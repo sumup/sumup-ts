@@ -1,0 +1,8 @@
+# Allowlist approach, exclude all, explicitly add what's needed.
+*
+
+!/CHANGELOG.md
+!/LICENSE
+!/README.md
+!/package.json
+!/dist/**/*

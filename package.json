@@ -1,0 +1,66 @@
+{
+  "name": "@sumup/sdk",
+  "version": "0.0.1-beta.0",
+  "description": "The official TypeScript SDK for the SumUp API",
+  "keywords": [
+    "nodejs",
+    "sdk",
+    "sumup",
+    "sumup-ts",
+    "sumup sdk"
+  ],
+  "homepage": "https://github.com/sumup/sumup-ts",
+  "bugs": {
+    "url": "https://github.com/sumup/sumup-ts/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sumup/sumup-ts.git"
+  },
+  "license": "Apache-2.0",
+  "author": "SumUp <support@sumup.com> (https://sumup.com/)",
+  "type": "module",
+  "files": [
+    "dist",
+    "README.md",
+    "CODE_OF_CONDUCT.md",
+    "CONTRIBUTING.md",
+    "LICENSE.md"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "publishConfig": {
+    "provenance": true,
+    "access": "public"
+  },
+  "scripts": {
+    "prebuild": "npm run fmt",
+    "build": "rslib build",
+    "build:watch": "rslib build --watch",
+    "inspect": "rslib inspect",
+    "test": "vitest",
+    "tsc": "tsc",
+    "prerelease": "npm run build",
+    "generate": "echo 'not yet implemented'",
+    "lint": "biome check",
+    "fmt": "biome check --write"
+  },
+  "main": "./dist/cjs/index.cjs",
+  "types": "./dist/cjs/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/cjs/index.cjs",
+      "import": "./dist/esm/index.js"
+    }
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "@microsoft/api-extractor": "^7.49.2",
+    "@rslib/core": "^0.4.1",
+    "rsbuild-plugin-dts": "^0.4.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3",
+    "vitest": "^3.0.5"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "name": "@sumup/sdk",
+  "version": "0.0.1-beta.0",
+  "license": "Apache-2.0",
+  "exports": "./src/index.ts",
+  "include": [
+    "CHANGELOG.md",
+    "LICENSE",
+    "README.md",
+    "src/**/*.ts"
+  ]
+}

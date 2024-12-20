@@ -1,0 +1,12 @@
+{
+  "name": "checkout",
+  "version": "0.0.1",
+  "description": "Checkout example with SumUp SDK",
+  "main": "index.js",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@sumup/sdk": "file:../..",
+    "express": "^4.21.0",
+    "typescript": "^5.7.3"
+  }
+}
