@@ -24,9 +24,17 @@ Node 18 or higher.
 Install the package with:
 
 ```sh
-npm install sumup
+npm install @sumup/sdk
 # or
-yarn add sumup
+yarn add @sumup/sdk
+```
+
+Install from jsr:
+
+```sh
+deno add jsr:@sumup/sdk
+# or
+npx jsr add @sumup/sdk
 ```
 
 ## Usage
