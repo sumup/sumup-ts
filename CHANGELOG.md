@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.1-beta.3](https://github.com/sumup/sumup-ts/compare/v0.0.1-beta.2...v0.0.1-beta.3) (2025-02-11)
+
+
+### Bug Fixes
+
+* **ci:** github package registry permission ([c8f6d29](https://github.com/sumup/sumup-ts/commit/c8f6d29cda787db1f58c6950b12e1ecbd20f5f33))
+
 ## [0.0.1-beta.2](https://github.com/sumup/sumup-ts/compare/v0.0.1-beta.1...v0.0.1-beta.2) (2025-02-11)
 
 
