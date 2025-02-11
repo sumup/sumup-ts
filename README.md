@@ -2,10 +2,10 @@
 
 # sumup-ts
 
-[![NPM Version](https://img.shields.io/npm/v/sumup.svg)](https://www.npmjs.org/package/sumup)
-[![JSR Version](https://jsr.io/badges/@sumup/sumup)](https://jsr.io/@sumup/sumup)
+[![NPM Version](https://img.shields.io/npm/v/%40sumup%2Fsdk.svg)](https://www.npmjs.org/package/@sumup/sdk)
+[![JSR Version](https://jsr.io/badges/@sumup/sdk)](https://jsr.io/@sumup/sdk)
 [![Build Status](https://github.com/sumup/sumup-ts/workflows/CI/badge.svg)](https://github.com/sumup/sumup-ts/actions/workflows/ci.yml)
-<!-- [![Downloads](https://img.shields.io/npm/dm/sumup.svg)](https://www.npmjs.com/package/sumup) -->
+<!-- [![Downloads](https://img.shields.io/npm/dm/%40sumup%2Fsdk.svg)](https://www.npmjs.com/package/@sumup/sdk) -->
 
 </div>
 
