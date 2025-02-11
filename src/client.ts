@@ -2,7 +2,7 @@
 
 import * as Core from "./core";
 
-export const VERSION = "0.0.1-beta.3"; // x-release-please-version
+export const VERSION = "0.0.1-beta.4"; // x-release-please-version
 
 export type APIConfig = {
   apiKey?: string;
