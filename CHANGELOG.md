@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.1-beta.4](https://github.com/sumup/sumup-ts/compare/v0.0.1-beta.3...v0.0.1-beta.4) (2025-02-11)
+
+
+### Bug Fixes
+
+* **ci:** jsr publishing setup ([0765d76](https://github.com/sumup/sumup-ts/commit/0765d765f4b2c0eb26255ce3f0de5ee165dbe311))
+
 ## [0.0.1-beta.3](https://github.com/sumup/sumup-ts/compare/v0.0.1-beta.2...v0.0.1-beta.3) (2025-02-11)
 
 
