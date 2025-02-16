@@ -225,6 +225,41 @@ export type Checkout = {
 };
 
 /**
+ * 3DS Response
+ */
+export type CheckoutAccepted = {
+  /**
+   * Required action processing 3D Secure payments.
+   */
+  next_step?: {
+    /**
+     * Indicates allowed mechanisms for redirecting an end user. If both values are provided to ensure a redirect takes place in either.
+     */
+    mechanism?: ("iframe" | "browser")[];
+    /**
+     * Method used to complete the redirect.
+     */
+    method?: string;
+    /**
+     * Contains parameters essential for form redirection. Number of object keys and their content can vary.
+     */
+    payload?: {
+      MD?: Record<string, unknown>;
+      PaReq?: Record<string, unknown>;
+      TermUrl?: Record<string, unknown>;
+    };
+    /**
+     * Refers to a url where the end user is redirected once the payment processing completes.
+     */
+    redirect_url?: string;
+    /**
+     * Where the end user is redirected.
+     */
+    url?: string;
+  };
+};
+
+/**
  * Details of the payment checkout.
  */
 export type CheckoutCreateRequest = {
@@ -635,6 +670,7 @@ export declare namespace Checkouts {
   export type {
     Card,
     Checkout,
+    CheckoutAccepted,
     CheckoutCreateRequest,
     CheckoutProcessMixin,
     CheckoutSuccess,

@@ -30,11 +30,19 @@ export type ListPayoutsQueryParams = {
   order?: "desc" | "asc";
 };
 
+export type ListPayoutsV1QueryParams = {
+  startDate: string;
+  endDate: string;
+  format?: "json" | "csv";
+  limit?: number;
+  order?: "desc" | "asc";
+};
+
 export class Payouts extends Core.APIResource {
   /**
    * List payouts
    */
-  list(
+  listDeprecated(
     query: ListPayoutsQueryParams,
     params?: Core.FetchParams,
   ): Core.APIPromise<FinancialPayouts> {
@@ -44,8 +52,27 @@ export class Payouts extends Core.APIResource {
       ...params,
     });
   }
+
+  /**
+   * List payouts
+   */
+  list(
+    merchantCode: string,
+    query: ListPayoutsV1QueryParams,
+    params?: Core.FetchParams,
+  ): Core.APIPromise<FinancialPayouts> {
+    return this._client.get<FinancialPayouts>({
+      path: `/v1.0/merchants/${merchantCode}/payouts`,
+      query,
+      ...params,
+    });
+  }
 }
 
 export declare namespace Payouts {
-  export type { FinancialPayouts, ListPayoutsQueryParams };
+  export type {
+    FinancialPayouts,
+    ListPayoutsQueryParams,
+    ListPayoutsV1QueryParams,
+  };
 }

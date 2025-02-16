@@ -6,7 +6,6 @@ import type * as Core from "./core";
 export type { APIConfig } from "./client";
 
 import { ApiKeys } from "./resources/api-keys";
-import { Authorization } from "./resources/authorization";
 import { Checkouts } from "./resources/checkouts";
 import { Customers } from "./resources/customers";
 import { Members } from "./resources/members";
@@ -18,48 +17,45 @@ import { Subaccounts } from "./resources/subaccounts";
 import { Transactions } from "./resources/transactions";
 
 export class SumUp extends HTTPClient {
-  authorization: Authorization = new Authorization(this);
+  apiKeys: ApiKeys = new ApiKeys(this);
   checkouts: Checkouts = new Checkouts(this);
   customers: Customers = new Customers(this);
-  transactions: Transactions = new Transactions(this);
-  payouts: Payouts = new Payouts(this);
-  receipts: Receipts = new Receipts(this);
-  merchant: Merchant = new Merchant(this);
-  apiKeys: ApiKeys = new ApiKeys(this);
-  subaccounts: Subaccounts = new Subaccounts(this);
   members: Members = new Members(this);
+  merchant: Merchant = new Merchant(this);
+  payouts: Payouts = new Payouts(this);
   readers: Readers = new Readers(this);
+  receipts: Receipts = new Receipts(this);
+  subaccounts: Subaccounts = new Subaccounts(this);
+  transactions: Transactions = new Transactions(this);
 
   static SumUp = this;
 }
 
-SumUp.Authorization = Authorization;
+SumUp.ApiKeys = ApiKeys;
 SumUp.Checkouts = Checkouts;
 SumUp.Customers = Customers;
-SumUp.Transactions = Transactions;
-SumUp.Payouts = Payouts;
-SumUp.Receipts = Receipts;
-SumUp.Merchant = Merchant;
-SumUp.ApiKeys = ApiKeys;
-SumUp.Subaccounts = Subaccounts;
 SumUp.Members = Members;
+SumUp.Merchant = Merchant;
+SumUp.Payouts = Payouts;
 SumUp.Readers = Readers;
+SumUp.Receipts = Receipts;
+SumUp.Subaccounts = Subaccounts;
+SumUp.Transactions = Transactions;
 
 export declare namespace SumUp {
   export type FetchParams = Core.FetchParams;
 
   export {
-    Authorization,
+    ApiKeys,
     Checkouts,
     Customers,
-    Transactions,
-    Payouts,
-    Receipts,
-    Merchant,
-    ApiKeys,
-    Subaccounts,
     Members,
+    Merchant,
+    Payouts,
     Readers,
+    Receipts,
+    Subaccounts,
+    Transactions,
   };
 }
 
