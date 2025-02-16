@@ -46,12 +46,31 @@
     "lint": "biome check",
     "fmt": "biome check --write"
   },
-  "main": "./dist/cjs/index.cjs",
-  "types": "./dist/cjs/index.d.ts",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "imports": {
+    "@sumup/sdk": ".",
+    "@sumup/sdk/*": "./src/*"
+  },
   "exports": {
     ".": {
-      "require": "./dist/cjs/index.cjs",
-      "import": "./dist/esm/index.js"
+      "require": "./dist/index.cjs",
+      "default": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./*": {
+      "types": [
+        "./dist/*.d.ts",
+        "./dist/*/index.d.ts"
+      ],
+      "require": [
+        "./dist/*.cjs",
+        "./dist/*/index.cjs"
+      ],
+      "default": [
+        "./dist/*.js",
+        "./dist/*/index.js"
+      ]
     }
   },
   "devDependencies": {
