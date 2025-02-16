@@ -13,7 +13,7 @@
     ".": {
       "release-type": "node",
       "extra-files": [
-        "src/client.ts",
+        "src/version.ts",
         {
           "type": "json",
           "path": "jsr.json",
