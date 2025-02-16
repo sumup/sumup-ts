@@ -1,146 +1,18 @@
 openapi: 3.0.1
 info:
   description: |
-    SumUp’s REST API operates with `application/json` HTTP requests and response. The request bodies are sent through resource-oriented URLs and use the standard HTTP response codes.
-    For testing our APIs make sure you have a SumUp Profile (you can create one [here](https://me.sumup.com)). To activate your SumUp Profile [follow these steps](https://help.sumup.com/en-GB/articles/7gSOGSm2wEwIHyAvjitrLF).
+    SumUp’s REST API operates with [JSON](https://www.json.org/json-en.html) HTTP requests and responses. The request bodies are sent through resource-oriented URLs and use the standard [HTTP response codes](https://developer.mozilla.org/docs/Web/HTTP/Status).
 
-    Once you have an active SumUp Profile, go to [developer.sumup.com](https://developer.sumup.com/) and click on “Create” On the top right side, click on “Profile” followed by “Test profiles” Select your business country Click “Create” Copy and store safely the user name (format: 32 characters@developers.sumup.com) and randomly generated unique password.
-
-    Note: You will not be able to access your password afterwards make sure to store it safely before dismissing the message
-
-    Note: SumUp merchants are able to create up to 20 test profiles
-
-    When you receive your test profile you can create your [client credentials](https://developer.sumup.com/docs/register-app/#3-create-oauth-client-credentials) and process different requests with real payment instruments, without charging them.
-    Legal note: We reserve the right to change, modify, or remove the contents of this Website and SumUp APIs at any time without notice.
+    You can experiment and work on your integration in a sandbox that doesn't affect your regular data and doesn't process real transactions. To create a sandbox merchant account visit the [dashboard](https://me.sumup.com/settings/developer). To use the sandbox when interacting with SumUp APIs [create an API](https://me.sumup.com/settings/api-keys) key and use it for [authentication](https://developer.sumup.com/api/authentication).
+  license:
+    name: Apache 2.0
+    url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: SumUp REST API
   version: 1.0.0
 servers:
   - description: Production server
     url: 'https://api.sumup.com'
 paths:
-  /authorize:
-    get:
-      operationId: Authorize
-      summary: Request authorization from users
-      description: |
-        Request authorization from users and grant your application access to resources associated with the user's profile.
-      parameters:
-        - name: response_type
-          in: query
-          description: The type of the expected response. The value must be `code` to indicate that you expect to receive an authorization code.
-          schema:
-            type: string
-          example: code
-        - name: client_id
-          in: query
-          description: 'The client ID of your application that was generated when you [registered it](https://developer.sumup.com/docs/register-app/).'
-          schema:
-            type: string
-          example: fOcmczrYtYMJ7Li5GjMLLcUeC9dN
-        - name: redirect_uri
-          in: query
-          description: 'The URI to which the merchant user is redirected after authorizing your application to access their user''s profile data and to which the authorization code is sent. The value must match exactly one of the [registered URIs](https://developer.sumup.com/docs/register-app#3-create-oauth-client-credentials) for your application.'
-          schema:
-            type: string
-          example: 'https://sample-app.example.com/callback'
-        - name: scope
-          in: query
-          description: 'A space-separated list of scopes for which you request authorization. If you don''t specify any scopes in the request, your application will be granted authorization for the default scopes.'
-          schema:
-            type: string
-          example: payments
-        - name: state
-          in: query
-          description: 'A unique local state that can be used for correlating requests and responses and for preventing [cross-site request forgery](https://tools.ietf.org/html/rfc6749#section-10.12).'
-          schema:
-            type: string
-          example: 2cFCsY36y95lFHk4
-      responses:
-        '200':
-          description: No Content
-          content:
-            application/json:
-              examples:
-                NoBody:
-                  value: {}
-              schema:
-                type: object
-      tags:
-        - Authorization
-  /token:
-    post:
-      operationId: CreateToken
-      summary: Generate a token
-      description: |
-        Generate a token or a refresh token
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/AuthToken'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              examples:
-                access_token:
-                  description: Successfully created access token
-                  value:
-                    access_token: 565e2d19cef68203170ddadb952141326d14e03f4ccbd46daa079c26c910a864
-                    expires_in: 3600
-                    refresh_token: d180031bfe9bac36c336e5746637810272546865e9c9586012f462a56f3fe9af
-                    token_type: Bearer
-                refresh_token:
-                  description: Successfully created access token with the refresh token
-                  value:
-                    access_token: ec410d10ad7f06d3c2598473c9cd61189abcc016900a9938068542bcf9754073
-                    expires_in: 3600
-                    refresh_token: d180031bfe9bac36c336e5746637810272546865e9c9586012f462a56f3fe9af
-                    scope: payments user.app-settings transactions.history user.profile_readonly
-                    token_type: Bearer
-              schema:
-                type: object
-                properties:
-                  access_token:
-                    description: The access token that you need to use in your requests to the SumUp API.
-                    type: string
-                    example: ec410d10ad7f06d3c2598473c9cd61189abcc016900a9938068542bcf9754073
-                  expires_in:
-                    description: The validity of the access token in seconds.
-                    type: integer
-                    example: 3600
-                  refresh_token:
-                    description: The refresh token provided in the request call
-                    type: string
-                    example: d180031bfe9bac36c336e5746637810272546865e9c9586012f462a56f3fe9af
-                  scope:
-                    description: List of authorization scopes granted to your access token.
-                    type: string
-                    example: payments user.app-settings transactions.history user.profile_readonly
-                  token_type:
-                    description: The type of the token. The value is always `Bearer`.
-                    type: string
-                    example: Bearer
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              examples:
-                Invalid_Parameter:
-                  description: A parameter is invalid or expired.
-                  value:
-                    error: invalid_grant
-                    error_description: code parameter invalid or expired
-                Missing_Parameter:
-                  description: A parameter is missing in the request.
-                  value:
-                    error: invalid_request
-                    error_description: code parameter is missing
-              schema:
-                $ref: '#/components/schemas/Error'
-      tags:
-        - Authorization
   /v0.1/checkouts:
     get:
       operationId: ListCheckouts
@@ -183,6 +55,10 @@ paths:
                     error_message: NOT_AUTHORIZED
               schema:
                 $ref: '#/components/schemas/Error'
+      security:
+        - apiKey: []
+        - oauth2:
+            - payments
       tags:
         - Checkouts
       x-codegen:
@@ -403,6 +279,10 @@ paths:
                     message: Checkout with this checkout reference and pay to email already exists
               schema:
                 $ref: '#/components/schemas/Error'
+      security:
+        - apiKey: []
+        - oauth2:
+            - payments
       tags:
         - Checkouts
       x-codegen:
@@ -550,6 +430,10 @@ paths:
                     message: Checkout is already processed
               schema:
                 $ref: '#/components/schemas/Error'
+      security:
+        - apiKey: []
+        - oauth2:
+            - payments
       tags:
         - Checkouts
       x-codegen:
@@ -601,6 +485,10 @@ paths:
                     message: Resource not found
               schema:
                 $ref: '#/components/schemas/Error'
+      security:
+        - apiKey: []
+        - oauth2:
+            - payments
       tags:
         - Checkouts
       x-codegen:
@@ -824,6 +712,12 @@ paths:
                       url: 'https://r3.girogate.de/ti/simideal'
               schema:
                 $ref: '#/components/schemas/CheckoutSuccess'
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckoutAccepted'
         '400':
           description: Bad Request
           content:
@@ -900,6 +794,9 @@ paths:
                     message: Checkout is already processed
               schema:
                 $ref: '#/components/schemas/Error'
+      security:
+        - apiKey: []
+        - oauth2: []
       tags:
         - Checkouts
       x-codegen:
@@ -969,6 +866,10 @@ paths:
                     message: Customer already exists
               schema:
                 $ref: '#/components/schemas/Error'
+      security:
+        - apiKey: []
+        - oauth2:
+            - payment_instruments
       tags:
         - Customers
       x-codegen:
@@ -1034,6 +935,10 @@ paths:
                     message: Resource not found
               schema:
                 $ref: '#/components/schemas/Error'
+      security:
+        - apiKey: []
+        - oauth2:
+            - payment_instruments
       tags:
         - Customers
       x-codegen:
@@ -1116,6 +1021,10 @@ paths:
                     message: Resource not found
               schema:
                 $ref: '#/components/schemas/Error'
+      security:
+        - apiKey: []
+        - oauth2:
+            - payment_instruments
       tags:
         - Customers
       x-codegen:
@@ -1183,6 +1092,10 @@ paths:
                     message: Resource not found
               schema:
                 $ref: '#/components/schemas/Error'
+      security:
+        - apiKey: []
+        - oauth2:
+            - payment_instruments
       tags:
         - Customers
       x-codegen:
@@ -1258,6 +1171,10 @@ paths:
                     message: Resource not found
               schema:
                 $ref: '#/components/schemas/Error'
+      security:
+        - apiKey: []
+        - oauth2:
+            - payment_instruments
       tags:
         - Customers
       x-codegen:
@@ -1325,6 +1242,11 @@ paths:
                     error_message: NOT_AUTHORIZED
               schema:
                 $ref: '#/components/schemas/Error'
+      security:
+        - apiKey: []
+        - oauth2:
+            - user.profile
+            - user.profile_readonly
       tags:
         - Merchant
       x-codegen:
@@ -1362,6 +1284,9 @@ paths:
                 items:
                   $ref: '#/components/schemas/Operator'
       deprecated: true
+      security:
+        - apiKey: []
+        - oauth2: []
       tags:
         - Subaccounts
       x-permissions:
@@ -1417,6 +1342,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/CompatError'
       deprecated: true
+      security:
+        - apiKey: []
+        - oauth2: []
       tags:
         - Subaccounts
       x-permissions:
@@ -1441,6 +1369,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/Operator'
       deprecated: true
+      security:
+        - apiKey: []
+        - oauth2: []
       tags:
         - Subaccounts
       x-permissions:
@@ -1465,6 +1396,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/Operator'
       deprecated: true
+      security:
+        - apiKey: []
+        - oauth2: []
       tags:
         - Subaccounts
       x-permissions:
@@ -1526,6 +1460,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/CompatError'
       deprecated: true
+      security:
+        - apiKey: []
+        - oauth2: []
       tags:
         - Subaccounts
       x-permissions:
@@ -1550,6 +1487,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/Operator'
       deprecated: true
+      security:
+        - apiKey: []
+        - oauth2: []
       tags:
         - Subaccounts
       x-permissions:
@@ -1592,6 +1532,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/CompatError'
       deprecated: true
+      security:
+        - apiKey: []
+        - oauth2: []
       tags:
         - Subaccounts
       x-permissions:
@@ -1664,10 +1607,16 @@ paths:
                     error_message: NOT_AUTHORIZED
               schema:
                 $ref: '#/components/schemas/Error'
+      deprecated: true
+      security:
+        - apiKey: []
+        - oauth2:
+            - user.profile
+            - user.profile_readonly
       tags:
         - Payouts
       x-codegen:
-        method_name: list
+        method_name: list_deprecated
       x-scopes:
         - user.profile
         - user.profile_readonly
@@ -1718,6 +1667,11 @@ paths:
                     status_code: '403'
               schema:
                 $ref: '#/components/schemas/ErrorForbidden'
+      security:
+        - apiKey: []
+        - oauth2:
+            - user.profile
+            - user.profile_readonly
       tags:
         - Merchant
       x-codegen:
@@ -1781,6 +1735,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorForbidden'
       deprecated: true
+      security:
+        - apiKey: []
+        - oauth2:
+            - user.payout-settings
+            - user.profile
+            - user.profile_readonly
       tags:
         - Merchant
       x-codegen:
@@ -1823,6 +1783,11 @@ paths:
                     error_message: NOT_AUTHORIZED
               schema:
                 $ref: '#/components/schemas/Error'
+      security:
+        - apiKey: []
+        - oauth2:
+            - user.profile
+            - user.profile_readonly
       tags:
         - Merchant
       x-codegen:
@@ -1877,6 +1842,10 @@ paths:
                     status_code: '403'
               schema:
                 $ref: '#/components/schemas/ErrorForbidden'
+      security:
+        - apiKey: []
+        - oauth2:
+            - user.payout-settings
       tags:
         - Merchant
       x-codegen:
@@ -1917,6 +1886,11 @@ paths:
                     error_message: NOT_AUTHORIZED
               schema:
                 $ref: '#/components/schemas/Error'
+      security:
+        - apiKey: []
+        - oauth2:
+            - user.profile
+            - user.profile_readonly
       tags:
         - Merchant
       x-codegen:
@@ -1981,6 +1955,10 @@ paths:
                     message: The transaction is not refundable in its current state
               schema:
                 $ref: '#/components/schemas/Error'
+      security:
+        - apiKey: []
+        - oauth2:
+            - payments
       tags:
         - Transactions
       x-codegen:
@@ -2056,6 +2034,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
       deprecated: true
+      security:
+        - apiKey: []
+        - oauth2:
+            - transactions.history
       tags:
         - Transactions
       x-codegen:
@@ -2201,6 +2183,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
       deprecated: true
+      security:
+        - apiKey: []
+        - oauth2:
+            - transactions.history
       tags:
         - Transactions
       x-codegen:
@@ -2244,10 +2230,15 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/APIKeysList'
+      security:
+        - apiKey: []
+        - oauth2: []
       tags:
         - API Keys
       x-permissions:
-        - api_keys_list
+        - object_id_param: merchant_code
+          object_type: merchant
+          relation: api_keys_list
       x-scopes:
         - api_keys
     post:
@@ -2285,10 +2276,15 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/APIKey'
+      security:
+        - apiKey: []
+        - oauth2: []
       tags:
         - API Keys
       x-permissions:
-        - api_keys_create
+        - object_id_param: merchant_code
+          object_type: merchant
+          relation: api_keys_create
       x-scopes:
         - 'api_keys:write'
   '/v0.1/merchants/{merchant_code}/api-keys/{key_id}':
@@ -2313,10 +2309,15 @@ paths:
       responses:
         '204':
           description: Successful revocation.
+      security:
+        - apiKey: []
+        - oauth2: []
       tags:
         - API Keys
       x-permissions:
-        - api_keys_delete
+        - object_id_param: merchant_code
+          object_type: merchant
+          relation: api_keys_delete
       x-scopes:
         - 'api_keys:write'
     get:
@@ -2344,10 +2345,15 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/APIKey'
+      security:
+        - apiKey: []
+        - oauth2: []
       tags:
         - API Keys
       x-permissions:
-        - api_keys_view
+        - object_id_param: merchant_code
+          object_type: merchant
+          relation: api_keys_view
       x-scopes:
         - api_keys
     put:
@@ -2388,10 +2394,15 @@ paths:
       responses:
         '204':
           description: Successful update.
+      security:
+        - apiKey: []
+        - oauth2: []
       tags:
         - API Keys
       x-permissions:
-        - api_keys_update
+        - object_id_param: merchant_code
+          object_type: merchant
+          relation: api_keys_update
       x-scopes:
         - 'api_keys:write'
   '/v0.1/merchants/{merchant_code}/members':
@@ -2473,10 +2484,17 @@ paths:
                   - items
         '404':
           description: Merchant not found.
+      security:
+        - apiKey: []
+        - oauth2: []
       tags:
         - Members
       x-codegen:
         method_name: list
+      x-permissions:
+        - object_id_param: merchant_code
+          object_type: merchant
+          relation: merchant_read
       x-scopes: []
     post:
       operationId: CreateMerchantMember
@@ -2539,12 +2557,17 @@ paths:
         '429':
           description: |
             Too many invitations sent to that user. The limit is 10 requests per 5 minutes and the Retry-After header is set to the number of minutes until the reset of the limit.
+      security:
+        - apiKey: []
+        - oauth2: []
       tags:
         - Members
       x-codegen:
         method_name: create
       x-permissions:
-        - members_create
+        - object_id_param: merchant_code
+          object_type: merchant
+          relation: members_create
       x-scopes: []
   '/v0.1/merchants/{merchant_code}/members/{member_id}':
     delete:
@@ -2569,12 +2592,17 @@ paths:
           description: Member deleted.
         '404':
           description: Merchant or member not found.
+      security:
+        - apiKey: []
+        - oauth2: []
       tags:
         - Members
       x-codegen:
         method_name: delete
       x-permissions:
-        - members_delete
+        - object_id_param: merchant_code
+          object_type: merchant
+          relation: members_delete
       x-scopes: []
     get:
       operationId: GetMerchantMember
@@ -2602,12 +2630,17 @@ paths:
                 $ref: '#/components/schemas/Member'
         '404':
           description: Merchant or member not found.
+      security:
+        - apiKey: []
+        - oauth2: []
       tags:
         - Members
       x-codegen:
         method_name: get
       x-permissions:
-        - members_view
+        - object_id_param: merchant_code
+          object_type: merchant
+          relation: members_view
       x-scopes: []
     put:
       operationId: UpdateMerchantMember
@@ -2670,12 +2703,17 @@ paths:
           description: Merchant or member not found.
         '409':
           description: Cannot update member as some data conflict with existing members.
+      security:
+        - apiKey: []
+        - oauth2: []
       tags:
         - Members
       x-codegen:
         method_name: update
       x-permissions:
-        - members_update
+        - object_id_param: merchant_code
+          object_type: merchant
+          relation: members_update
       x-scopes: []
   '/v0.1/merchants/{merchant_code}/payment-methods':
     get:
@@ -2765,6 +2803,10 @@ paths:
                     error_message: NOT_AUTHORIZED
               schema:
                 $ref: '#/components/schemas/Error'
+      security:
+        - apiKey: []
+        - oauth2:
+            - payments
       tags:
         - Checkouts
       x-codegen:
@@ -2799,12 +2841,17 @@ paths:
                       $ref: '#/components/schemas/Reader'
                 required:
                   - items
+      security:
+        - apiKey: []
+        - oauth2: []
       tags:
         - Readers
       x-codegen:
         method_name: list
       x-permissions:
-        - readers_list
+        - object_id_param: merchant_code
+          object_type: merchant
+          relation: readers_list
       x-scopes:
         - readers.read
     post:
@@ -2850,12 +2897,17 @@ paths:
               $ref: '#/components/links/DeleteReaderByID'
             UpdateReaderByID:
               $ref: '#/components/links/UpdateReaderByID'
+      security:
+        - apiKey: []
+        - oauth2: []
       tags:
         - Readers
       x-codegen:
         method_name: create
       x-permissions:
-        - readers_create
+        - object_id_param: merchant_code
+          object_type: merchant
+          relation: readers_create
       x-scopes:
         - readers.write
   '/v0.1/merchants/{merchant_code}/readers/{id}':
@@ -2882,10 +2934,15 @@ paths:
         '200':
           description: |
             The reader got successfully deleted from the merchant account.
+      security:
+        - apiKey: []
+        - oauth2: []
       tags:
         - Readers
       x-permissions:
-        - readers_delete
+        - object_id_param: merchant_code
+          object_type: merchant
+          relation: readers_delete
       x-scopes:
         - readers.write
     get:
@@ -2937,12 +2994,17 @@ paths:
         '404':
           description: |
             The requested Reader resource does not exists.
+      security:
+        - apiKey: []
+        - oauth2: []
       tags:
         - Readers
       x-codegen:
         method_name: get
       x-permissions:
-        - readers_view
+        - object_id_param: merchant_code
+          object_type: merchant
+          relation: readers_view
       x-scopes:
         - readers.read
     patch:
@@ -2982,12 +3044,17 @@ paths:
         '403':
           description: |
             The reader is not linked to the merchant account.
+      security:
+        - apiKey: []
+        - oauth2: []
       tags:
         - Readers
       x-codegen:
         method_name: update
       x-permissions:
-        - readers_update
+        - object_id_param: merchant_code
+          object_type: merchant
+          relation: readers_update
       x-scopes:
         - readers.write
   '/v0.1/merchants/{merchant_code}/readers/{id}/checkout':
@@ -3145,6 +3212,10 @@ paths:
                   description: |
                     Your server returns this code if it accepts the callback.
                     If the server returns any other code, the callback will be retried up to 5 times with exponential backoff.
+      security:
+        - apiKey: []
+        - oauth2:
+            - readers.write
       tags:
         - Readers
       x-codegen:
@@ -3250,6 +3321,10 @@ paths:
                       detail:
                         type: string
                         example: Gateway Timeout
+      security:
+        - apiKey: []
+        - oauth2:
+            - readers.write
       tags:
         - Readers
       x-codegen:
@@ -3258,6 +3333,91 @@ paths:
         - readers_checkout_create
       x-scopes:
         - readers.write
+  '/v1.0/merchants/{merchant_code}/payouts':
+    get:
+      operationId: ListPayoutsV1
+      summary: List payouts
+      description: Lists ordered payouts for the merchant profile.
+      parameters:
+        - name: merchant_code
+          in: path
+          required: true
+          schema:
+            type: string
+            example: MC0X0ABC
+        - name: start_date
+          in: query
+          description: 'Start date (in [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) format).'
+          required: true
+          schema:
+            type: string
+            format: date
+        - name: end_date
+          in: query
+          description: 'End date (in [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) format).'
+          required: true
+          schema:
+            type: string
+            format: date
+        - name: format
+          in: query
+          schema:
+            type: string
+            enum:
+              - json
+              - csv
+        - name: limit
+          in: query
+          schema:
+            type: integer
+        - name: order
+          in: query
+          schema:
+            type: string
+            enum:
+              - desc
+              - asc
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FinancialPayouts'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              examples:
+                Invalid_Token:
+                  description: The access token is invalid or has expired.
+                  value:
+                    error_code: NOT_AUTHORIZED
+                    error_message: invalid access token
+                Missing_Token:
+                  description: No access token is provided.
+                  value:
+                    error_code: NOT_AUTHORIZED
+                    message: access token required
+                Not_Authorized_Token:
+                  description: The access token is valid but the application is not authorized.
+                  value:
+                    error_code: NOT_AUTHORIZED
+                    error_message: NOT_AUTHORIZED
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+        - apiKey: []
+        - oauth2:
+            - user.profile
+            - user.profile_readonly
+      tags:
+        - Payouts
+      x-codegen:
+        method_name: list
+      x-scopes:
+        - user.profile
+        - user.profile_readonly
   '/v1.1/merchants/{merchant_code}/bank-accounts':
     get:
       operationId: ListBankAccountsV11
@@ -3319,6 +3479,12 @@ paths:
                     status_code: '403'
               schema:
                 $ref: '#/components/schemas/ErrorForbidden'
+      security:
+        - apiKey: []
+        - oauth2:
+            - user.payout-settings
+            - user.profile
+            - user.profile_readonly
       tags:
         - Merchant
       x-codegen:
@@ -3391,6 +3557,9 @@ paths:
                     error_message: NOT_AUTHORIZED
               schema:
                 $ref: '#/components/schemas/Error'
+      security:
+        - apiKey: []
+        - oauth2: []
       tags:
         - Receipts
       x-codegen:
@@ -3470,6 +3639,10 @@ paths:
                     message: Resource not found
               schema:
                 $ref: '#/components/schemas/Error'
+      security:
+        - apiKey: []
+        - oauth2:
+            - transactions.history
       tags:
         - Transactions
       x-codegen:
@@ -3620,6 +3793,10 @@ paths:
                     error_message: NOT_AUTHORIZED
               schema:
                 $ref: '#/components/schemas/Error'
+      security:
+        - apiKey: []
+        - oauth2:
+            - transactions.history
       tags:
         - Transactions
       x-codegen:
@@ -3907,38 +4084,6 @@ components:
       example: {}
       additionalProperties:
         maxLength: 256
-    AuthToken:
-      description: Authorization token flow
-      type: object
-      properties:
-        client_id:
-          description: 'The client ID of your application that was generated when you [registered it](https://developer.sumup.com/docs/register-app).'
-          type: string
-          example: fOcmczrYtYMJ7Li5GjMLLcUeC9dN
-        client_secret:
-          description: 'The client secret of your application that was generated when you [registered it](https://developer.sumup.com/docs/register-app).'
-          type: string
-          example: 717bd571b54297494cd7a79b491e8f2c1da6189c4cc2d3481380e8366eef539c
-        code:
-          description: The authorization code that you received from requesting an authorization code.
-          type: string
-          example: be366ce9fccd0c337d1da29b31d06dd1135ab95401562883
-        grant_type:
-          description: The grant type used for obtaining an access token.
-          type: string
-          example: refresh_token
-          enum:
-            - authorization_code
-            - refresh_token
-        refresh_token:
-          description: A **required** parameter when generating a refresh token.
-          type: string
-          example: d180031bfe9bac36c336e5746637810272546865e9c9586012f462a56f3fe9af
-      required:
-        - grant_type
-        - client_id
-        - client_secret
-        - code
     BankAccount:
       type: object
       properties:
@@ -4184,6 +4329,44 @@ components:
           example: '2020-02-29T10:56:56+00:00'
           nullable: true
       title: Checkout
+    CheckoutAccepted:
+      description: 3DS Response
+      type: object
+      properties:
+        next_step:
+          description: Required action processing 3D Secure payments.
+          type: object
+          properties:
+            mechanism:
+              description: Indicates allowed mechanisms for redirecting an end user. If both values are provided to ensure a redirect takes place in either.
+              type: array
+              items:
+                enum:
+                  - iframe
+                  - browser
+                type: string
+            method:
+              description: Method used to complete the redirect.
+              type: string
+              example: POST
+            payload:
+              description: Contains parameters essential for form redirection. Number of object keys and their content can vary.
+              type: object
+              properties:
+                MD:
+                  example: b1a536c0-29b9-11eb-adc1-0242ac120002
+                PaReq:
+                  example: eJxVUttu2zAM/RXDr4MjyY5dO6BVuE27FZuDZHGG9VGRmMSFb/Wljff1k9KkF0APPCR1eHQouD6WhfWCbZfXVWyzCbUtrGSt8mof25vs3gltq+tFpURRVxjbI3b2NYfs0CLO1yiHFjmk2HVij1auYrsRW1+F0U4qZxfKwJlur4QTYcQcJoIdc+XO2/poc1gmv/GZw3k216MnLpAL1JytPIiq5yDk883Dgk+DwPV9IGcIJbYPc84o1Ye6lHqu5wVA3tJQiRL5eiiHxlqKscSq76xfeZn3qICciiDroerbkYeuvnYBMLQFP/R9MyOkM9cnCoGYJJAPScvBRJ0mOeaKr/6l08XT6jXN7tx0vvHSbOMtsj1dzB9jIKYDlOiRu1omYyy0WDCj0YxFQE55EKWZzj2f6ee9xdCYEcmnwucEaN9bvaeRR1ehFn9BgMdGr0l3aCvfYyAfem9/GENlrz36ufpTBPTv07r8lm3qpPiOo1y/7u+SJImNzacmw5hrX1wt/kRpABBDQ84bJOf16+jLt/gPhUvGGw==
+                TermUrl:
+                  example: 'https://api.sumup.com/v0.1/checkouts/e552de3b-1777-4c91-bdb8-756967678572/complete_payment'
+            redirect_url:
+              description: Refers to a url where the end user is redirected once the payment processing completes.
+              type: string
+              example: 'https://mysite.com/completed_purchase'
+            url:
+              description: Where the end user is redirected.
+              type: string
+              example: 'https://dummy-3ds-gateway.com/cap?RID=1233&VAA=A'
     CheckoutCreateRequest:
       description: Details of the payment checkout.
       type: object
@@ -6015,22 +6198,18 @@ components:
       parameters:
         id: $response.body#/id
   securitySchemes:
-    accessToken:
+    apiKey:
       description: |
-        At SumUp authentication uses your API credentials and Basic HTTP auth. The API credentials consist of a `client_id` and `client_secret` key-value pair.
+        API keys allow you easily interact with SumUp APIs. API keys are static tokens. You can create API keys from the [Dashboard](https://me.sumup.com/settings/api-keys)
+      scheme: Bearer
+      type: http
+    oauth2:
+      description: |
+        SumUp supports [OAuth 2.0](https://tools.ietf.org/html/rfc6749) authentication for platforms that want to offer their services to SumUp users.
 
-        It is possible to create multiple API credentials for each of the applications you connect with your SumUp Profile.
+        To integrate via OAuth 2.0 you will need a client credentials that you can create in the [SumUp Dashboard](https://me.sumup.com/settings/oauth2-applications).
 
-        Use the API credentials as an authorization header for requests that require such.
-
-        Authorization
-        ---------
-
-        SumUp uses the [OAuth 2.0 authorization framework](https://tools.ietf.org/html/rfc6749) and supports [two authorization flows](https://developer.sumup.com/docs/authorization/#authorization-flows) for [obtaining an access token](https://developer.sumup.com/docs/register-app/#3-create-oauth-client-credentials).
-
-        The flow you choose will grant your access token-specific permissions. All API calls should include the obtained access token in the `Authorization: Bearer <<valid_access_token>>` format.
-
-        To complete successful requests, ensure you have requested the [necessary scopes](https://developer.sumup.com/docs/authorization/#authorization-scopes) for your authorization flow of choice.
+        To maintain security of our users, we highly recommend that you use one of the [recommended OAuth 2.0 libraries](https://oauth.net/code/) for authentication.
       flows:
         authorizationCode:
           authorizationUrl: 'https://api.sumup.com/authorize'
@@ -6058,25 +6237,6 @@ components:
           tokenUrl: 'https://api.sumup.com/token'
       type: oauth2
 tags:
-  - description: |
-      SumUp API uses [API keys](/online-payments/introduction/authorization#api-keys) for authentication.
-      You can view and manage your API keys in the [API Keys](/api-keys) section of the [Developer Portal](/).
-
-
-      API keys are short static tokens that are passed in the `Authorization` header to authenticate the requests.
-
-
-      The tokens have a `sup_sk_` prefix. Your API keys have access to the whole SumUp API, so make sure to keep them secure.
-
-
-      All requests must be made over [HTTPS](https://en.wikipedia.org/wiki/HTTPS) and must be authenticated.
-
-
-      Alternatively, SumUp APIs support [OAuth2](/online-payments/introduction/authorization#oauth-20) authentication for applications that want to use SumUp as a platform for other users.
-
-
-      Read more about authorization in our [Authorization guide](/online-payments/introduction/authorization).
-    name: Authorization
   - description: |
       Accept payments from your end users by adding the Checkouts model to your platform.
       SumUp supports standard and single payment 3DS checkout flows.
