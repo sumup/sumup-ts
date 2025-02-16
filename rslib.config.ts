@@ -4,27 +4,10 @@ export default defineConfig({
   lib: [
     {
       format: "esm",
-      bundle: false,
-      dts: {
-        bundle: true,
-      },
-      output: {
-        distPath: {
-          root: "./dist/esm",
-        },
-      },
+      dts: true,
     },
     {
       format: "cjs",
-      bundle: false,
-      dts: {
-        bundle: true,
-      },
-      output: {
-        distPath: {
-          root: "./dist/cjs",
-        },
-      },
     },
   ],
   output: {
