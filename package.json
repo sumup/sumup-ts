@@ -75,7 +75,6 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
-    "@microsoft/api-extractor": "^7.49.2",
     "@rslib/core": "^0.4.1",
     "rsbuild-plugin-dts": "^0.4.1",
     "ts-node": "^10.9.2",
