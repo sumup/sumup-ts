@@ -632,8 +632,8 @@ export class Checkouts extends Core.APIResource {
     id: string,
     body: CheckoutProcessMixin,
     params?: Core.FetchParams,
-  ): Core.APIPromise<CheckoutSuccess> {
-    return this._client.put<CheckoutSuccess>({
+  ): Core.APIPromise<CheckoutSuccess | CheckoutAccepted> {
+    return this._client.put<CheckoutSuccess | CheckoutAccepted>({
       path: `/v0.1/checkouts/${id}`,
       body,
       ...params,
