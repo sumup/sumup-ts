@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.0.1-beta.5](https://github.com/sumup/sumup-ts/compare/v0.0.1-beta.4...v0.0.1-beta.5) (2025-02-25)
+
+
+### Features
+
+* **cd:** slack notification on release ([#14](https://github.com/sumup/sumup-ts/issues/14)) ([139890b](https://github.com/sumup/sumup-ts/commit/139890b8b8351ede7bed9ce4268ff3836e3c07db))
+
+
+### Bug Fixes
+
+* **docs:** installation instructions ([8c4ef03](https://github.com/sumup/sumup-ts/commit/8c4ef03ddb3a3d72080bfd0f3028a92c70ded29f))
+* **tools:** release please config ([7cd7134](https://github.com/sumup/sumup-ts/commit/7cd71341f4be6e2733e3a2a323b67b1c1a6deae9))
+
 ## [0.0.1-beta.4](https://github.com/sumup/sumup-ts/compare/v0.0.1-beta.3...v0.0.1-beta.4) (2025-02-11)
 
 
