@@ -2193,12 +2193,75 @@ paths:
         method_name: list_deprecated
       x-scopes:
         - transactions.history
+  /v0.1/memberships:
+    get:
+      operationId: ListMemberships
+      summary: List memberships of the current user.
+      parameters:
+        - name: offset
+          in: query
+          description: Offset of the first member to return.
+          schema:
+            type: integer
+            example: 0
+            default: 0
+            minimum: 0
+        - name: limit
+          in: query
+          description: Maximum number of members to return.
+          schema:
+            type: integer
+            example: 10
+            default: 10
+            maximum: 25
+            minimum: 1
+        - name: kind
+          in: query
+          description: Filter memberships by resource kind.
+          schema:
+            description: |-
+              The kind of the membership resource.
+              Possible values are:
+              * `merchant` - merchant account(s)
+            type: string
+            enum:
+              - merchant
+        - name: resource.attributes.sandbox
+          in: query
+          description: Filter memberships by the sandbox status of the resource the membership is in.
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: List of user's memberships.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Membership'
+                  total_count:
+                    type: integer
+                    example: 3
+                required:
+                  - total_count
+                  - items
+      security:
+        - apiKey: []
+        - oauth2: []
+      tags:
+        - Memberships
+      x-codegen:
+        method_name: list
+      x-scopes: []
   '/v0.1/merchants/{merchant_code}/api-keys':
     get:
       operationId: ListAPIKeys
       summary: List API keys
-      description: |
-        Returns paginated list of API keys.
+      description: Returns paginated list of API keys.
       parameters:
         - name: offset
           in: query
@@ -2219,6 +2282,7 @@ paths:
             minimum: 1
         - name: merchant_code
           in: path
+          description: Unique identifier of the merchant account.
           required: true
           schema:
             type: string
@@ -2244,11 +2308,11 @@ paths:
     post:
       operationId: CreateAPIKey
       summary: Create an API key
-      description: |
-        Creates a new API key for the user.
+      description: Create a new API key.
       parameters:
         - name: merchant_code
           in: path
+          description: Unique identifier of the merchant account.
           required: true
           schema:
             type: string
@@ -2261,6 +2325,7 @@ paths:
               type: object
               properties:
                 name:
+                  description: Name of the API key.
                   type: string
                   example: New Key Name
                   maxLength: 255
@@ -2289,19 +2354,20 @@ paths:
         - 'api_keys:write'
   '/v0.1/merchants/{merchant_code}/api-keys/{key_id}':
     delete:
-      operationId: RevokeAPIKey
-      summary: Revoke an API key
-      description: |
-        Revokes an API key.
+      operationId: DeleteAPIKey
+      summary: Delete an API key
+      description: Delete an API key.
       parameters:
         - name: merchant_code
           in: path
+          description: Unique identifier of the merchant account.
           required: true
           schema:
             type: string
             example: MC0X0ABC
         - name: key_id
           in: path
+          description: Unique identifier of the API key.
           required: true
           schema:
             type: string
@@ -2323,17 +2389,18 @@ paths:
     get:
       operationId: GetAPIKey
       summary: Retrieve an API Key
-      description: |
-        Gets an API key.
+      description: Gets an API key.
       parameters:
         - name: merchant_code
           in: path
+          description: Unique identifier of the merchant account.
           required: true
           schema:
             type: string
             example: MC0X0ABC
         - name: key_id
           in: path
+          description: Unique identifier of the API key.
           required: true
           schema:
             type: string
@@ -2359,17 +2426,18 @@ paths:
     put:
       operationId: UpdateAPIKey
       summary: Update an API key
-      description: |
-        Updates an API key.
+      description: Updates an API key.
       parameters:
         - name: merchant_code
           in: path
+          description: Unique identifier of the merchant account.
           required: true
           schema:
             type: string
             example: MC0X0ABC
         - name: key_id
           in: path
+          description: Unique identifier of the API key.
           required: true
           schema:
             type: string
@@ -2467,7 +2535,7 @@ paths:
             example: MC0X0ABC
       responses:
         '200':
-          description: List of members.
+          description: List of account members.
           content:
             application/json:
               schema:
@@ -2520,14 +2588,12 @@ paths:
                   type: string
                   format: email
                 is_managed_user:
-                  description: |
-                    True if the user is managed by the merchant. In this case, we'll created a virtual user with the provided password and nickname.
+                  description: 'True if the user is managed by the merchant. In this case, we''ll created a virtual user with the provided password and nickname.'
                   type: boolean
                 metadata:
                   $ref: '#/components/schemas/Metadata'
                 nickname:
-                  description: |
-                    Nickname of the member to add. Only used if `is_managed_user` is true. Used for display purposes only.
+                  description: Nickname of the member to add. Only used if `is_managed_user` is true. Used for display purposes only.
                   type: string
                   example: Test User
                 password:
@@ -2555,8 +2621,7 @@ paths:
         '404':
           description: Merchant not found.
         '429':
-          description: |
-            Too many invitations sent to that user. The limit is 10 requests per 5 minutes and the Retry-After header is set to the number of minutes until the reset of the limit.
+          description: Too many invitations sent to that user. The limit is 10 requests per 5 minutes and the Retry-After header is set to the number of minutes until the reset of the limit.
       security:
         - apiKey: []
         - oauth2: []
@@ -2679,8 +2744,7 @@ paths:
                   type: object
                   properties:
                     nickname:
-                      description: |
-                        User's preferred name. Used for display purposes only.
+                      description: User's preferred name. Used for display purposes only.
                       type: string
                       example: Test User
                     password:
@@ -3806,15 +3870,18 @@ paths:
 components:
   schemas:
     APIKey:
+      description: |-
+        An API key is a static token that allows you to authorize with SumUp APIs.
+        Keep your API keys secret and safe. Do not share your API keys or expose them in a publicly accessible areas such as client-side code (browser or apps) or in the GitHub.
       type: object
       properties:
         created_at:
+          description: The timestamp of when the API key was created.
           type: string
           format: date-time
           example: '2023-01-20T15:16:17Z'
         id:
-          description: |
-            Unique identifier of the API Key.
+          description: Unique identifier of the API Key.
           type: string
           example: sup_pk_0D1FIpM6xqueY3L4Y994nseK0xMfOjPAU
         name:
@@ -3822,13 +3889,11 @@ components:
           type: string
           example: My API Key
         plaintext:
-          description: |
-            The plaintext value of the API key. This field is returned only in the response to API key creation and is never again available in the plaintext form.
+          description: The plaintext value of the API key. This field is returned only in the response to API key creation and is never again available in the plaintext form.
           type: string
           example: sup_sk_LZFWoLydp6S4S4KQpGVs1POzzp6cL1vyZ
         preview:
-          description: |
-            Last 8 characters of the API key.
+          description: Last 8 characters of the API key.
           type: string
           example: p6cL1vyZ
         scopes:
@@ -3840,6 +3905,7 @@ components:
             - public
             - secret
         updated_at:
+          description: The timestamp of when the API key was last updated.
           type: string
           format: date-time
           example: '2023-01-20T15:16:17Z'
@@ -3853,13 +3919,16 @@ components:
         - updated_at
       title: API Key
     APIKeysList:
+      description: List of API keys.
       type: object
       properties:
         items:
+          description: List of API keys.
           type: array
           items:
             $ref: '#/components/schemas/APIKey'
         total_count:
+          description: Total number of API keys.
           type: integer
       example:
         items:
@@ -4909,8 +4978,7 @@ components:
       type: number
       format: float
     Invite:
-      description: |
-        Pending invitation for membership.
+      description: Pending invitation for membership.
       type: object
       properties:
         email:
@@ -5021,13 +5089,13 @@ components:
         status: active
         type: recurrent
     Member:
-      description: |
-        A member is user within specific resource identified by resource id, resource type, and associated roles.
+      description: 'A member is user within specific resource identified by resource id, resource type, and associated roles.'
       type: object
       properties:
         attributes:
           $ref: '#/components/schemas/Attributes'
         created_at:
+          description: The timestamp of when the member was created.
           type: string
           format: date-time
           example: '2023-01-20T15:16:17Z'
@@ -5063,6 +5131,7 @@ components:
         status:
           $ref: '#/components/schemas/MembershipStatus'
         updated_at:
+          description: The timestamp of when the member was last updated.
           type: string
           format: date-time
           example: '2023-01-20T15:16:17Z'
@@ -5098,7 +5167,126 @@ components:
         - updated_at
         - status
       title: Member
+    Membership:
+      description: 'A membership associates a user with a resource, memberships is defined by user, resource, resource type, and associated roles.'
+      type: object
+      properties:
+        attributes:
+          $ref: '#/components/schemas/Attributes'
+        created_at:
+          description: The timestamp of when the membership was created.
+          type: string
+          format: date-time
+          example: '2023-01-20T15:16:17Z'
+        id:
+          description: ID of the membership.
+          type: string
+          example: mem_WZsm7QTPhVrompscmPhoGTXXcrd58fr9MOhP
+        invite:
+          $ref: '#/components/schemas/Invite'
+        metadata:
+          $ref: '#/components/schemas/Metadata'
+        permissions:
+          description: User's permissions.
+          type: array
+          items:
+            type: string
+          example:
+            - members_read
+            - members_write
+            - create_moto_payments
+            - full_transaction_history_view
+            - refund_transactions
+            - create_referral
+            - developer_settings_edit
+            - developer_settings_access
+        resource:
+          $ref: '#/components/schemas/MembershipResource'
+        resource_id:
+          description: ID of the resource the membership is in.
+          type: string
+          example: M2DDT39A
+        roles:
+          description: User's roles.
+          type: array
+          items:
+            type: string
+          example:
+            - role_admin
+        status:
+          $ref: '#/components/schemas/MembershipStatus'
+        type:
+          description: Type of the resource the membership is in.
+          type: string
+          example: merchant
+          enum:
+            - merchant
+        updated_at:
+          description: The timestamp of when the membership was last updated.
+          type: string
+          format: date-time
+          example: '2023-01-20T15:16:17Z'
+      required:
+        - id
+        - resource_id
+        - type
+        - roles
+        - permissions
+        - created_at
+        - updated_at
+        - status
+        - resource
+      title: Membership
+    MembershipResource:
+      description: Information about the resource the membership is in.
+      type: object
+      properties:
+        attributes:
+          $ref: '#/components/schemas/Attributes'
+        created_at:
+          description: The timestamp of when the membership resource was created.
+          type: string
+          format: date-time
+          example: '2023-01-20T15:16:17Z'
+        id:
+          description: ID of the resource the membership is in.
+          type: string
+          example: M2DDT39A
+        logo:
+          description: Logo fo the resource.
+          type: string
+          format: uri
+          example: 'https://images.sumup.com/img_2x4y6z8a0b1c2d3e4f5g6h7j8k.png'
+          maxLength: 256
+          x-go-type: apitypes.URI
+          x-go-type-import:
+            path: github.com/sumup/x/apitypes
+        name:
+          description: Display name of the resource.
+          type: string
+          example: Acme Corp
+        type:
+          type: string
+          example: merchant
+          enum:
+            - merchant
+          additionalProperties:
+            type: string
+        updated_at:
+          description: The timestamp of when the membership resource was last updated.
+          type: string
+          format: date-time
+          example: '2023-01-20T15:16:17Z'
+      required:
+        - id
+        - type
+        - name
+        - created_at
+        - updated_at
+        - attributes
+      title: Resource
     MembershipStatus:
+      description: The status of the membership.
       type: string
       enum:
         - accepted
@@ -5107,19 +5295,17 @@ components:
         - disabled
         - unknown
     MembershipUser:
-      description: User information.
+      description: Information about the user associated with the membership.
       type: object
       properties:
         classic:
           $ref: '#/components/schemas/MembershipUserClassic'
         disabled_at:
-          description: |
-            Time when the user has been disabled. Applies only to virtual users (`virtual_user: true`).
+          description: 'Time when the user has been disabled. Applies only to virtual users (`virtual_user: true`).'
           type: string
           format: date-time
         email:
-          description: |
-            End-User's preferred e-mail address. Its value MUST conform to the RFC 5322 [RFC5322] addr-spec syntax. The RP MUST NOT rely upon this value being unique, for unique identification use ID instead.
+          description: 'End-User''s preferred e-mail address. Its value MUST conform to the RFC 5322 [RFC5322] addr-spec syntax. The RP MUST NOT rely upon this value being unique, for unique identification use ID instead.'
           type: string
           example: example@sumup.com
         id:
@@ -5127,24 +5313,20 @@ components:
           type: string
           example: 44ca0f5b-813b-46e1-aee7-e6242010662e
         mfa_on_login_enabled:
-          description: |
-            True if the user has enabled MFA on login.
+          description: True if the user has enabled MFA on login.
           type: boolean
           example: true
         nickname:
-          description: |
-            User's preferred name. Used for display purposes only.
+          description: User's preferred name. Used for display purposes only.
           type: string
           example: Test User
         picture:
-          description: |
-            URL of the End-User's profile picture. This URL refers to an image file (for example, a PNG, JPEG, or GIF image file), rather than to a Web page containing an image.
+          description: 'URL of the End-User''s profile picture. This URL refers to an image file (for example, a PNG, JPEG, or GIF image file), rather than to a Web page containing an image.'
           type: string
           format: uri
           example: 'https://usercontent.sumup.com/44ca0f5b-813b-46e1-aee7-e6242010662e.png'
         virtual_user:
-          description: |
-            True if the user is a virtual user (operator).
+          description: True if the user is a virtual user (operator).
           type: boolean
           example: false
       required:
@@ -5334,6 +5516,7 @@ components:
             - operator
             - normal
         created_at:
+          description: The timestamp of when the operator was created.
           type: string
           format: date-time
         disabled:
@@ -5349,6 +5532,7 @@ components:
         permissions:
           $ref: '#/components/schemas/OperatorPermissions'
         updated_at:
+          description: The timestamp of when the operator was last updated.
           type: string
           format: date-time
         username:
@@ -5553,7 +5737,7 @@ components:
       type: object
       properties:
         created_at:
-          description: Reader creation timestamp.
+          description: The timestamp of when the reader was created.
           type: string
           format: date-time
           example: '2023-01-18T15:16:17Z'
@@ -5568,7 +5752,7 @@ components:
         status:
           $ref: '#/components/schemas/ReaderStatus'
         updated_at:
-          description: Reader last-modification timestamp.
+          description: The timestamp of when the reader was last updated.
           type: string
           format: date-time
           example: '2023-01-20T15:16:17Z'
@@ -6272,23 +6456,30 @@ tags:
     name: Merchant
     x-core-objects:
       - $ref: '#/components/schemas/MerchantAccount'
-  - description: |
+  - description: |-
       API Keys allow your application to gain programmatic access to SumUp.
       API Keys allow application to do authorized requests within the SumUp ecosystem. API Keys are scopes to single account and thus can't be used for endpoints where user presence is needed (for such endpoints it is necessary to use OAuth2).
+    externalDocs:
+      description: Authentication guide
+      url: 'https://developer.sumup.com/api/authentication'
     name: API Keys
     x-core-objects:
       - $ref: '#/components/schemas/APIKey'
-  - description: |
-      Endpoints for managing merchant sub-accounts (operators).
+  - description: Endpoints for managing merchant sub-accounts (operators).
     name: Subaccounts
     x-core-objects:
       - $ref: '#/components/schemas/Operator'
-  - description: |
-      Endpoints to manage account members. Members are users that have membership within merchant accounts.
+    x-deprecation-notice: 'Subaccounts API is deprecated, please use [Members](https://developer.sumup.com/api/members) API instead to manage your account members.'
+  - description: Endpoints to manage account members. Members are users that have membership within merchant accounts.
     name: Members
     x-beta: true
     x-core-objects:
       - $ref: '#/components/schemas/Member'
+  - description: Endpoints to manage user's memberships. Memberships are used to connect the user to merchant accounts and to grant them access to the merchant's resources via roles.
+    name: Memberships
+    x-beta: true
+    x-core-objects:
+      - $ref: '#/components/schemas/Membership'
   - description: |
       A reader represents a device that accepts payments. You can use the SumUp Solo to accept in-person payments.
     name: Readers
