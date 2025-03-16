@@ -5,6 +5,11 @@ updates:
     open-pull-requests-limit: 5
     schedule:
       interval: "daily"
+    groups:
+      rslib:
+        patterns:
+          - "@rslib/*"
+          - "rsbuild-plugin-dts"
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
