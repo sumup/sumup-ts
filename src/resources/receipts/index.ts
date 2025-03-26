@@ -3,30 +3,9 @@
 import * as Core from "../../core";
 
 /**
- * Amount of the event.
- */
-export type AmountEvent = number;
-
-/**
  * Unique ID of the transaction event.
  */
 export type EventID = number;
-
-/**
- * Status of the transaction event.
- */
-export type EventStatus =
-  | "PENDING"
-  | "SCHEDULED"
-  | "FAILED"
-  | "REFUNDED"
-  | "SUCCESSFUL"
-  | "PAID_OUT";
-
-/**
- * Date and time of the transaction event.
- */
-export type TimestampEvent = string;
 
 /**
  * Unique ID of the transaction.
@@ -43,25 +22,25 @@ export type EventType =
   | "PAYOUT_DEDUCTION";
 
 /**
- * Receipt merchant data
+ * Status of the transaction event.
  */
-export type ReceiptMerchantData = {
-  locale?: string;
-  merchant_profile?: {
-    address?: {
-      address_line1?: string;
-      city?: string;
-      country?: string;
-      country_en_name?: string;
-      country_native_name?: string;
-      landline?: string;
-      post_code?: string;
-    };
-    business_name?: string;
-    email?: string;
-    merchant_code?: string;
-  };
-};
+export type EventStatus =
+  | "PENDING"
+  | "SCHEDULED"
+  | "FAILED"
+  | "REFUNDED"
+  | "SUCCESSFUL"
+  | "PAID_OUT";
+
+/**
+ * Amount of the event.
+ */
+export type AmountEvent = number;
+
+/**
+ * Date and time of the transaction event.
+ */
+export type TimestampEvent = string;
 
 export type ReceiptCard = {
   /**
@@ -75,13 +54,13 @@ export type ReceiptCard = {
 };
 
 export type ReceiptEvent = {
-  amount?: AmountEvent;
   id?: EventID;
-  receipt_no?: string;
-  status?: EventStatus;
-  timestamp?: TimestampEvent;
   transaction_id?: TransactionID;
   type?: EventType;
+  status?: EventStatus;
+  amount?: AmountEvent;
+  timestamp?: TimestampEvent;
+  receipt_no?: string;
 };
 
 /**
@@ -89,42 +68,62 @@ export type ReceiptEvent = {
  */
 export type ReceiptTransaction = {
   /**
+   * Transaction code.
+   */
+  transaction_code?: string;
+  /**
    * Transaction amount.
    */
   amount?: string;
-  card?: ReceiptCard;
+  /**
+   * Transaction VAT amount.
+   */
+  vat_amount?: string;
+  /**
+   * Tip amount (included in transaction amount).
+   */
+  tip_amount?: string;
   /**
    * Transaction currency.
    */
   currency?: string;
   /**
-   * Transaction entry mode.
+   * Time created at.
    */
-  entry_mode?: string;
+  timestamp?: string;
   /**
-   * Events
+   * Transaction processing status.
    */
-  events?: ReceiptEvent[];
-  /**
-   * Number of installments.
-   */
-  installments_count?: number;
+  status?: string;
   /**
    * Transaction type.
    */
   payment_type?: string;
   /**
+   * Transaction entry mode.
+   */
+  entry_mode?: string;
+  /**
+   * Cardholder verification method.
+   */
+  verification_method?: string;
+  card?: ReceiptCard;
+  /**
+   * Number of installments.
+   */
+  installments_count?: number;
+  /**
    * Products
    */
   products?: {
     /**
-     * Product description.
-     */
-    description?: string;
-    /**
      * Product name.
      */
     name?: string;
+    /**
+     * Product description.
+     */
+    description?: string;
     /**
      * Product price.
      */
@@ -138,30 +137,6 @@ export type ReceiptTransaction = {
      */
     total_price?: number;
   }[];
-  /**
-   * Receipt number
-   */
-  receipt_no?: string;
-  /**
-   * Transaction processing status.
-   */
-  status?: string;
-  /**
-   * Time created at.
-   */
-  timestamp?: string;
-  /**
-   * Tip amount (included in transaction amount).
-   */
-  tip_amount?: string;
-  /**
-   * Transaction code.
-   */
-  transaction_code?: string;
-  /**
-   * Transaction VAT amount.
-   */
-  vat_amount?: string;
   /**
    * Vat rates.
    */
@@ -184,24 +159,49 @@ export type ReceiptTransaction = {
     vat?: number;
   }[];
   /**
-   * Cardholder verification method.
+   * Events
    */
-  verification_method?: string;
+  events?: ReceiptEvent[];
+  /**
+   * Receipt number
+   */
+  receipt_no?: string;
+};
+
+/**
+ * Receipt merchant data
+ */
+export type ReceiptMerchantData = {
+  merchant_profile?: {
+    merchant_code?: string;
+    business_name?: string;
+    email?: string;
+    address?: {
+      address_line1?: string;
+      city?: string;
+      country?: string;
+      country_en_name?: string;
+      country_native_name?: string;
+      post_code?: string;
+      landline?: string;
+    };
+  };
+  locale?: string;
 };
 
 /**
  * Receipt
  */
 export type Receipt = {
-  acquirer_data?: {
-    authorization_code?: string;
-    local_time?: string;
-    return_code?: string;
-    tid?: string;
-  };
-  emv_data?: Record<string, unknown>;
-  merchant_data?: ReceiptMerchantData;
   transaction_data?: ReceiptTransaction;
+  merchant_data?: ReceiptMerchantData;
+  emv_data?: Record<string, unknown>;
+  acquirer_data?: {
+    tid?: string;
+    authorization_code?: string;
+    return_code?: string;
+    local_time?: string;
+  };
 };
 
 export type GetReceiptQueryParams = {
