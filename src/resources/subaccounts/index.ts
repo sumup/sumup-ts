@@ -3,28 +3,48 @@
 import * as Core from "../../core";
 
 /**
- * Error
+ * User permissions
  */
-export type CompatError = { error_code: string; message: string };
-
-export type OperatorPermissions = {
-  admin: boolean;
-  create_moto_payments: boolean;
-  create_referral: boolean;
-  full_transaction_history_view: boolean;
-  refund_transactions: boolean;
+export type Permissions = {
+  /**
+   * Create MOTO payments
+   */
+  create_moto_payments?: boolean;
+  /**
+   * Can view full merchant transaction history
+   */
+  full_transaction_history_view?: boolean;
+  /**
+   * Refund transactions
+   */
+  refund_transactions?: boolean;
+  /**
+   * Create referral
+   */
+  create_referral?: boolean;
 };
 
 export type Operator = {
-  account_type: "operator" | "normal";
-  created_at: string;
-  disabled: boolean;
   id: number;
-  nickname?: string;
-  permissions: OperatorPermissions;
-  updated_at: string;
   username: string;
+  nickname?: string;
+  disabled: boolean;
+  /**
+   * The timestamp of when the operator was created.
+   */
+  created_at: string;
+  /**
+   * The timestamp of when the operator was last updated.
+   */
+  updated_at: string;
+  permissions: Permissions;
+  account_type: "operator" | "normal";
 };
+
+/**
+ * Error
+ */
+export type CompatError = { error_code: string; message: string };
 
 export type ListSubAccountsQueryParams = {
   query?: string;
@@ -34,31 +54,29 @@ export type ListSubAccountsQueryParams = {
 export type ListSubAccountsResponse = Operator[];
 
 export type CreateSubAccountParams = {
-  nickname?: string;
+  username: string;
   password: string;
+  nickname?: string;
   permissions?: {
     create_moto_payments?: boolean;
     create_referral?: boolean;
     full_transaction_history_view?: boolean;
     refund_transactions?: boolean;
   };
-  username: string;
 };
 
 export type UpdateSubAccountParams = {
+  password?: string;
+  username?: string;
   disabled?: boolean;
   nickname?: string;
-  password?: string;
   permissions?: {
     create_moto_payments?: boolean;
     create_referral?: boolean;
     full_transaction_history_view?: boolean;
     refund_transactions?: boolean;
   };
-  username?: string;
 };
-
-export type CompatChangeOperatorsPasswordParams = { password?: string };
 
 export class Subaccounts extends Core.APIResource {
   /**
@@ -129,44 +147,15 @@ export class Subaccounts extends Core.APIResource {
       ...params,
     });
   }
-
-  /**
-   * Disable operator.
-   */
-  compatDisableOperator(
-    operatorId: number,
-    params?: Core.FetchParams,
-  ): Core.APIPromise<Operator> {
-    return this._client.post<Operator>({
-      path: `/v0.1/me/accounts/${operatorId}/disable`,
-      ...params,
-    });
-  }
-
-  /**
-   * Change operators password.
-   */
-  compatChangeOperatorsPassword(
-    operatorId: number,
-    body: CompatChangeOperatorsPasswordParams,
-    params?: Core.FetchParams,
-  ): Core.APIPromise<Operator> {
-    return this._client.put<Operator>({
-      path: `/v0.1/me/accounts/${operatorId}/reset`,
-      body,
-      ...params,
-    });
-  }
 }
 
 export declare namespace Subaccounts {
   export type {
-    CompatChangeOperatorsPasswordParams,
     CompatError,
     CreateSubAccountParams,
     ListSubAccountsQueryParams,
     Operator,
-    OperatorPermissions,
+    Permissions,
     UpdateSubAccountParams,
   };
 }

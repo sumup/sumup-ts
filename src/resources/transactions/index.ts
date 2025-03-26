@@ -3,11 +3,6 @@
 import * as Core from "../../core";
 
 /**
- * Amount of the event.
- */
-export type AmountEvent = number;
-
-/**
  * Details of the payment card.
  */
 export type CardResponse = {
@@ -60,83 +55,67 @@ export type Currency =
  */
 export type TransactionMixinBase = {
   /**
+   * Unique ID of the transaction.
+   */
+  id?: string;
+  /**
+   * Transaction code returned by the acquirer/processing entity after processing the transaction.
+   */
+  transaction_code?: string;
+  /**
    * Total amount of the transaction.
    */
   amount?: number;
   currency?: Currency;
   /**
-   * Unique ID of the transaction.
+   * Date and time of the creation of the transaction. Response format expressed according to [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) code.
    */
-  id?: string;
-  /**
-   * Current number of the installment for deferred payments.
-   */
-  installments_count?: number;
-  /**
-   * Payment type used for the transaction.
-   */
-  payment_type?: "ECOM" | "RECURRING" | "BOLETO";
+  timestamp?: string;
   /**
    * Current status of the transaction.
    */
   status?: "SUCCESSFUL" | "CANCELLED" | "FAILED" | "PENDING";
   /**
-   * Date and time of the creation of the transaction. Response format expressed according to [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) code.
+   * Payment type used for the transaction.
    */
-  timestamp?: string;
+  payment_type?: "ECOM" | "RECURRING" | "BOLETO";
   /**
-   * Transaction code returned by the acquirer/processing entity after processing the transaction.
+   * Current number of the installment for deferred payments.
    */
-  transaction_code?: string;
+  installments_count?: number;
 };
 
 export type TransactionMixinCheckout = {
-  /**
-   * Authorization code for the transaction sent by the payment card issuer or bank. Applicable only to card payments.
-   */
-  auth_code?: string;
-  /**
-   * Entry mode of the payment details.
-   */
-  entry_mode?: "CUSTOMER_ENTRY" | "BOLETO";
-  /**
-   * Internal unique ID of the transaction on the SumUp platform.
-   */
-  internal_id?: number;
   /**
    * Unique code of the registered merchant to whom the payment is made.
    */
   merchant_code?: string;
   /**
+   * Amount of the applicable VAT (out of the total transaction amount).
+   */
+  vat_amount?: number;
+  /**
    * Amount of the tip (out of the total transaction amount).
    */
   tip_amount?: number;
   /**
-   * Amount of the applicable VAT (out of the total transaction amount).
+   * Entry mode of the payment details.
    */
-  vat_amount?: number;
+  entry_mode?: "CUSTOMER_ENTRY" | "BOLETO";
+  /**
+   * Authorization code for the transaction sent by the payment card issuer or bank. Applicable only to card payments.
+   */
+  auth_code?: string;
+  /**
+   * Internal unique ID of the transaction on the SumUp platform.
+   */
+  internal_id?: number;
 };
 
 /**
  * Unique ID of the transaction event.
  */
 export type EventID = number;
-
-/**
- * Status of the transaction event.
- */
-export type EventStatus =
-  | "PENDING"
-  | "SCHEDULED"
-  | "FAILED"
-  | "REFUNDED"
-  | "SUCCESSFUL"
-  | "PAID_OUT";
-
-/**
- * Date and time of the transaction event.
- */
-export type TimestampEvent = string;
 
 /**
  * Unique ID of the transaction.
@@ -152,8 +131,42 @@ export type EventType =
   | "REFUND"
   | "PAYOUT_DEDUCTION";
 
+/**
+ * Status of the transaction event.
+ */
+export type EventStatus =
+  | "PENDING"
+  | "SCHEDULED"
+  | "FAILED"
+  | "REFUNDED"
+  | "SUCCESSFUL"
+  | "PAID_OUT";
+
+/**
+ * Amount of the event.
+ */
+export type AmountEvent = number;
+
+/**
+ * Date and time of the transaction event.
+ */
+export type TimestampEvent = string;
+
 export type Event = {
+  id?: EventID;
+  transaction_id?: TransactionID;
+  type?: EventType;
+  status?: EventStatus;
   amount?: AmountEvent;
+  timestamp?: TimestampEvent;
+  /**
+   * Amount of the fee related to the event.
+   */
+  fee_amount?: number;
+  /**
+   * Consecutive number of the installment.
+   */
+  installment_number?: number;
   /**
    * Amount deducted for the event.
    */
@@ -162,64 +175,25 @@ export type Event = {
    * Amount of the fee deducted for the event.
    */
   deducted_fee_amount?: number;
-  /**
-   * Amount of the fee related to the event.
-   */
-  fee_amount?: number;
-  id?: EventID;
-  /**
-   * Consecutive number of the installment.
-   */
-  installment_number?: number;
-  status?: EventStatus;
-  timestamp?: TimestampEvent;
-  transaction_id?: TransactionID;
-  type?: EventType;
 };
-
-/**
- * Indication of the precision of the geographical position received from the payment terminal.
- */
-export type HorizontalAccuracy = number;
-
-/**
- * Latitude value from the coordinates of the payment location (as received from the payment terminal reader).
- */
-export type Lat = number;
 
 /**
  * Details of a link to a related resource.
  */
 export type Link = {
   /**
-   * URL for accessing the related resource.
-   */
-  href?: string;
-  /**
    * Specifies the relation to the current resource.
    */
   rel?: string;
+  /**
+   * URL for accessing the related resource.
+   */
+  href?: string;
   /**
    * Specifies the media type of the related resource.
    */
   type?: string;
 };
-
-export type LinkRefund = Link & {
-  /**
-   * Maximum allowed amount for the refund.
-   */
-  max_amount?: number;
-  /**
-   * Minimum allowed amount for the refund.
-   */
-  min_amount?: number;
-};
-
-/**
- * Longitude value from the coordinates of the payment location (as received from the payment terminal reader).
- */
-export type Lon = number;
 
 /**
  * Details of the product for which the payment is made.
@@ -234,17 +208,25 @@ export type Product = {
    */
   price?: number;
   /**
-   * Price of a single product item with VAT.
+   * VAT rate applicable to the product.
    */
-  price_with_vat?: number;
-  /**
-   * Number of product items for the purchase.
-   */
-  quantity?: number;
+  vat_rate?: number;
   /**
    * Amount of the VAT for a single product item (calculated as the product of `price` and `vat_rate`, i.e. `single_vat_amount = price * vat_rate`).
    */
   single_vat_amount?: number;
+  /**
+   * Price of a single product item with VAT.
+   */
+  price_with_vat?: number;
+  /**
+   * Total VAT amount for the purchase (calculated as the product of `single_vat_amount` and `quantity`, i.e. `vat_amount = single_vat_amount * quantity`).
+   */
+  vat_amount?: number;
+  /**
+   * Number of product items for the purchase.
+   */
+  quantity?: number;
   /**
    * Total price of the product items without VAT (calculated as the product of `price` and `quantity`, i.e. `total_price = price * quantity`).
    */
@@ -253,40 +235,44 @@ export type Product = {
    * Total price of the product items including VAT (calculated as the product of `price_with_vat` and `quantity`, i.e. `total_with_vat = price_with_vat * quantity`).
    */
   total_with_vat?: number;
-  /**
-   * Total VAT amount for the purchase (calculated as the product of `single_vat_amount` and `quantity`, i.e. `vat_amount = single_vat_amount * quantity`).
-   */
-  vat_amount?: number;
-  /**
-   * VAT rate applicable to the product.
-   */
-  vat_rate?: number;
 };
 
 /**
  * Details of a transaction event.
  */
 export type TransactionEvent = {
+  id?: EventID;
+  event_type?: EventType;
+  status?: EventStatus;
   amount?: AmountEvent;
+  /**
+   * Date when the transaction event is due to occur.
+   */
+  due_date?: string;
   /**
    * Date when the transaction event occurred.
    */
   date?: string;
   /**
-   * Date when the transaction event is due to occur.
-   */
-  due_date?: string;
-  event_type?: EventType;
-  id?: EventID;
-  /**
    * Consecutive number of the installment that is paid. Applicable only payout events, i.e. `event_type = PAYOUT`.
    */
   installment_number?: number;
-  status?: EventStatus;
   timestamp?: TimestampEvent;
 };
 
 export type TransactionMixinHistory = {
+  /**
+   * Short description of the payment. The value is taken from the `description` property of the related checkout resource.
+   */
+  product_summary?: string;
+  /**
+   * Total number of payouts to the registered user specified in the `user` property.
+   */
+  payouts_total?: number;
+  /**
+   * Number of payouts that are made to the registered user specified in the `user` property.
+   */
+  payouts_received?: number;
   /**
    * Payout plan of the registered user at the time when the transaction was made.
    */
@@ -294,109 +280,23 @@ export type TransactionMixinHistory = {
     | "SINGLE_PAYMENT"
     | "TRUE_INSTALLMENT"
     | "ACCELERATED_INSTALLMENT";
-  /**
-   * Number of payouts that are made to the registered user specified in the `user` property.
-   */
-  payouts_received?: number;
-  /**
-   * Total number of payouts to the registered user specified in the `user` property.
-   */
-  payouts_total?: number;
-  /**
-   * Short description of the payment. The value is taken from the `description` property of the related checkout resource.
-   */
-  product_summary?: string;
 };
-
-export type TransactionFull = TransactionMixinBase &
-  TransactionMixinCheckout &
-  TransactionMixinHistory & {
-    card?: CardResponse;
-    /**
-     * List of events related to the transaction.
-     */
-    events?: Event[];
-    horizontal_accuracy?: HorizontalAccuracy;
-    lat?: Lat;
-    /**
-     * List of hyperlinks for accessing related resources.
-     */
-    links?: Record<string, unknown>[];
-    /**
-     * Local date and time of the creation of the transaction.
-     */
-    local_time?: string;
-    /**
-     * Details of the payment location as received from the payment terminal.
-     */
-    location?: {
-      horizontal_accuracy?: HorizontalAccuracy;
-      lat?: Lat;
-      lon?: Lon;
-    };
-    lon?: Lon;
-    /**
-     * Payout type for the transaction.
-     */
-    payout_type?: "BANK_ACCOUNT" | "BALANCE" | "PREPAID_CARD";
-    /**
-     * List of products from the merchant's catalogue for which the transaction serves as a payment.
-     */
-    products?: Product[];
-    /**
-     * Simple name of the payment type.
-     */
-    simple_payment_type?:
-      | "MOTO"
-      | "CASH"
-      | "CC_SIGNATURE"
-      | "ELV"
-      | "CC_CUSTOMER_ENTERED"
-      | "MANUAL_ENTRY"
-      | "EMV";
-    /**
-     * Status generated from the processing status and the latest transaction state.
-     */
-    simple_status?:
-      | "SUCCESSFUL"
-      | "PAID_OUT"
-      | "CANCEL_FAILED"
-      | "CANCELLED"
-      | "CHARGEBACK"
-      | "FAILED"
-      | "REFUND_FAILED"
-      | "REFUNDED"
-      | "NON_COLLECTION";
-    /**
-     * Indicates whether tax deduction is enabled for the transaction.
-     */
-    tax_enabled?: boolean;
-    /**
-     * List of transaction events related to the transaction.
-     */
-    transaction_events?: TransactionEvent[];
-    /**
-     * Email address of the registered user (merchant) to whom the payment is made.
-     */
-    username?: string;
-    /**
-     * List of VAT rates applicable to the transaction.
-     */
-    vat_rates?: Record<string, unknown>[];
-    /**
-     * Verification method used for the transaction.
-     */
-    verification_method?:
-      | "none"
-      | "signature"
-      | "offline pin"
-      | "online pin"
-      | "offline pin + signature"
-      | "confirmation code verified";
-  };
 
 export type TransactionHistory = TransactionMixinBase &
   TransactionMixinHistory & {
+    transaction_id?: TransactionID;
+    /**
+     * Client-specific ID of the transaction.
+     */
+    client_transaction_id?: string;
+    /**
+     * Email address of the registered user (merchant) to whom the payment is made.
+     */
+    user?: string;
+    /**
+     * Type of the transaction for the registered user specified in the `user` property.
+     */
+    type?: "PAYMENT" | "REFUND" | "CHARGE_BACK";
     /**
      * Issuing card network of the payment card used for the transaction.
      */
@@ -415,19 +315,119 @@ export type TransactionHistory = TransactionMixinBase &
       | "VISA_ELECTRON"
       | "VISA_VPAY"
       | "UNKNOWN";
-    /**
-     * Client-specific ID of the transaction.
-     */
-    client_transaction_id?: string;
-    transaction_id?: TransactionID;
-    /**
-     * Type of the transaction for the registered user specified in the `user` property.
-     */
-    type?: "PAYMENT" | "REFUND" | "CHARGE_BACK";
+  };
+
+/**
+ * Latitude value from the coordinates of the payment location (as received from the payment terminal reader).
+ */
+export type Lat = number;
+
+/**
+ * Longitude value from the coordinates of the payment location (as received from the payment terminal reader).
+ */
+export type Lon = number;
+
+/**
+ * Indication of the precision of the geographical position received from the payment terminal.
+ */
+export type HorizontalAccuracy = number;
+
+export type LinkRefund = Link & {
+  /**
+   * Minimum allowed amount for the refund.
+   */
+  min_amount?: number;
+  /**
+   * Maximum allowed amount for the refund.
+   */
+  max_amount?: number;
+};
+
+export type TransactionFull = TransactionMixinBase &
+  TransactionMixinCheckout &
+  TransactionMixinHistory & {
     /**
      * Email address of the registered user (merchant) to whom the payment is made.
      */
-    user?: string;
+    username?: string;
+    lat?: Lat;
+    lon?: Lon;
+    horizontal_accuracy?: HorizontalAccuracy;
+    /**
+     * Simple name of the payment type.
+     */
+    simple_payment_type?:
+      | "MOTO"
+      | "CASH"
+      | "CC_SIGNATURE"
+      | "ELV"
+      | "CC_CUSTOMER_ENTERED"
+      | "MANUAL_ENTRY"
+      | "EMV";
+    /**
+     * Verification method used for the transaction.
+     */
+    verification_method?:
+      | "none"
+      | "signature"
+      | "offline pin"
+      | "online pin"
+      | "offline pin + signature"
+      | "confirmation code verified";
+    card?: CardResponse;
+    /**
+     * Local date and time of the creation of the transaction.
+     */
+    local_time?: string;
+    /**
+     * Payout type for the transaction.
+     */
+    payout_type?: "BANK_ACCOUNT" | "BALANCE" | "PREPAID_CARD";
+    /**
+     * List of products from the merchant's catalogue for which the transaction serves as a payment.
+     */
+    products?: Product[];
+    /**
+     * List of VAT rates applicable to the transaction.
+     */
+    vat_rates?: Record<string, unknown>[];
+    /**
+     * List of transaction events related to the transaction.
+     */
+    transaction_events?: TransactionEvent[];
+    /**
+     * Status generated from the processing status and the latest transaction state.
+     */
+    simple_status?:
+      | "SUCCESSFUL"
+      | "PAID_OUT"
+      | "CANCEL_FAILED"
+      | "CANCELLED"
+      | "CHARGEBACK"
+      | "FAILED"
+      | "REFUND_FAILED"
+      | "REFUNDED"
+      | "NON_COLLECTION";
+    /**
+     * List of hyperlinks for accessing related resources.
+     */
+    links?: Record<string, unknown>[];
+    /**
+     * List of events related to the transaction.
+     */
+    events?: Event[];
+    /**
+     * Details of the payment location as received from the payment terminal.
+     */
+    location?: {
+      lat?: Lat;
+      lon?: Lon;
+      horizontal_accuracy?: HorizontalAccuracy;
+    };
+    /**
+     * Indicates whether tax deduction is enabled for the transaction.
+     */
+    tax_enabled?: boolean;
   };
 
 export type RefundTransactionParams = {
@@ -439,47 +439,13 @@ export type RefundTransactionParams = {
 
 export type RefundTransactionResponse = Record<string, unknown>;
 
-export type GetTransactionQueryParams = {
+export type GetTransactionV2_1QueryParams = {
   id?: string;
   internalId?: string;
   transactionCode?: string;
 };
 
-export type ListTransactionsQueryParams = {
-  transactionCode?: string;
-  order?: "ascending" | "descending";
-  limit?: number;
-  users?: string[];
-  statuses?: (
-    | "SUCCESSFUL"
-    | "CANCELLED"
-    | "FAILED"
-    | "REFUNDED"
-    | "CHARGE_BACK"
-  )[];
-  paymentTypes?: (
-    | "CASH"
-    | "POS"
-    | "ECOM"
-    | "BALANCE"
-    | "MOTO"
-    | "BOLETO"
-    | "UNKNOWN"
-  )[];
-  types?: ("PAYMENT" | "REFUND" | "CHARGE_BACK")[];
-  changesSince?: string;
-  newestTime?: string;
-  newestRef?: string;
-  oldestTime?: string;
-  oldestRef?: string;
-};
-
-export type ListTransactionsResponse = {
-  items?: TransactionHistory[];
-  links?: Link[];
-};
-
-export type GetTransactionV2_1QueryParams = {
+export type GetTransactionQueryParams = {
   id?: string;
   internalId?: string;
   transactionCode?: string;
@@ -519,6 +485,40 @@ export type ListTransactionsV2_1Response = {
   links?: Link[];
 };
 
+export type ListTransactionsQueryParams = {
+  transactionCode?: string;
+  order?: "ascending" | "descending";
+  limit?: number;
+  users?: string[];
+  statuses?: (
+    | "SUCCESSFUL"
+    | "CANCELLED"
+    | "FAILED"
+    | "REFUNDED"
+    | "CHARGE_BACK"
+  )[];
+  paymentTypes?: (
+    | "CASH"
+    | "POS"
+    | "ECOM"
+    | "BALANCE"
+    | "MOTO"
+    | "BOLETO"
+    | "UNKNOWN"
+  )[];
+  types?: ("PAYMENT" | "REFUND" | "CHARGE_BACK")[];
+  changesSince?: string;
+  newestTime?: string;
+  newestRef?: string;
+  oldestTime?: string;
+  oldestRef?: string;
+};
+
+export type ListTransactionsResponse = {
+  items?: TransactionHistory[];
+  links?: Link[];
+};
+
 export class Transactions extends Core.APIResource {
   /**
    * Refund a transaction
@@ -531,6 +531,21 @@ export class Transactions extends Core.APIResource {
     return this._client.post<void>({
       path: `/v0.1/me/refund/${txnId}`,
       body,
+      ...params,
+    });
+  }
+
+  /**
+   * Retrieve a transaction
+   */
+  get(
+    merchantCode: string,
+    query?: GetTransactionV2_1QueryParams,
+    params?: Core.FetchParams,
+  ): Core.APIPromise<TransactionFull> {
+    return this._client.get<TransactionFull>({
+      path: `/v2.1/merchants/${merchantCode}/transactions`,
+      query,
       ...params,
     });
   }
@@ -552,27 +567,13 @@ export class Transactions extends Core.APIResource {
   /**
    * List transactions
    */
-  listDeprecated(
-    query?: ListTransactionsQueryParams,
+  list(
+    merchantCode: string,
+    query?: ListTransactionsV2_1QueryParams,
     params?: Core.FetchParams,
   ): Core.APIPromise<void> {
     return this._client.get<void>({
-      path: `/v0.1/me/transactions/history`,
-      query,
-      ...params,
-    });
-  }
-
-  /**
-   * Retrieve a transaction
-   */
-  get(
-    merchantCode: string,
-    query?: GetTransactionV2_1QueryParams,
-    params?: Core.FetchParams,
-  ): Core.APIPromise<TransactionFull> {
-    return this._client.get<TransactionFull>({
-      path: `/v2.1/merchants/${merchantCode}/transactions`,
+      path: `/v2.1/merchants/${merchantCode}/transactions/history`,
       query,
       ...params,
     });
@@ -581,13 +582,12 @@ export class Transactions extends Core.APIResource {
   /**
    * List transactions
    */
-  list(
-    merchantCode: string,
-    query?: ListTransactionsV2_1QueryParams,
+  listDeprecated(
+    query?: ListTransactionsQueryParams,
     params?: Core.FetchParams,
   ): Core.APIPromise<void> {
     return this._client.get<void>({
-      path: `/v2.1/merchants/${merchantCode}/transactions/history`,
+      path: `/v0.1/me/transactions/history`,
       query,
       ...params,
     });

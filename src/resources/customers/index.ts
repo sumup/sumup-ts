@@ -37,32 +37,23 @@ export type Address = {
  */
 export type MandateResponse = {
   /**
-   * Merchant code which has the mandate
+   * Indicates the mandate type
    */
-  merchant_code?: string;
+  type?: string;
   /**
    * Mandate status
    */
   status?: string;
   /**
-   * Indicates the mandate type
+   * Merchant code which has the mandate
    */
-  type?: string;
+  merchant_code?: string;
 };
 
 /**
  * Personal details for the customer.
  */
 export type PersonalDetails = {
-  address?: Address;
-  /**
-   * Date of birth of the customer.
-   */
-  birthdate?: string;
-  /**
-   * Email address of the customer.
-   */
-  email?: string;
   /**
    * First name of the customer.
    */
@@ -72,9 +63,18 @@ export type PersonalDetails = {
    */
   last_name?: string;
   /**
+   * Email address of the customer.
+   */
+  email?: string;
+  /**
    * Phone number of the customer.
    */
   phone?: string;
+  /**
+   * Date of birth of the customer.
+   */
+  birthdate?: string;
+  address?: Address;
 };
 
 /**
@@ -93,13 +93,13 @@ export type Customer = {
  */
 export type ErrorForbidden = {
   /**
-   * Platform code for the error.
-   */
-  error_code?: string;
-  /**
    * Short description of the error.
    */
   error_message?: string;
+  /**
+   * Platform code for the error.
+   */
+  error_code?: string;
   /**
    * HTTP status code for the error.
    */
@@ -111,9 +111,17 @@ export type ErrorForbidden = {
  */
 export type PaymentInstrumentResponse = {
   /**
+   * Unique token identifying the saved payment card for a customer.
+   */
+  token?: string;
+  /**
    * Indicates whether the payment instrument is active and can be used for payments. To deactivate it, send a `DELETE` request to the resource endpoint.
    */
   active?: boolean;
+  /**
+   * Type of the payment instrument.
+   */
+  type?: "card";
   /**
    * Details of the payment card.
    */
@@ -141,19 +149,11 @@ export type PaymentInstrumentResponse = {
       | "VISA_VPAY"
       | "UNKNOWN";
   };
+  mandate?: MandateResponse;
   /**
    * Creation date of payment instrument. Response format expressed according to [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) code.
    */
   created_at?: string;
-  mandate?: MandateResponse;
-  /**
-   * Unique token identifying the saved payment card for a customer.
-   */
-  token?: string;
-  /**
-   * Type of the payment instrument.
-   */
-  type?: "card";
 };
 
 export type UpdateCustomerParams = { personal_details?: PersonalDetails };

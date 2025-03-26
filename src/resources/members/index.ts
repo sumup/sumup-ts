@@ -3,15 +3,19 @@
 import * as Core from "../../core";
 
 /**
- * Object attributes that modifiable only by SumUp applications.
+ * The status of the membership.
  */
-export type Attributes = Record<string, Record<string, unknown>>;
+export type MembershipStatus =
+  | "accepted"
+  | "pending"
+  | "expired"
+  | "disabled"
+  | "unknown";
 
 /**
  * Invite
  *
  * Pending invitation for membership.
- *
  */
 export type Invite = {
   /**
@@ -26,85 +30,88 @@ export type Invite = {
  */
 export type Metadata = Record<string, Record<string, unknown>>;
 
-export type MembershipStatus =
-  | "accepted"
-  | "pending"
-  | "expired"
-  | "disabled"
-  | "unknown";
+/**
+ * Object attributes that modifiable only by SumUp applications.
+ */
+export type Attributes = Record<string, Record<string, unknown>>;
 
 /**
  * Classic identifiers of the user.
+ *
+ * @deprecated
  */
 export type MembershipUserClassic = { user_id: number };
 
 /**
- * User information.
+ * Information about the user associated with the membership.
  */
 export type MembershipUser = {
-  classic?: MembershipUserClassic;
-  /**
-   * Time when the user has been disabled. Applies only to virtual users (`virtual_user: true`).
-   *
-   */
-  disabled_at?: string;
-  /**
-   * End-User's preferred e-mail address. Its value MUST conform to the RFC 5322 [RFC5322] addr-spec syntax. The RP MUST NOT rely upon this value being unique, for unique identification use ID instead.
-   *
-   */
-  email: string;
   /**
    * Identifier for the End-User (also called Subject).
    */
   id: string;
   /**
+   * End-User's preferred e-mail address. Its value MUST conform to the RFC 5322 [RFC5322] addr-spec syntax. The RP MUST NOT rely upon this value being unique, for unique identification use ID instead.
+   */
+  email: string;
+  /**
    * True if the user has enabled MFA on login.
-   *
    */
   mfa_on_login_enabled: boolean;
   /**
+   * True if the user is a virtual user (operator).
+   */
+  virtual_user: boolean;
+  /**
+   * True if the user is a service account.
+   */
+  service_account_user: boolean;
+  /**
+   * Time when the user has been disabled. Applies only to virtual users (`virtual_user: true`).
+   */
+  disabled_at?: string;
+  /**
    * User's preferred name. Used for display purposes only.
-   *
    */
   nickname?: string;
   /**
    * URL of the End-User's profile picture. This URL refers to an image file (for example, a PNG, JPEG, or GIF image file), rather than to a Web page containing an image.
-   *
    */
   picture?: string;
-  /**
-   * True if the user is a virtual user (operator).
-   *
-   */
-  virtual_user: boolean;
+  classic?: MembershipUserClassic;
 };
 
 /**
  * Member
  *
  * A member is user within specific resource identified by resource id, resource type, and associated roles.
- *
  */
 export type Member = {
-  attributes?: Attributes;
-  created_at: string;
   /**
    * ID of the member.
    */
   id: string;
-  invite?: Invite;
-  metadata?: Metadata;
+  /**
+   * User's roles.
+   */
+  roles: string[];
   /**
    * User's permissions.
    */
   permissions: string[];
   /**
-   * User's roles.
+   * The timestamp of when the member was created.
    */
-  roles: string[];
-  status: MembershipStatus;
+  created_at: string;
+  /**
+   * The timestamp of when the member was last updated.
+   */
   updated_at: string;
   user?: MembershipUser;
+  invite?: Invite;
+  status: MembershipStatus;
+  metadata?: Metadata;
+  attributes?: Attributes;
 };
 
 export type ListMerchantMembersQueryParams = {
@@ -122,43 +129,44 @@ export type ListMerchantMembersResponse = {
 };
 
 export type CreateMerchantMemberParams = {
-  attributes?: Attributes;
+  /**
+   * True if the user is managed by the merchant. In this case, we'll created a virtual user with the provided password and nickname.
+   */
+  is_managed_user?: boolean;
+  /**
+   * True if the user is a service account. It can later be used to create OAuth2 clients.
+   */
+  is_service_account?: boolean;
   /**
    * Email address of the member to add.
    */
   email: string;
   /**
-   * True if the user is managed by the merchant. In this case, we'll created a virtual user with the provided password and nickname.
-   *
-   */
-  is_managed_user?: boolean;
-  metadata?: Metadata;
-  /**
-   * Nickname of the member to add. Only used if `is_managed_user` is true. Used for display purposes only.
-   *
-   */
-  nickname?: string;
-  /**
-   * Password of the member to add. Only used if `is_managed_user` is true.
+   * Password of the member to add. Only used if `is_managed_user` is true. In the case of service accounts, the password is not used and can not be defined by the caller.
    */
   password?: string;
   /**
-   * List of roles to assign to the new member.
+   * Nickname of the member to add. Only used if `is_managed_user` is true. Used for display purposes only.
+   */
+  nickname?: string;
+  /**
+   * List of roles to assign to the new member. In the case of service accounts, the roles are predefined.
    */
   roles: string[];
+  metadata?: Metadata;
+  attributes?: Attributes;
 };
 
 export type UpdateMerchantMemberParams = {
-  attributes?: Attributes;
-  metadata?: Metadata;
   roles?: string[];
+  metadata?: Metadata;
+  attributes?: Attributes;
   /**
    * Allows you to update user data of managed users.
    */
   user?: {
     /**
      * User's preferred name. Used for display purposes only.
-     *
      */
     nickname?: string;
     /**
@@ -185,7 +193,7 @@ export class Members extends Core.APIResource {
   }
 
   /**
-   * Create a merchant member.
+   * Create a member
    */
   create(
     merchantCode: string,
@@ -200,7 +208,7 @@ export class Members extends Core.APIResource {
   }
 
   /**
-   * Get merchant member
+   * Retrieve a member
    */
   get(
     merchantCode: string,
@@ -214,7 +222,7 @@ export class Members extends Core.APIResource {
   }
 
   /**
-   * Update merchant member
+   * Update a member
    */
   update(
     merchantCode: string,
@@ -230,7 +238,7 @@ export class Members extends Core.APIResource {
   }
 
   /**
-   * Delete member
+   * Delete a member
    */
   delete(
     merchantCode: string,

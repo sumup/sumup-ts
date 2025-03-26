@@ -24,41 +24,65 @@ export type OAuth2Scopes = (
 
 /**
  * API Key
+ *
+ * An API key is a static token that allows you to authorize with SumUp APIs.
+ * Keep your API keys secret and safe. Do not share your API keys or expose them in a publicly accessible areas such as client-side code (browser or apps) or in the GitHub.
  */
 export type APIKey = {
-  created_at: string;
   /**
    * Unique identifier of the API Key.
-   *
    */
   id: string;
   /**
    * User-assigned name of the API Key.
    */
   name: string;
+  scopes: OAuth2Scopes;
+  type: "public" | "secret";
   /**
    * The plaintext value of the API key. This field is returned only in the response to API key creation and is never again available in the plaintext form.
-   *
    */
   plaintext?: string;
   /**
    * Last 8 characters of the API key.
-   *
    */
   preview: string;
-  scopes: OAuth2Scopes;
-  type: "public" | "secret";
+  /**
+   * The timestamp of when the API key was created.
+   */
+  created_at: string;
+  /**
+   * The timestamp of when the API key was last updated.
+   */
   updated_at: string;
 };
 
-export type APIKeysList = { items: APIKey[]; total_count: number };
+/**
+ * List of API keys.
+ */
+export type APIKeysList = {
+  /**
+   * List of API keys.
+   */
+  items: APIKey[];
+  /**
+   * Total number of API keys.
+   */
+  total_count: number;
+};
 
 export type ListApiKeysQueryParams = {
   offset?: number;
   limit?: number;
 };
 
-export type CreateApiKeyParams = { name: string; scopes: OAuth2Scopes };
+export type CreateApiKeyParams = {
+  /**
+   * Name of the API key.
+   */
+  name: string;
+  scopes: OAuth2Scopes;
+};
 
 export type UpdateApiKeyParams = {
   /**
@@ -72,7 +96,7 @@ export class ApiKeys extends Core.APIResource {
   /**
    * List API keys
    */
-  listApiKeys(
+  list(
     merchantCode: string,
     query?: ListApiKeysQueryParams,
     params?: Core.FetchParams,
@@ -87,7 +111,7 @@ export class ApiKeys extends Core.APIResource {
   /**
    * Create an API key
    */
-  createApiKey(
+  create(
     merchantCode: string,
     body: CreateApiKeyParams,
     params?: Core.FetchParams,
@@ -102,7 +126,7 @@ export class ApiKeys extends Core.APIResource {
   /**
    * Retrieve an API Key
    */
-  getApiKey(
+  get(
     merchantCode: string,
     keyId: string,
     params?: Core.FetchParams,
@@ -116,7 +140,7 @@ export class ApiKeys extends Core.APIResource {
   /**
    * Update an API key
    */
-  updateApiKey(
+  update(
     merchantCode: string,
     keyId: string,
     body: UpdateApiKeyParams,
@@ -130,9 +154,9 @@ export class ApiKeys extends Core.APIResource {
   }
 
   /**
-   * Revoke an API key
+   * Delete an API key
    */
-  revokeApiKey(
+  delete(
     merchantCode: string,
     keyId: string,
     params?: Core.FetchParams,

@@ -7,13 +7,13 @@ import * as Core from "../../core";
  */
 export type Account = {
   /**
-   * The role of the user.
-   */
-  type?: "normal" | "operator";
-  /**
    * Username of the user profile.
    */
   username?: string;
+  /**
+   * The role of the user.
+   */
+  type?: "normal" | "operator";
 };
 
 /**
@@ -25,13 +25,13 @@ export type CountryDetails = {
    */
   currency?: string;
   /**
-   * Country EN name
-   */
-  en_name?: string;
-  /**
    * Country ISO code
    */
   iso_code?: string;
+  /**
+   * Country EN name
+   */
+  en_name?: string;
   /**
    * Country native name
    */
@@ -43,17 +43,17 @@ export type CountryDetails = {
  */
 export type TimeoffsetDetails = {
   /**
-   * Daylight Saving Time
+   * Postal code
    */
-  dst?: boolean;
+  post_code?: string;
   /**
    * UTC offset
    */
   offset?: number;
   /**
-   * Postal code
+   * Daylight Saving Time
    */
-  post_code?: string;
+  dst?: boolean;
 };
 
 /**
@@ -73,34 +73,9 @@ export type AddressWithDetails = {
    */
   city?: string;
   /**
-   * undefined
-   */
-  company?: string;
-  /**
    * Country ISO 3166-1 code
    */
   country?: string;
-  country_details?: CountryDetails;
-  /**
-   * undefined
-   */
-  first_name?: string;
-  /**
-   * Landline number
-   */
-  landline?: string;
-  /**
-   * undefined
-   */
-  last_name?: string;
-  /**
-   * Postal code
-   */
-  post_code?: string;
-  /**
-   * Region code
-   */
-  region_code?: string;
   /**
    * Country region id
    */
@@ -110,10 +85,35 @@ export type AddressWithDetails = {
    */
   region_name?: string;
   /**
+   * Region code
+   */
+  region_code?: string;
+  /**
+   * Postal code
+   */
+  post_code?: string;
+  /**
+   * Landline number
+   */
+  landline?: string;
+  /**
+   * undefined
+   */
+  first_name?: string;
+  /**
+   * undefined
+   */
+  last_name?: string;
+  /**
+   * undefined
+   */
+  company?: string;
+  country_details?: CountryDetails;
+  timeoffset_details?: TimeoffsetDetails;
+  /**
    * undefined
    */
   state_id?: string;
-  timeoffset_details?: TimeoffsetDetails;
 };
 
 /**
@@ -121,117 +121,117 @@ export type AddressWithDetails = {
  */
 export type AppSettings = {
   /**
-   * Advanced mode.
-   */
-  advanced_mode?: string;
-  /**
-   * Barcode scanner.
-   */
-  barcode_scanner?: string;
-  /**
-   * Cash payment.
-   */
-  cash_payment?: string;
-  /**
    * Checkout preference
    */
   checkout_preference?: string;
-  /**
-   * Expected max transaction amount.
-   */
-  expected_max_transaction_amount?: number;
   /**
    * Include vat.
    */
   include_vat?: boolean;
   /**
-   * Manual entry.
-   */
-  manual_entry?: string;
-  /**
    * Manual entry tutorial.
    */
   manual_entry_tutorial?: boolean;
-  /**
-   * Mobile payment.
-   */
-  mobile_payment?: string;
   /**
    * Mobile payment tutorial.
    */
   mobile_payment_tutorial?: boolean;
   /**
+   * Tax enabled.
+   */
+  tax_enabled?: boolean;
+  /**
+   * Mobile payment.
+   */
+  mobile_payment?: string;
+  /**
    * Reader payment.
    */
   reader_payment?: string;
   /**
-   * Referral.
+   * Cash payment.
    */
-  referral?: string;
+  cash_payment?: string;
   /**
-   * Tax enabled.
+   * Advanced mode.
    */
-  tax_enabled?: boolean;
+  advanced_mode?: string;
+  /**
+   * Expected max transaction amount.
+   */
+  expected_max_transaction_amount?: number;
+  /**
+   * Manual entry.
+   */
+  manual_entry?: string;
   /**
    * Terminal mode tutorial.
    */
   terminal_mode_tutorial?: boolean;
   /**
+   * Tipping.
+   */
+  tipping?: string;
+  /**
    * Tip rates.
    */
   tip_rates?: number[];
   /**
-   * Tipping.
+   * Barcode scanner.
    */
-  tipping?: string;
+  barcode_scanner?: string;
+  /**
+   * Referral.
+   */
+  referral?: string;
 };
 
 export type BankAccount = {
+  /**
+   * Bank code
+   */
+  bank_code?: string;
+  /**
+   * Branch code
+   */
+  branch_code?: string;
+  /**
+   * SWIFT code
+   */
+  swift?: string;
+  /**
+   * Account number
+   */
+  account_number?: string;
+  /**
+   * IBAN
+   */
+  iban?: string;
+  /**
+   * Type of the account
+   */
+  account_type?: string;
   /**
    * Account category - business or personal
    */
   account_category?: string;
   account_holder_name?: string;
   /**
-   * Account number
+   * Status in the verification process
    */
-  account_number?: string;
-  /**
-   * Type of the account
-   */
-  account_type?: string;
-  /**
-   * Bank code
-   */
-  bank_code?: string;
-  /**
-   * Bank name
-   */
-  bank_name?: string;
-  /**
-   * Branch code
-   */
-  branch_code?: string;
-  /**
-   * Creation date of the bank account
-   */
-  created_at?: string;
-  /**
-   * IBAN
-   */
-  iban?: string;
+  status?: string;
   /**
    * The primary bank account is the one used for payouts
    */
   primary?: boolean;
   /**
-   * Status in the verification process
+   * Creation date of the bank account
    */
-  status?: string;
+  created_at?: string;
   /**
-   * SWIFT code
+   * Bank name
    */
-  swift?: string;
+  bank_name?: string;
 };
 
 /**
@@ -239,25 +239,25 @@ export type BankAccount = {
  */
 export type BusinessOwners = {
   /**
-   * Date of birth
-   */
-  date_of_birth?: string;
-  /**
    * BO's first name
    */
   first_name?: string;
-  /**
-   * BO's Landline
-   */
-  landline?: string;
   /**
    * BO's last name of the user
    */
   last_name?: string;
   /**
+   * Date of birth
+   */
+  date_of_birth?: string;
+  /**
    * Mobile phone number
    */
   mobile_phone?: string;
+  /**
+   * BO's Landline
+   */
+  landline?: string;
   /**
    * Ownership percentage
    */
@@ -268,6 +268,26 @@ export type BusinessOwners = {
  * Doing Business As information
  */
 export type DoingBusinessAs = {
+  /**
+   * Doing business as name
+   */
+  business_name?: string;
+  /**
+   * Doing business as company registration number
+   */
+  company_registration_number?: string;
+  /**
+   * Doing business as VAT ID
+   */
+  vat_id?: string;
+  /**
+   * Doing business as website
+   */
+  website?: string;
+  /**
+   * Doing business as email
+   */
+  email?: string;
   address?: {
     /**
      * Address line 1
@@ -286,10 +306,6 @@ export type DoingBusinessAs = {
      */
     country?: string;
     /**
-     * Postal code
-     */
-    post_code?: string;
-    /**
      * Country region ID
      */
     region_id?: number;
@@ -297,27 +313,11 @@ export type DoingBusinessAs = {
      * Country region name
      */
     region_name?: string;
+    /**
+     * Postal code
+     */
+    post_code?: string;
   };
-  /**
-   * Doing business as name
-   */
-  business_name?: string;
-  /**
-   * Doing business as company registration number
-   */
-  company_registration_number?: string;
-  /**
-   * Doing business as email
-   */
-  email?: string;
-  /**
-   * Doing business as VAT ID
-   */
-  vat_id?: string;
-  /**
-   * Doing business as website
-   */
-  website?: string;
 };
 
 /**
@@ -325,13 +325,13 @@ export type DoingBusinessAs = {
  */
 export type ErrorForbidden = {
   /**
-   * Platform code for the error.
-   */
-  error_code?: string;
-  /**
    * Short description of the error.
    */
   error_message?: string;
+  /**
+   * Platform code for the error.
+   */
+  error_code?: string;
   /**
    * HTTP status code for the error.
    */
@@ -343,17 +343,17 @@ export type ErrorForbidden = {
  */
 export type LegalType = {
   /**
-   * Legal type short description
+   * Unique id
    */
-  description?: string;
+  id?: number;
   /**
    * Legal type description
    */
   full_description?: string;
   /**
-   * Unique id
+   * Legal type short description
    */
-  id?: number;
+  description?: string;
   /**
    * Sole trader legal type if true
    */
@@ -361,57 +361,81 @@ export type LegalType = {
 };
 
 /**
+ * Account's personal profile.
+ */
+export type PersonalProfile = {
+  /**
+   * First name of the user
+   */
+  first_name?: string;
+  /**
+   * Last name of the user
+   */
+  last_name?: string;
+  /**
+   * Date of birth
+   */
+  date_of_birth?: string;
+  /**
+   * Mobile phone number
+   */
+  mobile_phone?: string;
+  address?: AddressWithDetails;
+  complete?: boolean;
+};
+
+/**
  * Merchant settings &#40;like \"payout_type\", \"payout_period\"&#41;
  */
 export type MerchantSettings = {
   /**
-   * Whether merchant will receive daily payout emails
+   * Whether to show tax in receipts &#40;saved per transaction&#41;
    */
-  daily_payout_email?: boolean;
-  /**
-   * Whether merchant has gross settlement enabled
-   */
-  gross_settlement?: boolean;
-  /**
-   * Whether merchant will receive monthly payout emails
-   */
-  monthly_payout_email?: boolean;
-  /**
-   * Whether merchant can make MOTO payments
-   */
-  moto_payment?: "UNAVAILABLE" | "ENFORCED" | "ON" | "OFF";
-  /**
-   * Payout Instrument
-   */
-  payout_instrument?: string;
-  /**
-   * Whether merchant will receive payouts on demand
-   */
-  payout_on_demand?: boolean;
-  /**
-   * Whether merchant can edit payouts on demand
-   */
-  payout_on_demand_available?: boolean;
-  /**
-   * Payout frequency
-   */
-  payout_period?: string;
+  tax_enabled?: boolean;
   /**
    * Payout type
    */
   payout_type?: string;
   /**
+   * Payout frequency
+   */
+  payout_period?: string;
+  /**
+   * Whether merchant can edit payouts on demand
+   */
+  payout_on_demand_available?: boolean;
+  /**
+   * Whether merchant will receive payouts on demand
+   */
+  payout_on_demand?: boolean;
+  /**
    * Whether to show printers in mobile app
    */
   printers_enabled?: boolean;
+  /**
+   * Payout Instrument
+   */
+  payout_instrument?: string;
+  /**
+   * Whether merchant can make MOTO payments
+   */
+  moto_payment?: "UNAVAILABLE" | "ENFORCED" | "ON" | "OFF";
   /**
    * Stone merchant code
    */
   stone_merchant_code?: string;
   /**
-   * Whether to show tax in receipts &#40;saved per transaction&#41;
+   * Whether merchant will receive daily payout emails
    */
-  tax_enabled?: boolean;
+  daily_payout_email?: boolean;
+  /**
+   * Whether merchant will receive monthly payout emails
+   */
+  monthly_payout_email?: boolean;
+  /**
+   * Whether merchant has gross settlement enabled
+   */
+  gross_settlement?: boolean;
 };
 
 /**
@@ -419,90 +443,90 @@ export type MerchantSettings = {
  */
 export type VatRates = {
   /**
-   * Country ISO code
+   * Internal ID
    */
-  country?: string;
+  id?: number;
   /**
    * Description
    */
   description?: string;
   /**
-   * Internal ID
+   * Rate
    */
-  id?: number;
+  rate?: number;
   /**
    * Ordering
    */
   ordering?: number;
   /**
-   * Rate
+   * Country ISO code
    */
-  rate?: number;
+  country?: string;
 };
 
 /**
  * Account's merchant profile
  */
 export type MerchantProfile = {
-  address?: AddressWithDetails;
-  bank_accounts?: BankAccount[];
-  business_owners?: BusinessOwners;
-  /**
-   * Company name
-   */
-  company_name?: string;
-  /**
-   * Company registration number
-   */
-  company_registration_number?: string;
-  /**
-   * Merchant country code formatted according to [ISO3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) &#40;for internal usage only&#41;
-   */
-  country?: string;
-  doing_business_as?: DoingBusinessAs;
-  /**
-   * True if the merchant is extdev
-   */
-  extdev?: boolean;
-  legal_type?: LegalType;
-  /**
-   * Merchant locale &#40;for internal usage only&#41;
-   */
-  locale?: string;
-  /**
-   * Merchant category code
-   */
-  merchant_category_code?: string;
   /**
    * Unique identifying code of the merchant profile
    */
   merchant_code?: string;
   /**
+   * Company name
+   */
+  company_name?: string;
+  /**
+   * Website
+   */
+  website?: string;
+  legal_type?: LegalType;
+  /**
+   * Merchant category code
+   */
+  merchant_category_code?: string;
+  /**
    * Mobile phone number
    */
   mobile_phone?: string;
   /**
+   * Company registration number
+   */
+  company_registration_number?: string;
+  /**
+   * Vat ID
+   */
+  vat_id?: string;
+  /**
+   * Permanent certificate access code &#40;Portugal&#41;
+   */
+  permanent_certificate_access_code?: string;
+  /**
    * Nature and purpose of the business
    */
   nature_and_purpose?: string;
+  address?: AddressWithDetails;
+  business_owners?: BusinessOwners;
+  doing_business_as?: DoingBusinessAs;
+  settings?: MerchantSettings;
+  vat_rates?: VatRates;
+  /**
+   * Merchant locale &#40;for internal usage only&#41;
+   */
+  locale?: string;
+  bank_accounts?: BankAccount[];
+  /**
+   * True if the merchant is extdev
+   */
+  extdev?: boolean;
   /**
    * True if the payout zone of this merchant is migrated
    */
   payout_zone_migrated?: boolean;
   /**
-   * Permanent certificate access code &#40;Portugal&#41;
+   * Merchant country code formatted according to [ISO3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) &#40;for internal usage only&#41;
    */
-  permanent_certificate_access_code?: string;
-  settings?: MerchantSettings;
-  /**
-   * Vat ID
-   */
-  vat_id?: string;
-  vat_rates?: VatRates;
-  /**
-   * Website
-   */
-  website?: string;
+  country?: string;
 };
 
 /**
@@ -514,10 +538,6 @@ export type Permissions = {
    */
   create_moto_payments?: boolean;
   /**
-   * Create referral
-   */
-  create_referral?: boolean;
-  /**
    * Can view full merchant transaction history
    */
   full_transaction_history_view?: boolean;
@@ -525,30 +545,10 @@ export type Permissions = {
    * Refund transactions
    */
   refund_transactions?: boolean;
-};
-
-/**
- * Account's personal profile.
- */
-export type PersonalProfile = {
-  address?: AddressWithDetails;
-  complete?: boolean;
   /**
-   * Date of birth
+   * Create referral
    */
-  date_of_birth?: string;
-  /**
-   * First name of the user
-   */
-  first_name?: string;
-  /**
-   * Last name of the user
-   */
-  last_name?: string;
-  /**
-   * Mobile phone number
-   */
-  mobile_phone?: string;
+  create_referral?: boolean;
 };
 
 /**
@@ -558,14 +558,14 @@ export type PersonalProfile = {
  */
 export type MerchantAccount = {
   account?: Account;
+  personal_profile?: PersonalProfile;
+  merchant_profile?: MerchantProfile;
   app_settings?: AppSettings;
+  permissions?: Permissions;
   /**
    * Merchant comes from payleven BR migration
    */
   is_migrated_payleven_br?: boolean;
-  merchant_profile?: MerchantProfile;
-  permissions?: Permissions;
-  personal_profile?: PersonalProfile;
 };
 
 export type GetAccountQueryParams = {
@@ -578,17 +578,17 @@ export type GetAccountQueryParams = {
   )[];
 };
 
-export type ListBankAccountsQueryParams = {
-  primary?: boolean;
-};
-
-export type ListBankAccountsResponse = BankAccount[];
-
 export type ListBankAccountsV11QueryParams = {
   primary?: boolean;
 };
 
 export type ListBankAccountsV11Response = BankAccount[];
+
+export type ListBankAccountsQueryParams = {
+  primary?: boolean;
+};
+
+export type ListBankAccountsResponse = BankAccount[];
 
 export class Merchant extends Core.APIResource {
   /**
@@ -606,6 +606,18 @@ export class Merchant extends Core.APIResource {
   }
 
   /**
+   * Retrieve a personal profile
+   */
+  getPersonalProfile(
+    params?: Core.FetchParams,
+  ): Core.APIPromise<PersonalProfile> {
+    return this._client.get<PersonalProfile>({
+      path: `/v0.1/me/personal-profile`,
+      ...params,
+    });
+  }
+
+  /**
    * Retrieve a merchant profile
    */
   getMerchantProfile(
@@ -613,6 +625,33 @@ export class Merchant extends Core.APIResource {
   ): Core.APIPromise<MerchantProfile> {
     return this._client.get<MerchantProfile>({
       path: `/v0.1/me/merchant-profile`,
+      ...params,
+    });
+  }
+
+  /**
+   * Retrieve DBA
+   */
+  getDoingBusinessAs(
+    params?: Core.FetchParams,
+  ): Core.APIPromise<DoingBusinessAs> {
+    return this._client.get<DoingBusinessAs>({
+      path: `/v0.1/me/merchant-profile/doing-business-as`,
+      ...params,
+    });
+  }
+
+  /**
+   * List bank accounts
+   */
+  listBankAccounts(
+    merchantCode: string,
+    query?: ListBankAccountsV11QueryParams,
+    params?: Core.FetchParams,
+  ): Core.APIPromise<BankAccount[]> {
+    return this._client.get<BankAccount[]>({
+      path: `/v1.1/merchants/${merchantCode}/bank-accounts`,
+      query,
       ...params,
     });
   }
@@ -632,50 +671,11 @@ export class Merchant extends Core.APIResource {
   }
 
   /**
-   * Retrieve DBA
-   */
-  getDoingBusinessAs(
-    params?: Core.FetchParams,
-  ): Core.APIPromise<DoingBusinessAs> {
-    return this._client.get<DoingBusinessAs>({
-      path: `/v0.1/me/merchant-profile/doing-business-as`,
-      ...params,
-    });
-  }
-
-  /**
    * Get settings
    */
   getSettings(params?: Core.FetchParams): Core.APIPromise<MerchantSettings> {
     return this._client.get<MerchantSettings>({
       path: `/v0.1/me/merchant-profile/settings`,
-      ...params,
-    });
-  }
-
-  /**
-   * Retrieve a personal profile
-   */
-  getPersonalProfile(
-    params?: Core.FetchParams,
-  ): Core.APIPromise<PersonalProfile> {
-    return this._client.get<PersonalProfile>({
-      path: `/v0.1/me/personal-profile`,
-      ...params,
-    });
-  }
-
-  /**
-   * List bank accounts
-   */
-  listBankAccounts(
-    merchantCode: string,
-    query?: ListBankAccountsV11QueryParams,
-    params?: Core.FetchParams,
-  ): Core.APIPromise<BankAccount[]> {
-    return this._client.get<BankAccount[]>({
-      path: `/v1.1/merchants/${merchantCode}/bank-accounts`,
-      query,
       ...params,
     });
   }

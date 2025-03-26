@@ -22,7 +22,7 @@ export type FinancialPayouts = {
     | "BALANCE_DEDUCTION";
 }[];
 
-export type ListPayoutsQueryParams = {
+export type ListPayoutsV1QueryParams = {
   startDate: string;
   endDate: string;
   format?: "json" | "csv";
@@ -30,7 +30,7 @@ export type ListPayoutsQueryParams = {
   order?: "desc" | "asc";
 };
 
-export type ListPayoutsV1QueryParams = {
+export type ListPayoutsQueryParams = {
   startDate: string;
   endDate: string;
   format?: "json" | "csv";
@@ -42,12 +42,13 @@ export class Payouts extends Core.APIResource {
   /**
    * List payouts
    */
-  listDeprecated(
-    query: ListPayoutsQueryParams,
+  list(
+    merchantCode: string,
+    query: ListPayoutsV1QueryParams,
     params?: Core.FetchParams,
   ): Core.APIPromise<FinancialPayouts> {
     return this._client.get<FinancialPayouts>({
-      path: `/v0.1/me/financials/payouts`,
+      path: `/v1.0/merchants/${merchantCode}/payouts`,
       query,
       ...params,
     });
@@ -56,13 +57,12 @@ export class Payouts extends Core.APIResource {
   /**
    * List payouts
    */
-  list(
-    merchantCode: string,
-    query: ListPayoutsV1QueryParams,
+  listDeprecated(
+    query: ListPayoutsQueryParams,
     params?: Core.FetchParams,
   ): Core.APIPromise<FinancialPayouts> {
     return this._client.get<FinancialPayouts>({
-      path: `/v1.0/merchants/${merchantCode}/payouts`,
+      path: `/v0.1/me/financials/payouts`,
       query,
       ...params,
     });
