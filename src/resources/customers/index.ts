@@ -13,15 +13,15 @@ export type Address = {
   /**
    * Two letter country code formatted according to [ISO3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
    */
-  country: string;
+  country?: string;
   /**
    * First line of the address with details of the street name and number.
    */
-  line1?: string;
+  line_1?: string;
   /**
    * Second line of the address with details of the building, unit, apartment, and floor numbers.
    */
-  line2?: string;
+  line_2?: string;
   /**
    * Postal code from the address.
    */
@@ -73,7 +73,11 @@ export type PersonalDetails = {
   /**
    * Date of birth of the customer.
    */
-  birthdate?: string;
+  birth_date?: string;
+  /**
+   * An identification number user for tax purposes (e.g. CPF)
+   */
+  tax_id?: string;
   address?: Address;
 };
 
