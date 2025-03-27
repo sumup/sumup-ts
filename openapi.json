@@ -196,7 +196,6 @@
                     "checkout_reference": "f00a8f74-b05d-4605-bd73-2a901bae5802",
                     "amount": 10.1,
                     "currency": "EUR",
-                    "pay_to_email": "user@example.com",
                     "merchant_code": "MDUDGLR9",
                     "description": "Purchase",
                     "id": "2b79757a-de87-4a2e-90e4-b17c947c730d",
@@ -212,7 +211,6 @@
                     "checkout_reference": "f00a8f74-b05d-4605-bd73-2a901bae5802",
                     "amount": 10.1,
                     "currency": "EUR",
-                    "pay_to_email": "user@example.com",
                     "merchant_code": "MH4H92C7",
                     "description": "Purchase",
                     "return_url": "http://example.com/",
@@ -249,7 +247,6 @@
                       "checkout_reference": "8ea25ec3-3293-40e9-a165-6d7f3b3073c5",
                       "amount": 10.1,
                       "currency": "EUR",
-                      "pay_to_email": "user@example.com",
                       "merchant_code": "MCNPLE22",
                       "merchant_country": "DE",
                       "description": "My Checkout",
@@ -290,7 +287,6 @@
                       "checkout_reference": "8ea25ec3-3293-40e9-a165-6d7f3b3073c5",
                       "amount": 10.1,
                       "currency": "EUR",
-                      "pay_to_email": "user@example.com",
                       "description": "My Checkout",
                       "return_url": "http://example.com",
                       "id": "88fcf8de-304d-4820-8f1c-ec880290eb92",
@@ -325,7 +321,6 @@
                       "checkout_reference": "8ea25ec3-3293-40e9-a165-6d7f3b3073c5",
                       "amount": 10.1,
                       "currency": "EUR",
-                      "pay_to_email": "user@example.com",
                       "merchant_code": "MCNPLE22",
                       "description": "My Checkout",
                       "return_url": "http://example.com",
@@ -373,7 +368,7 @@
                     "value": {
                       "message": "Validation error",
                       "error_code": "MISSING",
-                      "param": "pay_to_email"
+                      "param": "merchant_code"
                     }
                   }
                 }
@@ -766,7 +761,6 @@
                       "checkout_reference": "f00a8f74-b05d-4605-bd73-2a901bae5802",
                       "amount": 10.1,
                       "currency": "EUR",
-                      "pay_to_email": "user@example.com",
                       "merchant_code": "MH4H92C7",
                       "description": "Purchase",
                       "return_url": "http://example.com",
@@ -808,7 +802,6 @@
                       "checkout_reference": "f00a8f74-b05d-4605-bd73-2a901bae5802",
                       "amount": 10.1,
                       "currency": "EUR",
-                      "pay_to_email": "user@example.com",
                       "merchant_code": "MH4H92C7",
                       "description": "Purchase with token",
                       "id": "4e425463-3e1b-431d-83fa-1e51c2925e99",
@@ -848,7 +841,6 @@
                       "checkout_reference": "f00a8f74-b05d-4605-bd73-2a901bae5802",
                       "amount": 10.1,
                       "currency": "BRL",
-                      "pay_to_email": "user@example.com",
                       "merchant_code": "MH4H92C7",
                       "description": "Boleto checkout",
                       "id": "4e425463-3e1b-431d-83fa-1e51c2925e99",
@@ -1180,7 +1172,6 @@
                       "id": "817340ce-f1d9-4609-b90a-6152f8ee267j",
                       "amount": 2,
                       "currency": "EUR",
-                      "pay_to_email": "user@example.com",
                       "merchant_code": "MH4H92C7",
                       "description": "Deletion example",
                       "purpose": "CHECKOUT",
@@ -6060,7 +6051,7 @@
           {
             "name": "If-Modified-Since",
             "in": "header",
-            "description": "Return the reader only if it has been modified after the specified timestamp given in the headers.\nTimestamps are accepted in the following formats:\n\n\n - HTTP Standard: [IMF format (RFC 5322)](https://www.rfc-editor.org/rfc/rfc5322#section-3.3), sometimes also referred to as [RFC 7231](https://www.rfc-editor.org/rfc/rfc7231#section-7.1.1.1).\n - RFC 3339: Used for timestamps in JSON payloads on this API.",
+            "description": "Return the reader only if it has been modified after the specified timestamp given in the headers.\n\nTimestamps are accepted in the following formats:\n\n - HTTP Standard: [IMF format (RFC 5322)](https://www.rfc-editor.org/rfc/rfc5322#section-3.3), sometimes also referred to as [RFC 7231](https://www.rfc-editor.org/rfc/rfc7231#section-7.1.1.1).\n - RFC 3339: Used for timestamps in JSON payloads on this API.",
             "required": false,
             "schema": {
               "type": "string",
@@ -6517,12 +6508,12 @@
             "type": "string",
             "example": "DE"
           },
-          "line1": {
+          "line_1": {
             "description": "First line of the address with details of the street name and number.",
             "type": "string",
             "example": "Sample street"
           },
-          "line2": {
+          "line_2": {
             "description": "Second line of the address with details of the building, unit, apartment, and floor numbers.",
             "type": "string",
             "example": "ap. 5"
@@ -6537,10 +6528,7 @@
             "type": "string",
             "example": "Berlin"
           }
-        },
-        "required": [
-          "country"
-        ]
+        }
       },
       "AddressWithDetails": {
         "description": "Details of the registered address.",
@@ -6605,62 +6593,6 @@
             "type": "string"
           }
         }
-      },
-      "AddressPayload": {
-        "description": "Personal address",
-        "type": "object",
-        "properties": {
-          "address_line1": {
-            "description": "Address line 1",
-            "type": "string"
-          },
-          "address_line2": {
-            "description": "Address line 2",
-            "type": "string"
-          },
-          "city": {
-            "description": "City",
-            "type": "string"
-          },
-          "country": {
-            "description": "Country ISO 3166-1 code",
-            "type": "string"
-          },
-          "region_id": {
-            "description": "Country region id",
-            "type": "number"
-          },
-          "region_name": {
-            "description": "Country region name",
-            "type": "string"
-          },
-          "post_code": {
-            "description": "Postal code",
-            "type": "string"
-          },
-          "landline": {
-            "description": "Landline number",
-            "type": "string"
-          },
-          "first_name": {
-            "description": "First name",
-            "type": "string"
-          },
-          "last_name": {
-            "description": "Last name",
-            "type": "string"
-          },
-          "company": {
-            "description": "Company name",
-            "type": "string"
-          }
-        },
-        "required": [
-          "address_line1",
-          "city",
-          "country",
-          "post_code"
-        ]
       },
       "Affiliate": {
         "description": "Affiliate metadata for the transaction.\nIt is an optional field that allow for integrators to track the source of the transaction.\n",
@@ -7151,7 +7083,9 @@
           "pay_to_email": {
             "description": "Email address of the registered user (merchant) to whom the payment is made.",
             "type": "string",
-            "format": "email"
+            "format": "email",
+            "deprecated": true,
+            "x-deprecation-notice": "`pay_to_email` is deprecated, use `merchant_code` instead."
           },
           "merchant_code": {
             "description": "Unique identifying code of the merchant profile.",
@@ -7297,8 +7231,7 @@
             "type": "string",
             "format": "date-time",
             "example": "2020-02-29T10:56:56+00:00",
-            "nullable": true,
-            "readOnly": true
+            "nullable": true
           },
           "transactions": {
             "description": "List of transactions related to the payment.",
@@ -7320,97 +7253,6 @@
             "description": "__Required__ for [APMs](https://developer.sumup.com/online-payments/apm/introduction) and __recommended__ for card payments. Refers to a url where the end user is redirected once the payment processing completes. If not specified, the [Payment Widget](https://developer.sumup.com/online-payments/tools/card-widget) renders [3DS challenge](https://developer.sumup.com/online-payments/features/3ds) within an iframe instead of performing a full-page redirect.",
             "type": "string",
             "example": "https://mysite.com/completed_purchase"
-          },
-          "payment_type": {
-            "description": "Alternative payment method name",
-            "type": "string",
-            "example": "boleto"
-          },
-          "personal_details": {
-            "description": "Object containing personal details about the payer, typical for __Boleto__ checkouts",
-            "type": "object",
-            "properties": {
-              "email": {
-                "description": "Payer's email address",
-                "type": "string",
-                "example": "test@example.com"
-              },
-              "first_name": {
-                "description": "Payer's first name",
-                "type": "string",
-                "example": "John"
-              },
-              "last_name": {
-                "description": "Payer's last name",
-                "type": "string",
-                "example": "Doe"
-              },
-              "tax_id": {
-                "description": "Payer's tax identification number (CPF)",
-                "type": "string",
-                "example": "423.378.593-47"
-              },
-              "address": {
-                "description": "Payer's address information",
-                "type": "object",
-                "properties": {
-                  "country": {
-                    "description": "Payer's country",
-                    "type": "string",
-                    "example": "BR"
-                  },
-                  "city": {
-                    "description": "Payer's city",
-                    "type": "string",
-                    "example": "Rio de Janeiro"
-                  },
-                  "line_1": {
-                    "description": "Field for address details",
-                    "type": "string"
-                  },
-                  "state": {
-                    "description": "Payer's state code",
-                    "type": "string",
-                    "example": "RJ",
-                    "enum": [
-                      "AC",
-                      "AL",
-                      "AP",
-                      "AM",
-                      "BA",
-                      "CE",
-                      "DF",
-                      "ES",
-                      "GO",
-                      "MA",
-                      "MT",
-                      "MS",
-                      "MG",
-                      "PA",
-                      "PB",
-                      "PR",
-                      "PE",
-                      "PI",
-                      "RJ",
-                      "RN",
-                      "RS",
-                      "RO",
-                      "RR",
-                      "SC",
-                      "SP",
-                      "SE",
-                      "TO"
-                    ]
-                  },
-                  "postal_code": {
-                    "description": "Payer's postal code. Must be eight digits long, however an optional dash could be applied after the 5th digit ([more information about the format available here](https://en.wikipedia.org/wiki/List_of_postal_codes_in_Brazil)). Both options are accepted as correct.",
-                    "type": "string",
-                    "example": "20000-000",
-                    "pattern": "^\\d{5}-?\\d{3}$"
-                  }
-                }
-              }
-            }
           }
         },
         "required": [
@@ -7420,111 +7262,12 @@
           "merchant_code"
         ]
       },
-      "CheckoutCreate": {
-        "description": "Details of the payment checkout.",
-        "type": "object",
-        "properties": {
-          "checkout_reference": {
-            "description": "Unique ID of the payment checkout specified by the client application when creating the checkout resource.",
-            "type": "string",
-            "maxLength": 90
-          },
-          "amount": {
-            "description": "Amount of the payment.",
-            "type": "number",
-            "format": "float"
-          },
-          "currency": {
-            "$ref": "#/components/schemas/Currency"
-          },
-          "pay_to_email": {
-            "description": "Email address of the registered user (merchant) to whom the payment is made.",
-            "type": "string",
-            "format": "email",
-            "deprecated": true,
-            "x-deprecation-notice": "`pay_to_email` is deprecated, use `merchant_code` instead."
-          },
-          "merchant_code": {
-            "description": "Unique identifying code of the merchant profile.",
-            "type": "string"
-          },
-          "description": {
-            "description": "Short description of the checkout visible in the SumUp dashboard. The description can contribute to reporting, allowing easier identification of a checkout.",
-            "type": "string"
-          },
-          "return_url": {
-            "description": "URL to which the SumUp platform sends the processing status of the payment checkout.",
-            "type": "string",
-            "format": "uri"
-          },
-          "id": {
-            "description": "Unique ID of the checkout resource.",
-            "type": "string",
-            "readOnly": true
-          },
-          "status": {
-            "description": "Current status of the checkout.",
-            "type": "string",
-            "enum": [
-              "PENDING",
-              "FAILED",
-              "PAID"
-            ],
-            "readOnly": true
-          },
-          "date": {
-            "description": "Date and time of the creation of the payment checkout. Response format expressed according to [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) code.",
-            "type": "string",
-            "format": "date-time",
-            "example": "2020-02-29T10:56:56+00:00",
-            "readOnly": true
-          },
-          "valid_until": {
-            "description": "Date and time of the checkout expiration before which the client application needs to send a processing request. If no value is present, the checkout does not have an expiration time.",
-            "type": "string",
-            "format": "date-time",
-            "example": "2020-02-29T10:56:56+00:00",
-            "nullable": true,
-            "readOnly": true
-          },
-          "transactions": {
-            "description": "List of transactions related to the payment.",
-            "type": "array",
-            "items": {
-              "allOf": [
-                {
-                  "$ref": "#/components/schemas/TransactionMixinBase"
-                },
-                {
-                  "$ref": "#/components/schemas/TransactionMixinCheckout"
-                }
-              ]
-            },
-            "readOnly": true,
-            "uniqueItems": true
-          },
-          "redirect_url": {
-            "description": "Required for 3DS checkouts. Refers to a URL where the end user is redirected once the payment processing completes.",
-            "type": "string",
-            "example": "https://mysite.com/completed_purchase"
-          }
-        },
-        "required": [
-          "checkout_reference",
-          "amount",
-          "currency",
-          "merchant_code",
-          "id",
-          "status",
-          "date",
-          "transactions"
-        ]
-      },
       "CheckoutProcessMixin": {
         "description": "Details of the payment instrument for processing the checkout.",
         "type": "object",
         "properties": {
           "payment_type": {
+            "description": "Describes the payment method used to attempt processing",
             "type": "string",
             "enum": [
               "card",
@@ -7553,6 +7296,9 @@
           "customer_id": {
             "description": "__Required when `token` is provided.__ Unique ID of the customer.",
             "type": "string"
+          },
+          "personal_details": {
+            "$ref": "#/components/schemas/PersonalDetails"
           }
         },
         "required": [
@@ -8759,49 +8505,20 @@
             "type": "string",
             "example": "+491635559723"
           },
-          "birthdate": {
+          "birth_date": {
             "description": "Date of birth of the customer.",
             "type": "string",
             "format": "date",
             "example": "1993-12-31"
+          },
+          "tax_id": {
+            "description": "An identification number user for tax purposes (e.g. CPF)",
+            "type": "string",
+            "example": "423.378.593-47",
+            "maxLength": 255
           },
           "address": {
             "$ref": "#/components/schemas/Address"
-          }
-        }
-      },
-      "PersonalDetailsResponse": {
-        "description": "Personal details for the customer.",
-        "type": "object",
-        "properties": {
-          "first_name": {
-            "description": "First name of the customer.",
-            "type": "string",
-            "example": "John"
-          },
-          "last_name": {
-            "description": "Last name of the customer.",
-            "type": "string",
-            "example": "Doe"
-          },
-          "email": {
-            "description": "Email address of the customer.",
-            "type": "string",
-            "example": "user@example.com"
-          },
-          "phone": {
-            "description": "Phone number of the customer.",
-            "type": "string",
-            "example": "+491635559723"
-          },
-          "birthdate": {
-            "description": "Date of birth of the customer.",
-            "type": "string",
-            "format": "date",
-            "example": "1993-12-31"
-          },
-          "address": {
-            "$ref": "#/components/schemas/AddressResponse"
           }
         }
       },
@@ -11082,7 +10799,8 @@
           "is_predefined",
           "created_at",
           "updated_at"
-        ]
+        ],
+        "title": "Role"
       },
       "Metadata": {
         "description": "Set of user-defined key-value pairs attached to the object. Partial updates are not supported. When updating, always submit whole metadata.",
@@ -11210,41 +10928,61 @@
         },
         "maxProperties": 50
       },
-      "AddressResponse": {
-        "description": "Personal address information.",
+      "AddressPayload": {
+        "description": "Personal address",
         "type": "object",
         "properties": {
+          "address_line1": {
+            "description": "Address line 1",
+            "type": "string"
+          },
+          "address_line2": {
+            "description": "Address line 2",
+            "type": "string"
+          },
           "city": {
-            "description": "City name from the address.",
-            "type": "string",
-            "example": "Berlin"
+            "description": "City",
+            "type": "string"
           },
           "country": {
-            "description": "Two letter country code formatted according to [ISO3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).",
-            "type": "string",
-            "example": "DE"
+            "description": "Country ISO 3166-1 code",
+            "type": "string"
           },
-          "line1": {
-            "description": "First line of the address with details of the street name and number.",
-            "type": "string",
-            "example": "Sample street"
+          "region_id": {
+            "description": "Country region id",
+            "type": "number"
           },
-          "line2": {
-            "description": "Second line of the address with details of the building, unit, apartment, and floor numbers.",
-            "type": "string",
-            "example": "ap. 5"
+          "region_name": {
+            "description": "Country region name",
+            "type": "string"
           },
-          "postal_code": {
-            "description": "Postal code from the address.",
-            "type": "string",
-            "example": "10115"
+          "post_code": {
+            "description": "Postal code",
+            "type": "string"
           },
-          "state": {
-            "description": "State name or abbreviation from the address.",
-            "type": "string",
-            "example": "Berlin"
+          "landline": {
+            "description": "Landline number",
+            "type": "string"
+          },
+          "first_name": {
+            "description": "First name",
+            "type": "string"
+          },
+          "last_name": {
+            "description": "Last name",
+            "type": "string"
+          },
+          "company": {
+            "description": "Company name",
+            "type": "string"
           }
-        }
+        },
+        "required": [
+          "address_line1",
+          "city",
+          "country",
+          "post_code"
+        ]
       }
     },
     "examples": {
@@ -11302,7 +11040,6 @@
                   "checkout_reference": "f00a8f74-b05d-4605-bd73-2a901bae5802",
                   "amount": 10.1,
                   "currency": "EUR",
-                  "pay_to_email": "user@example.com",
                   "merchant_code": "MDUDGLR9",
                   "description": "Purchase",
                   "id": "2b79757a-de87-4a2e-90e4-b17c947c730d",
@@ -11318,7 +11055,6 @@
                   "checkout_reference": "f00a8f74-b05d-4605-bd73-2a901bae5802",
                   "amount": 10.1,
                   "currency": "EUR",
-                  "pay_to_email": "user@example.com",
                   "merchant_code": "MH4H92C7",
                   "description": "Purchase",
                   "return_url": "http://example.com/",
@@ -11545,7 +11281,6 @@
                   "checkout_reference": "8ea25ec3-3293-40e9-a165-6d7f3b3073c5",
                   "amount": 10.1,
                   "currency": "EUR",
-                  "pay_to_email": "user@example.com",
                   "merchant_code": "MCNPLE22",
                   "merchant_country": "DE",
                   "description": "My Checkout",
@@ -11586,7 +11321,6 @@
                   "checkout_reference": "8ea25ec3-3293-40e9-a165-6d7f3b3073c5",
                   "amount": 10.1,
                   "currency": "EUR",
-                  "pay_to_email": "user@example.com",
                   "description": "My Checkout",
                   "return_url": "http://example.com",
                   "id": "88fcf8de-304d-4820-8f1c-ec880290eb92",
@@ -11621,7 +11355,6 @@
                   "checkout_reference": "8ea25ec3-3293-40e9-a165-6d7f3b3073c5",
                   "amount": 10.1,
                   "currency": "EUR",
-                  "pay_to_email": "user@example.com",
                   "merchant_code": "MCNPLE22",
                   "description": "My Checkout",
                   "return_url": "http://example.com",
@@ -11679,16 +11412,6 @@
           }
         }
       },
-      "CheckoutCreate": {
-        "description": "Created",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/CheckoutCreateRequest"
-            }
-          }
-        }
-      },
       "CheckoutProcess": {
         "description": "OK",
         "content": {
@@ -11703,7 +11426,6 @@
                   "checkout_reference": "f00a8f74-b05d-4605-bd73-2a901bae5802",
                   "amount": 10.1,
                   "currency": "EUR",
-                  "pay_to_email": "user@example.com",
                   "merchant_code": "MH4H92C7",
                   "description": "Purchase",
                   "return_url": "http://example.com",
@@ -11745,7 +11467,6 @@
                   "checkout_reference": "f00a8f74-b05d-4605-bd73-2a901bae5802",
                   "amount": 10.1,
                   "currency": "EUR",
-                  "pay_to_email": "user@example.com",
                   "merchant_code": "MH4H92C7",
                   "description": "Purchase with token",
                   "id": "4e425463-3e1b-431d-83fa-1e51c2925e99",
@@ -11785,7 +11506,6 @@
                   "checkout_reference": "f00a8f74-b05d-4605-bd73-2a901bae5802",
                   "amount": 10.1,
                   "currency": "BRL",
-                  "pay_to_email": "user@example.com",
                   "merchant_code": "MH4H92C7",
                   "description": "Boleto checkout",
                   "id": "4e425463-3e1b-431d-83fa-1e51c2925e99",
