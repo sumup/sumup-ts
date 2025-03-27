@@ -8,6 +8,8 @@ import * as Core from "../../core";
 export type Metadata = Record<string, Record<string, unknown>>;
 
 /**
+ * Role
+ *
  * A custom role that can be used to assign set of permissions to members.
  */
 export type Role = {

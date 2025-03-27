@@ -3,6 +3,36 @@
 import * as Core from "../../core";
 
 /**
+ * Profile's personal address information.
+ */
+export type Address = {
+  /**
+   * City name from the address.
+   */
+  city?: string;
+  /**
+   * Two letter country code formatted according to [ISO3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
+   */
+  country?: string;
+  /**
+   * First line of the address with details of the street name and number.
+   */
+  line_1?: string;
+  /**
+   * Second line of the address with details of the building, unit, apartment, and floor numbers.
+   */
+  line_2?: string;
+  /**
+   * Postal code from the address.
+   */
+  postal_code?: string;
+  /**
+   * State name or abbreviation from the address.
+   */
+  state?: string;
+};
+
+/**
  * __Required when payment type is `card`.__ Details of the payment card.
  */
 export type Card = {
@@ -183,6 +213,8 @@ export type Checkout = {
   currency?: Currency;
   /**
    * Email address of the registered user (merchant) to whom the payment is made.
+   *
+   * @deprecated: `pay_to_email` is deprecated, use `merchant_code` instead.
    */
   pay_to_email?: string;
   /**
@@ -287,83 +319,6 @@ export type CheckoutCreateRequest = {
    * __Required__ for [APMs](https://developer.sumup.com/online-payments/apm/introduction) and __recommended__ for card payments. Refers to a url where the end user is redirected once the payment processing completes. If not specified, the [Payment Widget](https://developer.sumup.com/online-payments/tools/card-widget) renders [3DS challenge](https://developer.sumup.com/online-payments/features/3ds) within an iframe instead of performing a full-page redirect.
    */
   redirect_url?: string;
-  /**
-   * Alternative payment method name
-   */
-  payment_type?: string;
-  /**
-   * Object containing personal details about the payer, typical for __Boleto__ checkouts
-   */
-  personal_details?: {
-    /**
-     * Payer's email address
-     */
-    email?: string;
-    /**
-     * Payer's first name
-     */
-    first_name?: string;
-    /**
-     * Payer's last name
-     */
-    last_name?: string;
-    /**
-     * Payer's tax identification number (CPF)
-     */
-    tax_id?: string;
-    /**
-     * Payer's address information
-     */
-    address?: {
-      /**
-       * Payer's country
-       */
-      country?: string;
-      /**
-       * Payer's city
-       */
-      city?: string;
-      /**
-       * Field for address details
-       */
-      line_1?: string;
-      /**
-       * Payer's state code
-       */
-      state?:
-        | "AC"
-        | "AL"
-        | "AP"
-        | "AM"
-        | "BA"
-        | "CE"
-        | "DF"
-        | "ES"
-        | "GO"
-        | "MA"
-        | "MT"
-        | "MS"
-        | "MG"
-        | "PA"
-        | "PB"
-        | "PR"
-        | "PE"
-        | "PI"
-        | "RJ"
-        | "RN"
-        | "RS"
-        | "RO"
-        | "RR"
-        | "SC"
-        | "SP"
-        | "SE"
-        | "TO";
-      /**
-       * Payer's postal code. Must be eight digits long, however an optional dash could be applied after the 5th digit ([more information about the format available here](https://en.wikipedia.org/wiki/List_of_postal_codes_in_Brazil)). Both options are accepted as correct.
-       */
-      postal_code?: string;
-    };
-  };
 };
 
 /**
@@ -385,9 +340,43 @@ export type MandatePayload = {
 };
 
 /**
+ * Personal details for the customer.
+ */
+export type PersonalDetails = {
+  /**
+   * First name of the customer.
+   */
+  first_name?: string;
+  /**
+   * Last name of the customer.
+   */
+  last_name?: string;
+  /**
+   * Email address of the customer.
+   */
+  email?: string;
+  /**
+   * Phone number of the customer.
+   */
+  phone?: string;
+  /**
+   * Date of birth of the customer.
+   */
+  birth_date?: string;
+  /**
+   * An identification number user for tax purposes (e.g. CPF)
+   */
+  tax_id?: string;
+  address?: Address;
+};
+
+/**
  * Details of the payment instrument for processing the checkout.
  */
 export type CheckoutProcessMixin = {
+  /**
+   * Describes the payment method used to attempt processing
+   */
   payment_type: "card" | "boleto" | "ideal" | "blik" | "bancontact";
   /**
    * Number of installments for deferred payments. Available only to merchant users in Brazil.
@@ -403,6 +392,7 @@ export type CheckoutProcessMixin = {
    * __Required when `token` is provided.__ Unique ID of the customer.
    */
   customer_id?: string;
+  personal_details?: PersonalDetails;
 };
 
 export type CheckoutSuccess = Checkout & {
@@ -672,6 +662,7 @@ export class Checkouts extends Core.APIResource {
 
 export declare namespace Checkouts {
   export type {
+    Address,
     Card,
     Checkout,
     CheckoutAccepted,
@@ -686,6 +677,7 @@ export declare namespace Checkouts {
     ListCheckoutsQueryParams,
     MandatePayload,
     MandateResponse,
+    PersonalDetails,
     TransactionMixinBase,
     TransactionMixinCheckout,
   };
