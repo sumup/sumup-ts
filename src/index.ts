@@ -5,7 +5,6 @@ import type * as Core from "./core";
 
 export type { APIConfig } from "./client";
 
-import { ApiKeys } from "./resources/api-keys";
 import { Checkouts } from "./resources/checkouts";
 import { Customers } from "./resources/customers";
 import { Members } from "./resources/members";
@@ -19,7 +18,6 @@ import { Subaccounts } from "./resources/subaccounts";
 import { Transactions } from "./resources/transactions";
 
 export class SumUp extends HTTPClient {
-  apiKeys: ApiKeys = new ApiKeys(this);
   checkouts: Checkouts = new Checkouts(this);
   customers: Customers = new Customers(this);
   members: Members = new Members(this);
@@ -35,7 +33,6 @@ export class SumUp extends HTTPClient {
   static SumUp = this;
 }
 
-SumUp.ApiKeys = ApiKeys;
 SumUp.Checkouts = Checkouts;
 SumUp.Customers = Customers;
 SumUp.Members = Members;
@@ -52,7 +49,6 @@ export declare namespace SumUp {
   export type FetchParams = Core.FetchParams;
 
   export {
-    ApiKeys,
     Checkouts,
     Customers,
     Members,
