@@ -27,7 +27,7 @@ export type Permissions = {
 export type Operator = {
   id: number;
   username: string;
-  nickname?: string;
+  nickname?: string | null;
   disabled: boolean;
   /**
    * The timestamp of when the operator was created.

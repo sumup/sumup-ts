@@ -35,7 +35,7 @@
     "access": "public"
   },
   "scripts": {
-    "prebuild": "npm run fmt",
+    "prebuild": "npm run lint:fix",
     "build": "rslib build",
     "build:watch": "rslib build --watch",
     "inspect": "rslib inspect",
@@ -44,7 +44,7 @@
     "prerelease": "npm run build",
     "generate": "echo 'not yet implemented'",
     "lint": "biome check",
-    "fmt": "biome check --write"
+    "lint:fix": "biome check --write"
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

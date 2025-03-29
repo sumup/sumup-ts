@@ -244,7 +244,7 @@ export type Checkout = {
   /**
    * Date and time of the checkout expiration before which the client application needs to send a processing request. If no value is present, the checkout does not have an expiration time.
    */
-  valid_until?: string;
+  valid_until?: string | null;
   /**
    * Unique identification of a customer. If specified, the checkout session and payment instrument are associated with the referenced customer.
    */
@@ -310,7 +310,7 @@ export type CheckoutCreateRequest = {
   /**
    * Date and time of the checkout expiration before which the client application needs to send a processing request. If no value is present, the checkout does not have an expiration time.
    */
-  valid_until?: string;
+  valid_until?: string | null;
   /**
    * List of transactions related to the payment.
    */
@@ -565,7 +565,7 @@ export type DeactivateCheckoutResponse = {
   /**
    * Date and time of the checkout expiration before which the client application needs to send a processing request. If no value is present, the checkout does not have an expiration time.
    */
-  valid_until?: string;
+  valid_until?: string | null;
   /**
    * Merchant name
    */
