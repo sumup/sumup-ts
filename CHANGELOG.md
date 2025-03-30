@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.1-beta.7](https://github.com/sumup/sumup-ts/compare/v0.0.1-beta.6...v0.0.1-beta.7) (2025-03-30)
+
+
+### Bug Fixes
+
+* github release process ([#43](https://github.com/sumup/sumup-ts/issues/43)) ([29dcd8b](https://github.com/sumup/sumup-ts/commit/29dcd8b2e9491107d64e70cb8375e59b5b182fea))
+
 ## [0.0.1-beta.6](https://github.com/sumup/sumup-ts/compare/v0.0.1-beta.5...v0.0.1-beta.6) (2025-02-28)
 
 
