@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.1-beta.9](https://github.com/sumup/sumup-ts/compare/v0.0.1-beta.8...v0.0.1-beta.9) (2025-04-09)
+
+
+### Bug Fixes
+
+* query parameters, latest specs ([#53](https://github.com/sumup/sumup-ts/issues/53)) ([1e1e34e](https://github.com/sumup/sumup-ts/commit/1e1e34e36489d0d846591256768eca249f59ee0b))
+
 ## [0.0.1-beta.8](https://github.com/sumup/sumup-ts/compare/v0.0.1-beta.7...v0.0.1-beta.8) (2025-03-31)
 
 
