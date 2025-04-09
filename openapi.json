@@ -4165,7 +4165,7 @@
     "/v0.1/me/accounts": {
       "get": {
         "operationId": "ListSubAccounts",
-        "summary": "List operators.",
+        "summary": "List operators",
         "description": "Returns list of operators for currently authorized user's merchant.",
         "parameters": [
           {
@@ -4220,7 +4220,7 @@
       },
       "post": {
         "operationId": "CreateSubAccount",
-        "summary": "Create operator.",
+        "summary": "Create an operator",
         "description": "Creates new operator for currently authorized users' merchant.",
         "requestBody": {
           "required": true,
@@ -4313,7 +4313,7 @@
     "/v0.1/me/accounts/{operator_id}": {
       "get": {
         "operationId": "CompatGetOperator",
-        "summary": "Get operator",
+        "summary": "Retrieve an operator",
         "description": "Returns specific operator.",
         "parameters": [
           {
@@ -4358,7 +4358,7 @@
       },
       "put": {
         "operationId": "UpdateSubAccount",
-        "summary": "Update operator.",
+        "summary": "Update an operator",
         "description": "Updates operator. If the operator was disabled and their password is updated they will be unblocked.",
         "parameters": [
           {
@@ -4459,7 +4459,7 @@
       },
       "delete": {
         "operationId": "DeactivateSubAccount",
-        "summary": "Disable operator.",
+        "summary": "Disable an operator",
         "parameters": [
           {
             "name": "operator_id",

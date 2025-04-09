@@ -48,7 +48,7 @@ export type CompatError = { error_code: string; message: string };
 
 export type ListSubAccountsQueryParams = {
   query?: string;
-  includePrimary?: boolean;
+  include_primary?: boolean;
 };
 
 export type ListSubAccountsResponse = Operator[];
@@ -80,7 +80,7 @@ export type UpdateSubAccountParams = {
 
 export class Subaccounts extends Core.APIResource {
   /**
-   * List operators.
+   * List operators
    */
   listSubAccounts(
     query?: ListSubAccountsQueryParams,
@@ -94,7 +94,7 @@ export class Subaccounts extends Core.APIResource {
   }
 
   /**
-   * Create operator.
+   * Create an operator
    */
   createSubAccount(
     body: CreateSubAccountParams,
@@ -108,7 +108,7 @@ export class Subaccounts extends Core.APIResource {
   }
 
   /**
-   * Get operator
+   * Retrieve an operator
    */
   compatGetOperator(
     operatorId: number,
@@ -121,7 +121,7 @@ export class Subaccounts extends Core.APIResource {
   }
 
   /**
-   * Update operator.
+   * Update an operator
    */
   updateSubAccount(
     operatorId: number,
@@ -136,7 +136,7 @@ export class Subaccounts extends Core.APIResource {
   }
 
   /**
-   * Disable operator.
+   * Disable an operator
    */
   deactivateSubAccount(
     operatorId: number,

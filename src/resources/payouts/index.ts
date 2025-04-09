@@ -23,16 +23,16 @@ export type FinancialPayouts = {
 }[];
 
 export type ListPayoutsV1QueryParams = {
-  startDate: string;
-  endDate: string;
+  start_date: string;
+  end_date: string;
   format?: "json" | "csv";
   limit?: number;
   order?: "desc" | "asc";
 };
 
 export type ListPayoutsQueryParams = {
-  startDate: string;
-  endDate: string;
+  start_date: string;
+  end_date: string;
   format?: "json" | "csv";
   limit?: number;
   order?: "desc" | "asc";
