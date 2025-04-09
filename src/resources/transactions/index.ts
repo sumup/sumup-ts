@@ -441,18 +441,18 @@ export type RefundTransactionResponse = Record<string, unknown>;
 
 export type GetTransactionV2_1QueryParams = {
   id?: string;
-  internalId?: string;
-  transactionCode?: string;
+  internal_id?: string;
+  transaction_code?: string;
 };
 
 export type GetTransactionQueryParams = {
   id?: string;
-  internalId?: string;
-  transactionCode?: string;
+  internal_id?: string;
+  transaction_code?: string;
 };
 
 export type ListTransactionsV2_1QueryParams = {
-  transactionCode?: string;
+  transaction_code?: string;
   order?: "ascending" | "descending";
   limit?: number;
   users?: string[];
@@ -463,7 +463,7 @@ export type ListTransactionsV2_1QueryParams = {
     | "REFUNDED"
     | "CHARGE_BACK"
   )[];
-  paymentTypes?: (
+  payment_types?: (
     | "CASH"
     | "POS"
     | "ECOM"
@@ -473,11 +473,11 @@ export type ListTransactionsV2_1QueryParams = {
     | "UNKNOWN"
   )[];
   types?: ("PAYMENT" | "REFUND" | "CHARGE_BACK")[];
-  changesSince?: string;
-  newestTime?: string;
-  newestRef?: string;
-  oldestTime?: string;
-  oldestRef?: string;
+  changes_since?: string;
+  newest_time?: string;
+  newest_ref?: string;
+  oldest_time?: string;
+  oldest_ref?: string;
 };
 
 export type ListTransactionsV2_1Response = {
@@ -486,7 +486,7 @@ export type ListTransactionsV2_1Response = {
 };
 
 export type ListTransactionsQueryParams = {
-  transactionCode?: string;
+  transaction_code?: string;
   order?: "ascending" | "descending";
   limit?: number;
   users?: string[];
@@ -497,7 +497,7 @@ export type ListTransactionsQueryParams = {
     | "REFUNDED"
     | "CHARGE_BACK"
   )[];
-  paymentTypes?: (
+  payment_types?: (
     | "CASH"
     | "POS"
     | "ECOM"
@@ -507,11 +507,11 @@ export type ListTransactionsQueryParams = {
     | "UNKNOWN"
   )[];
   types?: ("PAYMENT" | "REFUND" | "CHARGE_BACK")[];
-  changesSince?: string;
-  newestTime?: string;
-  newestRef?: string;
-  oldestTime?: string;
-  oldestRef?: string;
+  changes_since?: string;
+  newest_time?: string;
+  newest_ref?: string;
+  oldest_time?: string;
+  oldest_ref?: string;
 };
 
 export type ListTransactionsResponse = {

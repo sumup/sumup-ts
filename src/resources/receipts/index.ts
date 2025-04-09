@@ -206,7 +206,7 @@ export type Receipt = {
 
 export type GetReceiptQueryParams = {
   mid: string;
-  txEventId?: number;
+  tx_event_id?: number;
 };
 
 export class Receipts extends Core.APIResource {

@@ -517,7 +517,7 @@ export type GetPaymentMethodsResponse = {
 };
 
 export type ListCheckoutsQueryParams = {
-  checkoutReference?: string;
+  checkout_reference?: string;
 };
 
 export type ListCheckoutsResponse = CheckoutSuccess[];
