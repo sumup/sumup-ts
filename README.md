@@ -13,7 +13,7 @@ _**IMPORTANT:** This SDK is under heavy development and subject to breaking chan
 
 The Node.js SDK for the SumUp [API](https://developer.sumup.com).
 
-To learn more, check out our [API Reference](https://developer.sumup.com/api) and [Documentation](https://developer.sumup.com).
+To learn more, check out our [API Reference](https://developer.sumup.com/api) and [Developer Documentation](https://developer.sumup.com). You can also find the full documentation of the SumUp Node.js SDK at [sumup.github.io/sumup-ts](https://sumup.github.io/sumup-ts/).
 
 ## Requirements
 
