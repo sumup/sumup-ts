@@ -284,8 +284,8 @@ export class Readers extends Core.APIResource {
     id: ReaderID,
     body: UpdateReaderParams,
     params?: Core.FetchParams,
-  ): Core.APIPromise<void> {
-    return this._client.patch<void>({
+  ): Core.APIPromise<Reader> {
+    return this._client.patch<Reader>({
       path: `/v0.1/merchants/${merchantCode}/readers/${id}`,
       body,
       ...params,

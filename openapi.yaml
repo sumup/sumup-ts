@@ -3897,8 +3897,12 @@ paths:
                 meta:
                   $ref: '#/components/schemas/Meta'
       responses:
-        '304':
-          description: 'The update request was successful, but the reader didn''t get updated.'
+        '200':
+          description: Returns the updated Reader object if the update succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Reader'
         '403':
           description: The reader is not linked to the merchant account.
       security:
@@ -6791,7 +6795,7 @@ components:
           type: boolean
           example: true
         phone_number:
-          description: 'End-User''s preferred telephone number in E.164 [E.164] format. For example, +1 (425) 555-1212 or +56 (2) 687 2400. Can be empty if the user doesn''t have phone number set.'
+          description: 'End-User''s preferred telephone number in [E.164](https://en.wikipedia.org/wiki/E.164) format. For example, +1 (425) 555-1212 or +56 (2) 687 2400. Can be empty if the user doesn''t have phone number set.'
           type: string
           example: '+55115525632555'
         phone_number_verified:
