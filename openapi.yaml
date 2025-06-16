@@ -6294,15 +6294,6 @@ components:
       additionalProperties: false
       required:
         - hint
-    SignupContext:
-      type: object
-      properties:
-        client_id:
-          type: string
-          example: client-id
-        intent:
-          type: string
-          example: invoices
     Operator:
       type: object
       properties:
@@ -6506,9 +6497,6 @@ components:
           description: |
             Type of the account of the user this token was issued for. Present only for internal clients in password flow.
           type: string
-        consent_reused:
-          description: Used to support the OAuth2 authorization flow handled by gateway.
-          type: boolean
       required:
         - access_token
         - token_type
@@ -6574,32 +6562,6 @@ components:
               - email
           example:
             - otp
-    AuthorizationContext:
-      description: Ext authz agent authorization context
-      type: object
-      properties:
-        client_id:
-          type: string
-        scp:
-          type: array
-          items:
-            type: string
-        ext:
-          type: object
-          properties:
-            classic:
-              $ref: '#/components/schemas/ClassicContext'
-            sig:
-              $ref: '#/components/schemas/SignatureContext'
-        sub:
-          type: string
-        aud:
-          type: array
-          items:
-            type: string
-      required:
-        - client_id
-        - scp
     UserInfo:
       description: Basic account info from an user
       type: object
@@ -6751,13 +6713,86 @@ components:
       maxLength: 124
       nullable: true
     CountryCode:
-      description: |
-        An [https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2](ISO3166-1 alpha-2) country code. This definition users `oneOf` with a two-character string type to allow for support of future countries in client code.
-        Possible values are: ``` - "AT" - "AU" - "BE" - "BG" - "BR" - "CH" - "CL" - "CO" - "CY" - "CZ" - "DE" - "DK" - "EE" - "ES" - "FI" - "FR" - "GB" - "GR" - "HU" - "IE" - "IT" - "LT" - "LU" - "LV" - "MT" - "MX" - "NL" - "NO" - "PE" - "PL" - "PT" - "RO" - "SE" - "SI" - "SK" - "US" ```
+      description: |-
+        An [https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2](ISO3166-1 alpha-2)
+        country code. This definition users `oneOf` with a two-character string
+        type to allow for support of future countries in client code.
+
+        Possible values are:
+        - `AR`
+        - `AT`
+        - `AU`
+        - `BE`
+        - `BG`
+        - `BR`
+        - `CA`
+        - `CH`
+        - `CL`
+        - `CO`
+        - `CY`
+        - `CZ`
+        - `DE`
+        - `DK`
+        - `EE`
+        - `ES`
+        - `FI`
+        - `FR`
+        - `GB`
+        - `GR`
+        - `HK`
+        - `HR`
+        - `HU`
+        - `IE`
+        - `IT`
+        - `JP`
+        - `LT`
+        - `LU`
+        - `LV`
+        - `MT`
+        - `MX`
+        - `MY`
+        - `NL`
+        - `NO`
+        - `NZ`
+        - `PE`
+        - `PL`
+        - `PT`
+        - `RO`
+        - `SE`
+        - `SG`
+        - `SI`
+        - `SK`
+        - `US`
       type: string
       example: BR
       maxLength: 2
       minLength: 2
+    PersonalIdentifier:
+      type: object
+      properties:
+        ref:
+          description: The unique reference for the personal identifier type.
+          type: string
+          example: br.cpf
+        value:
+          description: |
+            The company identifier value.
+          type: string
+          example: 847.060.136-90
+      example:
+        ref: br.cpf
+        value: 847.060.136-90
+      required:
+        - ref
+        - value
+    PersonalIdentifiers:
+      description: A list of country-specific personal identifiers.
+      type: array
+      items:
+        $ref: '#/components/schemas/PersonalIdentifier'
+      example:
+        - ref: br.cpf
+          value: 847.060.136-90
     User:
       description: The userinfo response
       type: object
@@ -6852,6 +6887,10 @@ components:
           format: date-time
         address:
           $ref: '#/components/schemas/Address'
+        citizenship:
+          $ref: '#/components/schemas/CountryCode'
+        identifiers:
+          $ref: '#/components/schemas/PersonalIdentifiers'
         mfa_on_login_enabled:
           description: |
             True if the End-User's wants to enabled MFA on login, false otherwise.
