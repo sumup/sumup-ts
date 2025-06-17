@@ -1794,19 +1794,7 @@
         "description": "Deactivates an identified card payment instrument resource for a customer.",
         "responses": {
           "204": {
-            "description": "No Content",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                },
-                "examples": {
-                  "NoBody": {
-                    "value": {}
-                  }
-                }
-              }
-            }
+            "description": "No Content"
           },
           "401": {
             "description": "Unauthorized",
@@ -1938,19 +1926,7 @@
         },
         "responses": {
           "204": {
-            "description": "No Content",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                },
-                "examples": {
-                  "NoBody": {
-                    "value": {}
-                  }
-                }
-              }
-            }
+            "description": "No Content"
           },
           "404": {
             "description": "Not Found",
@@ -5354,7 +5330,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Returns the deleted Role object if the deletion succeeded."
+            "description": "Returns an empty response if the role deletion succeeded."
           },
           "400": {
             "description": "Invalid request."
@@ -6340,83 +6316,6 @@
           }
         }
       },
-      "AuthCode": {
-        "description": "Authorization code flow",
-        "type": "object",
-        "properties": {
-          "response_type": {
-            "description": "The type of the expected response. The value must be `code` to indicate that you expect to receive an authorization code.",
-            "type": "string",
-            "example": "code"
-          },
-          "client_id": {
-            "description": "The client ID of your application that was generated when you [registered it](https://developer.sumup.com/docs/register-app/).",
-            "type": "string",
-            "example": "fOcmczrYtYMJ7Li5GjMLLcUeC9dN"
-          },
-          "redirect_uri": {
-            "description": "The URI to which the merchant user is redirected after authorizing your application to access their user's profile data and to which the authorization code is sent. The value must match exactly one of the [registered URIs](https://developer.sumup.com/docs/register-app#3-create-oauth-client-credentials) for your application.",
-            "type": "string",
-            "example": "https://sample-app.example.com/callback"
-          },
-          "scope": {
-            "description": "A space-separated list of scopes for which you request authorization. If you don't specify any scopes in the request, your application will be granted authorization for the default scopes.",
-            "type": "string",
-            "example": "payments"
-          },
-          "state": {
-            "description": "A unique local state that can be used for correlating requests and responses and for preventing [cross-site request forgery](https://tools.ietf.org/html/rfc6749#section-10.12).",
-            "type": "string",
-            "example": "2cFCsY36y95lFHk4"
-          }
-        },
-        "required": [
-          "response_type",
-          "client_id",
-          "redirect_uri"
-        ]
-      },
-      "AuthToken": {
-        "description": "Authorization token flow",
-        "type": "object",
-        "properties": {
-          "grant_type": {
-            "description": "The grant type used for obtaining an access token.",
-            "type": "string",
-            "example": "refresh_token",
-            "enum": [
-              "authorization_code",
-              "refresh_token"
-            ]
-          },
-          "client_id": {
-            "description": "The client ID of your application that was generated when you [registered it](https://developer.sumup.com/docs/register-app).",
-            "type": "string",
-            "example": "fOcmczrYtYMJ7Li5GjMLLcUeC9dN"
-          },
-          "client_secret": {
-            "description": "The client secret of your application that was generated when you [registered it](https://developer.sumup.com/docs/register-app).",
-            "type": "string",
-            "example": "717bd571b54297494cd7a79b491e8f2c1da6189c4cc2d3481380e8366eef539c"
-          },
-          "code": {
-            "description": "The authorization code that you received from requesting an authorization code.",
-            "type": "string",
-            "example": "be366ce9fccd0c337d1da29b31d06dd1135ab95401562883"
-          },
-          "refresh_token": {
-            "description": "A **required** parameter when generating a refresh token.",
-            "type": "string",
-            "example": "d180031bfe9bac36c336e5746637810272546865e9c9586012f462a56f3fe9af"
-          }
-        },
-        "required": [
-          "grant_type",
-          "client_id",
-          "client_secret",
-          "code"
-        ]
-      },
       "BankAccount": {
         "type": "object",
         "properties": {
@@ -6468,71 +6367,6 @@
             "type": "string"
           }
         }
-      },
-      "BankAccountPayload": {
-        "type": "object",
-        "properties": {
-          "bank_code": {
-            "description": "Bank code",
-            "type": "string"
-          },
-          "branch_code": {
-            "description": "Branch code",
-            "type": "string"
-          },
-          "account_number": {
-            "description": "Account number",
-            "type": "string"
-          },
-          "iban": {
-            "description": "IBAN",
-            "type": "string"
-          },
-          "swift": {
-            "description": "SWIFT code",
-            "type": "string"
-          },
-          "account_type": {
-            "description": "Type of the account.",
-            "type": "string",
-            "enum": [
-              "CURRENT",
-              "SAVINGS"
-            ]
-          },
-          "account_holder_name": {
-            "description": "Account holder name",
-            "type": "string"
-          },
-          "check_digit": {
-            "description": "Check digit",
-            "type": "string"
-          },
-          "primary": {
-            "description": "Determines if this bank account will be primary. Default is false",
-            "type": "boolean"
-          },
-          "status": {
-            "description": "Determines the bank account status.",
-            "type": "string",
-            "enum": [
-              "OPEN"
-            ]
-          },
-          "account_category": {
-            "description": "Determines if this bank account is business or personal.",
-            "type": "string",
-            "enum": [
-              "PERSONAL",
-              "BUSINESS"
-            ]
-          }
-        },
-        "required": [
-          "account_holder_name",
-          "iban",
-          "swift"
-        ]
       },
       "BusinessOwners": {
         "description": "Business owners information.",
@@ -6989,116 +6823,6 @@
           }
         ]
       },
-      "CheckoutSuccessToken": {
-        "description": "Details of the payment checkout.",
-        "type": "object",
-        "properties": {
-          "checkout_reference": {
-            "description": "Unique ID of the payment checkout specified by the client application when creating the checkout resource.",
-            "type": "string",
-            "maxLength": 90
-          },
-          "amount": {
-            "description": "Amount of the payment.",
-            "type": "number",
-            "format": "float",
-            "example": 10.1
-          },
-          "currency": {
-            "$ref": "#/components/schemas/Currency"
-          },
-          "pay_to_email": {
-            "description": "Email address of the registered user (merchant) to whom the payment is made.",
-            "type": "string",
-            "format": "email",
-            "deprecated": true,
-            "x-deprecation-notice": "`pay_to_email` is deprecated, use `merchant_code` instead."
-          },
-          "merchant_code": {
-            "description": "Unique identifying code of the merchant profile.",
-            "type": "string"
-          },
-          "description": {
-            "description": "Short description of the checkout visible in the SumUp dashboard. The description can contribute to reporting, allowing easier identification of a checkout.",
-            "type": "string"
-          },
-          "id": {
-            "description": "Unique ID of the checkout resource.",
-            "type": "string",
-            "readOnly": true
-          },
-          "status": {
-            "description": "Current status of the checkout.",
-            "type": "string",
-            "enum": [
-              "PENDING",
-              "FAILED",
-              "PAID"
-            ],
-            "readOnly": true
-          },
-          "date": {
-            "description": "Date and time of the creation of the payment checkout. Response format expressed according to [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) code.",
-            "type": "string",
-            "format": "date-time",
-            "example": "2020-02-29T10:56:56+00:00",
-            "readOnly": true
-          },
-          "transaction_code": {
-            "description": "Transaction code of the successful transaction with which the payment for the checkout is completed.",
-            "type": "string",
-            "example": "TEENSK4W2K",
-            "readOnly": true
-          },
-          "transaction_id": {
-            "description": "Transaction ID of the successful transaction with which the payment for the checkout is completed.",
-            "type": "string",
-            "example": "410fc44a-5956-44e1-b5cc-19c6f8d727a4",
-            "readOnly": true
-          },
-          "merchant_name": {
-            "description": "Name of the merchant",
-            "type": "string",
-            "example": "Sample Merchant"
-          },
-          "redirect_url": {
-            "description": "Refers to a url where the end user is redirected once the payment processing completes.",
-            "type": "string",
-            "example": "https://mysite.com/completed_purchase"
-          },
-          "customer_id": {
-            "description": "Unique identification of a customer. If specified, the checkout session and payment instrument are associated with the referenced customer.",
-            "type": "string"
-          },
-          "payment_instrument": {
-            "description": "Object containing token information for the specified payment instrument",
-            "type": "object",
-            "properties": {
-              "token": {
-                "description": "Token value",
-                "type": "string",
-                "example": "e76d7e5c-9375-4fac-a7e7-b19dc5302fbc"
-              }
-            }
-          },
-          "transactions": {
-            "description": "List of transactions related to the payment.",
-            "type": "array",
-            "items": {
-              "allOf": [
-                {
-                  "$ref": "#/components/schemas/TransactionMixinBase"
-                },
-                {
-                  "$ref": "#/components/schemas/TransactionMixinCheckout"
-                }
-              ]
-            },
-            "readOnly": true,
-            "uniqueItems": true
-          }
-        }
-      },
       "CheckoutAccepted": {
         "description": "3DS Response",
         "type": "object",
@@ -7389,35 +7113,6 @@
                 "type": "string"
               }
             }
-          }
-        }
-      },
-      "DoingBusinessAsPayload": {
-        "description": "Doing Business As information",
-        "type": "object",
-        "properties": {
-          "business_name": {
-            "description": "Doing business as name",
-            "type": "string"
-          },
-          "tax_id": {
-            "description": "Doing business as Tax ID",
-            "type": "string"
-          },
-          "vat_id": {
-            "description": "Doing business as VAT ID",
-            "type": "string"
-          },
-          "website": {
-            "description": "Doing business as website",
-            "type": "string"
-          },
-          "email": {
-            "description": "Doing business as email",
-            "type": "string"
-          },
-          "address": {
-            "$ref": "#/components/schemas/AddressPayload"
           }
         }
       },
@@ -7795,93 +7490,6 @@
           }
         }
       },
-      "MerchantProfilePayload": {
-        "description": "Account's merchant profile",
-        "type": "object",
-        "properties": {
-          "legal_type_id": {
-            "description": "Id of the legal type of the merchant",
-            "type": "number"
-          },
-          "merchant_category_code": {
-            "description": "Merchant category code",
-            "type": "string"
-          },
-          "company_name": {
-            "description": "Company name",
-            "type": "string"
-          },
-          "company_registration_number": {
-            "description": "Company registration number",
-            "type": "string"
-          },
-          "vat_id": {
-            "description": "Vat ID",
-            "type": "string"
-          },
-          "permanent_certificate_access_code": {
-            "description": "Payment certificate access code",
-            "type": "string"
-          },
-          "website": {
-            "description": "Company website",
-            "type": "string"
-          },
-          "nature_and_purpose": {
-            "description": "Nature and purpose of the business. Required for the following merchant category codes: 5999, 7392, 8999, 5694, 5969, 7299, 7399",
-            "type": "string"
-          },
-          "mobile_phone": {
-            "description": "Mobile number",
-            "type": "string"
-          },
-          "address": {
-            "$ref": "#/components/schemas/AddressPayload"
-          },
-          "doing_business_as": {
-            "type": "object",
-            "properties": {
-              "business_name": {
-                "description": "Doing business as name",
-                "type": "string"
-              },
-              "tax_id": {
-                "description": "Doing business as Tax ID",
-                "type": "string"
-              },
-              "vat_id": {
-                "description": "Doing business as Vat ID",
-                "type": "string"
-              },
-              "website": {
-                "description": "Doing business as website",
-                "type": "string"
-              },
-              "email": {
-                "description": "Doing business as email",
-                "type": "string"
-              },
-              "address": {
-                "$ref": "#/components/schemas/AddressPayload"
-              }
-            }
-          },
-          "business_owners": {
-            "$ref": "#/components/schemas/BusinessOwners"
-          },
-          "is_test_account": {
-            "description": "Defines if the profile nature is for testing",
-            "type": "boolean"
-          }
-        },
-        "required": [
-          "legal_type_id",
-          "company_registration_number",
-          "merchant_category_code",
-          "company_name",
-          "address"
-        ]
-      },
       "MerchantSettings": {
         "description": "Merchant settings &#40;like \\\"payout_type\\\", \\\"payout_period\\\"&#41;",
         "type": "object",
@@ -7941,80 +7549,6 @@
             "type": "boolean"
           }
         }
-      },
-      "MerchantSettingsPayload": {
-        "type": "object",
-        "properties": {
-          "payout_period": {
-            "description": "Payout period.",
-            "type": "string",
-            "enum": [
-              "daily",
-              "weekly",
-              "monthly"
-            ]
-          },
-          "payout_type": {
-            "description": "Payout type.",
-            "type": "string",
-            "enum": [
-              "SINGLE_PAYMENT"
-            ]
-          },
-          "payout_on_demand": {
-            "description": "If true, the merchant will not receive automatic payouts.",
-            "type": "boolean"
-          },
-          "payout_on_demand_available": {
-            "description": "If true, the merchant will be able to manage  payout_on_demand settings",
-            "type": "string"
-          },
-          "expected_max_transaction_amount": {
-            "description": "Expected maximum amount of a single purchase",
-            "type": "number"
-          },
-          "printers_enabled": {
-            "description": "Printers enabled.",
-            "type": "boolean"
-          },
-          "gross_settlement": {
-            "description": "Gross settlement",
-            "type": "boolean"
-          }
-        }
-      },
-      "PaymentInstrumentCard": {
-        "description": "Details of the payment card that is saved as a payment instrument.",
-        "type": "object",
-        "properties": {
-          "token": {
-            "description": "Unique token identifying the saved payment card for a customer.",
-            "type": "string",
-            "readOnly": true
-          },
-          "active": {
-            "description": "Indicates whether the payment instrument is active and can be used for payments. To deactivate it, send a `DELETE` request to the resource endpoint.",
-            "type": "boolean",
-            "default": true,
-            "readOnly": true
-          },
-          "type": {
-            "description": "Type of the payment instrument.",
-            "type": "string",
-            "enum": [
-              "card"
-            ]
-          },
-          "card": {
-            "$ref": "#/components/schemas/Card"
-          }
-        },
-        "required": [
-          "token",
-          "active",
-          "type",
-          "card"
-        ]
       },
       "PaymentInstrumentResponse": {
         "description": "Payment Instrument Response",
@@ -8188,42 +7722,6 @@
             "type": "boolean"
           }
         }
-      },
-      "PersonalProfilePayload": {
-        "description": "Account's personal profile.",
-        "type": "object",
-        "properties": {
-          "first_name": {
-            "description": "First name of the user",
-            "type": "string"
-          },
-          "last_name": {
-            "description": "Last name of the user",
-            "type": "string"
-          },
-          "date_of_birth": {
-            "description": "Date of birth",
-            "type": "string",
-            "format": "date"
-          },
-          "mobile_phone": {
-            "description": "Mobile phone number",
-            "type": "string"
-          },
-          "national_id": {
-            "description": "National identification id. Country specific. Ex CPF &#40;Brazil&#41;, DNI (Spain), PESEL (Poland)",
-            "type": "string"
-          },
-          "address": {
-            "$ref": "#/components/schemas/AddressPayload"
-          }
-        },
-        "required": [
-          "first_name",
-          "last_name",
-          "date_of_birth",
-          "address"
-        ]
       },
       "Product": {
         "description": "Details of the product for which the payment is made.",
@@ -9029,18 +8527,6 @@
         "type": "string",
         "format": "date-time"
       },
-      "Preauth": {
-        "type": "object",
-        "properties": {
-          "hint": {
-            "type": "string"
-          }
-        },
-        "additionalProperties": false,
-        "required": [
-          "hint"
-        ]
-      },
       "Operator": {
         "type": "object",
         "properties": {
@@ -9109,751 +8595,6 @@
           "error_code",
           "message"
         ]
-      },
-      "LegacyOTP": {
-        "type": "object",
-        "properties": {
-          "otpToken": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "otpToken"
-        ]
-      },
-      "CompatIntrospectionError": {
-        "description": "An error response from an token introspection endpoint",
-        "type": "object",
-        "properties": {
-          "error_code": {
-            "description": "An error code identifying the type of error that occurred",
-            "type": "string"
-          },
-          "error_message": {
-            "description": "A human readable description on the error",
-            "type": "string"
-          }
-        },
-        "example": {
-          "error_code": "NOT_AUTHORIZED",
-          "error_message": "invalid access token"
-        },
-        "required": [
-          "error_code"
-        ]
-      },
-      "CompatSessionInfo": {
-        "description": "Object containing information about a access token session.\n\nThe properties `user_id` and `merchant_id` will be set only if the token is issued for an SumUp internal OAuth 2.0 client.\n",
-        "type": "object",
-        "properties": {
-          "access_token": {
-            "description": "The provided access token.",
-            "type": "string"
-          },
-          "legacy_token": {
-            "description": "Same value as the `access_token` field. Exists for compatibility reasons.",
-            "type": "string"
-          },
-          "merchant_code": {
-            "description": "The merchant code of the merchant the user is currently logged in to.",
-            "type": "string"
-          },
-          "scope": {
-            "description": "Space separated list of the scopes the token authorizes the user for",
-            "type": "string"
-          },
-          "client_id": {
-            "description": "The client id of the client the token was issued for.",
-            "type": "string"
-          },
-          "user_id": {
-            "description": "The user id of the user the token was issued for.",
-            "type": "integer"
-          },
-          "merchant_id": {
-            "description": "The merchant id of the merchant the user is currently logged in to.",
-            "type": "integer"
-          }
-        },
-        "example": {
-          "access_token": "at_classic_tW1BQcMv14Txz4LzPsnVJqSlMYxyuj50YCEo2j3deCQTYqpsd0teZ",
-          "legacy_token": "at_classic_tW1BQcMv14Txz4LzPsnVJqSlMYxyuj50YCEo2j3deCQTYqpsd0teZ",
-          "merchant_code": "MCKKXS9R",
-          "scope": "email profile",
-          "client_id": "cc_classic_ICt5WKz28oDNgvHch6oSKAMJaIZUN"
-        },
-        "required": [
-          "access_token",
-          "legacy_token",
-          "scope",
-          "client_id"
-        ]
-      },
-      "CompatTokenRequest": {
-        "type": "object",
-        "properties": {
-          "grant_type": {
-            "type": "string",
-            "enum": [
-              "authorization_code",
-              "password",
-              "client_credentials",
-              "urn:ietf:params:oauth:grant-type:token-exchange",
-              "refresh_token"
-            ],
-            "nullable": true,
-            "x-oapi-codegen-extra-tags": {
-              "form": "grant_type"
-            }
-          },
-          "client_id": {
-            "type": "string",
-            "nullable": true,
-            "x-oapi-codegen-extra-tags": {
-              "form": "client_id"
-            }
-          },
-          "client_secret": {
-            "type": "string",
-            "nullable": true,
-            "x-oapi-codegen-extra-tags": {
-              "form": "client_secret"
-            }
-          },
-          "code": {
-            "type": "string",
-            "nullable": true,
-            "x-oapi-codegen-extra-tags": {
-              "form": "code"
-            }
-          },
-          "username": {
-            "type": "string",
-            "nullable": true,
-            "x-oapi-codegen-extra-tags": {
-              "form": "username"
-            }
-          },
-          "password": {
-            "type": "string",
-            "example": "correct horse batter staple",
-            "nullable": true,
-            "x-oapi-codegen-extra-tags": {
-              "form": "password"
-            }
-          },
-          "refresh_token": {
-            "type": "string",
-            "nullable": true,
-            "x-oapi-codegen-extra-tags": {
-              "form": "refresh_token"
-            }
-          },
-          "subject_token": {
-            "type": "string",
-            "nullable": true,
-            "x-oapi-codegen-extra-tags": {
-              "form": "subject_token"
-            }
-          },
-          "subject_token_type": {
-            "type": "string",
-            "nullable": true,
-            "x-oapi-codegen-extra-tags": {
-              "form": "subject_token_type"
-            }
-          },
-          "scope": {
-            "description": "Space separated list of requested scopes.",
-            "type": "string",
-            "nullable": true,
-            "x-oapi-codegen-extra-tags": {
-              "form": "scope"
-            }
-          },
-          "hashed": {
-            "description": "Hashed is used by legacy applications (notably cube) to submit the password in the password flow in pre-hashed format (the password is md5 hashed on the client and submitted in such format).\n",
-            "type": "boolean",
-            "nullable": true,
-            "x-oapi-codegen-extra-tags": {
-              "form": "hashed"
-            }
-          }
-        }
-      },
-      "CompatToken": {
-        "type": "object",
-        "properties": {
-          "access_token": {
-            "type": "string"
-          },
-          "token_type": {
-            "type": "string"
-          },
-          "expires_in": {
-            "description": "The TTL of the token in seconds.",
-            "type": "integer",
-            "format": "int64"
-          },
-          "refresh_token": {
-            "type": "string"
-          },
-          "scope": {
-            "description": "Space separated list of scopes effective for this token.",
-            "type": "string"
-          },
-          "issued_token_type": {
-            "type": "string"
-          },
-          "account_type": {
-            "description": "Type of the account of the user this token was issued for. Present only for internal clients in password flow.\n",
-            "type": "string"
-          }
-        },
-        "required": [
-          "access_token",
-          "token_type",
-          "expires_in",
-          "scope"
-        ]
-      },
-      "TokenError": {
-        "type": "object",
-        "properties": {
-          "error": {
-            "description": "Identifier of the error.",
-            "type": "string",
-            "example": "invalid_request"
-          },
-          "error_description": {
-            "description": "Short description of the error.",
-            "type": "string",
-            "example": "missing client credentials"
-          }
-        },
-        "required": [
-          "error",
-          "error_description"
-        ]
-      },
-      "ValidatedToken": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "description": "The standardized authentication cookie name used for webviews.\n",
-            "type": "string"
-          },
-          "value": {
-            "description": "The validated token.\n",
-            "type": "string"
-          }
-        },
-        "required": [
-          "name",
-          "value"
-        ]
-      },
-      "ClassicContext": {
-        "description": "Ext authz agent classic context",
-        "type": "object",
-        "properties": {
-          "user_id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "merchant_code": {
-            "type": "string",
-            "example": "MC0X0ABC"
-          }
-        }
-      },
-      "SignatureContext": {
-        "description": "Ext authz agent signature context",
-        "type": "object",
-        "properties": {
-          "body_digest": {
-            "type": "string"
-          },
-          "meta": {
-            "description": "Application-specific data provided by the signer which should be used when authorizing request together with `body_digest`.",
-            "type": "object",
-            "x-go-type": "json.RawMessage"
-          },
-          "amr": {
-            "description": "Method used to authenticate the requester when obtaining the signature.",
-            "type": "array",
-            "items": {
-              "type": "string",
-              "enum": [
-                "otp",
-                "swk",
-                "sms",
-                "email"
-              ]
-            },
-            "example": [
-              "otp"
-            ]
-          }
-        }
-      },
-      "UserInfo": {
-        "description": "Basic account info from an user",
-        "type": "object",
-        "properties": {
-          "merchant_code": {
-            "type": "string",
-            "example": "MC0X0ABC"
-          },
-          "user_id": {
-            "type": "integer",
-            "format": "int32",
-            "example": 1234
-          },
-          "merchant_id": {
-            "type": "integer",
-            "format": "int32",
-            "example": 1111
-          }
-        },
-        "example": {
-          "merchant_code": "MC0X0ABC",
-          "user_id": 12345678,
-          "merchant_id": 87654321
-        }
-      },
-      "SampleBody": {
-        "description": "Body to be sent in the signature validation example endpoint",
-        "type": "object",
-        "properties": {
-          "action_id": {
-            "type": "string"
-          },
-          "params": {
-            "description": "Application-specific data provided by the signer which should be used when authorizing request together with `body_digest`.",
-            "type": "object",
-            "x-go-type": "json.RawMessage"
-          }
-        },
-        "required": [
-          "action_id",
-          "params"
-        ]
-      },
-      "OTP": {
-        "type": "object",
-        "properties": {
-          "otp_channel": {
-            "$ref": "#/components/schemas/OTPChannel"
-          },
-          "otp_recipient": {
-            "description": "Masked recipient of the OTP.\n",
-            "type": "string",
-            "example": "+420*******898"
-          }
-        },
-        "required": [
-          "otp_channel",
-          "otp_recipient"
-        ]
-      },
-      "OTPChannel": {
-        "description": "The Out-of-Band channel for OTP delivery.",
-        "type": "string",
-        "default": "sms",
-        "enum": [
-          "sms",
-          "whatsapp"
-        ]
-      },
-      "DeviceRequest": {
-        "type": "object",
-        "properties": {
-          "platform_device_id": {
-            "description": "The device identifier created by the mobile app after installation on the device. This is a UUID although iOS and Android may use different versions.\n",
-            "type": "string",
-            "example": "B87A160D-C9B8-4A25-87B4-A59036AECE61",
-            "maxLength": 64
-          },
-          "app_id": {
-            "description": "client id of the app",
-            "type": "string",
-            "example": "ios_merchant_app",
-            "maxLength": 64
-          },
-          "app_version": {
-            "description": "App version of the device",
-            "type": "string",
-            "example": "2.59.16",
-            "maxLength": 64
-          },
-          "name": {
-            "description": "Human readable name of the device.",
-            "type": "string",
-            "example": "John's iPhone",
-            "maxLength": 124
-          },
-          "push_token": {
-            "description": "Push token used for sending push notifications\n",
-            "type": "string",
-            "example": "7a8d93b3 2b6c881a 5d71e43e 6b95a7f0 1bfe62c8 f49d5e4c d28be4b8 7ec0a941",
-            "maxLength": 256
-          }
-        },
-        "required": [
-          "name"
-        ]
-      },
-      "SignupVerificationStatus": {
-        "type": "object",
-        "properties": {
-          "verified": {
-            "description": "True if the signup email has been verified.",
-            "type": "boolean",
-            "example": true
-          },
-          "status": {
-            "description": "The state of the signup verification.\nPossible values are:\n* `pending` - the signup is pending confirmation\n* `verified` - the signup has been verified as can be claimed\n* `claimed` - the signup has been claimed\n",
-            "type": "string",
-            "example": "pending",
-            "enum": [
-              "pending",
-              "verified",
-              "claimed"
-            ]
-          }
-        },
-        "required": [
-          "verified",
-          "status"
-        ]
-      },
-      "ValidationError": {
-        "type": "object",
-        "properties": {
-          "error_code": {
-            "type": "string",
-            "example": "NOT_FOUND"
-          },
-          "message": {
-            "type": "string",
-            "example": "Resource not found"
-          },
-          "param": {
-            "type": "string",
-            "example": "group"
-          }
-        },
-        "required": [
-          "error_code",
-          "message",
-          "param"
-        ]
-      },
-      "ToSAcceptance": {
-        "description": "Details on the acceptance of the SumUp Terms of Service Agreement",
-        "type": "object",
-        "properties": {
-          "accepted_at": {
-            "description": "The Unix timestamp marking when the user accepted Terms of Service agreement.",
-            "type": "string",
-            "format": "date-time",
-            "example": "2023-03-25T09:10:10Z"
-          },
-          "ip_address": {
-            "description": "The IP address from which the user accepted Terms of Service agreement.",
-            "type": "string",
-            "example": "127.0.0.1"
-          },
-          "user_agent": {
-            "description": "The user agent of the browser from which the user accepted Terms of Service agreement.",
-            "type": "string",
-            "example": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/113.0"
-          }
-        },
-        "required": [
-          "accepted_at",
-          "ip_address",
-          "user_agent"
-        ]
-      },
-      "Zoneinfo": {
-        "description": "String from zoneinfo time zone database representing the user's time zone.",
-        "type": "string",
-        "example": "Europe/Paris",
-        "maxLength": 124,
-        "nullable": true
-      },
-      "CountryCode": {
-        "description": "An [https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2](ISO3166-1 alpha-2)\ncountry code. This definition users `oneOf` with a two-character string\ntype to allow for support of future countries in client code.\n\nPossible values are:\n- `AR`\n- `AT`\n- `AU`\n- `BE`\n- `BG`\n- `BR`\n- `CA`\n- `CH`\n- `CL`\n- `CO`\n- `CY`\n- `CZ`\n- `DE`\n- `DK`\n- `EE`\n- `ES`\n- `FI`\n- `FR`\n- `GB`\n- `GR`\n- `HK`\n- `HR`\n- `HU`\n- `IE`\n- `IT`\n- `JP`\n- `LT`\n- `LU`\n- `LV`\n- `MT`\n- `MX`\n- `MY`\n- `NL`\n- `NO`\n- `NZ`\n- `PE`\n- `PL`\n- `PT`\n- `RO`\n- `SE`\n- `SG`\n- `SI`\n- `SK`\n- `US`",
-        "type": "string",
-        "example": "BR",
-        "maxLength": 2,
-        "minLength": 2
-      },
-      "PersonalIdentifier": {
-        "type": "object",
-        "properties": {
-          "ref": {
-            "description": "The unique reference for the personal identifier type.",
-            "type": "string",
-            "example": "br.cpf"
-          },
-          "value": {
-            "description": "The company identifier value.\n",
-            "type": "string",
-            "example": "847.060.136-90"
-          }
-        },
-        "example": {
-          "ref": "br.cpf",
-          "value": "847.060.136-90"
-        },
-        "required": [
-          "ref",
-          "value"
-        ]
-      },
-      "PersonalIdentifiers": {
-        "description": "A list of country-specific personal identifiers.",
-        "type": "array",
-        "items": {
-          "$ref": "#/components/schemas/PersonalIdentifier"
-        },
-        "example": [
-          {
-            "ref": "br.cpf",
-            "value": "847.060.136-90"
-          }
-        ]
-      },
-      "User": {
-        "description": "The userinfo response",
-        "type": "object",
-        "properties": {
-          "id": {
-            "description": "Identifier for the End-User (also called Subject).",
-            "type": "string",
-            "example": "44ca0f5b-813b-46e1-aee7-e6242010662e"
-          },
-          "created_at": {
-            "description": "Time the End-User was created.\n",
-            "type": "string",
-            "format": "date-time",
-            "example": "2022-05-03T14:46:44.185202Z"
-          },
-          "updated_at": {
-            "description": "Time the End-User's information was last updated.\n",
-            "type": "string",
-            "format": "date-time",
-            "example": "2022-05-03T14:46:44.185202Z"
-          },
-          "blocked_at": {
-            "description": "Time the End-User was blocked.\n",
-            "type": "string",
-            "format": "date-time",
-            "example": "2022-05-03T14:46:44.185202Z"
-          },
-          "email": {
-            "description": "End-User's preferred e-mail address. Its value MUST conform to the RFC 5322 [RFC5322] addr-spec syntax. The RP MUST NOT rely upon this value being unique, for unique identification use ID instead.\n",
-            "type": "string",
-            "example": "example@sumup.com"
-          },
-          "email_verified": {
-            "description": "True if the End-User's e-mail address has been verified; otherwise false. When this Claim Value is true, this means that the we took affirmative steps to ensure that this e-mail address was controlled by the End-User at the time the verification was performed.\n",
-            "type": "boolean",
-            "example": true
-          },
-          "phone_number": {
-            "description": "End-User's preferred telephone number in [E.164](https://en.wikipedia.org/wiki/E.164) format. For example, +1 (425) 555-1212 or +56 (2) 687 2400. Can be empty if the user doesn't have phone number set.",
-            "type": "string",
-            "example": "+55115525632555"
-          },
-          "phone_number_verified": {
-            "description": "True if the End-User's phone number has been verified; otherwise false. When this Claim Value is true, this means that we took affirmative steps to ensure that this phone number was controlled by the End-User at the time the verification was performed.\n",
-            "type": "boolean",
-            "example": true
-          },
-          "attributes": {
-            "description": "Any additional attributes associated with the user such as parameters present during the signup.",
-            "type": "object"
-          },
-          "locale": {
-            "description": "End-User's locale, represented as a BCP47 [RFC5646] language tag. This is typically an ISO 639-1 Alpha-2 [ISO639‑1] language code in lowercase and an ISO 3166-1 Alpha-2 [ISO3166‑1] country code in uppercase, separated by a dash. For example, en-US or fr-CA.\n",
-            "type": "string",
-            "example": "de-AT"
-          },
-          "tos_acceptance": {
-            "$ref": "#/components/schemas/ToSAcceptance"
-          },
-          "marketing_consent": {
-            "description": "True if the user has given consent to marketing communication.\n**This is only valid on user creation. Identity does not store or track the consent over time, should the user for example choose to revoke.**\n",
-            "type": "boolean",
-            "example": true,
-            "readOnly": true
-          },
-          "zoneinfo": {
-            "$ref": "#/components/schemas/Zoneinfo"
-          },
-          "name": {
-            "description": "End-User's full name in displayable form including all name parts, possibly including titles and suffixes, ordered according to the End-User's locale and preferences.",
-            "type": "string",
-            "example": "Anna Maria Sophie Müller"
-          },
-          "nickname": {
-            "description": "Casual name of the End-User that may or may not be the same as the given_name. For instance, a nickname value of Mike might be returned alongside a given_name value of Michael.",
-            "type": "string",
-            "example": "An"
-          },
-          "given_name": {
-            "description": "Given name(s) or first name(s) of the End-User. Note that in some cultures, people can have multiple given names; all can be present, with the names being separated by space characters.",
-            "type": "string",
-            "example": "Anna"
-          },
-          "middle_name": {
-            "description": "Middle name(s) of the End-User. Note that in some cultures, people can have multiple middle names; all can be present, with the names being separated by space characters. Also note that in some cultures, middle names are not used.",
-            "type": "string",
-            "example": "Maria Sophie"
-          },
-          "family_name": {
-            "description": "Surname(s) or last name(s) of the End-User. Note that in some cultures, people can have multiple family names or no family name; all can be present, with the names being separated by space characters.",
-            "type": "string",
-            "example": "Müller"
-          },
-          "gender": {
-            "description": "End-User's gender. Values defined by this specification are female and male. Other values MAY be used when neither of the defined values are applicable.",
-            "type": "string",
-            "example": "female"
-          },
-          "birthdate": {
-            "description": "End-User's birthday, represented as an ISO 8601:2004 [ISO8601‑2004] YYYY-MM-DD format.",
-            "type": "string",
-            "format": "date-time"
-          },
-          "address": {
-            "$ref": "#/components/schemas/Address"
-          },
-          "citizenship": {
-            "$ref": "#/components/schemas/CountryCode"
-          },
-          "identifiers": {
-            "$ref": "#/components/schemas/PersonalIdentifiers"
-          },
-          "mfa_on_login_enabled": {
-            "description": "True if the End-User's wants to enabled MFA on login, false otherwise.\n",
-            "type": "boolean",
-            "example": true
-          },
-          "mfa_disabled": {
-            "description": "True if the End-User's wants to disable MFA completely, false otherwise.\n",
-            "type": "boolean",
-            "example": true
-          },
-          "password_updated_at": {
-            "description": "Time the End-User's password was last updated.\n",
-            "type": "string",
-            "format": "date-time",
-            "example": "2022-05-03T14:46:44.185202Z"
-          },
-          "picture": {
-            "description": "URL of the End-User's profile picture. This URL refers to an image file (for example, a PNG, JPEG, or GIF image file), rather than to a Web page containing an image.\n",
-            "type": "string",
-            "format": "uri",
-            "example": "https://usercontent.sumup.com/u/44ca0f5b-813b-46e1-aee7-e6242010662e.png"
-          },
-          "is_virtual": {
-            "description": "Indicates whether a user is a managed user. Managed users are team members for which the owner of the merchant has set the password. These users have not gone through an invitation flow and cannot own merchants of their own or be invited to other merchants.\n",
-            "type": "boolean",
-            "example": false
-          },
-          "is_service_account": {
-            "description": "Indicates whether a user is a service account.\n",
-            "type": "boolean",
-            "example": false
-          },
-          "feature_previews": {
-            "description": "Experimental features that the user has enabled for themselves.\n",
-            "type": "object",
-            "example": {
-              "passkeys": true,
-              "dark_mode": true
-            },
-            "additionalProperties": {
-              "type": "boolean"
-            }
-          },
-          "color_scheme_preference": {
-            "description": "User's preference for the color scheme.\n",
-            "type": "string",
-            "example": "system",
-            "enum": [
-              "light",
-              "dark",
-              "system"
-            ]
-          }
-        },
-        "required": [
-          "id",
-          "email",
-          "email_verified",
-          "created_at",
-          "updated_at",
-          "phone_number",
-          "phone_number_verified",
-          "is_virtual",
-          "marketing_consent",
-          "mfa_on_login_enabled",
-          "mfa_disabled"
-        ]
-      },
-      "Device": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "description": "Unique identifier for the device. The ID is generated on the backend on device creation. It is not to be confused with the `platform_device_id`.\n",
-            "type": "string",
-            "example": "55E996A4-7F5E-44C2-B29A-869DE8A82A8A",
-            "maxLength": 64
-          },
-          "platform_device_id": {
-            "description": "The device identifier created by the mobile app after installation on the device. This is a UUID although iOS and Android may use different versions.\n",
-            "type": "string",
-            "example": "B87A160D-C9B8-4A25-87B4-A59036AECE61",
-            "maxLength": 64
-          },
-          "app_id": {
-            "description": "The client application's identifier.",
-            "type": "string",
-            "example": "ios_merchant_app"
-          },
-          "app_version": {
-            "description": "The client application's reported version. Not to confuse with the device operating system version.",
-            "type": "string"
-          },
-          "name": {
-            "description": "A human readable name for the device. In case of mobile phone's, it may be a name recognizable to the owner of the device.",
-            "type": "string"
-          },
-          "push_token": {
-            "description": "Push token used for sending push notifications\n",
-            "type": "string",
-            "example": "7a8d93b3 2b6c881a 5d71e43e 6b95a7f0 1bfe62c8 f49d5e4c d28be4b8 7ec0a941"
-          },
-          "created_at": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updated_at": {
-            "type": "string",
-            "format": "date-time"
-          }
-        },
-        "required": [
-          "id",
-          "name"
-        ],
-        "title": "Device"
       },
       "MembershipStatus": {
         "description": "The status of the membership.",
@@ -10460,6 +9201,297 @@
           "city",
           "country",
           "post_code"
+        ]
+      },
+      "BankAccountPayload": {
+        "type": "object",
+        "properties": {
+          "bank_code": {
+            "description": "Bank code",
+            "type": "string"
+          },
+          "branch_code": {
+            "description": "Branch code",
+            "type": "string"
+          },
+          "account_number": {
+            "description": "Account number",
+            "type": "string"
+          },
+          "iban": {
+            "description": "IBAN",
+            "type": "string"
+          },
+          "swift": {
+            "description": "SWIFT code",
+            "type": "string"
+          },
+          "account_type": {
+            "description": "Type of the account.",
+            "type": "string",
+            "enum": [
+              "CURRENT",
+              "SAVINGS"
+            ]
+          },
+          "account_holder_name": {
+            "description": "Account holder name",
+            "type": "string"
+          },
+          "check_digit": {
+            "description": "Check digit",
+            "type": "string"
+          },
+          "primary": {
+            "description": "Determines if this bank account will be primary. Default is false",
+            "type": "boolean"
+          },
+          "status": {
+            "description": "Determines the bank account status.",
+            "type": "string",
+            "enum": [
+              "OPEN"
+            ]
+          },
+          "account_category": {
+            "description": "Determines if this bank account is business or personal.",
+            "type": "string",
+            "enum": [
+              "PERSONAL",
+              "BUSINESS"
+            ]
+          }
+        },
+        "required": [
+          "account_holder_name",
+          "iban",
+          "swift"
+        ]
+      },
+      "DoingBusinessAsPayload": {
+        "description": "Doing Business As information",
+        "type": "object",
+        "properties": {
+          "business_name": {
+            "description": "Doing business as name",
+            "type": "string"
+          },
+          "tax_id": {
+            "description": "Doing business as Tax ID",
+            "type": "string"
+          },
+          "vat_id": {
+            "description": "Doing business as VAT ID",
+            "type": "string"
+          },
+          "website": {
+            "description": "Doing business as website",
+            "type": "string"
+          },
+          "email": {
+            "description": "Doing business as email",
+            "type": "string"
+          },
+          "address": {
+            "$ref": "#/components/schemas/AddressPayload"
+          }
+        }
+      },
+      "MerchantProfilePayload": {
+        "description": "Account's merchant profile",
+        "type": "object",
+        "properties": {
+          "legal_type_id": {
+            "description": "Id of the legal type of the merchant",
+            "type": "number"
+          },
+          "merchant_category_code": {
+            "description": "Merchant category code",
+            "type": "string"
+          },
+          "company_name": {
+            "description": "Company name",
+            "type": "string"
+          },
+          "company_registration_number": {
+            "description": "Company registration number",
+            "type": "string"
+          },
+          "vat_id": {
+            "description": "Vat ID",
+            "type": "string"
+          },
+          "permanent_certificate_access_code": {
+            "description": "Payment certificate access code",
+            "type": "string"
+          },
+          "website": {
+            "description": "Company website",
+            "type": "string"
+          },
+          "nature_and_purpose": {
+            "description": "Nature and purpose of the business. Required for the following merchant category codes: 5999, 7392, 8999, 5694, 5969, 7299, 7399",
+            "type": "string"
+          },
+          "mobile_phone": {
+            "description": "Mobile number",
+            "type": "string"
+          },
+          "address": {
+            "$ref": "#/components/schemas/AddressPayload"
+          },
+          "doing_business_as": {
+            "type": "object",
+            "properties": {
+              "business_name": {
+                "description": "Doing business as name",
+                "type": "string"
+              },
+              "tax_id": {
+                "description": "Doing business as Tax ID",
+                "type": "string"
+              },
+              "vat_id": {
+                "description": "Doing business as Vat ID",
+                "type": "string"
+              },
+              "website": {
+                "description": "Doing business as website",
+                "type": "string"
+              },
+              "email": {
+                "description": "Doing business as email",
+                "type": "string"
+              },
+              "address": {
+                "$ref": "#/components/schemas/AddressPayload"
+              }
+            }
+          },
+          "business_owners": {
+            "$ref": "#/components/schemas/BusinessOwners"
+          },
+          "is_test_account": {
+            "description": "Defines if the profile nature is for testing",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "legal_type_id",
+          "company_registration_number",
+          "merchant_category_code",
+          "company_name",
+          "address"
+        ]
+      },
+      "MerchantSettingsPayload": {
+        "type": "object",
+        "properties": {
+          "payout_period": {
+            "description": "Payout period.",
+            "type": "string",
+            "enum": [
+              "daily",
+              "weekly",
+              "monthly"
+            ]
+          },
+          "payout_type": {
+            "description": "Payout type.",
+            "type": "string",
+            "enum": [
+              "SINGLE_PAYMENT"
+            ]
+          },
+          "payout_on_demand": {
+            "description": "If true, the merchant will not receive automatic payouts.",
+            "type": "boolean"
+          },
+          "payout_on_demand_available": {
+            "description": "If true, the merchant will be able to manage  payout_on_demand settings",
+            "type": "string"
+          },
+          "expected_max_transaction_amount": {
+            "description": "Expected maximum amount of a single purchase",
+            "type": "number"
+          },
+          "printers_enabled": {
+            "description": "Printers enabled.",
+            "type": "boolean"
+          },
+          "gross_settlement": {
+            "description": "Gross settlement",
+            "type": "boolean"
+          }
+        }
+      },
+      "PaymentInstrumentCard": {
+        "description": "Details of the payment card that is saved as a payment instrument.",
+        "type": "object",
+        "properties": {
+          "token": {
+            "description": "Unique token identifying the saved payment card for a customer.",
+            "type": "string",
+            "readOnly": true
+          },
+          "active": {
+            "description": "Indicates whether the payment instrument is active and can be used for payments. To deactivate it, send a `DELETE` request to the resource endpoint.",
+            "type": "boolean",
+            "default": true,
+            "readOnly": true
+          },
+          "type": {
+            "description": "Type of the payment instrument.",
+            "type": "string",
+            "enum": [
+              "card"
+            ]
+          },
+          "card": {
+            "$ref": "#/components/schemas/Card"
+          }
+        },
+        "required": [
+          "token",
+          "active",
+          "type",
+          "card"
+        ]
+      },
+      "PersonalProfilePayload": {
+        "description": "Account's personal profile.",
+        "type": "object",
+        "properties": {
+          "first_name": {
+            "description": "First name of the user",
+            "type": "string"
+          },
+          "last_name": {
+            "description": "Last name of the user",
+            "type": "string"
+          },
+          "date_of_birth": {
+            "description": "Date of birth",
+            "type": "string",
+            "format": "date"
+          },
+          "mobile_phone": {
+            "description": "Mobile phone number",
+            "type": "string"
+          },
+          "national_id": {
+            "description": "National identification id. Country specific. Ex CPF &#40;Brazil&#41;, DNI (Spain), PESEL (Poland)",
+            "type": "string"
+          },
+          "address": {
+            "$ref": "#/components/schemas/AddressPayload"
+          }
+        },
+        "required": [
+          "first_name",
+          "last_name",
+          "date_of_birth",
+          "address"
         ]
       }
     },
@@ -11139,34 +10171,10 @@
         }
       },
       "NoBodyResponse": {
-        "description": "No Content",
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object"
-            },
-            "examples": {
-              "NoBody": {
-                "value": {}
-              }
-            }
-          }
-        }
+        "description": "No Content"
       },
       "ErrorBadRequest": {
-        "description": "No Content",
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object"
-            },
-            "examples": {
-              "NoBody": {
-                "value": {}
-              }
-            }
-          }
-        }
+        "description": "No Content"
       },
       "ErrorNotAuthorized": {
         "description": "Unauthorized",
