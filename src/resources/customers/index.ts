@@ -164,8 +164,6 @@ export type UpdateCustomerParams = { personal_details?: PersonalDetails };
 
 export type ListPaymentInstrumentsResponse = PaymentInstrumentResponse[];
 
-export type DeactivatePaymentInstrumentResponse = Record<string, unknown>;
-
 export class Customers extends Core.APIResource {
   /**
    * Create a customer

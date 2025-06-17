@@ -437,8 +437,6 @@ export type RefundTransactionParams = {
   amount?: number;
 };
 
-export type RefundTransactionResponse = Record<string, unknown>;
-
 export type GetTransactionV2_1QueryParams = {
   id?: string;
   internal_id?: string;
