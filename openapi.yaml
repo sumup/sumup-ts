@@ -1382,6 +1382,16 @@ paths:
           required: false
           schema:
             type: string
+        - name: foreign_transaction_id
+          in: query
+          description: External/foreign transaction id (passed by clients).
+          schema:
+            type: string
+        - name: client_transaction_id
+          in: query
+          description: Client transaction id.
+          schema:
+            type: string
       responses:
         '200':
           description: OK
