@@ -7,7 +7,7 @@
 [![Documentation][docs-badge]](https://developer.sumup.com)
 [![Build Status](https://github.com/sumup/sumup-ts/workflows/CI/badge.svg)](https://github.com/sumup/sumup-ts/actions/workflows/ci.yml)
 [![Downloads](https://img.shields.io/npm/dm/%40sumup%2Fsdk.svg)](https://www.npmjs.com/package/@sumup/sdk)
-[![License](https://img.shields.io/github/license/sumup/sumup-go)](./LICENSE)
+[![License](https://img.shields.io/github/license/sumup/sumup-ts)](./LICENSE)
 
 </div>
 
