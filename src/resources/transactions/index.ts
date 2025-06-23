@@ -441,6 +441,8 @@ export type GetTransactionV2_1QueryParams = {
   id?: string;
   internal_id?: string;
   transaction_code?: string;
+  foreign_transaction_id?: string;
+  client_transaction_id?: string;
 };
 
 export type GetTransactionQueryParams = {
