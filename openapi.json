@@ -4542,6 +4542,14 @@
             "schema": {
               "type": "boolean"
             }
+          },
+          {
+            "name": "resource.name",
+            "in": "query",
+            "description": "Filter memberships by the name of the resource the membership is in.",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
