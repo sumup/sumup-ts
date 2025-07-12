@@ -212,12 +212,6 @@ export type Checkout = {
   amount?: number;
   currency?: Currency;
   /**
-   * Email address of the registered user (merchant) to whom the payment is made.
-   *
-   * @deprecated: `pay_to_email` is deprecated, use `merchant_code` instead.
-   */
-  pay_to_email?: string;
-  /**
    * Unique identifying code of the merchant profile.
    */
   merchant_code?: string;
@@ -273,12 +267,6 @@ export type CheckoutCreateRequest = {
    * Unique identifying code of the merchant profile.
    */
   merchant_code: string;
-  /**
-   * Email address of the registered user (merchant) to whom the payment is made.
-   *
-   * @deprecated: `pay_to_email` is deprecated, use `merchant_code` instead.
-   */
-  pay_to_email?: string;
   /**
    * Short description of the checkout visible in the SumUp dashboard. The description can contribute to reporting, allowing easier identification of a checkout.
    */
@@ -536,12 +524,6 @@ export type DeactivateCheckoutResponse = {
    */
   amount?: number;
   currency?: Currency;
-  /**
-   * Email address of the registered user (merchant) to whom the payment is made.
-   *
-   * @deprecated: `pay_to_email` is deprecated, use `merchant_code` instead.
-   */
-  pay_to_email?: string;
   /**
    * Unique identifying code of the merchant profile.
    */

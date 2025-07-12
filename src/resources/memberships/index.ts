@@ -116,6 +116,7 @@ export type ListMembershipsQueryParams = {
    */
   kind?: "merchant";
   "resource.attributes.sandbox"?: boolean;
+  "resource.name"?: string;
 };
 
 export type ListMembershipsResponse = {
