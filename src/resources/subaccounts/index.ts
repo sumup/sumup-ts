@@ -24,6 +24,9 @@ export type Permissions = {
   create_referral?: boolean;
 };
 
+/**
+ * Operator account for a merchant.
+ */
 export type Operator = {
   id: number;
   username: string;
@@ -42,7 +45,7 @@ export type Operator = {
 };
 
 /**
- * Error
+ * Error object for compat API calls.
  */
 export type CompatError = { error_code: string; message: string };
 
@@ -136,7 +139,7 @@ export class Subaccounts extends Core.APIResource {
   }
 
   /**
-   * Disable an operator
+   * Disable an operator.
    */
   deactivateSubAccount(
     operatorId: number,

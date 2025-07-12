@@ -121,13 +121,12 @@ export type ReaderName = string;
  * - `unknown` - The reader status is unknown.
  * - `processing` - The reader is created and waits for the physical device to confirm the pairing.
  * - `paired` - The reader is paired with a merchant account and can be used with SumUp APIs.
- * - `expired` - The pairing is expired and no longer usable with the account. The resource needs to get recreated
+ * - `expired` - The pairing is expired and no longer usable with the account. The resource needs to get recreated.
  */
 export type ReaderStatus = "unknown" | "processing" | "paired" | "expired";
 
 /**
  * Information about the underlying physical device.
- *
  */
 export type ReaderDevice = {
   /**

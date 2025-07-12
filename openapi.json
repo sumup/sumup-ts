@@ -1092,13 +1092,6 @@
                     "currency": {
                       "$ref": "#/components/schemas/Currency"
                     },
-                    "pay_to_email": {
-                      "description": "Email address of the registered user (merchant) to whom the payment is made.",
-                      "type": "string",
-                      "format": "email",
-                      "deprecated": true,
-                      "x-deprecation-notice": "`pay_to_email` is deprecated, use `merchant_code` instead."
-                    },
                     "merchant_code": {
                       "description": "Unique identifying code of the merchant profile.",
                       "type": "string"
@@ -4163,7 +4156,7 @@
           {
             "name": "query",
             "in": "query",
-            "description": "Search query used to filter users that match given query term.\n\nCurrent implementation allow querying only over the email address.\nAll operators whos email address contains the query string are returned.\n",
+            "description": "Search query used to filter users that match given query term.\n\nCurrent implementation allow querying only over the email address.\nAll operators whos email address contains the query string are returned.",
             "schema": {
               "type": "string"
             }
@@ -4273,7 +4266,7 @@
             }
           },
           "403": {
-            "description": "error response for compat API calls",
+            "description": "Error response for compat API calls.",
             "content": {
               "application/json": {
                 "schema": {
@@ -4311,6 +4304,7 @@
           {
             "name": "operator_id",
             "in": "path",
+            "description": "The unique identifier for the operator.",
             "required": true,
             "schema": {
               "type": "integer",
@@ -4320,7 +4314,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Operator.",
+            "description": "Information about the requested operator.",
             "content": {
               "application/json": {
                 "schema": {
@@ -4356,6 +4350,7 @@
           {
             "name": "operator_id",
             "in": "path",
+            "description": "The unique identifier for the operator.",
             "required": true,
             "schema": {
               "type": "integer",
@@ -4451,11 +4446,13 @@
       },
       "delete": {
         "operationId": "DeactivateSubAccount",
-        "summary": "Disable an operator",
+        "summary": "Disable an operator.",
+        "description": "Disable the specified operator for the merchant account.",
         "parameters": [
           {
             "name": "operator_id",
             "in": "path",
+            "description": "The unique identifier for the operator.",
             "required": true,
             "schema": {
               "type": "integer",
@@ -4541,6 +4538,14 @@
             "description": "Filter memberships by the sandbox status of the resource the membership is in.",
             "schema": {
               "type": "boolean"
+            }
+          },
+          {
+            "name": "resource.name",
+            "in": "query",
+            "description": "Filter memberships by the name of the resource the membership is in.",
+            "schema": {
+              "type": "string"
             }
           }
         ],
@@ -5626,14 +5631,14 @@
                 "parameters": {
                   "id": "$response.body#/id"
                 },
-                "description": "Update the reader object. This can be used to set a name after using this endpoint to verify the pairing code.\n"
+                "description": "Update the reader object. This can be used to set a name after using this endpoint to verify the pairing code."
               },
               "DeleteReaderByID": {
                 "operationId": "DeleteReader",
                 "parameters": {
                   "id": "$response.body#/id"
                 },
-                "description": "Delete the reader.\n"
+                "description": "Delete the reader."
               }
             }
           }
@@ -5715,7 +5720,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Returns a Reader object for a valid identifier.\n",
+            "description": "Returns a Reader object for a valid identifier.",
             "content": {
               "application/json": {
                 "schema": {
@@ -5724,11 +5729,8 @@
               }
             }
           },
-          "400": {
-            "description": "Malformed request."
-          },
           "404": {
-            "description": "The requested Reader resource does not exists.\n"
+            "description": "The requested Reader resource does not exists."
           }
         },
         "security": [
@@ -6569,13 +6571,6 @@
           "currency": {
             "$ref": "#/components/schemas/Currency"
           },
-          "pay_to_email": {
-            "description": "Email address of the registered user (merchant) to whom the payment is made.",
-            "type": "string",
-            "format": "email",
-            "deprecated": true,
-            "x-deprecation-notice": "`pay_to_email` is deprecated, use `merchant_code` instead."
-          },
           "merchant_code": {
             "description": "Unique identifying code of the merchant profile.",
             "type": "string"
@@ -6663,13 +6658,6 @@
           "merchant_code": {
             "description": "Unique identifying code of the merchant profile.",
             "type": "string"
-          },
-          "pay_to_email": {
-            "description": "Email address of the registered user (merchant) to whom the payment is made.",
-            "type": "string",
-            "format": "email",
-            "deprecated": true,
-            "x-deprecation-notice": "`pay_to_email` is deprecated, use `merchant_code` instead."
           },
           "description": {
             "description": "Short description of the checkout visible in the SumUp dashboard. The description can contribute to reporting, allowing easier identification of a checkout.",
@@ -8544,6 +8532,7 @@
         "format": "date-time"
       },
       "Operator": {
+        "description": "Operator account for a merchant.",
         "type": "object",
         "properties": {
           "id": {
@@ -8595,7 +8584,7 @@
         ]
       },
       "CompatError": {
-        "description": "Error",
+        "description": "Error object for compat API calls.",
         "type": "object",
         "properties": {
           "error_code": {
@@ -9113,7 +9102,7 @@
         "maxLength": 500
       },
       "ReaderStatus": {
-        "description": "The status of the reader object gives information about the current state of the reader.\n\nPossible values:\n\n- `unknown` - The reader status is unknown.\n- `processing` - The reader is created and waits for the physical device to confirm the pairing.\n- `paired` - The reader is paired with a merchant account and can be used with SumUp APIs.\n- `expired` - The pairing is expired and no longer usable with the account. The resource needs to get recreated",
+        "description": "The status of the reader object gives information about the current state of the reader.\n\nPossible values:\n\n- `unknown` - The reader status is unknown.\n- `processing` - The reader is created and waits for the physical device to confirm the pairing.\n- `paired` - The reader is paired with a merchant account and can be used with SumUp APIs.\n- `expired` - The pairing is expired and no longer usable with the account. The resource needs to get recreated.",
         "type": "string",
         "example": "paired",
         "enum": [
@@ -9124,7 +9113,7 @@
         ]
       },
       "ReaderDevice": {
-        "description": "Information about the underlying physical device.\n",
+        "description": "Information about the underlying physical device.",
         "type": "object",
         "properties": {
           "identifier": {
@@ -9533,14 +9522,14 @@
         "parameters": {
           "id": "$response.body#/id"
         },
-        "description": "Update the reader object. This can be used to set a name after using this endpoint to verify the pairing code.\n"
+        "description": "Update the reader object. This can be used to set a name after using this endpoint to verify the pairing code."
       },
       "DeleteReaderByID": {
         "operationId": "DeleteReader",
         "parameters": {
           "id": "$response.body#/id"
         },
-        "description": "Delete the reader.\n"
+        "description": "Delete the reader."
       }
     },
     "requestBodies": {
@@ -10284,7 +10273,7 @@
         }
       },
       "CompatErrorResponse": {
-        "description": "error response for compat API calls",
+        "description": "Error response for compat API calls.",
         "content": {
           "application/json": {
             "schema": {
@@ -10500,7 +10489,7 @@
     },
     {
       "name": "Readers",
-      "description": "A reader represents a device that accepts payments. You can use the SumUp Solo to accept in-person payments.\n",
+      "description": "A reader represents a device that accepts payments. You can use the SumUp Solo to accept in-person payments.",
       "x-core-objects": [
         {
           "$ref": "#/components/schemas/Reader"
