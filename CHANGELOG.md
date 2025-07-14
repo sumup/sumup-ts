@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.0.3](https://github.com/sumup/sumup-ts/compare/v0.0.2...v0.0.3) (2025-07-12)
+
+
+### Features
+
+* **readme:** badges ([#79](https://github.com/sumup/sumup-ts/issues/79)) ([f355346](https://github.com/sumup/sumup-ts/commit/f35534669384291d002b15a3e13378213f47d3b5))
+
+
+### Bug Fixes
+
+* **readme:** license badge link ([#80](https://github.com/sumup/sumup-ts/issues/80)) ([df85d61](https://github.com/sumup/sumup-ts/commit/df85d6164d02effd2572d9ba768115e04e096a06))
+
 ## [0.0.2](https://github.com/sumup/sumup-ts/compare/v0.0.1...v0.0.2) (2025-04-24)
 
 
