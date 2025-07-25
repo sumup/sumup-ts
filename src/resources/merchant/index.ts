@@ -562,10 +562,6 @@ export type MerchantAccount = {
   merchant_profile?: MerchantProfile;
   app_settings?: AppSettings;
   permissions?: Permissions;
-  /**
-   * Merchant comes from payleven BR migration
-   */
-  is_migrated_payleven_br?: boolean;
 };
 
 export type GetAccountQueryParams = {

@@ -5080,9 +5080,6 @@ components:
           $ref: '#/components/schemas/AppSettings'
         permissions:
           $ref: '#/components/schemas/Permissions'
-        is_migrated_payleven_br:
-          description: Merchant comes from payleven BR migration
-          type: boolean
       title: Merchant Account
     MerchantProfile:
       description: Account's merchant profile
