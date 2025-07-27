@@ -6,7 +6,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@sumup/sdk": "file:../..",
-    "express": "^4.21.0",
+    "express": "^5.1.0",
     "typescript": "^5.7.3"
   }
 }
