@@ -81,8 +81,11 @@ export class Roles extends Core.APIResource {
   /**
    * List roles
    */
-  list(merchantCode: string, params?: Core.FetchParams): Core.APIPromise<void> {
-    return this._client.get<void>({
+  list(
+    merchantCode: string,
+    params?: Core.FetchParams,
+  ): Core.APIPromise<ListMerchantRolesResponse> {
+    return this._client.get<ListMerchantRolesResponse>({
       path: `/v0.1/merchants/${merchantCode}/roles`,
       ...params,
     });

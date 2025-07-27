@@ -11,18 +11,13 @@ async function main() {
   const merchant2 = await client.merchant.get().withResponse();
   console.info({ merchant2 });
 
-  const merchantCode = "MERCHANT_CODE";
-
-  const readers = await client.readers.list(merchantCode);
-  const reader = readers[0];
-
-  client.readers.createCheckout(merchantCode, reader.id, {
-    total_amount: {
-      currency: "EUR",
-      minor_unit: 100,
-      value: 500,
-    },
-  });
+  const merchantCode = process.env.SUMUP_MERCHANT_CODE;
+  if (!merchantCode) {
+    console.warn(
+      "Missing merchant code, please specify merchant code using SUMUP_MERCHANT_CODE env variable.",
+    );
+    return;
+  }
 
   const checkout = await client.checkouts.create({
     amount: 19,

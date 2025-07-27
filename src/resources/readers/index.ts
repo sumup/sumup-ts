@@ -200,8 +200,8 @@ export class Readers extends Core.APIResource {
     id: string,
     body: CreateReaderCheckout,
     params?: Core.FetchParams,
-  ): Core.APIPromise<void> {
-    return this._client.post<void>({
+  ): Core.APIPromise<CreateReaderCheckoutResponse> {
+    return this._client.post<CreateReaderCheckoutResponse>({
       path: `/v0.1/merchants/${merchantCode}/readers/${id}/checkout`,
       body,
       ...params,
@@ -225,8 +225,11 @@ export class Readers extends Core.APIResource {
   /**
    * List Readers
    */
-  list(merchantCode: string, params?: Core.FetchParams): Core.APIPromise<void> {
-    return this._client.get<void>({
+  list(
+    merchantCode: string,
+    params?: Core.FetchParams,
+  ): Core.APIPromise<ListReadersResponse> {
+    return this._client.get<ListReadersResponse>({
       path: `/v0.1/merchants/${merchantCode}/readers`,
       ...params,
     });

@@ -131,8 +131,8 @@ export class Memberships extends Core.APIResource {
   list(
     query?: ListMembershipsQueryParams,
     params?: Core.FetchParams,
-  ): Core.APIPromise<void> {
-    return this._client.get<void>({
+  ): Core.APIPromise<ListMembershipsResponse> {
+    return this._client.get<ListMembershipsResponse>({
       path: `/v0.1/memberships`,
       query,
       ...params,

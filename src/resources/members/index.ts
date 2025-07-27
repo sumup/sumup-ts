@@ -184,8 +184,8 @@ export class Members extends Core.APIResource {
     merchantCode: string,
     query?: ListMerchantMembersQueryParams,
     params?: Core.FetchParams,
-  ): Core.APIPromise<void> {
-    return this._client.get<void>({
+  ): Core.APIPromise<ListMerchantMembersResponse> {
+    return this._client.get<ListMerchantMembersResponse>({
       path: `/v0.1/merchants/${merchantCode}/members`,
       query,
       ...params,

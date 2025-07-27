@@ -2,7 +2,9 @@ version: 2
 
 updates:
   - package-ecosystem: "npm"
-    directory: "/"
+    directories:
+      - './'
+      - './examples/**/*'
     open-pull-requests-limit: 5
     schedule:
       interval: "weekly"

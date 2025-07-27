@@ -66,7 +66,7 @@ console.info(merchant);
 
 ## Examples
 
-Run examples:
+Examples require an API key and your merchant code. You can run the examples using:
 
 ```sh
 npx tsx examples/checkout/index.ts

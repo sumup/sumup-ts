@@ -54,7 +54,7 @@
     "default": "./dist/index.js"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.0.4",
+    "@biomejs/biome": "^2.1.2",
     "@rslib/core": "^0.10.0",
     "rsbuild-plugin-dts": "^0.10.0",
     "rsbuild-plugin-publint": "^0.3.0",

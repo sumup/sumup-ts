@@ -570,8 +570,8 @@ export class Checkouts extends Core.APIResource {
     merchantCode: string,
     query?: GetPaymentMethodsQueryParams,
     params?: Core.FetchParams,
-  ): Core.APIPromise<void> {
-    return this._client.get<void>({
+  ): Core.APIPromise<GetPaymentMethodsResponse> {
+    return this._client.get<GetPaymentMethodsResponse>({
       path: `/v0.1/merchants/${merchantCode}/payment-methods`,
       query,
       ...params,
@@ -634,8 +634,11 @@ export class Checkouts extends Core.APIResource {
   /**
    * Deactivate a checkout
    */
-  deactivate(id: string, params?: Core.FetchParams): Core.APIPromise<void> {
-    return this._client.delete<void>({
+  deactivate(
+    id: string,
+    params?: Core.FetchParams,
+  ): Core.APIPromise<DeactivateCheckoutResponse> {
+    return this._client.delete<DeactivateCheckoutResponse>({
       path: `/v0.1/checkouts/${id}`,
       ...params,
     });

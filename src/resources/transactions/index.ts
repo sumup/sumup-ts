@@ -571,8 +571,8 @@ export class Transactions extends Core.APIResource {
     merchantCode: string,
     query?: ListTransactionsV2_1QueryParams,
     params?: Core.FetchParams,
-  ): Core.APIPromise<void> {
-    return this._client.get<void>({
+  ): Core.APIPromise<ListTransactionsV2_1Response> {
+    return this._client.get<ListTransactionsV2_1Response>({
       path: `/v2.1/merchants/${merchantCode}/transactions/history`,
       query,
       ...params,
@@ -585,8 +585,8 @@ export class Transactions extends Core.APIResource {
   listDeprecated(
     query?: ListTransactionsQueryParams,
     params?: Core.FetchParams,
-  ): Core.APIPromise<void> {
-    return this._client.get<void>({
+  ): Core.APIPromise<ListTransactionsResponse> {
+    return this._client.get<ListTransactionsResponse>({
       path: `/v0.1/me/transactions/history`,
       query,
       ...params,
