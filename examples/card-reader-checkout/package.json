@@ -4,9 +4,16 @@
   "description": "Card reader checkout example with SumUp SDK",
   "main": "index.js",
   "license": "Apache-2.0",
+  "scripts": {
+    "lint": "biome check",
+    "lint:fix": "biome check --write"
+  },
   "dependencies": {
-    "@sumup/sdk": "file:../..",
+    "@sumup/sdk": "file:../../sdk",
     "express": "^5.1.0",
     "typescript": "^5.7.3"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.1.2"
   }
 }
