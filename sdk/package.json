@@ -44,7 +44,8 @@
     "prerelease": "npm run build",
     "generate": "echo 'not yet implemented'",
     "lint": "biome check",
-    "lint:fix": "biome check --write"
+    "lint:fix": "biome check --write",
+    "docs": "typedoc --cleanOutputDir --out ../docs/"
   },
   "main": "./dist/index.cjs",
   "types": "./dist/index.d.ts",

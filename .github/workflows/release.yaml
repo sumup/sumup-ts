@@ -5,6 +5,10 @@ on:
     types:
       - published
 
+defaults:
+  run:
+    working-directory: ./sdk
+
 permissions:
   id-token: write # Needed for provenance
   packages: write # Needed to publish package to GitHub package registry
@@ -22,8 +26,9 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
-          node-version: 22
+          node-version-file: ./sdk/package.json
           cache: npm
+          cache-dependency-path: ./sdk/package-lock.json
           registry-url: 'https://registry.npmjs.org'
 
       - name: Install dependencies
@@ -40,7 +45,9 @@ jobs:
       - name: Setup Node.js for GitHub Packages
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
-          node-version: 22
+          node-version-file: ./sdk/package.json
+          cache: npm
+          cache-dependency-path: ./sdk/package-lock.json
           registry-url: 'https://npm.pkg.github.com'
           scope: '@sumup'
 

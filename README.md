@@ -25,7 +25,7 @@ Node 18 or higher.
 
 Install the package with:
 
-```sh
+```bash
 npm install @sumup/sdk
 # or
 yarn add @sumup/sdk
@@ -33,7 +33,7 @@ yarn add @sumup/sdk
 
 Install from jsr:
 
-```sh
+```bash
 deno add jsr:@sumup/sdk
 # or
 npx jsr add @sumup/sdk
@@ -68,7 +68,7 @@ console.info(merchant);
 
 Examples require an API key and your merchant code. You can run the examples using:
 
-```sh
+```bash
 npx tsx examples/checkout/index.ts
 ```
 

@@ -10,7 +10,7 @@
   "extra-label": "release",
   "draft": true,
   "packages": {
-    ".": {
+    "sdk": {
       "release-type": "node",
       "extra-files": [
         "src/version.ts",
