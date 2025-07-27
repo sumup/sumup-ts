@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.4](https://github.com/sumup/sumup-ts/compare/v0.0.3...v0.0.4) (2025-07-27)
+
+
+### Bug Fixes
+
+* missing response types ([cb4c8af](https://github.com/sumup/sumup-ts/commit/cb4c8afd7c9b4da3bfd3fee5d7de23f1729c3165))
+
 ## [0.0.3](https://github.com/sumup/sumup-ts/compare/v0.0.2...v0.0.3) (2025-07-12)
 
 
