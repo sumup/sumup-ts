@@ -9,7 +9,7 @@ updates:
       rslib:
         patterns:
           - "@rslib/*"
-          - "rsbuild-plugin-dts"
+          - "rsbuild-*"
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
