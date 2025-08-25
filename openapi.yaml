@@ -3029,13 +3029,7 @@ paths:
           in: query
           description: Filter memberships by resource kind.
           schema:
-            description: |-
-              The kind of the membership resource.
-              Possible values are:
-              * `merchant` - merchant account(s)
-            type: string
-            enum:
-              - merchant
+            $ref: '#/components/schemas/ResourceType'
         - name: resource.attributes.sandbox
           in: query
           description: Filter memberships by the sandbox status of the resource the membership is in.
@@ -5968,6 +5962,14 @@ components:
         - expired
         - disabled
         - unknown
+    ResourceType:
+      description: |-
+        The kind of the membership resource.
+        Possible values are:
+        * `merchant` - merchant account(s)
+        * `organization` - organization(s)
+      type: string
+      example: merchant
     Membership:
       description: 'A membership associates a user with a resource, memberships is defined by user, resource, resource type, and associated roles.'
       type: object
@@ -5981,11 +5983,7 @@ components:
           type: string
           example: M2DDT39A
         type:
-          description: Type of the resource the membership is in.
-          type: string
-          example: merchant
-          enum:
-            - merchant
+          $ref: '#/components/schemas/ResourceType'
         roles:
           description: User's roles.
           type: array
@@ -6047,12 +6045,7 @@ components:
           type: string
           example: M2DDT39A
         type:
-          type: string
-          example: merchant
-          enum:
-            - merchant
-          additionalProperties:
-            type: string
+          $ref: '#/components/schemas/ResourceType'
         name:
           description: Display name of the resource.
           type: string
