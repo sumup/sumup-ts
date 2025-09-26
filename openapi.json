@@ -4525,11 +4525,7 @@
             "in": "query",
             "description": "Filter memberships by resource kind.",
             "schema": {
-              "description": "The kind of the membership resource.\nPossible values are:\n* `merchant` - merchant account(s)",
-              "type": "string",
-              "enum": [
-                "merchant"
-              ]
+              "$ref": "#/components/schemas/ResourceType"
             }
           },
           {
@@ -8608,6 +8604,11 @@
           "unknown"
         ]
       },
+      "ResourceType": {
+        "description": "The kind of the membership resource.\nPossible values are:\n* `merchant` - merchant account(s)\n* `organization` - organization(s)",
+        "type": "string",
+        "example": "merchant"
+      },
       "Membership": {
         "description": "A membership associates a user with a resource, memberships is defined by user, resource, resource type, and associated roles.",
         "type": "object",
@@ -8623,12 +8624,7 @@
             "example": "M2DDT39A"
           },
           "type": {
-            "description": "Type of the resource the membership is in.",
-            "type": "string",
-            "example": "merchant",
-            "enum": [
-              "merchant"
-            ]
+            "$ref": "#/components/schemas/ResourceType"
           },
           "roles": {
             "description": "User's roles.",
@@ -8708,14 +8704,7 @@
             "example": "M2DDT39A"
           },
           "type": {
-            "type": "string",
-            "example": "merchant",
-            "enum": [
-              "merchant"
-            ],
-            "additionalProperties": {
-              "type": "string"
-            }
+            "$ref": "#/components/schemas/ResourceType"
           },
           "name": {
             "description": "Display name of the resource.",
