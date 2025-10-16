@@ -2,10 +2,9 @@
 
 ## Development
 
-Assuming you have `ts-sdk-gen` in the same folder as `sumup-ts`:
-
 ```sh
-npx ../ts-sdk-gen/ ./openapi.json ./src/
+cd codegen && npm run build && cd ..
+cd sdk && npm run generate && cd ..
 ```
 
 ## Conventional Commits

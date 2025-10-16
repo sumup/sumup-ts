@@ -42,7 +42,7 @@
     "test": "vitest",
     "tsc": "tsc",
     "prerelease": "npm run build",
-    "generate": "echo 'not yet implemented'",
+    "generate": "node ../codegen/dist/index.cjs ../openapi.json ./src/",
     "lint": "biome check",
     "lint:fix": "biome check --write",
     "docs": "typedoc --cleanOutputDir --out ../docs/"
