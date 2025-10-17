@@ -1892,6 +1892,7 @@ paths:
                   value:
                     message: access token required
                     error_code: NOT_AUTHORIZED
+      deprecated: true
       security:
         - apiKey: []
         - oauth2:
@@ -1901,6 +1902,7 @@ paths:
         - Merchant
       x-codegen:
         method_name: get
+      x-deprecation-notice: 'The _Retrieve a profile_ endpoint is deprecated, please use the `Merchant` object instead (see [Merchants](https://developer.sumup.com/api/merchants)).'
       x-scopes:
         - user.profile
         - user.profile_readonly
@@ -2086,7 +2088,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PersonalProfile'
+                $ref: '#/components/schemas/PersonalProfileLegacy'
         '401':
           description: Unauthorized
           content:
@@ -2109,6 +2111,7 @@ paths:
                   value:
                     message: access token required
                     error_code: NOT_AUTHORIZED
+      deprecated: true
       security:
         - apiKey: []
         - oauth2:
@@ -2118,6 +2121,7 @@ paths:
         - Merchant
       x-codegen:
         method_name: get_personal_profile
+      x-deprecation-notice: 'The _Retrieve a personal profile_ endpoint is deprecated, please use the `persons` field of the `Merchant` object instead. (see [Merchants](https://developer.sumup.com/api/merchants)).'
       x-scopes:
         - user.profile
         - user.profile_readonly
@@ -2132,7 +2136,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MerchantProfile'
+                $ref: '#/components/schemas/MerchantProfileLegacy'
         '401':
           description: Unauthorized
           content:
@@ -2168,6 +2172,7 @@ paths:
                     error_message: request_not_allowed
                     error_code: FORBIDDEN
                     status_code: '403'
+      deprecated: true
       security:
         - apiKey: []
         - oauth2:
@@ -2177,6 +2182,7 @@ paths:
         - Merchant
       x-codegen:
         method_name: get_merchant_profile
+      x-deprecation-notice: 'The _Retrieve a merchant profile_ endpoint is deprecated, please use the `Merchant` object instead (see [Merchants](https://developer.sumup.com/api/merchants)).'
       x-scopes:
         - user.profile
         - user.profile_readonly
@@ -2191,7 +2197,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DoingBusinessAs'
+                $ref: '#/components/schemas/DoingBusinessAsLegacy'
         '401':
           description: Unauthorized
           content:
@@ -2214,6 +2220,7 @@ paths:
                   value:
                     message: access token required
                     error_code: NOT_AUTHORIZED
+      deprecated: true
       security:
         - apiKey: []
         - oauth2:
@@ -2223,6 +2230,7 @@ paths:
         - Merchant
       x-codegen:
         method_name: get_doing_business_as
+      x-deprecation-notice: 'The _Retrieve DBA_ endpoint is deprecated, please use the `business_profile` field of the `Merchant` object instead (see [Merchants](https://developer.sumup.com/api/merchants)).'
       x-scopes:
         - user.profile
         - user.profile_readonly
@@ -2503,282 +2511,6 @@ paths:
       x-codegen:
         method_name: get
       x-scopes: []
-  '/v0.1/merchants/{merchant_code}/readers/{id}/checkout':
-    post:
-      operationId: CreateReaderCheckout
-      summary: Create a Reader Checkout
-      description: |
-        Create a Checkout for a Reader.
-
-        This process is asynchronous and the actual transaction may take some time to be stared on the device.
-
-
-        There are some caveats when using this endpoint:
-        * The target device must be online, otherwise checkout won't be accepted
-        * After the checkout is accepted, the system has 60 seconds to start the payment on the target device. During this time, any other checkout for the same device will be rejected.
-
-        **Note**: If the target device is a Solo, it must be in version 3.3.24.3 or higher.
-      parameters:
-        - name: merchant_code
-          in: path
-          required: true
-          schema:
-            type: string
-            example: MC0X0ABC
-        - name: id
-          in: path
-          description: |
-            The unique identifier of the reader.
-          required: true
-          schema:
-            type: string
-            example: rdr_3MSAFM23CK82VSTT4BN6RWSQ65
-            maxLength: 30
-            minLength: 30
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateReaderCheckout'
-      responses:
-        '201':
-          description: |
-            The Checkout got successfully created for the given reader.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  data:
-                    type: object
-                    properties:
-                      client_transaction_id:
-                        description: |
-                          The client transaction ID is a unique identifier for the transaction that is generated for the client.
-                          It can be used later to fetch the transaction details via the [Transactions API](https://developer.sumup.com/api/transactions/get).
-                        type: string
-                        format: uuid
-                        example: 123e4567-e89b-12d3-a456-426614174000
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  errors:
-                    type: object
-                    properties:
-                      detail:
-                        type: string
-                        example: Bad Request
-        '422':
-          description: Unprocessable Entity
-          content:
-            application/json:
-              examples:
-                ReaderOffline:
-                  description: Error returned when the target device is not online.
-                  value:
-                    errors:
-                      detail: The device is offline.
-                      type: READER_OFFLINE
-                ReaderCheckoutPending:
-                  description: Error returned when a checkout was requested in the last 60 seconds.
-                  value:
-                    errors:
-                      detail: A pending transaction already exists for this device
-                DataValidation:
-                  description: Validation errors for the informed fields.
-                  value:
-                    errors:
-                      total_amount:
-                        - is too low
-                        - this merchant can only accept 'EUR'
-                      installments:
-                        - not allowed
-                      card_type:
-                        - is invalid
-              schema:
-                type: object
-                properties:
-                  errors:
-                    type: object
-                    additionalProperties: true
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  errors:
-                    type: object
-                    properties:
-                      detail:
-                        type: string
-                        example: Internal Server Error
-        '502':
-          description: Bad Gateway
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  errors:
-                    type: object
-                    properties:
-                      detail:
-                        type: string
-                        example: Bad Gateway
-        '504':
-          description: Gateway Timeout
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  errors:
-                    type: object
-                    properties:
-                      detail:
-                        type: string
-                        example: Gateway Timeout
-      callbacks:
-        ReaderCheckoutStatusChange:
-          '{$request.body#/return_url}':
-            post:
-              requestBody:
-                content:
-                  application/json:
-                    schema:
-                      $ref: '#/components/schemas/ReaderCheckoutStatusChange'
-              responses:
-                '200':
-                  description: |
-                    Your server returns this code if it accepts the callback.
-                    If the server returns any other code, the callback will be retried up to 5 times with exponential backoff.
-      security:
-        - apiKey: []
-        - oauth2:
-            - readers.write
-      tags:
-        - Readers
-      x-codegen:
-        method_name: create_checkout
-      x-permissions:
-        - readers_checkout_create
-      x-scopes:
-        - readers.write
-  '/v0.1/merchants/{merchant_code}/readers/{id}/terminate':
-    post:
-      operationId: CreateReaderTerminate
-      summary: Create a Reader Terminate action
-      description: |
-        Create a Terminate action for a Reader.
-
-        It stops the current transaction on the target device.
-
-        This process is asynchronous and the actual termination may take some time to be performed on the device.
-
-
-        There are some caveats when using this endpoint:
-        * The target device must be online, otherwise terminate won't be accepted
-        * The action will succeed only if the device is waiting for cardholder action: e.g: waiting for card, waiting for PIN, etc.
-        * There is no confirmation of the termination.
-
-        If a transaction is successfully terminated and `return_url` was provided on Checkout, the transaction status will be sent as `failed` to the provided URL.
-
-        **Note**: If the target device is a Solo, it must be in version 3.3.28.0 or higher.
-      parameters:
-        - name: merchant_code
-          in: path
-          required: true
-          schema:
-            type: string
-            example: MC0X0ABC
-        - name: id
-          in: path
-          description: |
-            The unique identifier of the reader.
-          required: true
-          schema:
-            type: string
-            example: rdr_3MSAFM23CK82VSTT4BN6RWSQ65
-            maxLength: 30
-            minLength: 30
-      responses:
-        '202':
-          description: |
-            The Terminate action was successfully dispatched for the given reader.
-        '422':
-          description: Unprocessable Entity
-          content:
-            application/json:
-              examples:
-                ReaderOffline:
-                  description: Error returned when the target device is not online.
-                  value:
-                    errors:
-                      detail: The device is offline.
-                      type: READER_OFFLINE
-              schema:
-                type: object
-                properties:
-                  errors:
-                    type: object
-                    additionalProperties: true
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  errors:
-                    type: object
-                    properties:
-                      detail:
-                        type: string
-                        example: Internal Server Error
-        '502':
-          description: Bad Gateway
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  errors:
-                    type: object
-                    properties:
-                      detail:
-                        type: string
-                        example: Bad Gateway
-        '504':
-          description: Gateway Timeout
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  errors:
-                    type: object
-                    properties:
-                      detail:
-                        type: string
-                        example: Gateway Timeout
-      security:
-        - apiKey: []
-        - oauth2:
-            - readers.write
-      tags:
-        - Readers
-      x-codegen:
-        method_name: terminate_checkout
-      x-permissions:
-        - readers_checkout_create
-      x-scopes:
-        - readers.write
   /v0.1/me/accounts:
     get:
       operationId: ListSubAccounts
@@ -3029,13 +2761,7 @@ paths:
           in: query
           description: Filter memberships by resource kind.
           schema:
-            description: |-
-              The kind of the membership resource.
-              Possible values are:
-              * `merchant` - merchant account(s)
-            type: string
-            enum:
-              - merchant
+            $ref: '#/components/schemas/ResourceType'
         - name: resource.attributes.sandbox
           in: query
           description: Filter memberships by the sandbox status of the resource the membership is in.
@@ -3912,6 +3638,212 @@ paths:
           object_id_param: merchant_code
       x-scopes:
         - readers.write
+  '/v0.1/merchants/{merchant_code}/readers/{reader_id}/checkout':
+    post:
+      operationId: CreateReaderCheckout
+      summary: Create a Reader Checkout
+      description: |
+        Create a Checkout for a Reader.
+
+        This process is asynchronous and the actual transaction may take some time to be stared on the device.
+
+
+        There are some caveats when using this endpoint:
+        * The target device must be online, otherwise checkout won't be accepted
+        * After the checkout is accepted, the system has 60 seconds to start the payment on the target device. During this time, any other checkout for the same device will be rejected.
+
+
+        **Note**: If the target device is a Solo, it must be in version 3.3.24.3 or higher.
+      parameters:
+        - name: merchant_code
+          in: path
+          description: Merchant Code
+          required: true
+          schema:
+            type: string
+            x-struct: null
+            x-validate: null
+          example: MC0X0ABC
+        - name: reader_id
+          in: path
+          description: The unique identifier of the Reader
+          required: true
+          schema:
+            type: string
+            x-struct: null
+            x-validate: null
+          example: rdr_3MSAFM23CK82VSTT4BN6RWSQ65
+      requestBody:
+        description: A checkout initial attributes
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateReaderCheckoutRequest'
+      responses:
+        '201':
+          description: The Checkout got successfully created for the given reader.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateReaderCheckoutResponse'
+        '400':
+          description: Response when given params (or one of them) are invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateReaderCheckoutError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateReaderCheckoutError'
+        '422':
+          description: Response when given params (or one of them) are invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateReaderCheckoutUnprocessableEntity'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateReaderCheckoutError'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateReaderCheckoutError'
+        '504':
+          description: Gateway Timeout
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateReaderCheckoutError'
+      callbacks:
+        ReaderCheckoutStatusChange:
+          '{$request.body#/return_url}':
+            post:
+              requestBody:
+                required: true
+                content:
+                  application/json:
+                    schema:
+                      $ref: '#/components/schemas/ReaderCheckoutStatusChange'
+              responses:
+                '200':
+                  description: |
+                    Your server returns this code if it accepts the callback.
+                    If the server returns any other code, the callback will be retried up to 5 times with exponential backoff.
+      security:
+        - apiKey: []
+        - oauth2:
+            - readers.write
+      tags:
+        - Readers
+      x-permissions:
+        - readers_checkout_create
+      x-scopes:
+        - readers.write
+  '/v0.1/merchants/{merchant_code}/readers/{reader_id}/terminate':
+    post:
+      operationId: CreateReaderTerminate
+      summary: Create a Reader Terminate action
+      description: |
+        Create a Terminate action for a Reader.
+
+        It stops the current transaction on the target device.
+
+        This process is asynchronous and the actual termination may take some time to be performed on the device.
+
+
+        There are some caveats when using this endpoint:
+        * The target device must be online, otherwise terminate won't be accepted
+        * The action will succeed only if the device is waiting for cardholder action: e.g: waiting for card, waiting for PIN, etc.
+        * There is no confirmation of the termination.
+
+        If a transaction is successfully terminated and `return_url` was provided on Checkout, the transaction status will be sent as `failed` to the provided URL.
+
+
+        **Note**: If the target device is a Solo, it must be in version 3.3.28.0 or higher.
+      parameters:
+        - name: merchant_code
+          in: path
+          description: Merchant Code
+          required: true
+          schema:
+            type: string
+            x-struct: null
+            x-validate: null
+          example: MC0X0ABC
+        - name: reader_id
+          in: path
+          description: The unique identifier of the Reader
+          required: true
+          schema:
+            type: string
+            x-struct: null
+            x-validate: null
+          example: rdr_3MSAFM23CK82VSTT4BN6RWSQ65
+      requestBody:
+        description: A checkout initial attributes
+        required: false
+        content:
+          application/json: {}
+      responses:
+        '202':
+          description: The Terminate action was successfully dispatched for the given reader.
+          content:
+            application/json: {}
+        '400':
+          description: Response when given params (or one of them) are invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateReaderTerminateError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateReaderTerminateError'
+        '422':
+          description: Response when given params (or one of them) are invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateReaderTerminateUnprocessableEntity'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateReaderTerminateError'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateReaderTerminateError'
+        '504':
+          description: Gateway Timeout
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateReaderTerminateError'
+      security:
+        - apiKey: []
+        - oauth2:
+            - readers.write
+      tags:
+        - Readers
+      x-permissions:
+        - readers_checkout_create
+      x-scopes:
+        - readers.write
 components:
   parameters:
     ChangesSinceFilter:
@@ -4080,7 +4012,7 @@ components:
           type: string
           format: email
   schemas:
-    Account:
+    AccountLegacy:
       description: Profile information.
       type: object
       properties:
@@ -4093,7 +4025,7 @@ components:
           enum:
             - normal
             - operator
-    Address:
+    AddressLegacy:
       description: Profile's personal address information.
       type: object
       properties:
@@ -4168,43 +4100,6 @@ components:
         state_id:
           description: undefined
           type: string
-    Affiliate:
-      description: |
-        Affiliate metadata for the transaction.
-        It is an optional field that allow for integrators to track the source of the transaction.
-      type: object
-      properties:
-        app_id:
-          description: |
-            Application ID of the affiliate.
-            It is a unique identifier for the application and should be set by the integrator in the [Affiliate Keys](https://developer.sumup.com/affiliate-keys) page.
-          type: string
-          example: com.example.app
-        key:
-          description: |
-            Key of the affiliate.
-            It is a unique identifier for the key  and should be generated by the integrator in the [Affiliate Keys](https://developer.sumup.com/affiliate-keys) page.
-          type: string
-          format: uuid
-          example: 123e4567-e89b-12d3-a456-426614174000
-        foreign_transaction_id:
-          description: |
-            Foreign transaction ID of the affiliate.
-            It is a unique identifier for the transaction.
-            It can be used later to fetch the transaction details via the [Transactions API](https://developer.sumup.com/api/transactions/get).
-          type: string
-          example: '123456'
-        tags:
-          description: |
-            Additional metadata for the transaction.
-            It is key-value object that can be associated with the transaction.
-          type: object
-          example: {}
-          additionalProperties: true
-      required:
-        - app_id
-        - key
-        - foreign_transaction_id
     AppSettings:
       description: Mobile app settings
       type: object
@@ -4678,135 +4573,6 @@ components:
                   example: b1a536c0-29b9-11eb-adc1-0242ac120002
                 TermUrl:
                   example: 'https://api.sumup.com/v0.1/checkouts/e552de3b-1777-4c91-bdb8-756967678572/complete_payment'
-    CreateReaderCheckout:
-      description: Reader Checkout
-      type: object
-      properties:
-        description:
-          description: |
-            Description of the checkout to be shown in the Merchant Sales
-          type: string
-        card_type:
-          description: |
-            The card type of the card used for the transaction.
-            Is is required only for some countries (e.g: Brazil).
-          type: string
-          example: credit
-          enum:
-            - credit
-            - debit
-        installments:
-          description: |
-            Number of installments for the transaction.
-            It may vary according to the merchant country.
-            For example, in Brazil, the maximum number of installments is 12.
-          type: integer
-          example: 1
-        return_url:
-          description: |
-            Webhook URL to which the payment result will be sent.
-            It must be a HTTPS url.
-          type: string
-          format: uri
-          example: 'https://www.example.com'
-        total_amount:
-          $ref: '#/components/schemas/CreateReaderCheckoutAmount'
-        tip_rates:
-          description: |
-            List of tipping rates to be displayed to the cardholder.
-            The rates are in percentage and should be between 0.01 and 0.99.
-            The list should be sorted in ascending order.
-          type: array
-          items:
-            type: number
-            format: float
-            multipleOf: 0.01
-        affiliate:
-          $ref: '#/components/schemas/Affiliate'
-      required:
-        - total_amount
-      title: Reader
-    CreateReaderCheckoutAmount:
-      description: |
-        Amount of the transaction.
-        The amount is represented as an integer value altogether with the currency and the minor unit.
-        For example, EUR 1.00 is represented as value 100 with minor unit of 2.
-      type: object
-      properties:
-        value:
-          description: |
-            Total amount of the transaction.
-            It must be a positive integer.
-          type: integer
-          example: 1000
-        currency:
-          description: Currency ISO 4217 code
-          type: string
-          example: EUR
-        minor_unit:
-          description: |
-            The minor units of the currency. It represents the number of decimals of the currency.
-            For the currencies CLP, COP and HUF, the minor unit is 0.
-          type: integer
-          example: 2
-      required:
-        - value
-        - currency
-        - minor_unit
-    ReaderCheckoutStatusChange:
-      description: |
-        The callback payload containing the status change of the Reader Checkout.
-      type: object
-      properties:
-        id:
-          description: The unique event id.
-          type: string
-          format: uuid
-          example: 123e4567-e89b-12d3-a456-426614174000
-        event_type:
-          description: The event type.
-          type: string
-          example: solo.transaction.updated
-        payload:
-          description: The event payload.
-          type: object
-          properties:
-            client_transaction_id:
-              description: The unique client transaction id. It is the same returned by the Checkout.
-              type: string
-              format: uuid
-              example: ba0a3c07-799e-40f8-89e9-1dfe96e4557e
-            merchant_code:
-              description: The target merchant code owner of the transaction.
-              type: string
-              example: M1234567
-            status:
-              description: The status of the transaction.
-              type: string
-              example: successful
-              enum:
-                - successful
-                - failed
-            transaction_id:
-              description: The unique transaction id.
-              type: string
-              format: uuid
-              example: c88032e4-a384-4030-943c-ac59cc768d90
-              deprecated: true
-          required:
-            - client_transaction_id
-            - merchant_code
-            - status
-        timestamp:
-          description: The timestamp of the event.
-          type: string
-          format: date-time
-          example: '2021-01-01T00:00:00Z'
-      required:
-        - id
-        - event_type
-        - payload
-        - timestamp
     Customer:
       type: object
       properties:
@@ -4835,7 +4601,7 @@ components:
         native_name:
           description: Country native name
           type: string
-    DoingBusinessAs:
+    DoingBusinessAsLegacy:
       description: Doing Business As information
       type: object
       properties:
@@ -4997,7 +4763,7 @@ components:
               - DD_RETURN_DEDUCTION
               - BALANCE_DEDUCTION
       title: Financial Payouts
-    LegalType:
+    LegalTypeLegacy:
       description: Id of the legal type of the merchant profile
       type: object
       properties:
@@ -5071,17 +4837,17 @@ components:
       type: object
       properties:
         account:
-          $ref: '#/components/schemas/Account'
+          $ref: '#/components/schemas/AccountLegacy'
         personal_profile:
-          $ref: '#/components/schemas/PersonalProfile'
+          $ref: '#/components/schemas/PersonalProfileLegacy'
         merchant_profile:
-          $ref: '#/components/schemas/MerchantProfile'
+          $ref: '#/components/schemas/MerchantProfileLegacy'
         app_settings:
           $ref: '#/components/schemas/AppSettings'
         permissions:
-          $ref: '#/components/schemas/Permissions'
+          $ref: '#/components/schemas/PermissionsLegacy'
       title: Merchant Account
-    MerchantProfile:
+    MerchantProfileLegacy:
       description: Account's merchant profile
       type: object
       properties:
@@ -5095,7 +4861,7 @@ components:
           description: Website
           type: string
         legal_type:
-          $ref: '#/components/schemas/LegalType'
+          $ref: '#/components/schemas/LegalTypeLegacy'
         merchant_category_code:
           description: Merchant category code
           type: string
@@ -5119,7 +4885,7 @@ components:
         business_owners:
           $ref: '#/components/schemas/BusinessOwners'
         doing_business_as:
-          $ref: '#/components/schemas/DoingBusinessAs'
+          $ref: '#/components/schemas/DoingBusinessAsLegacy'
         settings:
           $ref: '#/components/schemas/MerchantSettings'
         vat_rates:
@@ -5251,7 +5017,7 @@ components:
           last_4_digits: '0001'
           type: VISA
         created_at: '2021-03-30T10:06:07.000+00:00'
-    Permissions:
+    PermissionsLegacy:
       description: User permissions
       type: object
       properties:
@@ -5298,8 +5064,8 @@ components:
           example: 423.378.593-47
           maxLength: 255
         address:
-          $ref: '#/components/schemas/Address'
-    PersonalProfile:
+          $ref: '#/components/schemas/AddressLegacy'
+    PersonalProfileLegacy:
       description: Account's personal profile.
       type: object
       properties:
@@ -5906,6 +5672,26 @@ components:
       description: Date and time of the transaction event.
       type: string
       format: date-time
+    Permissions:
+      description: Permissions assigned to an operator or user.
+      type: object
+      properties:
+        create_moto_payments:
+          type: boolean
+        create_referral:
+          type: boolean
+        full_transaction_history_view:
+          type: boolean
+        refund_transactions:
+          type: boolean
+        admin:
+          type: boolean
+      required:
+        - create_moto_payments
+        - create_referral
+        - full_transaction_history_view
+        - refund_transactions
+        - admin
     Operator:
       description: Operator account for a merchant.
       type: object
@@ -5959,6 +5745,18 @@ components:
       required:
         - error_code
         - message
+    Metadata:
+      description: 'Set of user-defined key-value pairs attached to the object. Partial updates are not supported. When updating, always submit whole metadata.'
+      type: object
+      example: {}
+      additionalProperties:
+        maxLength: 256
+    Attributes:
+      description: Object attributes that modifiable only by SumUp applications.
+      type: object
+      example: {}
+      additionalProperties:
+        maxLength: 256
     MembershipStatus:
       description: The status of the membership.
       type: string
@@ -5968,6 +5766,14 @@ components:
         - expired
         - disabled
         - unknown
+    ResourceType:
+      description: |-
+        The kind of the membership resource.
+        Possible values are:
+        * `merchant` - merchant account(s)
+        * `organization` - organization(s)
+      type: string
+      example: merchant
     Membership:
       description: 'A membership associates a user with a resource, memberships is defined by user, resource, resource type, and associated roles.'
       type: object
@@ -5981,11 +5787,7 @@ components:
           type: string
           example: M2DDT39A
         type:
-          description: Type of the resource the membership is in.
-          type: string
-          example: merchant
-          enum:
-            - merchant
+          $ref: '#/components/schemas/ResourceType'
         roles:
           description: User's roles.
           type: array
@@ -6007,6 +5809,8 @@ components:
             - create_referral
             - developer_settings_edit
             - developer_settings_access
+          deprecated: true
+          x-deprecation-notice: 'Permissions include only legacy permissions. Otherwise, access control is based on member''s roles within a given resource.'
         created_at:
           description: The timestamp of when the membership was created.
           type: string
@@ -6047,12 +5851,7 @@ components:
           type: string
           example: M2DDT39A
         type:
-          type: string
-          example: merchant
-          enum:
-            - merchant
-          additionalProperties:
-            type: string
+          $ref: '#/components/schemas/ResourceType'
         name:
           description: Display name of the resource.
           type: string
@@ -6293,18 +6092,6 @@ components:
         - created_at
         - updated_at
       title: Role
-    Metadata:
-      description: 'Set of user-defined key-value pairs attached to the object. Partial updates are not supported. When updating, always submit whole metadata.'
-      type: object
-      example: {}
-      additionalProperties:
-        maxLength: 256
-    Attributes:
-      description: Object attributes that modifiable only by SumUp applications.
-      type: object
-      example: {}
-      additionalProperties:
-        maxLength: 256
     Reader:
       description: A physical card reader device that can accept in-person payments.
       type: object
@@ -6402,7 +6189,391 @@ components:
       additionalProperties:
         maxLength: 256
       maxProperties: 50
-    AddressPayload:
+    CreateReaderCheckoutUnprocessableEntity:
+      description: Unprocessable entity
+      type: object
+      properties:
+        errors:
+          type: object
+          additionalProperties: true
+          x-struct: null
+          x-validate: null
+      example:
+        DataValidation:
+          description: Validation errors for the informed fields.
+          value:
+            errors:
+              card_type:
+                - is invalid
+              installments:
+                - not allowed
+              return_url:
+                - must be a valid URL
+              tip_rates:
+                - must be between 0.01 and 0.99
+              total_amount:
+                - must be greater than 0
+        ReaderCheckoutPending:
+          description: Error returned when a checkout was requested in the last 60 seconds.
+          value:
+            errors:
+              detail: A pending transaction already exists for this device
+        ReaderOffline:
+          description: Error returned when the target device is not online.
+          value:
+            errors:
+              detail: The device is offline.
+              type: READER_OFFLINE
+      required:
+        - errors
+      title: CreateReaderCheckoutUnprocessableEntity
+      x-struct: Elixir.SoloEdgeWeb.OpenApi.ReadersController.CreateReaderCheckoutUnprocessableEntity
+      x-validate: null
+    CreateReaderCheckoutError:
+      description: Error description
+      type: object
+      properties:
+        errors:
+          type: object
+          properties:
+            detail:
+              description: Error message
+              type: string
+              x-struct: null
+              x-validate: null
+          required:
+            - type
+          x-struct: null
+          x-validate: null
+      required:
+        - errors
+      title: CreateReaderCheckoutError
+      x-struct: Elixir.SoloEdgeWeb.OpenApi.ReadersController.CreateReaderCheckoutError
+      x-validate: null
+    CreateReaderTerminateUnprocessableEntity:
+      description: Unprocessable entity
+      type: object
+      properties:
+        errors:
+          type: object
+          additionalProperties: true
+          x-struct: null
+          x-validate: null
+      example:
+        ReaderOffline:
+          description: Error returned when the target device is not online.
+          value:
+            errors:
+              detail: The device is offline.
+              type: READER_OFFLINE
+      required:
+        - errors
+      title: CreateReaderTerminateUnprocessableEntity
+      x-struct: Elixir.SoloEdgeWeb.OpenApi.ReadersController.CreateReaderTerminateUnprocessableEntity
+      x-validate: null
+    CreateReaderTerminateError:
+      description: Error description
+      type: object
+      properties:
+        errors:
+          type: object
+          properties:
+            detail:
+              description: Error message
+              type: string
+              x-struct: null
+              x-validate: null
+          required:
+            - type
+          x-struct: null
+          x-validate: null
+      required:
+        - errors
+      title: CreateReaderTerminateError
+      x-struct: Elixir.SoloEdgeWeb.OpenApi.ReadersController.CreateReaderTerminateError
+      x-validate: null
+    CreateReaderCheckoutResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            client_transaction_id:
+              description: |
+                The client transaction ID is a unique identifier for the transaction that is generated for the client.
+
+                It can be used later to fetch the transaction details via the [Transactions API](https://developer.sumup.com/api/transactions/get).
+              type: string
+              example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+              x-struct: null
+              x-validate: null
+          required:
+            - client_transaction_id
+          x-struct: null
+          x-validate: null
+      example:
+        data:
+          client_transaction_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+      required:
+        - data
+      title: CreateReaderCheckoutResponse
+      x-struct: Elixir.SoloEdgeWeb.OpenApi.ReadersController.CreateReaderCheckoutResponse
+      x-validate: null
+    CreateReaderCheckoutRequest:
+      description: Reader Checkout
+      type: object
+      properties:
+        affiliate:
+          description: |
+            Affiliate metadata for the transaction.
+            It is a field that allow for integrators to track the source of the transaction.
+          type: object
+          properties:
+            app_id:
+              description: |
+                Application ID of the affiliate.
+                It is a unique identifier for the application and should be set by the integrator in the [Affiliate Keys](https://developer.sumup.com/affiliate-keys) page.
+              type: string
+              example: com.example.app
+              x-struct: null
+              x-validate: null
+            foreign_transaction_id:
+              description: |
+                Foreign transaction ID of the affiliate.
+                It is a unique identifier for the transaction.
+                It can be used later to fetch the transaction details via the [Transactions API](https://developer.sumup.com/api/transactions/get).
+              type: string
+              example: 19e12390-72cf-4f9f-80b5-b0c8a67fa43f
+              x-struct: null
+              x-validate: null
+            key:
+              description: |
+                Key of the affiliate.
+                It is a unique identifier for the key  and should be generated by the integrator in the [Affiliate Keys](https://developer.sumup.com/affiliate-keys) page.
+              type: string
+              example: 123e4567-e89b-12d3-a456-426614174000
+              x-struct: null
+              x-validate: null
+            tags:
+              description: |
+                Additional metadata for the transaction.
+                It is key-value object that can be associated with the transaction.
+              type: object
+              example:
+                custom_key_1: custom_value_1
+                custom_key_2: custom_value_2
+              additionalProperties: true
+              x-struct: null
+              x-validate: null
+          required:
+            - app_id
+            - key
+            - foreign_transaction_id
+          title: Affiliate
+          x-struct: Elixir.SoloEdgeWeb.OpenApi.Common.Affiliate
+          x-validate: null
+        card_type:
+          description: |
+            The card type of the card used for the transaction.
+            Is is required only for some countries (e.g: Brazil).
+          type: string
+          example: credit
+          enum:
+            - credit
+            - debit
+          x-struct: null
+          x-validate: null
+        description:
+          description: Description of the checkout to be shown in the Merchant Sales
+          type: string
+          x-struct: null
+          x-validate: null
+        installments:
+          description: |
+            Number of installments for the transaction.
+            It may vary according to the merchant country.
+            For example, in Brazil, the maximum number of installments is 12.
+          type: integer
+          example: 1
+          x-struct: null
+          x-validate: null
+        return_url:
+          description: |
+            Webhook URL to which the payment result will be sent.
+            It must be a HTTPS url.
+          type: string
+          format: uri
+          example: 'https://www.example.com'
+          x-struct: null
+          x-validate: null
+        tip_rates:
+          description: |
+            List of tipping rates to be displayed to the cardholder.
+            The rates are in percentage and should be between 0.01 and 0.99.
+            The list should be sorted in ascending order.
+          type: array
+          items:
+            format: float
+            multipleOf: 0.01
+            type: number
+            x-struct: null
+            x-validate: null
+          x-struct: null
+          x-validate: null
+        tip_timeout:
+          description: |
+            Time in seconds the cardholder has to select a tip rate.
+            If not provided, the default value is 30 seconds.
+
+            It can only be set if `tip_rates` is provided.
+
+            **Note**: If the target device is a Solo, it must be in version 3.3.38.0 or higher.
+          type: integer
+          example: 30
+          default: 30
+          maximum: 120
+          minimum: 30
+          x-struct: null
+          x-validate: null
+        total_amount:
+          description: |
+            Amount structure.
+
+            The amount is represented as an integer value altogether with the currency and the minor unit.
+
+            For example, EUR 1.00 is represented as value 100 with minor unit of 2.
+          type: object
+          example:
+            currency: EUR
+            minor_unit: 2
+            value: 1000
+          properties:
+            currency:
+              description: Currency ISO 4217 code
+              type: string
+              example: EUR
+              x-struct: null
+              x-validate: null
+            minor_unit:
+              description: |
+                The minor units of the currency.
+                It represents the number of decimals of the currency. For the currencies CLP, COP and HUF, the minor unit is 0.
+              type: integer
+              example: 2
+              minimum: 0
+              x-struct: null
+              x-validate: null
+            value:
+              description: Integer value of the amount.
+              type: integer
+              example: 1000
+              minimum: 0
+              x-struct: null
+              x-validate: null
+          required:
+            - currency
+            - minor_unit
+            - value
+          title: Money
+          x-struct: Elixir.SoloEdgeWeb.OpenApi.Common.Money
+          x-validate: null
+      example:
+        affiliate:
+          app_id: com.example.app
+          foreign_transaction_id: '123456'
+          key: ef7b684a-d6f4-4e93-9b1b-6acdd6564a8e
+          tags: {}
+        card_type: debit
+        description: This is a description...
+        installments: 1
+        return_url: 'https://webhook.site/e21ddbb0-42c4-4358-a981-f5a95cd86fb5'
+        tip_rates:
+          - 0.05
+          - 0.1
+          - 0.15
+        tip_timeout: 60
+        total_amount:
+          currency: EUR
+          minor_unit: 2
+          value: 5033
+      required:
+        - total_amount
+      title: CreateReaderCheckoutRequest
+      x-struct: Elixir.SoloEdgeWeb.OpenApi.ReadersController.CreateReaderCheckoutRequest
+      x-validate: null
+    ReaderCheckoutStatusChange:
+      description: The callback payload containing the status change of the Reader Checkout.
+      type: object
+      properties:
+        event_type:
+          description: Type of event.
+          type: string
+          example: solo.transaction.updated
+          x-struct: null
+          x-validate: null
+        id:
+          description: Unique identifier for the event.
+          type: string
+          format: uuid
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+          x-struct: null
+          x-validate: null
+        payload:
+          description: The event payload.
+          type: object
+          properties:
+            client_transaction_id:
+              description: The unique client transaction id. It is the same returned by the Checkout.
+              type: string
+              format: uuid
+              example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+              x-struct: null
+              x-validate: null
+            merchant_code:
+              description: The merchant code associated with the transaction.
+              type: string
+              example: M1234567
+              x-struct: null
+              x-validate: null
+            status:
+              description: The current status of the transaction.
+              type: string
+              example: successful
+              enum:
+                - successful
+                - failed
+              x-struct: null
+              x-validate: null
+            transaction_id:
+              description: 'The transaction id. Deprecated: use `client_transaction_id` instead.'
+              type: string
+              format: uuid
+              example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+              deprecated: true
+              x-struct: null
+              x-validate: null
+          required:
+            - client_transaction_id
+            - merchant_code
+            - status
+          x-struct: null
+          x-validate: null
+        timestamp:
+          description: Timestamp of the event.
+          type: string
+          format: date-time
+          example: '2023-10-05T14:48:00Z'
+          x-struct: null
+          x-validate: null
+      required:
+        - id
+        - event_type
+        - payload
+        - timestamp
+      title: ReaderCheckoutStatusChange
+      x-struct: Elixir.SoloEdgeWeb.OpenApi.ReadersController.ReaderCheckoutStatusChange
+      x-validate: null
+    AddressPayloadLegacy:
       description: Personal address
       type: object
       properties:
@@ -6492,7 +6663,7 @@ components:
         - account_holder_name
         - iban
         - swift
-    DoingBusinessAsPayload:
+    DoingBusinessAsPayloadLegacy:
       description: Doing Business As information
       type: object
       properties:
@@ -6512,7 +6683,7 @@ components:
           description: Doing business as email
           type: string
         address:
-          $ref: '#/components/schemas/AddressPayload'
+          $ref: '#/components/schemas/AddressPayloadLegacy'
     MerchantProfilePayload:
       description: Account's merchant profile
       type: object
@@ -6545,7 +6716,7 @@ components:
           description: Mobile number
           type: string
         address:
-          $ref: '#/components/schemas/AddressPayload'
+          $ref: '#/components/schemas/AddressPayloadLegacy'
         doing_business_as:
           type: object
           properties:
@@ -6565,7 +6736,7 @@ components:
               description: Doing business as email
               type: string
             address:
-              $ref: '#/components/schemas/AddressPayload'
+              $ref: '#/components/schemas/AddressPayloadLegacy'
         business_owners:
           $ref: '#/components/schemas/BusinessOwners'
         is_test_account:
@@ -6632,7 +6803,7 @@ components:
         - active
         - type
         - card
-    PersonalProfilePayload:
+    PersonalProfilePayloadLegacy:
       description: Account's personal profile.
       type: object
       properties:
@@ -6653,7 +6824,7 @@ components:
           description: 'National identification id. Country specific. Ex CPF &#40;Brazil&#41;, DNI (Spain), PESEL (Poland)'
           type: string
         address:
-          $ref: '#/components/schemas/AddressPayload'
+          $ref: '#/components/schemas/AddressPayloadLegacy'
       required:
         - first_name
         - last_name
@@ -6807,11 +6978,11 @@ components:
             properties:
               personal_details:
                 $ref: '#/components/schemas/PersonalDetails'
-    DoingBusinessAs:
+    DoingBusinessAsLegacy:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/DoingBusinessAsPayload'
+            $ref: '#/components/schemas/DoingBusinessAsPayloadLegacy'
     MerchantProfile:
       content:
         application/json:
@@ -6831,7 +7002,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/PersonalProfilePayload'
+            $ref: '#/components/schemas/PersonalProfilePayloadLegacy'
     Refund:
       content:
         application/json:
@@ -7137,12 +7308,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/PaymentInstrumentResponse'
-    PersonalProfile:
+    PersonalProfileLegacy:
       description: OK
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/PersonalProfile'
+            $ref: '#/components/schemas/PersonalProfileLegacy'
     Transaction:
       description: OK
       content:
