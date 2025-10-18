@@ -10,6 +10,16 @@ updates:
         patterns:
           - "@rslib/*"
           - "rsbuild-*"
+  - package-ecosystem: "npm"
+    directory: '/codegen'
+    open-pull-requests-limit: 5
+    schedule:
+      interval: "weekly"
+    groups:
+      rslib:
+        patterns:
+          - "@rslib/*"
+          - "rsbuild-*"
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
