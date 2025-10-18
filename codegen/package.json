@@ -54,7 +54,7 @@
     "@biomejs/js-api": "^3.0.0",
     "@biomejs/wasm-nodejs": "^2.2.6",
     "change-case-all": "^2.1.0",
-    "commander": "^14.0.0",
+    "commander": "^14.0.1",
     "swagger-parser": "^10.0.3",
     "ts-pattern": "^5.8.0"
   },
