@@ -56,7 +56,7 @@
     "change-case-all": "^2.1.0",
     "commander": "^14.0.0",
     "swagger-parser": "^10.0.3",
-    "ts-pattern": "^5.7.1"
+    "ts-pattern": "^5.8.0"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.2.6",
