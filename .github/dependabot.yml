@@ -16,10 +16,9 @@ updates:
     schedule:
       interval: "weekly"
     groups:
-      rslib:
+      all:
         patterns:
-          - "@rslib/*"
-          - "rsbuild-*"
+          - "*"
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
