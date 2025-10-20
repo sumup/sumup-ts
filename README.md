@@ -11,7 +11,7 @@
 
 </div>
 
-_**IMPORTANT:** This SDK is under heavy development and subject to breaking changes._
+_**IMPORTANT:** This SDK is under development. We might still introduce minor breaking changes before reaching v1._
 
 The Node.js SDK for the SumUp [API](https://developer.sumup.com).
 
