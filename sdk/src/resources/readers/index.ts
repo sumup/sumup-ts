@@ -328,7 +328,7 @@ export class Readers extends Core.APIResource {
   }
 
   /**
-   * Create a Checkout for a Reader.
+   * Creates a Checkout for a Reader.
    *
    * This process is asynchronous and the actual transaction may take some time to be stared on the device.
    *
@@ -341,7 +341,7 @@ export class Readers extends Core.APIResource {
    * **Note**: If the target device is a Solo, it must be in version 3.3.24.3 or higher.
    *
    */
-  createReaderCheckout(
+  createCheckout(
     merchantCode: string,
     readerId: string,
     body: CreateReaderCheckoutRequest,
@@ -355,9 +355,7 @@ export class Readers extends Core.APIResource {
   }
 
   /**
-   * Create a Terminate action for a Reader.
-   *
-   * It stops the current transaction on the target device.
+   * Terminate a Reader Checkout stops the current transaction on the target device.
    *
    * This process is asynchronous and the actual termination may take some time to be performed on the device.
    *
@@ -373,7 +371,7 @@ export class Readers extends Core.APIResource {
    * **Note**: If the target device is a Solo, it must be in version 3.3.28.0 or higher.
    *
    */
-  createReaderTerminate(
+  terminateCheckout(
     merchantCode: string,
     readerId: string,
     body?: CreateReaderTerminateParams,
