@@ -167,7 +167,7 @@ export class ${resourceName} extends Core.APIResource {`);
 
     const successType = successResponses.join(" | ");
 
-    const comment = docComment(methodSpec.summary || methodSpec.description);
+    const comment = docComment(methodSpec.description || methodSpec.summary);
     if (comment) {
       writer.w(comment);
     }
@@ -185,7 +185,7 @@ export class ${resourceName} extends Core.APIResource {`);
 
     const body = getRequestBody(opId, methodSpec);
     if (body) {
-      writer.w0(`body: ${body.typeName}, `);
+      writer.w0(`body${body.required ? "" : "?"}: ${body.typeName}, `);
     }
 
     if (queryParams.length > 0) {

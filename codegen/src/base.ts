@@ -42,23 +42,43 @@ export function getRequestBody(
   o?: OpenAPIV3_1.OperationObject,
 ): {
   typeName: string;
+  required: boolean;
   schema: OpenAPIV3_1.SchemaObject | OpenAPIV3_1.ReferenceObject;
 } | null {
   if (
     !o ||
     !o.requestBody ||
     !("content" in o.requestBody) ||
-    !o.requestBody?.content["application/json"]?.schema
+    !o.requestBody?.content["application/json"]
   ) {
     return null;
   }
 
-  const body = o.requestBody?.content["application/json"]?.schema;
-  if ("$ref" in body) {
-    return { typeName: refToSchemaName(body.$ref), schema: body };
+  // Returns empty JSON body
+  if (!o.requestBody?.content["application/json"].schema) {
+    return {
+      typeName: bodyType(Case.pascal(operationId)),
+      required: !!o.requestBody.required,
+      schema: {
+        type: "object",
+      },
+    };
   }
 
-  return { typeName: bodyType(Case.pascal(operationId)), schema: body };
+  const body = o.requestBody?.content["application/json"]?.schema;
+  if ("$ref" in body) {
+    return {
+      typeName: refToSchemaName(body.$ref),
+      required: !!o.requestBody.required,
+      schema: body,
+    };
+  }
+
+  return {
+    typeName: bodyType(Case.pascal(operationId)),
+    required: !!o.requestBody.required,
+    schema: body,
+  };
 }
 
 /**
