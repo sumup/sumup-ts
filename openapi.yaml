@@ -1892,6 +1892,7 @@ paths:
                   value:
                     message: access token required
                     error_code: NOT_AUTHORIZED
+      deprecated: true
       security:
         - apiKey: []
         - oauth2:
@@ -1901,6 +1902,7 @@ paths:
         - Merchant
       x-codegen:
         method_name: get
+      x-deprecation-notice: 'The _Retrieve a profile_ endpoint is deprecated, please use the `Merchant` object instead (see [Merchants](https://developer.sumup.com/api/merchants)).'
       x-scopes:
         - user.profile
         - user.profile_readonly
@@ -2086,7 +2088,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PersonalProfile'
+                $ref: '#/components/schemas/PersonalProfileLegacy'
         '401':
           description: Unauthorized
           content:
@@ -2109,6 +2111,7 @@ paths:
                   value:
                     message: access token required
                     error_code: NOT_AUTHORIZED
+      deprecated: true
       security:
         - apiKey: []
         - oauth2:
@@ -2118,6 +2121,7 @@ paths:
         - Merchant
       x-codegen:
         method_name: get_personal_profile
+      x-deprecation-notice: 'The _Retrieve a personal profile_ endpoint is deprecated, please use the `persons` field of the `Merchant` object instead. (see [Merchants](https://developer.sumup.com/api/merchants)).'
       x-scopes:
         - user.profile
         - user.profile_readonly
@@ -2132,7 +2136,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MerchantProfile'
+                $ref: '#/components/schemas/MerchantProfileLegacy'
         '401':
           description: Unauthorized
           content:
@@ -2168,6 +2172,7 @@ paths:
                     error_message: request_not_allowed
                     error_code: FORBIDDEN
                     status_code: '403'
+      deprecated: true
       security:
         - apiKey: []
         - oauth2:
@@ -2177,6 +2182,7 @@ paths:
         - Merchant
       x-codegen:
         method_name: get_merchant_profile
+      x-deprecation-notice: 'The _Retrieve a merchant profile_ endpoint is deprecated, please use the `Merchant` object instead (see [Merchants](https://developer.sumup.com/api/merchants)).'
       x-scopes:
         - user.profile
         - user.profile_readonly
@@ -2191,7 +2197,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DoingBusinessAs'
+                $ref: '#/components/schemas/DoingBusinessAsLegacy'
         '401':
           description: Unauthorized
           content:
@@ -2214,6 +2220,7 @@ paths:
                   value:
                     message: access token required
                     error_code: NOT_AUTHORIZED
+      deprecated: true
       security:
         - apiKey: []
         - oauth2:
@@ -2223,6 +2230,7 @@ paths:
         - Merchant
       x-codegen:
         method_name: get_doing_business_as
+      x-deprecation-notice: 'The _Retrieve DBA_ endpoint is deprecated, please use the `business_profile` field of the `Merchant` object instead (see [Merchants](https://developer.sumup.com/api/merchants)).'
       x-scopes:
         - user.profile
         - user.profile_readonly
@@ -2503,282 +2511,6 @@ paths:
       x-codegen:
         method_name: get
       x-scopes: []
-  '/v0.1/merchants/{merchant_code}/readers/{id}/checkout':
-    post:
-      operationId: CreateReaderCheckout
-      summary: Create a Reader Checkout
-      description: |
-        Create a Checkout for a Reader.
-
-        This process is asynchronous and the actual transaction may take some time to be stared on the device.
-
-
-        There are some caveats when using this endpoint:
-        * The target device must be online, otherwise checkout won't be accepted
-        * After the checkout is accepted, the system has 60 seconds to start the payment on the target device. During this time, any other checkout for the same device will be rejected.
-
-        **Note**: If the target device is a Solo, it must be in version 3.3.24.3 or higher.
-      parameters:
-        - name: merchant_code
-          in: path
-          required: true
-          schema:
-            type: string
-            example: MC0X0ABC
-        - name: id
-          in: path
-          description: |
-            The unique identifier of the reader.
-          required: true
-          schema:
-            type: string
-            example: rdr_3MSAFM23CK82VSTT4BN6RWSQ65
-            maxLength: 30
-            minLength: 30
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateReaderCheckout'
-      responses:
-        '201':
-          description: |
-            The Checkout got successfully created for the given reader.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  data:
-                    type: object
-                    properties:
-                      client_transaction_id:
-                        description: |
-                          The client transaction ID is a unique identifier for the transaction that is generated for the client.
-                          It can be used later to fetch the transaction details via the [Transactions API](https://developer.sumup.com/api/transactions/get).
-                        type: string
-                        format: uuid
-                        example: 123e4567-e89b-12d3-a456-426614174000
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  errors:
-                    type: object
-                    properties:
-                      detail:
-                        type: string
-                        example: Bad Request
-        '422':
-          description: Unprocessable Entity
-          content:
-            application/json:
-              examples:
-                ReaderOffline:
-                  description: Error returned when the target device is not online.
-                  value:
-                    errors:
-                      detail: The device is offline.
-                      type: READER_OFFLINE
-                ReaderCheckoutPending:
-                  description: Error returned when a checkout was requested in the last 60 seconds.
-                  value:
-                    errors:
-                      detail: A pending transaction already exists for this device
-                DataValidation:
-                  description: Validation errors for the informed fields.
-                  value:
-                    errors:
-                      total_amount:
-                        - is too low
-                        - this merchant can only accept 'EUR'
-                      installments:
-                        - not allowed
-                      card_type:
-                        - is invalid
-              schema:
-                type: object
-                properties:
-                  errors:
-                    type: object
-                    additionalProperties: true
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  errors:
-                    type: object
-                    properties:
-                      detail:
-                        type: string
-                        example: Internal Server Error
-        '502':
-          description: Bad Gateway
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  errors:
-                    type: object
-                    properties:
-                      detail:
-                        type: string
-                        example: Bad Gateway
-        '504':
-          description: Gateway Timeout
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  errors:
-                    type: object
-                    properties:
-                      detail:
-                        type: string
-                        example: Gateway Timeout
-      callbacks:
-        ReaderCheckoutStatusChange:
-          '{$request.body#/return_url}':
-            post:
-              requestBody:
-                content:
-                  application/json:
-                    schema:
-                      $ref: '#/components/schemas/ReaderCheckoutStatusChange'
-              responses:
-                '200':
-                  description: |
-                    Your server returns this code if it accepts the callback.
-                    If the server returns any other code, the callback will be retried up to 5 times with exponential backoff.
-      security:
-        - apiKey: []
-        - oauth2:
-            - readers.write
-      tags:
-        - Readers
-      x-codegen:
-        method_name: create_checkout
-      x-permissions:
-        - readers_checkout_create
-      x-scopes:
-        - readers.write
-  '/v0.1/merchants/{merchant_code}/readers/{id}/terminate':
-    post:
-      operationId: CreateReaderTerminate
-      summary: Create a Reader Terminate action
-      description: |
-        Create a Terminate action for a Reader.
-
-        It stops the current transaction on the target device.
-
-        This process is asynchronous and the actual termination may take some time to be performed on the device.
-
-
-        There are some caveats when using this endpoint:
-        * The target device must be online, otherwise terminate won't be accepted
-        * The action will succeed only if the device is waiting for cardholder action: e.g: waiting for card, waiting for PIN, etc.
-        * There is no confirmation of the termination.
-
-        If a transaction is successfully terminated and `return_url` was provided on Checkout, the transaction status will be sent as `failed` to the provided URL.
-
-        **Note**: If the target device is a Solo, it must be in version 3.3.28.0 or higher.
-      parameters:
-        - name: merchant_code
-          in: path
-          required: true
-          schema:
-            type: string
-            example: MC0X0ABC
-        - name: id
-          in: path
-          description: |
-            The unique identifier of the reader.
-          required: true
-          schema:
-            type: string
-            example: rdr_3MSAFM23CK82VSTT4BN6RWSQ65
-            maxLength: 30
-            minLength: 30
-      responses:
-        '202':
-          description: |
-            The Terminate action was successfully dispatched for the given reader.
-        '422':
-          description: Unprocessable Entity
-          content:
-            application/json:
-              examples:
-                ReaderOffline:
-                  description: Error returned when the target device is not online.
-                  value:
-                    errors:
-                      detail: The device is offline.
-                      type: READER_OFFLINE
-              schema:
-                type: object
-                properties:
-                  errors:
-                    type: object
-                    additionalProperties: true
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  errors:
-                    type: object
-                    properties:
-                      detail:
-                        type: string
-                        example: Internal Server Error
-        '502':
-          description: Bad Gateway
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  errors:
-                    type: object
-                    properties:
-                      detail:
-                        type: string
-                        example: Bad Gateway
-        '504':
-          description: Gateway Timeout
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  errors:
-                    type: object
-                    properties:
-                      detail:
-                        type: string
-                        example: Gateway Timeout
-      security:
-        - apiKey: []
-        - oauth2:
-            - readers.write
-      tags:
-        - Readers
-      x-codegen:
-        method_name: terminate_checkout
-      x-permissions:
-        - readers_checkout_create
-      x-scopes:
-        - readers.write
   /v0.1/me/accounts:
     get:
       operationId: ListSubAccounts
@@ -3029,13 +2761,7 @@ paths:
           in: query
           description: Filter memberships by resource kind.
           schema:
-            description: |-
-              The kind of the membership resource.
-              Possible values are:
-              * `merchant` - merchant account(s)
-            type: string
-            enum:
-              - merchant
+            $ref: '#/components/schemas/ResourceType'
         - name: resource.attributes.sandbox
           in: query
           description: Filter memberships by the sandbox status of the resource the membership is in.
@@ -3184,9 +2910,6 @@ paths:
               properties:
                 is_managed_user:
                   description: 'True if the user is managed by the merchant. In this case, we''ll created a virtual user with the provided password and nickname.'
-                  type: boolean
-                is_service_account:
-                  description: True if the user is a service account. It can later be used to create OAuth2 clients.
                   type: boolean
                 email:
                   description: Email address of the member to add.
@@ -3654,6 +3377,221 @@ paths:
           object_type: merchant
           object_id_param: merchant_code
       x-scopes: []
+  '/v1/merchants/{merchant_code}':
+    get:
+      operationId: GetMerchant
+      summary: Retrieve a Merchant
+      description: Retrieve a merchant.
+      parameters:
+        - name: version
+          in: query
+          description: |
+            The version of the resource. At the moment, the only supported value is `latest`. When provided and the requested resource's `change_status` is pending, the resource will be returned with all pending changes applied. When no changes are pending the resource is returned as is. The `change_status` in the response body will reflect the current state of the resource.
+          schema:
+            type: string
+            examples:
+              - latest
+        - name: merchant_code
+          in: path
+          description: Merchant code.
+          required: true
+          schema:
+            type: string
+            example: MK10CL2A
+      responses:
+        '200':
+          description: Returns a Merchant for a valid identifier.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Merchant'
+        '404':
+          description: |
+            No user with the specified ID exists.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/BaseError'
+                  - type: object
+                    properties:
+                      category:
+                        $ref: '#/components/schemas/ErrorCategoryClient'
+                      code:
+                        $ref: '#/components/schemas/ErrorCodeNotFound'
+      externalDocs:
+        description: Merchant documentation
+        url: 'https://developer.sumup.com/tools/models/merchant'
+      security:
+        - apiKey: []
+        - oauth2:
+            - user.profile
+            - user.profile_readonly
+            - merchant.read
+      tags:
+        - Merchants
+      x-permissions:
+        - merchant_read
+      x-scopes:
+        - user.profile
+        - user.profile_readonly
+        - merchant.read
+  '/v1/merchants/{merchant_code}/persons':
+    get:
+      operationId: ListPersons
+      summary: List Persons
+      description: Returns a list of persons related to the merchant.
+      parameters:
+        - name: version
+          in: query
+          description: |
+            The version of the resource. At the moment, the only supported value is `latest`. When provided and the requested resource's `change_status` is pending, the resource will be returned with all pending changes applied. When no changes are pending the resource is returned as is. The `change_status` in the response body will reflect the current state of the resource.
+          schema:
+            type: string
+            examples:
+              - latest
+        - name: merchant_code
+          in: path
+          description: Merchant code.
+          required: true
+          schema:
+            type: string
+            example: MK10CL2A
+      responses:
+        '200':
+          description: Returns a list of persons for a valid merchant identifier.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListPersonsResponseBody'
+        '404':
+          description: |
+            No user with the specified ID exists.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/BaseError'
+                  - type: object
+                    properties:
+                      category:
+                        $ref: '#/components/schemas/ErrorCategoryClient'
+                      code:
+                        $ref: '#/components/schemas/ErrorCodeNotFound'
+        '500':
+          description: |
+            An internal server error occurred.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/BaseError'
+                  - type: object
+                    properties:
+                      category:
+                        $ref: '#/components/schemas/ErrorCategoryServer'
+                      code:
+                        $ref: '#/components/schemas/ErrorCodeInternalServerError'
+      externalDocs:
+        description: Persons documentation
+        url: 'https://developer.sumup.com/tools/models/merchant#persons'
+      security:
+        - apiKey: []
+        - oauth2:
+            - user.profile
+            - user.profile_readonly
+            - merchant.read
+      tags:
+        - Merchants
+      x-permissions:
+        - persons_read
+      x-scopes:
+        - user.profile
+        - user.profile_readonly
+        - merchant.read
+  '/v1/merchants/{merchant_code}/persons/{person_id}':
+    get:
+      operationId: GetPerson
+      summary: Retrieve a Person
+      description: Returns a single person related to the merchant.
+      parameters:
+        - name: version
+          in: query
+          description: |
+            The version of the resource. At the moment, the only supported value is `latest`. When provided and the requested resource's `change_status` is pending, the resource will be returned with all pending changes applied. When no changes are pending the resource is returned as is. The `change_status` in the response body will reflect the current state of the resource.
+          schema:
+            type: string
+            examples:
+              - latest
+        - name: merchant_code
+          in: path
+          description: Merchant code.
+          required: true
+          schema:
+            type: string
+            example: MK10CL2A
+        - name: person_id
+          in: path
+          description: Person ID
+          required: true
+          schema:
+            type: string
+            example: pers_5AKFHN2KSK8D3TS79DJE3P3A2Z
+            x-go-type: merchants.PersonID
+            x-go-type-import:
+              path: github.com/sumup/merchants/internal/domain/merchants
+      responses:
+        '200':
+          description: Returns a Person for a valid identifier.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Person'
+        '404':
+          description: |
+            No user with the specified ID exists.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/BaseError'
+                  - type: object
+                    properties:
+                      category:
+                        $ref: '#/components/schemas/ErrorCategoryClient'
+                      code:
+                        $ref: '#/components/schemas/ErrorCodeNotFound'
+        '500':
+          description: |
+            An internal server error occurred.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/BaseError'
+                  - type: object
+                    properties:
+                      category:
+                        $ref: '#/components/schemas/ErrorCategoryServer'
+                      code:
+                        $ref: '#/components/schemas/ErrorCodeInternalServerError'
+      externalDocs:
+        description: Persons documentation
+        url: 'https://developer.sumup.com/tools/models/merchant#persons'
+      security:
+        - apiKey: []
+        - oauth2:
+            - user.profile
+            - user.profile_readonly
+            - merchant.read
+      tags:
+        - Merchants
+      x-permissions:
+        - persons_read
+      x-scopes:
+        - user.profile
+        - user.profile_readonly
+        - merchant.read
   '/v0.1/merchants/{merchant_code}/readers':
     get:
       operationId: ListReaders
@@ -3912,6 +3850,212 @@ paths:
           object_id_param: merchant_code
       x-scopes:
         - readers.write
+  '/v0.1/merchants/{merchant_code}/readers/{reader_id}/checkout':
+    post:
+      operationId: CreateReaderCheckout
+      summary: Create a Reader Checkout
+      description: |
+        Create a Checkout for a Reader.
+
+        This process is asynchronous and the actual transaction may take some time to be stared on the device.
+
+
+        There are some caveats when using this endpoint:
+        * The target device must be online, otherwise checkout won't be accepted
+        * After the checkout is accepted, the system has 60 seconds to start the payment on the target device. During this time, any other checkout for the same device will be rejected.
+
+
+        **Note**: If the target device is a Solo, it must be in version 3.3.24.3 or higher.
+      parameters:
+        - name: merchant_code
+          in: path
+          description: Merchant Code
+          required: true
+          schema:
+            type: string
+            x-struct: null
+            x-validate: null
+          example: MC0X0ABC
+        - name: reader_id
+          in: path
+          description: The unique identifier of the Reader
+          required: true
+          schema:
+            type: string
+            x-struct: null
+            x-validate: null
+          example: rdr_3MSAFM23CK82VSTT4BN6RWSQ65
+      requestBody:
+        description: A checkout initial attributes
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateReaderCheckoutRequest'
+      responses:
+        '201':
+          description: The Checkout got successfully created for the given reader.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateReaderCheckoutResponse'
+        '400':
+          description: Response when given params (or one of them) are invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateReaderCheckoutError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateReaderCheckoutError'
+        '422':
+          description: Response when given params (or one of them) are invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateReaderCheckoutUnprocessableEntity'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateReaderCheckoutError'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateReaderCheckoutError'
+        '504':
+          description: Gateway Timeout
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateReaderCheckoutError'
+      callbacks:
+        ReaderCheckoutStatusChange:
+          '{$request.body#/return_url}':
+            post:
+              requestBody:
+                required: true
+                content:
+                  application/json:
+                    schema:
+                      $ref: '#/components/schemas/ReaderCheckoutStatusChange'
+              responses:
+                '200':
+                  description: |
+                    Your server returns this code if it accepts the callback.
+                    If the server returns any other code, the callback will be retried up to 5 times with exponential backoff.
+      security:
+        - apiKey: []
+        - oauth2:
+            - readers.write
+      tags:
+        - Readers
+      x-permissions:
+        - readers_checkout_create
+      x-scopes:
+        - readers.write
+  '/v0.1/merchants/{merchant_code}/readers/{reader_id}/terminate':
+    post:
+      operationId: CreateReaderTerminate
+      summary: Create a Reader Terminate action
+      description: |
+        Create a Terminate action for a Reader.
+
+        It stops the current transaction on the target device.
+
+        This process is asynchronous and the actual termination may take some time to be performed on the device.
+
+
+        There are some caveats when using this endpoint:
+        * The target device must be online, otherwise terminate won't be accepted
+        * The action will succeed only if the device is waiting for cardholder action: e.g: waiting for card, waiting for PIN, etc.
+        * There is no confirmation of the termination.
+
+        If a transaction is successfully terminated and `return_url` was provided on Checkout, the transaction status will be sent as `failed` to the provided URL.
+
+
+        **Note**: If the target device is a Solo, it must be in version 3.3.28.0 or higher.
+      parameters:
+        - name: merchant_code
+          in: path
+          description: Merchant Code
+          required: true
+          schema:
+            type: string
+            x-struct: null
+            x-validate: null
+          example: MC0X0ABC
+        - name: reader_id
+          in: path
+          description: The unique identifier of the Reader
+          required: true
+          schema:
+            type: string
+            x-struct: null
+            x-validate: null
+          example: rdr_3MSAFM23CK82VSTT4BN6RWSQ65
+      requestBody:
+        description: A checkout initial attributes
+        required: false
+        content:
+          application/json: {}
+      responses:
+        '202':
+          description: The Terminate action was successfully dispatched for the given reader.
+          content:
+            application/json: {}
+        '400':
+          description: Response when given params (or one of them) are invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateReaderTerminateError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateReaderTerminateError'
+        '422':
+          description: Response when given params (or one of them) are invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateReaderTerminateUnprocessableEntity'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateReaderTerminateError'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateReaderTerminateError'
+        '504':
+          description: Gateway Timeout
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateReaderTerminateError'
+      security:
+        - apiKey: []
+        - oauth2:
+            - readers.write
+      tags:
+        - Readers
+      x-permissions:
+        - readers_checkout_create
+      x-scopes:
+        - readers.write
 components:
   parameters:
     ChangesSinceFilter:
@@ -4080,7 +4224,7 @@ components:
           type: string
           format: email
   schemas:
-    Account:
+    AccountLegacy:
       description: Profile information.
       type: object
       properties:
@@ -4093,7 +4237,7 @@ components:
           enum:
             - normal
             - operator
-    Address:
+    AddressLegacy:
       description: Profile's personal address information.
       type: object
       properties:
@@ -4168,43 +4312,6 @@ components:
         state_id:
           description: undefined
           type: string
-    Affiliate:
-      description: |
-        Affiliate metadata for the transaction.
-        It is an optional field that allow for integrators to track the source of the transaction.
-      type: object
-      properties:
-        app_id:
-          description: |
-            Application ID of the affiliate.
-            It is a unique identifier for the application and should be set by the integrator in the [Affiliate Keys](https://developer.sumup.com/affiliate-keys) page.
-          type: string
-          example: com.example.app
-        key:
-          description: |
-            Key of the affiliate.
-            It is a unique identifier for the key  and should be generated by the integrator in the [Affiliate Keys](https://developer.sumup.com/affiliate-keys) page.
-          type: string
-          format: uuid
-          example: 123e4567-e89b-12d3-a456-426614174000
-        foreign_transaction_id:
-          description: |
-            Foreign transaction ID of the affiliate.
-            It is a unique identifier for the transaction.
-            It can be used later to fetch the transaction details via the [Transactions API](https://developer.sumup.com/api/transactions/get).
-          type: string
-          example: '123456'
-        tags:
-          description: |
-            Additional metadata for the transaction.
-            It is key-value object that can be associated with the transaction.
-          type: object
-          example: {}
-          additionalProperties: true
-      required:
-        - app_id
-        - key
-        - foreign_transaction_id
     AppSettings:
       description: Mobile app settings
       type: object
@@ -4678,135 +4785,6 @@ components:
                   example: b1a536c0-29b9-11eb-adc1-0242ac120002
                 TermUrl:
                   example: 'https://api.sumup.com/v0.1/checkouts/e552de3b-1777-4c91-bdb8-756967678572/complete_payment'
-    CreateReaderCheckout:
-      description: Reader Checkout
-      type: object
-      properties:
-        description:
-          description: |
-            Description of the checkout to be shown in the Merchant Sales
-          type: string
-        card_type:
-          description: |
-            The card type of the card used for the transaction.
-            Is is required only for some countries (e.g: Brazil).
-          type: string
-          example: credit
-          enum:
-            - credit
-            - debit
-        installments:
-          description: |
-            Number of installments for the transaction.
-            It may vary according to the merchant country.
-            For example, in Brazil, the maximum number of installments is 12.
-          type: integer
-          example: 1
-        return_url:
-          description: |
-            Webhook URL to which the payment result will be sent.
-            It must be a HTTPS url.
-          type: string
-          format: uri
-          example: 'https://www.example.com'
-        total_amount:
-          $ref: '#/components/schemas/CreateReaderCheckoutAmount'
-        tip_rates:
-          description: |
-            List of tipping rates to be displayed to the cardholder.
-            The rates are in percentage and should be between 0.01 and 0.99.
-            The list should be sorted in ascending order.
-          type: array
-          items:
-            type: number
-            format: float
-            multipleOf: 0.01
-        affiliate:
-          $ref: '#/components/schemas/Affiliate'
-      required:
-        - total_amount
-      title: Reader
-    CreateReaderCheckoutAmount:
-      description: |
-        Amount of the transaction.
-        The amount is represented as an integer value altogether with the currency and the minor unit.
-        For example, EUR 1.00 is represented as value 100 with minor unit of 2.
-      type: object
-      properties:
-        value:
-          description: |
-            Total amount of the transaction.
-            It must be a positive integer.
-          type: integer
-          example: 1000
-        currency:
-          description: Currency ISO 4217 code
-          type: string
-          example: EUR
-        minor_unit:
-          description: |
-            The minor units of the currency. It represents the number of decimals of the currency.
-            For the currencies CLP, COP and HUF, the minor unit is 0.
-          type: integer
-          example: 2
-      required:
-        - value
-        - currency
-        - minor_unit
-    ReaderCheckoutStatusChange:
-      description: |
-        The callback payload containing the status change of the Reader Checkout.
-      type: object
-      properties:
-        id:
-          description: The unique event id.
-          type: string
-          format: uuid
-          example: 123e4567-e89b-12d3-a456-426614174000
-        event_type:
-          description: The event type.
-          type: string
-          example: solo.transaction.updated
-        payload:
-          description: The event payload.
-          type: object
-          properties:
-            client_transaction_id:
-              description: The unique client transaction id. It is the same returned by the Checkout.
-              type: string
-              format: uuid
-              example: ba0a3c07-799e-40f8-89e9-1dfe96e4557e
-            merchant_code:
-              description: The target merchant code owner of the transaction.
-              type: string
-              example: M1234567
-            status:
-              description: The status of the transaction.
-              type: string
-              example: successful
-              enum:
-                - successful
-                - failed
-            transaction_id:
-              description: The unique transaction id.
-              type: string
-              format: uuid
-              example: c88032e4-a384-4030-943c-ac59cc768d90
-              deprecated: true
-          required:
-            - client_transaction_id
-            - merchant_code
-            - status
-        timestamp:
-          description: The timestamp of the event.
-          type: string
-          format: date-time
-          example: '2021-01-01T00:00:00Z'
-      required:
-        - id
-        - event_type
-        - payload
-        - timestamp
     Customer:
       type: object
       properties:
@@ -4835,7 +4813,7 @@ components:
         native_name:
           description: Country native name
           type: string
-    DoingBusinessAs:
+    DoingBusinessAsLegacy:
       description: Doing Business As information
       type: object
       properties:
@@ -4997,7 +4975,7 @@ components:
               - DD_RETURN_DEDUCTION
               - BALANCE_DEDUCTION
       title: Financial Payouts
-    LegalType:
+    LegalTypeLegacy:
       description: Id of the legal type of the merchant profile
       type: object
       properties:
@@ -5071,17 +5049,17 @@ components:
       type: object
       properties:
         account:
-          $ref: '#/components/schemas/Account'
+          $ref: '#/components/schemas/AccountLegacy'
         personal_profile:
-          $ref: '#/components/schemas/PersonalProfile'
+          $ref: '#/components/schemas/PersonalProfileLegacy'
         merchant_profile:
-          $ref: '#/components/schemas/MerchantProfile'
+          $ref: '#/components/schemas/MerchantProfileLegacy'
         app_settings:
           $ref: '#/components/schemas/AppSettings'
         permissions:
-          $ref: '#/components/schemas/Permissions'
+          $ref: '#/components/schemas/PermissionsLegacy'
       title: Merchant Account
-    MerchantProfile:
+    MerchantProfileLegacy:
       description: Account's merchant profile
       type: object
       properties:
@@ -5095,7 +5073,7 @@ components:
           description: Website
           type: string
         legal_type:
-          $ref: '#/components/schemas/LegalType'
+          $ref: '#/components/schemas/LegalTypeLegacy'
         merchant_category_code:
           description: Merchant category code
           type: string
@@ -5119,7 +5097,7 @@ components:
         business_owners:
           $ref: '#/components/schemas/BusinessOwners'
         doing_business_as:
-          $ref: '#/components/schemas/DoingBusinessAs'
+          $ref: '#/components/schemas/DoingBusinessAsLegacy'
         settings:
           $ref: '#/components/schemas/MerchantSettings'
         vat_rates:
@@ -5251,7 +5229,7 @@ components:
           last_4_digits: '0001'
           type: VISA
         created_at: '2021-03-30T10:06:07.000+00:00'
-    Permissions:
+    PermissionsLegacy:
       description: User permissions
       type: object
       properties:
@@ -5298,8 +5276,8 @@ components:
           example: 423.378.593-47
           maxLength: 255
         address:
-          $ref: '#/components/schemas/Address'
-    PersonalProfile:
+          $ref: '#/components/schemas/AddressLegacy'
+    PersonalProfileLegacy:
       description: Account's personal profile.
       type: object
       properties:
@@ -5906,6 +5884,26 @@ components:
       description: Date and time of the transaction event.
       type: string
       format: date-time
+    Permissions:
+      description: Permissions assigned to an operator or user.
+      type: object
+      properties:
+        create_moto_payments:
+          type: boolean
+        create_referral:
+          type: boolean
+        full_transaction_history_view:
+          type: boolean
+        refund_transactions:
+          type: boolean
+        admin:
+          type: boolean
+      required:
+        - create_moto_payments
+        - create_referral
+        - full_transaction_history_view
+        - refund_transactions
+        - admin
     Operator:
       description: Operator account for a merchant.
       type: object
@@ -5959,6 +5957,167 @@ components:
       required:
         - error_code
         - message
+    Metadata:
+      description: 'Set of user-defined key-value pairs attached to the object. Partial updates are not supported. When updating, always submit whole metadata.'
+      type: object
+      example: {}
+      additionalProperties:
+        maxLength: 256
+    Attributes:
+      description: Object attributes that are modifiable only by SumUp applications.
+      type: object
+      example: {}
+      additionalProperties:
+        maxLength: 256
+    CountryCode:
+      description: |-
+        An [ISO3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)
+        country code. This definition users `oneOf` with a two-character string
+        type to allow for support of future countries in client code.
+      type: string
+      example: BR
+      maxLength: 2
+      minLength: 2
+    Address:
+      description: |-
+        An address somewhere in the world. The address fields used depend on the country conventions. For example, in Great Britain, `city` is `post_town`. In the United States, the top-level administrative unit used in addresses is `state`, whereas in Chile it's `region`.
+        Whether an address is valid or not depends on whether the locally required fields are present. Fields not supported in a country will be ignored.
+      type: object
+      properties:
+        street_address:
+          type: array
+          items:
+            type: string
+            description: The first line of the address.
+            maxLength: 100
+          example:
+            - Paul-Linke-Ufer 39-40
+            - 2. Hinterhof
+          maxItems: 2
+        post_code:
+          description: |
+            The postal code (aka. zip code) of the address.
+          type: string
+          example: '10999'
+          maxLength: 32
+        country:
+          $ref: '#/components/schemas/CountryCode'
+        city:
+          description: |
+            The city of the address.
+          type: string
+          example: Berlin
+          maxLength: 512
+        province:
+          description: |
+            The province where the address is located. This may not be relevant in some countries.
+          type: string
+          example: Berlin
+          maxLength: 512
+        region:
+          description: |
+            The region where the address is located. This may not be relevant in some countries.
+          type: string
+          example: Baden Wuerttemberg
+          maxLength: 512
+        county:
+          description: |
+            A county is a geographic region of a country used for administrative or other purposes in some nations. Used in countries such as Ireland, Romania, etc.
+          type: string
+          example: Dublin County
+          maxLength: 512
+        autonomous_community:
+          description: |
+            In Spain, an autonomous community is the first sub-national level of political and administrative division.
+          type: string
+          example: Catalonia
+          maxLength: 512
+        post_town:
+          description: |
+            A post town is a required part of all postal addresses in the United Kingdom and Ireland, and a basic unit of the postal delivery system.
+          type: string
+          example: London
+          maxLength: 512
+        state:
+          description: |
+            Most often, a country has a single state, with various administrative divisions. The term "state" is sometimes used to refer to the federated polities that make up the federation. Used in countries such as the United States and Brazil.
+          type: string
+          example: California
+          maxLength: 512
+        neighborhood:
+          description: |
+            Locality level of the address. Used in countries such as Brazil or Chile.
+          type: string
+          example: Copacabana
+          maxLength: 512
+        commune:
+          description: |
+            In many countries, terms cognate with "commune" are used, referring to the community living in the area and the common interest. Used in countries such as Chile.
+          type: string
+          example: Providencia
+          maxLength: 512
+        department:
+          description: |
+            A department (French: département, Spanish: departamento) is an administrative or political division in several countries. Used in countries such as Colombia.
+          type: string
+          example: Antioquia
+          maxLength: 512
+        municipality:
+          description: |
+            A municipality is usually a single administrative division having corporate status and powers of self-government or jurisdiction as granted by national and regional laws to which it is subordinate. Used in countries such as Colombia.
+          type: string
+          example: Medellín
+          maxLength: 512
+        district:
+          description: |
+            A district is a type of administrative division that in some countries is managed by the local government. Used in countries such as Portugal.
+          type: string
+          example: Lisbon District
+          maxLength: 512
+        zip_code:
+          description: |
+            A US system of postal codes used by the United States Postal Service (USPS).
+          type: string
+          example: '94103'
+          maxLength: 512
+        eircode:
+          description: |
+            A postal address in Ireland.
+          type: string
+          example: D02 X285
+          maxLength: 512
+      example:
+        street_address:
+          - Paul-Linke-Ufer 39-40
+          - 2. Hinterhof
+        post_code: '10999'
+        city: Berlin
+        country: DE
+      externalDocs:
+        description: Address documentation
+        url: 'https://sumup.roadie.so/docs/default/Component/merchants/merchant/#addresses'
+      required:
+        - country
+      x-go-type: address.Address
+      x-go-type-import:
+        path: github.com/sumup/country-sdk/go-sdk/address
+    PersonalIdentifier:
+      type: object
+      properties:
+        ref:
+          description: The unique reference for the personal identifier type.
+          type: string
+          example: br.cpf
+        value:
+          description: The company identifier value.
+          type: string
+          example: 847.060.136-90
+      example:
+        ref: br.cpf
+        value: 847.060.136-90
+      required:
+        - ref
+        - value
     MembershipStatus:
       description: The status of the membership.
       type: string
@@ -5968,6 +6127,14 @@ components:
         - expired
         - disabled
         - unknown
+    ResourceType:
+      description: |-
+        The kind of the membership resource.
+        Possible values are:
+        * `merchant` - merchant account(s)
+        * `organization` - organization(s)
+      type: string
+      example: merchant
     Membership:
       description: 'A membership associates a user with a resource, memberships is defined by user, resource, resource type, and associated roles.'
       type: object
@@ -5981,11 +6148,7 @@ components:
           type: string
           example: M2DDT39A
         type:
-          description: Type of the resource the membership is in.
-          type: string
-          example: merchant
-          enum:
-            - merchant
+          $ref: '#/components/schemas/ResourceType'
         roles:
           description: User's roles.
           type: array
@@ -6007,6 +6170,8 @@ components:
             - create_referral
             - developer_settings_edit
             - developer_settings_access
+          deprecated: true
+          x-deprecation-notice: 'Permissions include only legacy permissions, please use roles instead. Member access is based on their roles within a given resource and the permissions these roles grant.'
         created_at:
           description: The timestamp of when the membership was created.
           type: string
@@ -6047,12 +6212,7 @@ components:
           type: string
           example: M2DDT39A
         type:
-          type: string
-          example: merchant
-          enum:
-            - merchant
-          additionalProperties:
-            type: string
+          $ref: '#/components/schemas/ResourceType'
         name:
           description: Display name of the resource.
           type: string
@@ -6084,7 +6244,6 @@ components:
         - name
         - created_at
         - updated_at
-        - attributes
       title: Resource
     Member:
       description: 'A member is user within specific resource identified by resource id, resource type, and associated roles.'
@@ -6115,6 +6274,8 @@ components:
             - create_referral
             - developer_settings_edit
             - developer_settings_access
+          deprecated: true
+          x-deprecation-notice: 'Permissions include only legacy permissions, please use roles instead. Member access is based on roles within a given resource and the permissions these roles grant.'
         created_at:
           description: The timestamp of when the member was created.
           type: string
@@ -6293,18 +6454,461 @@ components:
         - created_at
         - updated_at
       title: Role
-    Metadata:
-      description: 'Set of user-defined key-value pairs attached to the object. Partial updates are not supported. When updating, always submit whole metadata.'
+    ListPersonsResponseBody:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Person'
+      required:
+        - items
+    Merchant:
+      allOf:
+        - type: object
+          required:
+            - merchant_code
+            - country
+            - default_currency
+            - default_locale
+          properties:
+            merchant_code:
+              description: Short unique identifier for the merchant.
+              type: string
+              example: MK01A8C2
+              readOnly: true
+            organization_id:
+              description: ID of the organization the merchant belongs to (if any).
+              type: string
+              example: G0UZPVAX
+            business_type:
+              description: |
+                The business type.
+                * `sole_trader`: The business is run by an self-employed individual.
+                * `company`: The business is run as a company with one or more shareholders
+                * `partnership`: The business is run as a company with two or more shareholders that can be also other legal entities
+                * `non_profit`: The business is run as a nonprofit organization that operates for public or social benefit
+                * `government_entity`: The business is state owned and operated
+              type: string
+            company:
+              $ref: '#/components/schemas/Company'
+            country:
+              $ref: '#/components/schemas/CountryCode'
+            business_profile:
+              $ref: '#/components/schemas/BusinessProfile'
+            avatar:
+              description: |
+                A user-facing small-format logo for use in dashboards and other user-facing applications. For customer-facing branding see `merchant.business_profile.branding`.
+              type: string
+              format: url
+            alias:
+              description: |
+                A user-facing name of the merchant account for use in dashboards and other user-facing applications. For customer-facing business name see `merchant.business_profile`.
+              type: string
+            default_currency:
+              description: |
+                Three-letter [ISO currency code](https://en.wikipedia.org/wiki/ISO_4217) representing the default currency for the account.
+              type: string
+              example: EUR
+              maxLength: 3
+              minLength: 3
+              readOnly: true
+            default_locale:
+              description: |-
+                Merchant's default locale, represented as a BCP47 [RFC5646](https://datatracker.ietf.org/doc/html/rfc5646) language tag. This is typically an ISO 639-1 Alpha-2 [ISO639‑1](https://www.iso.org/iso-639-language-code) language code in lowercase and an ISO 3166-1 Alpha-2 [ISO3166‑1](https://www.iso.org/iso-3166-country-codes.html) country code in uppercase, separated by a dash. For example, en-US or fr-CA.
+                In multilingual countries this is the merchant's preferred locale out of those, that are officially spoken in the country. In a countries with a single official language this will match the official language.
+              type: string
+              example: de-DE
+              maxLength: 5
+              minLength: 2
+            sandbox:
+              description: True if the merchant is a sandbox for testing.
+              type: boolean
+              example: false
+            meta:
+              $ref: '#/components/schemas/Meta'
+            classic:
+              $ref: '#/components/schemas/ClassicMerchantIdentifiers'
+            version:
+              $ref: '#/components/schemas/Version'
+            change_status:
+              $ref: '#/components/schemas/ChangeStatus'
+        - $ref: '#/components/schemas/Timestamps'
+      externalDocs:
+        description: Merchant documentation
+        url: 'https://developer.sumup.com/tools/models/merchant'
+    Company:
+      description: |
+        Information about the company or business. This is legal information that is used for verification.
+      type: object
+      properties:
+        name:
+          description: The company's legal name.
+          type: string
+          example: Gin & Doughnuts Bar GmbH
+          maxLength: 512
+        merchant_category_code:
+          description: |
+            The merchant category code for the account as specified by [ISO18245](https://www.iso.org/standard/33365.html). MCCs are used to classify businesses based on the goods or services they provide.
+          type: string
+          example: '1532'
+          pattern: '^[0-9]{4}$'
+        legal_type:
+          $ref: '#/components/schemas/LegalType'
+        address:
+          $ref: '#/components/schemas/Address'
+        trading_address:
+          $ref: '#/components/schemas/Address'
+        identifiers:
+          $ref: '#/components/schemas/CompanyIdentifiers'
+        phone_number:
+          $ref: '#/components/schemas/PhoneNumber'
+        website:
+          description: |
+            HTTP(S) URL of the company's website.
+          type: string
+          examples:
+            - 'https://www.sumup.com'
+          maxLength: 255
+          nullable: true
+          x-go-type: 'nullable.Nullable[string]'
+          x-go-type-skip-optional-pointer: true
+        attributes:
+          $ref: '#/components/schemas/Attributes'
+      externalDocs:
+        description: Company documentation
+        url: 'https://developer.sumup.com/tools/models/merchant#company'
+    Meta:
+      description: |
+        A set of key-value pairs that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
+        **Warning**: Updating Meta will overwrite the existing data. Make sure to always include the complete JSON object.
       type: object
       example: {}
       additionalProperties:
+        type: string
         maxLength: 256
-    Attributes:
-      description: Object attributes that modifiable only by SumUp applications.
+    BusinessProfile:
+      description: |
+        Business information about the merchant. This information will be visible to the merchant's customers.
       type: object
-      example: {}
-      additionalProperties:
-        maxLength: 256
+      properties:
+        name:
+          description: The customer-facing business name.
+          type: string
+          example: Gin & Dougnuts
+          maxLength: 512
+        dynamic_descriptor:
+          description: |
+            The descriptor is the text that your customer sees on their bank account statement.
+            The more recognisable your descriptor is, the less risk you have of receiving disputes (e.g. chargebacks).
+          type: string
+          maxLength: 30
+          pattern: '^[a-zA-Z0-9 \-+\''_.]{0,30}$'
+        website:
+          description: The business's publicly available website.
+          type: string
+          example: 'https://gindoughnuts.com'
+          maxLength: 512
+        email:
+          description: A publicly available email address.
+          type: string
+          example: contact@gindoughnuts.com
+          maxLength: 256
+        phone_number:
+          $ref: '#/components/schemas/PhoneNumber'
+        address:
+          $ref: '#/components/schemas/Address'
+        branding:
+          $ref: '#/components/schemas/Branding'
+    Person:
+      allOf:
+        - $ref: '#/components/schemas/BasePerson'
+    PhoneNumber:
+      description: |
+        A publicly available phone number in [E.164](https://en.wikipedia.org/wiki/E.164) format.
+      type: string
+      example: '+420123456789'
+      maxLength: 64
+    Branding:
+      description: 'Settings used to apply the Merchant''s branding to email receipts, invoices, checkouts, and other products.'
+      type: object
+      properties:
+        icon:
+          description: |
+            An icon for the merchant. Must be square.
+          type: string
+          format: uri
+        logo:
+          description: |
+            A logo for the merchant that will be used in place of the icon and without the merchant's name next to it if there's sufficient space.
+          type: string
+          format: uri
+        hero:
+          description: |
+            Data-URL encoded hero image for the merchant business.
+          type: string
+          format: uri
+        primary_color:
+          description: |
+            A hex color value representing the primary branding color of this merchant (your brand color).
+          type: string
+          examples:
+            - '#FF4B3A'
+            - '#0072C6'
+            - '#F68B20'
+        primary_color_fg:
+          description: |
+            A hex color value representing the color of the text displayed on branding color of this merchant.
+          type: string
+          examples:
+            - '#FF4B3A'
+            - '#0072C6'
+            - '#F68B20'
+        secondary_color:
+          description: |
+            A hex color value representing the secondary branding color of this merchant (accent color used for buttons).
+          type: string
+          examples:
+            - '#FF4B3A'
+            - '#0072C6'
+            - '#F68B20'
+        secondary_color_fg:
+          description: |
+            A hex color value representing the color of the text displayed on secondary branding color of this merchant.
+          type: string
+          examples:
+            - '#FF4B3A'
+            - '#0072C6'
+            - '#F68B20'
+        background_color:
+          description: |
+            A hex color value representing the preferred background color of this merchant.
+          type: string
+          examples:
+            - '#FF4B3A'
+            - '#0072C6'
+            - '#F68B20'
+    LegalType:
+      description: |
+        The unique legal type reference as defined in the country SDK. We do not rely on IDs as used by other services. Consumers of this API are expected to use the country SDK to map to any other IDs, translation keys, or descriptions.
+      type: string
+      examples:
+        - de.freiberufler
+        - br.ltda
+        - gb.partnership
+        - bg.private_limited_company
+      externalDocs:
+        description: The country SDK documentation for legal types.
+        url: 'https://developer.sumup.com/tools/models/merchant#legal-types'
+      maxLength: 64
+      minLength: 4
+    CompanyIdentifiers:
+      description: |
+        A list of country-specific company identifiers.
+      type: array
+      items:
+        $ref: '#/components/schemas/CompanyIdentifier'
+    CompanyIdentifier:
+      type: object
+      properties:
+        ref:
+          description: |
+            The unique reference for the company identifier type as defined in the country SDK.
+          type: string
+          examples:
+            - de.gmbh
+        value:
+          description: |
+            The company identifier value.
+          type: string
+          examples:
+            - HRB 123456
+          maxLength: 100
+      examples:
+        - ref: de.gmbh
+          value: HRB 123456
+      externalDocs:
+        description: Company identifier documentation
+        url: 'https://developer.sumup.com/tools/models/merchant#company-identifiers'
+      required:
+        - ref
+        - value
+    Ownership:
+      type: object
+      properties:
+        share:
+          description: |
+            The percent of ownership shares held by the person expressed in percent mille (1/100000). Only persons with the relationship `owner` can have ownership.
+          type: integer
+          format: int32
+          example: 50000
+          maximum: 100000
+          minimum: 25000
+      required:
+        - share
+    Version:
+      description: |
+        The version of the resource. The version reflects a specific change submitted to the API via one of the `PATCH` endpoints.
+      type: string
+      examples:
+        - chng_01HS0KG3MPVEVWW85E3KNXH55J
+    ChangeStatus:
+      description: |
+        Reflects the status of changes submitted through the `PATCH` endpoints for the merchant or persons. If some changes have not been applied yet, the status will be `pending`. If all changes have been applied, the status `done`.
+        The status is only returned after write operations or on read endpoints when the `version` query parameter is provided.
+      type: string
+      readOnly: true
+    BasePerson:
+      description: |
+        Base schema for a person associated with a merchant. This can be a legal representative, business owner (ultimate beneficial owner), or an officer. A legal representative is the person who registered the merchant with SumUp. They should always have a `user_id`.
+      type: object
+      properties:
+        id:
+          description: |
+            The unique identifier for the person. This is a [typeid](https://github.com/sumup/typeid).
+          type: string
+          examples:
+            - pers_2EGQ057R6C8J791RVCG5NWAEAB
+          readOnly: true
+          x-go-type: '*merchants.PersonID'
+          x-go-type-import:
+            path: github.com/sumup/merchants/internal/domain/merchants
+        user_id:
+          description: |
+            A corresponding identity user ID for the person, if they have a user account.
+          type: string
+          examples:
+            - ef263f37-8701-4181-9758-acddbb778ee9
+        birthdate:
+          description: |
+            The date of birth of the individual, represented as an ISO 8601:2004 [ISO8601‑2004] YYYY-MM-DD format.
+          type: string
+          format: date
+          example: '1980-01-12'
+        given_name:
+          description: The first name(s) of the individual.
+          type: string
+          example: James Herrald
+          maxLength: 60
+        family_name:
+          description: The last name(s) of the individual.
+          type: string
+          example: Bond
+          maxLength: 60
+        middle_name:
+          description: |
+            Middle name(s) of the End-User. Note that in some cultures, people can have multiple middle names; all can be present, with the names being separated by space characters. Also note that in some cultures, middle names are not used.
+          type: string
+          example: Maria Sophie
+          maxLength: 60
+        phone_number:
+          $ref: '#/components/schemas/PhoneNumber'
+        relationships:
+          description: |
+            A list of roles the person has in the merchant or towards SumUp. A merchant must have at least one person with the relationship `representative`.
+          type: array
+          items:
+            type: string
+            description: |
+              * `representative`: The person is the primary contact for SumUp and has full administrative power over the merchant account.
+              * `owner`: The person is a business owner. If this value is set, the `ownership_percent` should be set as well.
+              * `officer`: The person is an officer at the company.
+            examples:
+              - representative
+              - owner
+              - officer
+          maxItems: 1
+          minItems: 1
+        ownership:
+          $ref: '#/components/schemas/Ownership'
+        address:
+          $ref: '#/components/schemas/Address'
+        identifiers:
+          description: |
+            A list of country-specific personal identifiers.
+          type: array
+          items:
+            $ref: '#/components/schemas/PersonalIdentifier'
+          maxItems: 5
+        citizenship:
+          $ref: '#/components/schemas/CountryCode'
+        version:
+          $ref: '#/components/schemas/Version'
+        change_status:
+          $ref: '#/components/schemas/ChangeStatus'
+      externalDocs:
+        description: Person documentation
+        url: 'https://developer.sumup.com/tools/models/merchant#persons'
+      required:
+        - id
+    ClassicMerchantIdentifiers:
+      type: object
+      properties:
+        id:
+          description: Classic (serial) merchant ID.
+          type: integer
+          format: int64
+          example: 1234
+          deprecated: true
+      required:
+        - id
+    Timestamps:
+      type: object
+      properties:
+        created_at:
+          description: |
+            The date and time when the resource was created. This is a string as defined in [RFC 3339, section 5.6](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6).
+          type: string
+          format: date-time
+          examples:
+            - '2021-08-31T12:00:00Z'
+          readOnly: true
+        updated_at:
+          description: |
+            The date and time when the resource was last updated. This is a string as defined in [RFC 3339, section 5.6](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6).
+          type: string
+          format: date-time
+          examples:
+            - '2021-08-31T12:00:00Z'
+          readOnly: true
+      required:
+        - created_at
+        - updated_at
+    BaseError:
+      type: object
+      properties:
+        instance:
+          description: |
+            A unique identifier for the error instance. This can be used to trace the error back to the server logs.
+          type: string
+        message:
+          description: |
+            A human-readable message describing the error that occurred.
+          type: string
+    ErrorCategoryClient:
+      description: |
+        The category of the error.
+      type: string
+      enum:
+        - client_error
+    ErrorCodeNotFound:
+      description: |
+        An error code specifying the exact error that occurred.
+      type: string
+      enum:
+        - not_found
+    ErrorCategoryServer:
+      description: |
+        The category of the error.
+      type: string
+      enum:
+        - server_error
+    ErrorCodeInternalServerError:
+      description: |
+        An error code specifying the exact error that occurred.
+      type: string
+      enum:
+        - internal_error
     Reader:
       description: A physical card reader device that can accept in-person payments.
       type: object
@@ -6395,14 +6999,391 @@ components:
       example: 4WLFDSBF
       maxLength: 9
       minLength: 8
-    Meta:
-      description: Set of user-defined key-value pairs attached to the object.
+    CreateReaderCheckoutUnprocessableEntity:
+      description: Unprocessable entity
       type: object
-      example: {}
-      additionalProperties:
-        maxLength: 256
-      maxProperties: 50
-    AddressPayload:
+      properties:
+        errors:
+          type: object
+          additionalProperties: true
+          x-struct: null
+          x-validate: null
+      example:
+        DataValidation:
+          description: Validation errors for the informed fields.
+          value:
+            errors:
+              card_type:
+                - is invalid
+              installments:
+                - not allowed
+              return_url:
+                - must be a valid URL
+              tip_rates:
+                - must be between 0.01 and 0.99
+              total_amount:
+                - must be greater than 0
+        ReaderCheckoutPending:
+          description: Error returned when a checkout was requested in the last 60 seconds.
+          value:
+            errors:
+              detail: A pending transaction already exists for this device
+        ReaderOffline:
+          description: Error returned when the target device is not online.
+          value:
+            errors:
+              detail: The device is offline.
+              type: READER_OFFLINE
+      required:
+        - errors
+      title: CreateReaderCheckoutUnprocessableEntity
+      x-struct: Elixir.SoloEdgeWeb.OpenApi.ReadersController.CreateReaderCheckoutUnprocessableEntity
+      x-validate: null
+    CreateReaderCheckoutError:
+      description: Error description
+      type: object
+      properties:
+        errors:
+          type: object
+          properties:
+            detail:
+              description: Error message
+              type: string
+              x-struct: null
+              x-validate: null
+          required:
+            - type
+          x-struct: null
+          x-validate: null
+      required:
+        - errors
+      title: CreateReaderCheckoutError
+      x-struct: Elixir.SoloEdgeWeb.OpenApi.ReadersController.CreateReaderCheckoutError
+      x-validate: null
+    CreateReaderTerminateUnprocessableEntity:
+      description: Unprocessable entity
+      type: object
+      properties:
+        errors:
+          type: object
+          additionalProperties: true
+          x-struct: null
+          x-validate: null
+      example:
+        ReaderOffline:
+          description: Error returned when the target device is not online.
+          value:
+            errors:
+              detail: The device is offline.
+              type: READER_OFFLINE
+      required:
+        - errors
+      title: CreateReaderTerminateUnprocessableEntity
+      x-struct: Elixir.SoloEdgeWeb.OpenApi.ReadersController.CreateReaderTerminateUnprocessableEntity
+      x-validate: null
+    CreateReaderTerminateError:
+      description: Error description
+      type: object
+      properties:
+        errors:
+          type: object
+          properties:
+            detail:
+              description: Error message
+              type: string
+              x-struct: null
+              x-validate: null
+          required:
+            - type
+          x-struct: null
+          x-validate: null
+      required:
+        - errors
+      title: CreateReaderTerminateError
+      x-struct: Elixir.SoloEdgeWeb.OpenApi.ReadersController.CreateReaderTerminateError
+      x-validate: null
+    CreateReaderCheckoutResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            client_transaction_id:
+              description: |
+                The client transaction ID is a unique identifier for the transaction that is generated for the client.
+
+                It can be used later to fetch the transaction details via the [Transactions API](https://developer.sumup.com/api/transactions/get).
+              type: string
+              example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+              x-struct: null
+              x-validate: null
+          required:
+            - client_transaction_id
+          x-struct: null
+          x-validate: null
+      example:
+        data:
+          client_transaction_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+      required:
+        - data
+      title: CreateReaderCheckoutResponse
+      x-struct: Elixir.SoloEdgeWeb.OpenApi.ReadersController.CreateReaderCheckoutResponse
+      x-validate: null
+    CreateReaderCheckoutRequest:
+      description: Reader Checkout
+      type: object
+      properties:
+        affiliate:
+          description: |
+            Affiliate metadata for the transaction.
+            It is a field that allow for integrators to track the source of the transaction.
+          type: object
+          properties:
+            app_id:
+              description: |
+                Application ID of the affiliate.
+                It is a unique identifier for the application and should be set by the integrator in the [Affiliate Keys](https://developer.sumup.com/affiliate-keys) page.
+              type: string
+              example: com.example.app
+              x-struct: null
+              x-validate: null
+            foreign_transaction_id:
+              description: |
+                Foreign transaction ID of the affiliate.
+                It is a unique identifier for the transaction.
+                It can be used later to fetch the transaction details via the [Transactions API](https://developer.sumup.com/api/transactions/get).
+              type: string
+              example: 19e12390-72cf-4f9f-80b5-b0c8a67fa43f
+              x-struct: null
+              x-validate: null
+            key:
+              description: |
+                Key of the affiliate.
+                It is a unique identifier for the key  and should be generated by the integrator in the [Affiliate Keys](https://developer.sumup.com/affiliate-keys) page.
+              type: string
+              example: 123e4567-e89b-12d3-a456-426614174000
+              x-struct: null
+              x-validate: null
+            tags:
+              description: |
+                Additional metadata for the transaction.
+                It is key-value object that can be associated with the transaction.
+              type: object
+              example:
+                custom_key_1: custom_value_1
+                custom_key_2: custom_value_2
+              additionalProperties: true
+              x-struct: null
+              x-validate: null
+          required:
+            - app_id
+            - key
+            - foreign_transaction_id
+          title: Affiliate
+          x-struct: Elixir.SoloEdgeWeb.OpenApi.Common.Affiliate
+          x-validate: null
+        card_type:
+          description: |
+            The card type of the card used for the transaction.
+            Is is required only for some countries (e.g: Brazil).
+          type: string
+          example: credit
+          enum:
+            - credit
+            - debit
+          x-struct: null
+          x-validate: null
+        description:
+          description: Description of the checkout to be shown in the Merchant Sales
+          type: string
+          x-struct: null
+          x-validate: null
+        installments:
+          description: |
+            Number of installments for the transaction.
+            It may vary according to the merchant country.
+            For example, in Brazil, the maximum number of installments is 12.
+          type: integer
+          example: 1
+          x-struct: null
+          x-validate: null
+        return_url:
+          description: |
+            Webhook URL to which the payment result will be sent.
+            It must be a HTTPS url.
+          type: string
+          format: uri
+          example: 'https://www.example.com'
+          x-struct: null
+          x-validate: null
+        tip_rates:
+          description: |
+            List of tipping rates to be displayed to the cardholder.
+            The rates are in percentage and should be between 0.01 and 0.99.
+            The list should be sorted in ascending order.
+          type: array
+          items:
+            format: float
+            multipleOf: 0.01
+            type: number
+            x-struct: null
+            x-validate: null
+          x-struct: null
+          x-validate: null
+        tip_timeout:
+          description: |
+            Time in seconds the cardholder has to select a tip rate.
+            If not provided, the default value is 30 seconds.
+
+            It can only be set if `tip_rates` is provided.
+
+            **Note**: If the target device is a Solo, it must be in version 3.3.38.0 or higher.
+          type: integer
+          example: 30
+          default: 30
+          maximum: 120
+          minimum: 30
+          x-struct: null
+          x-validate: null
+        total_amount:
+          description: |
+            Amount structure.
+
+            The amount is represented as an integer value altogether with the currency and the minor unit.
+
+            For example, EUR 1.00 is represented as value 100 with minor unit of 2.
+          type: object
+          example:
+            currency: EUR
+            minor_unit: 2
+            value: 1000
+          properties:
+            currency:
+              description: Currency ISO 4217 code
+              type: string
+              example: EUR
+              x-struct: null
+              x-validate: null
+            minor_unit:
+              description: |
+                The minor units of the currency.
+                It represents the number of decimals of the currency. For the currencies CLP, COP and HUF, the minor unit is 0.
+              type: integer
+              example: 2
+              minimum: 0
+              x-struct: null
+              x-validate: null
+            value:
+              description: Integer value of the amount.
+              type: integer
+              example: 1000
+              minimum: 0
+              x-struct: null
+              x-validate: null
+          required:
+            - currency
+            - minor_unit
+            - value
+          title: Money
+          x-struct: Elixir.SoloEdgeWeb.OpenApi.Common.Money
+          x-validate: null
+      example:
+        affiliate:
+          app_id: com.example.app
+          foreign_transaction_id: '123456'
+          key: ef7b684a-d6f4-4e93-9b1b-6acdd6564a8e
+          tags: {}
+        card_type: debit
+        description: This is a description...
+        installments: 1
+        return_url: 'https://webhook.site/e21ddbb0-42c4-4358-a981-f5a95cd86fb5'
+        tip_rates:
+          - 0.05
+          - 0.1
+          - 0.15
+        tip_timeout: 60
+        total_amount:
+          currency: EUR
+          minor_unit: 2
+          value: 5033
+      required:
+        - total_amount
+      title: CreateReaderCheckoutRequest
+      x-struct: Elixir.SoloEdgeWeb.OpenApi.ReadersController.CreateReaderCheckoutRequest
+      x-validate: null
+    ReaderCheckoutStatusChange:
+      description: The callback payload containing the status change of the Reader Checkout.
+      type: object
+      properties:
+        event_type:
+          description: Type of event.
+          type: string
+          example: solo.transaction.updated
+          x-struct: null
+          x-validate: null
+        id:
+          description: Unique identifier for the event.
+          type: string
+          format: uuid
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+          x-struct: null
+          x-validate: null
+        payload:
+          description: The event payload.
+          type: object
+          properties:
+            client_transaction_id:
+              description: The unique client transaction id. It is the same returned by the Checkout.
+              type: string
+              format: uuid
+              example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+              x-struct: null
+              x-validate: null
+            merchant_code:
+              description: The merchant code associated with the transaction.
+              type: string
+              example: M1234567
+              x-struct: null
+              x-validate: null
+            status:
+              description: The current status of the transaction.
+              type: string
+              example: successful
+              enum:
+                - successful
+                - failed
+              x-struct: null
+              x-validate: null
+            transaction_id:
+              description: 'The transaction id. Deprecated: use `client_transaction_id` instead.'
+              type: string
+              format: uuid
+              example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+              deprecated: true
+              x-struct: null
+              x-validate: null
+          required:
+            - client_transaction_id
+            - merchant_code
+            - status
+          x-struct: null
+          x-validate: null
+        timestamp:
+          description: Timestamp of the event.
+          type: string
+          format: date-time
+          example: '2023-10-05T14:48:00Z'
+          x-struct: null
+          x-validate: null
+      required:
+        - id
+        - event_type
+        - payload
+        - timestamp
+      title: ReaderCheckoutStatusChange
+      x-struct: Elixir.SoloEdgeWeb.OpenApi.ReadersController.ReaderCheckoutStatusChange
+      x-validate: null
+    AddressPayloadLegacy:
       description: Personal address
       type: object
       properties:
@@ -6492,7 +7473,7 @@ components:
         - account_holder_name
         - iban
         - swift
-    DoingBusinessAsPayload:
+    DoingBusinessAsPayloadLegacy:
       description: Doing Business As information
       type: object
       properties:
@@ -6512,7 +7493,7 @@ components:
           description: Doing business as email
           type: string
         address:
-          $ref: '#/components/schemas/AddressPayload'
+          $ref: '#/components/schemas/AddressPayloadLegacy'
     MerchantProfilePayload:
       description: Account's merchant profile
       type: object
@@ -6545,7 +7526,7 @@ components:
           description: Mobile number
           type: string
         address:
-          $ref: '#/components/schemas/AddressPayload'
+          $ref: '#/components/schemas/AddressPayloadLegacy'
         doing_business_as:
           type: object
           properties:
@@ -6565,7 +7546,7 @@ components:
               description: Doing business as email
               type: string
             address:
-              $ref: '#/components/schemas/AddressPayload'
+              $ref: '#/components/schemas/AddressPayloadLegacy'
         business_owners:
           $ref: '#/components/schemas/BusinessOwners'
         is_test_account:
@@ -6632,7 +7613,7 @@ components:
         - active
         - type
         - card
-    PersonalProfilePayload:
+    PersonalProfilePayloadLegacy:
       description: Account's personal profile.
       type: object
       properties:
@@ -6653,7 +7634,7 @@ components:
           description: 'National identification id. Country specific. Ex CPF &#40;Brazil&#41;, DNI (Spain), PESEL (Poland)'
           type: string
         address:
-          $ref: '#/components/schemas/AddressPayload'
+          $ref: '#/components/schemas/AddressPayloadLegacy'
       required:
         - first_name
         - last_name
@@ -6807,11 +7788,11 @@ components:
             properties:
               personal_details:
                 $ref: '#/components/schemas/PersonalDetails'
-    DoingBusinessAs:
+    DoingBusinessAsLegacy:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/DoingBusinessAsPayload'
+            $ref: '#/components/schemas/DoingBusinessAsPayloadLegacy'
     MerchantProfile:
       content:
         application/json:
@@ -6831,7 +7812,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/PersonalProfilePayload'
+            $ref: '#/components/schemas/PersonalProfilePayloadLegacy'
     Refund:
       content:
         application/json:
@@ -7111,12 +8092,6 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Customer'
-    CustomerCreate:
-      description: Created
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Customer'
     PaymentInstrumentList:
       description: OK
       content:
@@ -7125,24 +8100,12 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/PaymentInstrumentResponse'
-    PaymentInstrument:
+    PersonalProfileLegacy:
       description: OK
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/PaymentInstrumentCard'
-    PaymentInstrumentCreate:
-      description: Created
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/PaymentInstrumentResponse'
-    PersonalProfile:
-      description: OK
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/PersonalProfile'
+            $ref: '#/components/schemas/PersonalProfileLegacy'
     Transaction:
       description: OK
       content:
@@ -7150,8 +8113,6 @@ components:
           schema:
             $ref: '#/components/schemas/TransactionFull'
     NoBodyResponse:
-      description: No Content
-    ErrorBadRequest:
       description: No Content
     ErrorNotAuthorized:
       description: Unauthorized
@@ -7264,6 +8225,34 @@ components:
                   $ref: '#/components/schemas/Role'
             required:
               - items
+    404NotFound:
+      description: |
+        No user with the specified ID exists.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/BaseError'
+              - type: object
+                properties:
+                  category:
+                    $ref: '#/components/schemas/ErrorCategoryClient'
+                  code:
+                    $ref: '#/components/schemas/ErrorCodeNotFound'
+    500InternalServerError:
+      description: |
+        An internal server error occurred.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/BaseError'
+              - type: object
+                properties:
+                  category:
+                    $ref: '#/components/schemas/ErrorCategoryServer'
+                  code:
+                    $ref: '#/components/schemas/ErrorCodeInternalServerError'
   securitySchemes:
     apiKey:
       description: |
@@ -7359,6 +8348,10 @@ tags:
     x-core-objects:
       - $ref: '#/components/schemas/Role'
     x-beta: true
+  - name: Merchants
+    description: Merchant account represents a single business entity at SumUp.
+    x-core-objects:
+      - $ref: '#/components/schemas/Merchant'
   - name: Readers
     description: A reader represents a device that accepts payments. You can use the SumUp Solo to accept in-person payments.
     x-core-objects:
