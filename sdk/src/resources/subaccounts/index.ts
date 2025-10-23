@@ -3,25 +3,14 @@
 import * as Core from "../../core";
 
 /**
- * User permissions
+ * Permissions assigned to an operator or user.
  */
 export type Permissions = {
-  /**
-   * Create MOTO payments
-   */
-  create_moto_payments?: boolean;
-  /**
-   * Can view full merchant transaction history
-   */
-  full_transaction_history_view?: boolean;
-  /**
-   * Refund transactions
-   */
-  refund_transactions?: boolean;
-  /**
-   * Create referral
-   */
-  create_referral?: boolean;
+  create_moto_payments: boolean;
+  create_referral: boolean;
+  full_transaction_history_view: boolean;
+  refund_transactions: boolean;
+  admin: boolean;
 };
 
 /**
@@ -83,7 +72,7 @@ export type UpdateSubAccountParams = {
 
 export class Subaccounts extends Core.APIResource {
   /**
-   * List operators
+   * Returns list of operators for currently authorized user's merchant.
    */
   listSubAccounts(
     query?: ListSubAccountsQueryParams,
@@ -97,7 +86,7 @@ export class Subaccounts extends Core.APIResource {
   }
 
   /**
-   * Create an operator
+   * Creates new operator for currently authorized users' merchant.
    */
   createSubAccount(
     body: CreateSubAccountParams,
@@ -111,7 +100,7 @@ export class Subaccounts extends Core.APIResource {
   }
 
   /**
-   * Retrieve an operator
+   * Returns specific operator.
    */
   compatGetOperator(
     operatorId: number,
@@ -124,7 +113,7 @@ export class Subaccounts extends Core.APIResource {
   }
 
   /**
-   * Update an operator
+   * Updates operator. If the operator was disabled and their password is updated they will be unblocked.
    */
   updateSubAccount(
     operatorId: number,
@@ -139,7 +128,7 @@ export class Subaccounts extends Core.APIResource {
   }
 
   /**
-   * Disable an operator.
+   * Disable the specified operator for the merchant account.
    */
   deactivateSubAccount(
     operatorId: number,

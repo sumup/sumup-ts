@@ -521,11 +521,11 @@ export type ListTransactionsResponse = {
 
 export class Transactions extends Core.APIResource {
   /**
-   * Refund a transaction
+   * Refunds an identified transaction either in full or partially.
    */
   refund(
     txnId: string,
-    body: RefundTransactionParams,
+    body?: RefundTransactionParams,
     params?: Core.FetchParams,
   ): Core.APIPromise<void> {
     return this._client.post<void>({
@@ -536,7 +536,14 @@ export class Transactions extends Core.APIResource {
   }
 
   /**
-   * Retrieve a transaction
+   * Retrieves the full details of an identified transaction. The transaction resource is identified by a query parameter and *one* of following parameters is required:
+   *
+   *  *  `id`
+   *  *  `internal_id`
+   *  *  `transaction_code`
+   *  *  `foreign_transaction_id`
+   *  *  `client_transaction_id`
+   *
    */
   get(
     merchantCode: string,
@@ -551,7 +558,14 @@ export class Transactions extends Core.APIResource {
   }
 
   /**
-   * Retrieve a transaction
+   * Retrieves the full details of an identified transaction. The transaction resource is identified by a query parameter and *one* of following parameters is required:
+   *
+   *  *  `id`
+   *  *  `internal_id`
+   *  *  `transaction_code`
+   *  *  `foreign_transaction_id`
+   *  *  `client_transaction_id`
+   *
    */
   getDeprecated(
     query?: GetTransactionQueryParams,
@@ -565,7 +579,7 @@ export class Transactions extends Core.APIResource {
   }
 
   /**
-   * List transactions
+   * Lists detailed history of all transactions associated with the merchant profile.
    */
   list(
     merchantCode: string,
@@ -580,7 +594,7 @@ export class Transactions extends Core.APIResource {
   }
 
   /**
-   * List transactions
+   * Lists detailed history of all transactions associated with the merchant profile.
    */
   listDeprecated(
     query?: ListTransactionsQueryParams,

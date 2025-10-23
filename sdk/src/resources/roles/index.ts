@@ -79,7 +79,7 @@ export type UpdateMerchantRoleParams = {
 
 export class Roles extends Core.APIResource {
   /**
-   * List roles
+   * List merchant's custom roles.
    */
   list(
     merchantCode: string,
@@ -92,7 +92,7 @@ export class Roles extends Core.APIResource {
   }
 
   /**
-   * Create a role
+   * Create a custom role for the merchant. Roles are defined by the set of permissions that they grant to the members that they are assigned to.
    */
   create(
     merchantCode: string,
@@ -107,7 +107,7 @@ export class Roles extends Core.APIResource {
   }
 
   /**
-   * Retrieve a role
+   * Retrieve a custom role by ID.
    */
   get(
     merchantCode: string,
@@ -121,7 +121,7 @@ export class Roles extends Core.APIResource {
   }
 
   /**
-   * Delete a role
+   * Delete a custom role.
    */
   delete(
     merchantCode: string,
@@ -135,7 +135,7 @@ export class Roles extends Core.APIResource {
   }
 
   /**
-   * Update a role
+   * Update a custom role.
    */
   update(
     merchantCode: string,

@@ -10,6 +10,7 @@ import { Customers } from "./resources/customers";
 import { Members } from "./resources/members";
 import { Memberships } from "./resources/memberships";
 import { Merchant } from "./resources/merchant";
+import { Merchants } from "./resources/merchants";
 import { Payouts } from "./resources/payouts";
 import { Readers } from "./resources/readers";
 import { Receipts } from "./resources/receipts";
@@ -23,6 +24,7 @@ export class SumUp extends HTTPClient {
   members: Members = new Members(this);
   memberships: Memberships = new Memberships(this);
   merchant: Merchant = new Merchant(this);
+  merchants: Merchants = new Merchants(this);
   payouts: Payouts = new Payouts(this);
   readers: Readers = new Readers(this);
   receipts: Receipts = new Receipts(this);
@@ -38,6 +40,7 @@ SumUp.Customers = Customers;
 SumUp.Members = Members;
 SumUp.Memberships = Memberships;
 SumUp.Merchant = Merchant;
+SumUp.Merchants = Merchants;
 SumUp.Payouts = Payouts;
 SumUp.Readers = Readers;
 SumUp.Receipts = Receipts;
@@ -54,6 +57,7 @@ export declare namespace SumUp {
     Members,
     Memberships,
     Merchant,
+    Merchants,
     Payouts,
     Readers,
     Receipts,

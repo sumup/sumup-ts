@@ -5,7 +5,7 @@ import * as Core from "../../core";
 /**
  * Profile's personal address information.
  */
-export type Address = {
+export type AddressLegacy = {
   /**
    * City name from the address.
    */
@@ -78,7 +78,7 @@ export type PersonalDetails = {
    * An identification number user for tax purposes (e.g. CPF)
    */
   tax_id?: string;
-  address?: Address;
+  address?: AddressLegacy;
 };
 
 /**
@@ -166,9 +166,12 @@ export type ListPaymentInstrumentsResponse = PaymentInstrumentResponse[];
 
 export class Customers extends Core.APIResource {
   /**
-   * Create a customer
+   * Creates a new saved customer resource which you can later manipulate and save payment instruments to.
    */
-  create(body: Customer, params?: Core.FetchParams): Core.APIPromise<Customer> {
+  create(
+    body?: Customer,
+    params?: Core.FetchParams,
+  ): Core.APIPromise<Customer> {
     return this._client.post<Customer>({
       path: `/v0.1/customers`,
       body,
@@ -177,7 +180,7 @@ export class Customers extends Core.APIResource {
   }
 
   /**
-   * Retrieve a customer
+   * Retrieves an identified saved customer resource through the unique `customer_id` parameter, generated upon customer creation.
    */
   get(
     customerId: string,
@@ -190,11 +193,14 @@ export class Customers extends Core.APIResource {
   }
 
   /**
-   * Update a customer
+   * Updates an identified saved customer resource's personal details.
+   *
+   * The request only overwrites the parameters included in the request, all other parameters will remain with their initially assigned values.
+   *
    */
   update(
     customerId: string,
-    body: UpdateCustomerParams,
+    body?: UpdateCustomerParams,
     params?: Core.FetchParams,
   ): Core.APIPromise<Customer> {
     return this._client.put<Customer>({
@@ -205,7 +211,7 @@ export class Customers extends Core.APIResource {
   }
 
   /**
-   * List payment instruments
+   * Lists all payment instrument resources that are saved for an identified customer.
    */
   listPaymentInstruments(
     customerId: string,
@@ -218,7 +224,7 @@ export class Customers extends Core.APIResource {
   }
 
   /**
-   * Deactivate a payment instrument
+   * Deactivates an identified card payment instrument resource for a customer.
    */
   deactivatePaymentInstrument(
     customerId: string,
@@ -234,7 +240,7 @@ export class Customers extends Core.APIResource {
 
 export declare namespace Customers {
   export type {
-    Address,
+    AddressLegacy,
     Customer,
     ErrorForbidden,
     MandateResponse,

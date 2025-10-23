@@ -3,6 +3,16 @@
 import * as Core from "../../core";
 
 /**
+ * Set of user-defined key-value pairs attached to the object. Partial updates are not supported. When updating, always submit whole metadata.
+ */
+export type Metadata = Record<string, Record<string, unknown>>;
+
+/**
+ * Object attributes that are modifiable only by SumUp applications.
+ */
+export type Attributes = Record<string, Record<string, unknown>>;
+
+/**
  * The status of the membership.
  */
 export type MembershipStatus =
@@ -24,16 +34,6 @@ export type Invite = {
   email: string;
   expires_at: string;
 };
-
-/**
- * Set of user-defined key-value pairs attached to the object. Partial updates are not supported. When updating, always submit whole metadata.
- */
-export type Metadata = Record<string, Record<string, unknown>>;
-
-/**
- * Object attributes that modifiable only by SumUp applications.
- */
-export type Attributes = Record<string, Record<string, unknown>>;
 
 /**
  * Classic identifiers of the user.
@@ -97,6 +97,8 @@ export type Member = {
   roles: string[];
   /**
    * User's permissions.
+   *
+   * @deprecated: Permissions include only legacy permissions, please use roles instead. Member access is based on roles within a given resource and the permissions these roles grant.
    */
   permissions: string[];
   /**
@@ -133,10 +135,6 @@ export type CreateMerchantMemberParams = {
    * True if the user is managed by the merchant. In this case, we'll created a virtual user with the provided password and nickname.
    */
   is_managed_user?: boolean;
-  /**
-   * True if the user is a service account. It can later be used to create OAuth2 clients.
-   */
-  is_service_account?: boolean;
   /**
    * Email address of the member to add.
    */
@@ -178,7 +176,7 @@ export type UpdateMerchantMemberParams = {
 
 export class Members extends Core.APIResource {
   /**
-   * List members
+   * Lists merchant members.
    */
   list(
     merchantCode: string,
@@ -193,7 +191,7 @@ export class Members extends Core.APIResource {
   }
 
   /**
-   * Create a member
+   * Create a merchant member.
    */
   create(
     merchantCode: string,
@@ -208,7 +206,7 @@ export class Members extends Core.APIResource {
   }
 
   /**
-   * Retrieve a member
+   * Retrieve a merchant member.
    */
   get(
     merchantCode: string,
@@ -222,7 +220,7 @@ export class Members extends Core.APIResource {
   }
 
   /**
-   * Update a member
+   * Update the merchant member.
    */
   update(
     merchantCode: string,
@@ -238,7 +236,7 @@ export class Members extends Core.APIResource {
   }
 
   /**
-   * Delete a member
+   * Deletes a merchant member.
    */
   delete(
     merchantCode: string,
