@@ -13,8 +13,8 @@ async function main() {
     return;
   }
 
-  const readers = await client.readers.list(merchantCode);
-  if (!readers.items.length) {
+  const { items: readers } = await client.readers.list(merchantCode);
+  if (!readers.length) {
     console.warn("No readers found, please pair a card reader first.");
     return;
   }
