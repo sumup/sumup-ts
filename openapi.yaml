@@ -3855,7 +3855,7 @@ paths:
       operationId: CreateReaderCheckout
       summary: Create a Reader Checkout
       description: |
-        Create a Checkout for a Reader.
+        Creates a Checkout for a Reader.
 
         This process is asynchronous and the actual transaction may take some time to be stared on the device.
 
@@ -3956,6 +3956,8 @@ paths:
             - readers.write
       tags:
         - Readers
+      x-codegen:
+        method_name: create_checkout
       x-permissions:
         - readers_checkout_create
       x-scopes:
@@ -3963,11 +3965,9 @@ paths:
   '/v0.1/merchants/{merchant_code}/readers/{reader_id}/terminate':
     post:
       operationId: CreateReaderTerminate
-      summary: Create a Reader Terminate action
+      summary: Terminate a Reader Checkout
       description: |
-        Create a Terminate action for a Reader.
-
-        It stops the current transaction on the target device.
+        Terminate a Reader Checkout stops the current transaction on the target device.
 
         This process is asynchronous and the actual termination may take some time to be performed on the device.
 
@@ -4052,6 +4052,8 @@ paths:
             - readers.write
       tags:
         - Readers
+      x-codegen:
+        method_name: terminate_checkout
       x-permissions:
         - readers_checkout_create
       x-scopes:
