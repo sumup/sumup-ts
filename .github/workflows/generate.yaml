@@ -29,10 +29,16 @@ jobs:
       - uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6.0.0
         with:
           node-version-file: ./sdk/package.json
-          cache: npm
-          cache-dependency-path: ./sdk/package-lock.json
 
-      - name: Install dependencies
+      - name: Install codegen dependencies
+        run: npm ci
+        working-directory: ./codegen
+
+      - name: Build codegen tool
+        run: npm run build
+        working-directory: ./codegen
+
+      - name: Install SDK dependencies
         run: npm ci
 
       - name: Generate latest SDK
