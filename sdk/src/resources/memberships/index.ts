@@ -3,6 +3,16 @@
 import * as Core from "../../core";
 
 /**
+ * Set of user-defined key-value pairs attached to the object. Partial updates are not supported. When updating, always submit whole metadata.
+ */
+export type Metadata = Record<string, Record<string, unknown>>;
+
+/**
+ * Object attributes that are modifiable only by SumUp applications.
+ */
+export type Attributes = Record<string, Record<string, unknown>>;
+
+/**
  * The status of the membership.
  */
 export type MembershipStatus =
@@ -11,6 +21,14 @@ export type MembershipStatus =
   | "expired"
   | "disabled"
   | "unknown";
+
+/**
+ * The kind of the membership resource.
+ * Possible values are:
+ * * `merchant` - merchant account(s)
+ * * `organization` - organization(s)
+ */
+export type ResourceType = string;
 
 /**
  * Invite
@@ -26,16 +44,6 @@ export type Invite = {
 };
 
 /**
- * Set of user-defined key-value pairs attached to the object. Partial updates are not supported. When updating, always submit whole metadata.
- */
-export type Metadata = Record<string, Record<string, unknown>>;
-
-/**
- * Object attributes that modifiable only by SumUp applications.
- */
-export type Attributes = Record<string, Record<string, unknown>>;
-
-/**
  * Resource
  *
  * Information about the resource the membership is in.
@@ -45,7 +53,7 @@ export type MembershipResource = {
    * ID of the resource the membership is in.
    */
   id: string;
-  type: "merchant";
+  type: ResourceType;
   /**
    * Display name of the resource.
    */
@@ -62,7 +70,7 @@ export type MembershipResource = {
    * The timestamp of when the membership resource was last updated.
    */
   updated_at: string;
-  attributes: Attributes;
+  attributes?: Attributes;
 };
 
 /**
@@ -79,16 +87,15 @@ export type Membership = {
    * ID of the resource the membership is in.
    */
   resource_id: string;
-  /**
-   * Type of the resource the membership is in.
-   */
-  type: "merchant";
+  type: ResourceType;
   /**
    * User's roles.
    */
   roles: string[];
   /**
    * User's permissions.
+   *
+   * @deprecated: Permissions include only legacy permissions, please use roles instead. Member access is based on their roles within a given resource and the permissions these roles grant.
    */
   permissions: string[];
   /**
@@ -109,12 +116,7 @@ export type Membership = {
 export type ListMembershipsQueryParams = {
   offset?: number;
   limit?: number;
-  /**
-   * The kind of the membership resource.
-   * Possible values are:
-   * * `merchant` - merchant account(s)
-   */
-  kind?: "merchant";
+  kind?: ResourceType;
   "resource.attributes.sandbox"?: boolean;
   "resource.name"?: string;
 };
@@ -126,7 +128,7 @@ export type ListMembershipsResponse = {
 
 export class Memberships extends Core.APIResource {
   /**
-   * List memberships
+   * List memberships of the current user.
    */
   list(
     query?: ListMembershipsQueryParams,
@@ -149,5 +151,6 @@ export declare namespace Memberships {
     MembershipResource,
     MembershipStatus,
     Metadata,
+    ResourceType,
   };
 }

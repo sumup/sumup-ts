@@ -5,7 +5,7 @@ import * as Core from "../../core";
 /**
  * Profile's personal address information.
  */
-export type Address = {
+export type AddressLegacy = {
   /**
    * City name from the address.
    */
@@ -355,7 +355,7 @@ export type PersonalDetails = {
    * An identification number user for tax purposes (e.g. CPF)
    */
   tax_id?: string;
-  address?: Address;
+  address?: AddressLegacy;
 };
 
 /**
@@ -564,7 +564,7 @@ export type DeactivateCheckoutResponse = {
 
 export class Checkouts extends Core.APIResource {
   /**
-   * Get available payment methods
+   * Get payment methods available for the given merchant to use with a checkout.
    */
   listAvailablePaymentMethods(
     merchantCode: string,
@@ -579,7 +579,7 @@ export class Checkouts extends Core.APIResource {
   }
 
   /**
-   * List checkouts
+   * Lists created checkout resources according to the applied `checkout_reference`.
    */
   list(
     query?: ListCheckoutsQueryParams,
@@ -593,10 +593,15 @@ export class Checkouts extends Core.APIResource {
   }
 
   /**
-   * Create a checkout
+   * Creates a new payment checkout resource. The unique `checkout_reference` created by this request, is used for further manipulation of the checkout.
+   *
+   * For 3DS checkouts, add the `redirect_url` parameter to your request body schema.
+   *
+   * Follow by processing a checkout to charge the provided payment instrument.
+   *
    */
   create(
-    body: CheckoutCreateRequest,
+    body?: CheckoutCreateRequest,
     params?: Core.FetchParams,
   ): Core.APIPromise<Checkout> {
     return this._client.post<Checkout>({
@@ -607,7 +612,7 @@ export class Checkouts extends Core.APIResource {
   }
 
   /**
-   * Retrieve a checkout
+   * Retrieves an identified checkout resource. Use this request after processing a checkout to confirm its status and inform the end user respectively.
    */
   get(id: string, params?: Core.FetchParams): Core.APIPromise<CheckoutSuccess> {
     return this._client.get<CheckoutSuccess>({
@@ -617,11 +622,14 @@ export class Checkouts extends Core.APIResource {
   }
 
   /**
-   * Process a checkout
+   * Processing a checkout will attempt to charge the provided payment instrument for the amount of the specified checkout resource initiated in the `Create a checkout` endpoint.
+   *
+   * Follow this request with `Retrieve a checkout` to confirm its status.
+   *
    */
   process(
     id: string,
-    body: CheckoutProcessMixin,
+    body?: CheckoutProcessMixin,
     params?: Core.FetchParams,
   ): Core.APIPromise<CheckoutSuccess | CheckoutAccepted> {
     return this._client.put<CheckoutSuccess | CheckoutAccepted>({
@@ -632,7 +640,7 @@ export class Checkouts extends Core.APIResource {
   }
 
   /**
-   * Deactivate a checkout
+   * Deactivates an identified checkout resource. If the checkout has already been processed it can not be deactivated.
    */
   deactivate(
     id: string,
@@ -647,7 +655,7 @@ export class Checkouts extends Core.APIResource {
 
 export declare namespace Checkouts {
   export type {
-    Address,
+    AddressLegacy,
     Card,
     Checkout,
     CheckoutAccepted,

@@ -40,7 +40,7 @@ export type ListPayoutsQueryParams = {
 
 export class Payouts extends Core.APIResource {
   /**
-   * List payouts
+   * Lists ordered payouts for the merchant profile.
    */
   list(
     merchantCode: string,
@@ -55,7 +55,7 @@ export class Payouts extends Core.APIResource {
   }
 
   /**
-   * List payouts
+   * Lists ordered payouts for the merchant profile.
    */
   listDeprecated(
     query: ListPayoutsQueryParams,

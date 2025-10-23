@@ -5,7 +5,7 @@ import * as Core from "../../core";
 /**
  * Profile information.
  */
-export type Account = {
+export type AccountLegacy = {
   /**
    * Username of the user profile.
    */
@@ -267,7 +267,7 @@ export type BusinessOwners = {
 /**
  * Doing Business As information
  */
-export type DoingBusinessAs = {
+export type DoingBusinessAsLegacy = {
   /**
    * Doing business as name
    */
@@ -341,7 +341,7 @@ export type ErrorForbidden = {
 /**
  * Id of the legal type of the merchant profile
  */
-export type LegalType = {
+export type LegalTypeLegacy = {
   /**
    * Unique id
    */
@@ -363,7 +363,7 @@ export type LegalType = {
 /**
  * Account's personal profile.
  */
-export type PersonalProfile = {
+export type PersonalProfileLegacy = {
   /**
    * First name of the user
    */
@@ -467,7 +467,7 @@ export type VatRates = {
 /**
  * Account's merchant profile
  */
-export type MerchantProfile = {
+export type MerchantProfileLegacy = {
   /**
    * Unique identifying code of the merchant profile
    */
@@ -480,7 +480,7 @@ export type MerchantProfile = {
    * Website
    */
   website?: string;
-  legal_type?: LegalType;
+  legal_type?: LegalTypeLegacy;
   /**
    * Merchant category code
    */
@@ -507,7 +507,7 @@ export type MerchantProfile = {
   nature_and_purpose?: string;
   address?: AddressWithDetails;
   business_owners?: BusinessOwners;
-  doing_business_as?: DoingBusinessAs;
+  doing_business_as?: DoingBusinessAsLegacy;
   settings?: MerchantSettings;
   vat_rates?: VatRates;
   /**
@@ -532,7 +532,7 @@ export type MerchantProfile = {
 /**
  * User permissions
  */
-export type Permissions = {
+export type PermissionsLegacy = {
   /**
    * Create MOTO payments
    */
@@ -557,11 +557,11 @@ export type Permissions = {
  * Details of the merchant account.
  */
 export type MerchantAccount = {
-  account?: Account;
-  personal_profile?: PersonalProfile;
-  merchant_profile?: MerchantProfile;
+  account?: AccountLegacy;
+  personal_profile?: PersonalProfileLegacy;
+  merchant_profile?: MerchantProfileLegacy;
   app_settings?: AppSettings;
-  permissions?: Permissions;
+  permissions?: PermissionsLegacy;
 };
 
 export type GetAccountQueryParams = {
@@ -588,7 +588,7 @@ export type ListBankAccountsResponse = BankAccount[];
 
 export class Merchant extends Core.APIResource {
   /**
-   * Retrieve a profile
+   * Returns user profile information.
    */
   get(
     query?: GetAccountQueryParams,
@@ -602,43 +602,43 @@ export class Merchant extends Core.APIResource {
   }
 
   /**
-   * Retrieve a personal profile
+   * Retrieves personal profile data.
    */
   getPersonalProfile(
     params?: Core.FetchParams,
-  ): Core.APIPromise<PersonalProfile> {
-    return this._client.get<PersonalProfile>({
+  ): Core.APIPromise<PersonalProfileLegacy> {
+    return this._client.get<PersonalProfileLegacy>({
       path: `/v0.1/me/personal-profile`,
       ...params,
     });
   }
 
   /**
-   * Retrieve a merchant profile
+   * Retrieves merchant profile data.
    */
   getMerchantProfile(
     params?: Core.FetchParams,
-  ): Core.APIPromise<MerchantProfile> {
-    return this._client.get<MerchantProfile>({
+  ): Core.APIPromise<MerchantProfileLegacy> {
+    return this._client.get<MerchantProfileLegacy>({
       path: `/v0.1/me/merchant-profile`,
       ...params,
     });
   }
 
   /**
-   * Retrieve DBA
+   * Retrieves Doing Business As profile.
    */
   getDoingBusinessAs(
     params?: Core.FetchParams,
-  ): Core.APIPromise<DoingBusinessAs> {
-    return this._client.get<DoingBusinessAs>({
+  ): Core.APIPromise<DoingBusinessAsLegacy> {
+    return this._client.get<DoingBusinessAsLegacy>({
       path: `/v0.1/me/merchant-profile/doing-business-as`,
       ...params,
     });
   }
 
   /**
-   * List bank accounts
+   * Retrieves bank accounts of the merchant.
    */
   listBankAccounts(
     merchantCode: string,
@@ -653,7 +653,7 @@ export class Merchant extends Core.APIResource {
   }
 
   /**
-   * List bank accounts
+   * Retrieves bank accounts of the merchant.
    */
   listBankAccountsDeprecated(
     query?: ListBankAccountsQueryParams,
@@ -667,7 +667,7 @@ export class Merchant extends Core.APIResource {
   }
 
   /**
-   * Get settings
+   * Retrieves merchant settings.
    */
   getSettings(params?: Core.FetchParams): Core.APIPromise<MerchantSettings> {
     return this._client.get<MerchantSettings>({
@@ -679,23 +679,23 @@ export class Merchant extends Core.APIResource {
 
 export declare namespace Merchant {
   export type {
-    Account,
+    AccountLegacy,
     AddressWithDetails,
     AppSettings,
     BankAccount,
     BusinessOwners,
     CountryDetails,
-    DoingBusinessAs,
+    DoingBusinessAsLegacy,
     ErrorForbidden,
     GetAccountQueryParams,
-    LegalType,
+    LegalTypeLegacy,
     ListBankAccountsQueryParams,
     ListBankAccountsV11QueryParams,
     MerchantAccount,
-    MerchantProfile,
+    MerchantProfileLegacy,
     MerchantSettings,
-    Permissions,
-    PersonalProfile,
+    PermissionsLegacy,
+    PersonalProfileLegacy,
     TimeoffsetDetails,
     VatRates,
   };

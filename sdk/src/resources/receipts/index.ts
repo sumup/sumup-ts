@@ -211,7 +211,7 @@ export type GetReceiptQueryParams = {
 
 export class Receipts extends Core.APIResource {
   /**
-   * Retrieve receipt details
+   * Retrieves receipt specific data for a transaction.
    */
   get(
     id: string,
