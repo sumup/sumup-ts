@@ -5859,7 +5859,7 @@
       "post": {
         "operationId": "CreateReaderCheckout",
         "summary": "Create a Reader Checkout",
-        "description": "Create a Checkout for a Reader.\n\nThis process is asynchronous and the actual transaction may take some time to be stared on the device.\n\n\nThere are some caveats when using this endpoint:\n* The target device must be online, otherwise checkout won't be accepted\n* After the checkout is accepted, the system has 60 seconds to start the payment on the target device. During this time, any other checkout for the same device will be rejected.\n\n\n**Note**: If the target device is a Solo, it must be in version 3.3.24.3 or higher.\n",
+        "description": "Creates a Checkout for a Reader.\n\nThis process is asynchronous and the actual transaction may take some time to be stared on the device.\n\n\nThere are some caveats when using this endpoint:\n* The target device must be online, otherwise checkout won't be accepted\n* After the checkout is accepted, the system has 60 seconds to start the payment on the target device. During this time, any other checkout for the same device will be rejected.\n\n\n**Note**: If the target device is a Solo, it must be in version 3.3.24.3 or higher.\n",
         "parameters": [
           {
             "name": "merchant_code",
@@ -6005,6 +6005,9 @@
         "tags": [
           "Readers"
         ],
+        "x-codegen": {
+          "method_name": "create_checkout"
+        },
         "x-permissions": [
           "readers_checkout_create"
         ],
@@ -6016,8 +6019,8 @@
     "/v0.1/merchants/{merchant_code}/readers/{reader_id}/terminate": {
       "post": {
         "operationId": "CreateReaderTerminate",
-        "summary": "Create a Reader Terminate action",
-        "description": "Create a Terminate action for a Reader.\n\nIt stops the current transaction on the target device.\n\nThis process is asynchronous and the actual termination may take some time to be performed on the device.\n\n\nThere are some caveats when using this endpoint:\n* The target device must be online, otherwise terminate won't be accepted\n* The action will succeed only if the device is waiting for cardholder action: e.g: waiting for card, waiting for PIN, etc.\n* There is no confirmation of the termination.\n\nIf a transaction is successfully terminated and `return_url` was provided on Checkout, the transaction status will be sent as `failed` to the provided URL.\n\n\n**Note**: If the target device is a Solo, it must be in version 3.3.28.0 or higher.\n",
+        "summary": "Terminate a Reader Checkout",
+        "description": "Terminate a Reader Checkout stops the current transaction on the target device.\n\nThis process is asynchronous and the actual termination may take some time to be performed on the device.\n\n\nThere are some caveats when using this endpoint:\n* The target device must be online, otherwise terminate won't be accepted\n* The action will succeed only if the device is waiting for cardholder action: e.g: waiting for card, waiting for PIN, etc.\n* There is no confirmation of the termination.\n\nIf a transaction is successfully terminated and `return_url` was provided on Checkout, the transaction status will be sent as `failed` to the provided URL.\n\n\n**Note**: If the target device is a Solo, it must be in version 3.3.28.0 or higher.\n",
         "parameters": [
           {
             "name": "merchant_code",
@@ -6132,6 +6135,9 @@
         "tags": [
           "Readers"
         ],
+        "x-codegen": {
+          "method_name": "terminate_checkout"
+        },
         "x-permissions": [
           "readers_checkout_create"
         ],
