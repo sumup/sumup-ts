@@ -25,7 +25,7 @@ export class HTTPClient {
     const headers = new Headers({
       "Accept": "application/json",
       "Content-Type": "application/json",
-      "User-Agent": `${this.constructor.name.toLowerCase()}-ts/${VERSION}`,
+      "User-Agent": `sumup-ts/v${VERSION}`,
     });
     if (apiKey) {
       headers.append("Authorization", `Bearer ${apiKey}`);
