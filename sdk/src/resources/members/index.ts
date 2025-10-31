@@ -121,6 +121,7 @@ export type ListMerchantMembersQueryParams = {
   limit?: number;
   scroll?: boolean;
   email?: string;
+  "user.id"?: string;
   status?: MembershipStatus;
   roles?: string[];
 };
