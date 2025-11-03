@@ -3905,7 +3905,7 @@
         "tags": [
           "Subaccounts"
         ],
-        "x-deprecation-notice": "Subaccounts API is deprecated, to create an user in your merchant account please use [Create member](https://developer.sumup.com/api/members/create) instead.",
+        "x-deprecation-notice": "Subaccounts API is deprecated, to create a user in your merchant account please use [Create member](https://developer.sumup.com/api/members/create) instead.",
         "x-permissions": [
           "members_update"
         ],
@@ -3953,7 +3953,7 @@
         "tags": [
           "Subaccounts"
         ],
-        "x-deprecation-notice": "Subaccounts API is deprecated, to get an user that's a member of your merchant account please use [Get member](https://developer.sumup.com/api/members/get) instead.",
+        "x-deprecation-notice": "Subaccounts API is deprecated, to get a user that's a member of your merchant account please use [Get member](https://developer.sumup.com/api/members/get) instead.",
         "x-permissions": [
           "members_view"
         ],
@@ -4055,7 +4055,7 @@
         "tags": [
           "Subaccounts"
         ],
-        "x-deprecation-notice": "Subaccounts API is deprecated, to update an user that's a member of your merchant account please use [Update member](https://developer.sumup.com/api/members/update) instead.",
+        "x-deprecation-notice": "Subaccounts API is deprecated, to update a user that's a member of your merchant account please use [Update member](https://developer.sumup.com/api/members/update) instead.",
         "x-permissions": [
           "members_update"
         ],
@@ -4101,7 +4101,7 @@
         "tags": [
           "Subaccounts"
         ],
-        "x-deprecation-notice": "Subaccounts API is deprecated, to remove an user that's a member of your merchant account please use [Delete member](https://developer.sumup.com/api/members/delete) instead.",
+        "x-deprecation-notice": "Subaccounts API is deprecated, to remove a user that's a member of your merchant account please use [Delete member](https://developer.sumup.com/api/members/delete) instead.",
         "x-permissions": [
           "members_delete"
         ],
@@ -4256,6 +4256,20 @@
             }
           },
           {
+            "name": "user.id",
+            "in": "query",
+            "description": "Search for a member by user id.",
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "245b2ead-85bf-45ff-856f-311a88a5d454",
+              "x-go-type": "uuid.UUID",
+              "x-go-type-import": {
+                "path": "github.com/gofrs/uuid/v5"
+              }
+            }
+          },
+          {
             "name": "status",
             "in": "query",
             "description": "Filter the returned members by the membership status.",
@@ -4388,7 +4402,7 @@
                     "example": "Test User"
                   },
                   "roles": {
-                    "description": "List of roles to assign to the new member. In the case of service accounts, the roles are predefined.",
+                    "description": "List of roles to assign to the new member.",
                     "type": "array",
                     "items": {
                       "type": "string"
@@ -4400,6 +4414,12 @@
                   "attributes": {
                     "$ref": "#/components/schemas/Attributes"
                   }
+                },
+                "example": {
+                  "email": "karl.berg@example.com",
+                  "roles": [
+                    "role_employee"
+                  ]
                 },
                 "required": [
                   "email",
@@ -4579,6 +4599,18 @@
                         "format": "password",
                         "minLength": 8
                       }
+                    }
+                  }
+                },
+                "example": {
+                  "Update member's role": {
+                    "roles": [
+                      "role_manager"
+                    ]
+                  },
+                  "Update managed user": {
+                    "user": {
+                      "nickname": "New Employee Name"
                     }
                   }
                 }
@@ -4792,11 +4824,9 @@
                       "type": "string"
                     },
                     "example": [
-                      "members_list",
-                      "members_read",
-                      "members_view",
-                      "members_write",
-                      "members_delete"
+                      "catalog_access",
+                      "taxes_access",
+                      "members_access"
                     ],
                     "maxItems": 100
                   },
@@ -5041,11 +5071,9 @@
                       "type": "string"
                     },
                     "example": [
-                      "members_list",
-                      "members_read",
-                      "members_view",
-                      "members_write",
-                      "members_delete"
+                      "catalog_access",
+                      "taxes_access",
+                      "members_access"
                     ],
                     "maxItems": 100
                   },
@@ -5054,6 +5082,14 @@
                     "type": "string",
                     "example": "Manges the shop and the employees."
                   }
+                },
+                "example": {
+                  "name": "Senior Shop Manager III",
+                  "permissions": [
+                    "catalog_edit",
+                    "taxes_access",
+                    "members_edit"
+                  ]
                 }
               }
             }
@@ -5121,7 +5157,7 @@
           {
             "name": "merchant_code",
             "in": "path",
-            "description": "Merchant code.",
+            "description": "Short unique identifier for the merchant.",
             "required": true,
             "schema": {
               "type": "string",
@@ -5185,6 +5221,9 @@
         "tags": [
           "Merchants"
         ],
+        "x-codegen": {
+          "method_name": "get"
+        },
         "x-permissions": [
           "merchant_read"
         ],
@@ -5215,7 +5254,7 @@
           {
             "name": "merchant_code",
             "in": "path",
-            "description": "Merchant code.",
+            "description": "Short unique identifier for the merchant.",
             "required": true,
             "schema": {
               "type": "string",
@@ -5304,6 +5343,9 @@
         "tags": [
           "Merchants"
         ],
+        "x-codegen": {
+          "method_name": "list_persons"
+        },
         "x-permissions": [
           "persons_read"
         ],
@@ -5334,7 +5376,7 @@
           {
             "name": "merchant_code",
             "in": "path",
-            "description": "Merchant code.",
+            "description": "Short unique identifier for the merchant.",
             "required": true,
             "schema": {
               "type": "string",
@@ -5437,6 +5479,9 @@
         "tags": [
           "Merchants"
         ],
+        "x-codegen": {
+          "method_name": "get_person"
+        },
         "x-permissions": [
           "persons_read"
         ],
@@ -5548,7 +5593,8 @@
                   }
                 },
                 "required": [
-                  "pairing_code"
+                  "pairing_code",
+                  "name"
                 ]
               }
             }
@@ -9255,14 +9301,9 @@
             "items": {
               "type": "string"
             },
-            "example": [
-              "members_list",
-              "members_read",
-              "members_view",
-              "members_write",
-              "members_delete"
-            ],
-            "maxItems": 100
+            "example": [],
+            "maxItems": 100,
+            "x-deprecation-notice": "Permissions include only legacy permissions, please use roles instead. Member access is based on their roles within a given resource and the permissions these roles grant."
           },
           "is_predefined": {
             "description": "True if the role is provided by SumUp.",
@@ -9394,7 +9435,8 @@
         "externalDocs": {
           "description": "Merchant documentation",
           "url": "https://developer.sumup.com/tools/models/merchant"
-        }
+        },
+        "title": "Merchant"
       },
       "Company": {
         "description": "Information about the company or business. This is legal information that is used for verification.\n",
@@ -9448,7 +9490,7 @@
         }
       },
       "Meta": {
-        "description": "A set of key-value pairs that you can attach to an object. This can be useful for storing additional information about the object in a structured format.\n**Warning**: Updating Meta will overwrite the existing data. Make sure to always include the complete JSON object.\n",
+        "description": "A set of key-value pairs that you can attach to an object. This can be useful for storing additional information about the object in a structured format.\n\n**Warning**: Updating Meta will overwrite the existing data. Make sure to always include the complete JSON object.",
         "type": "object",
         "example": {},
         "additionalProperties": {
