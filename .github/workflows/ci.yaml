@@ -2,12 +2,9 @@ name: CI
 
 on:
   push:
-    branches:
-      - main
-      - next
+    branches: [main]
   pull_request:
-    branches:
-      - main
+    branches: [main]
 
 defaults:
   run:

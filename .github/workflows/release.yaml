@@ -17,7 +17,7 @@ permissions:
 jobs:
   publish:
     name: Publish
-    if: github.event_name == 'release' && !github.event.prerelease
+    if: '!github.event.prerelease'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
