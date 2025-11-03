@@ -2605,7 +2605,7 @@ paths:
         - oauth2: []
       tags:
         - Subaccounts
-      x-deprecation-notice: 'Subaccounts API is deprecated, to create an user in your merchant account please use [Create member](https://developer.sumup.com/api/members/create) instead.'
+      x-deprecation-notice: 'Subaccounts API is deprecated, to create a user in your merchant account please use [Create member](https://developer.sumup.com/api/members/create) instead.'
       x-permissions:
         - members_update
       x-scopes: []
@@ -2635,7 +2635,7 @@ paths:
         - oauth2: []
       tags:
         - Subaccounts
-      x-deprecation-notice: 'Subaccounts API is deprecated, to get an user that''s a member of your merchant account please use [Get member](https://developer.sumup.com/api/members/get) instead.'
+      x-deprecation-notice: 'Subaccounts API is deprecated, to get a user that''s a member of your merchant account please use [Get member](https://developer.sumup.com/api/members/get) instead.'
       x-permissions:
         - members_view
       x-scopes: []
@@ -2701,7 +2701,7 @@ paths:
         - oauth2: []
       tags:
         - Subaccounts
-      x-deprecation-notice: 'Subaccounts API is deprecated, to update an user that''s a member of your merchant account please use [Update member](https://developer.sumup.com/api/members/update) instead.'
+      x-deprecation-notice: 'Subaccounts API is deprecated, to update a user that''s a member of your merchant account please use [Update member](https://developer.sumup.com/api/members/update) instead.'
       x-permissions:
         - members_update
       x-scopes: []
@@ -2730,7 +2730,7 @@ paths:
         - oauth2: []
       tags:
         - Subaccounts
-      x-deprecation-notice: 'Subaccounts API is deprecated, to remove an user that''s a member of your merchant account please use [Delete member](https://developer.sumup.com/api/members/delete) instead.'
+      x-deprecation-notice: 'Subaccounts API is deprecated, to remove a user that''s a member of your merchant account please use [Delete member](https://developer.sumup.com/api/members/delete) instead.'
       x-permissions:
         - members_delete
       x-scopes: []
@@ -2834,6 +2834,16 @@ paths:
           schema:
             type: string
             example: user
+        - name: user.id
+          in: query
+          description: Search for a member by user id.
+          schema:
+            type: string
+            format: uuid
+            example: 245b2ead-85bf-45ff-856f-311a88a5d454
+            x-go-type: uuid.UUID
+            x-go-type-import:
+              path: github.com/gofrs/uuid/v5
         - name: status
           in: query
           description: Filter the returned members by the membership status.
@@ -2925,7 +2935,7 @@ paths:
                   type: string
                   example: Test User
                 roles:
-                  description: 'List of roles to assign to the new member. In the case of service accounts, the roles are predefined.'
+                  description: List of roles to assign to the new member.
                   type: array
                   items:
                     type: string
@@ -2933,6 +2943,10 @@ paths:
                   $ref: '#/components/schemas/Metadata'
                 attributes:
                   $ref: '#/components/schemas/Attributes'
+              example:
+                email: karl.berg@example.com
+                roles:
+                  - role_employee
               required:
                 - email
                 - roles
@@ -3049,6 +3063,13 @@ paths:
                       type: string
                       format: password
                       minLength: 8
+              example:
+                Update member's role:
+                  roles:
+                    - role_manager
+                Update managed user:
+                  user:
+                    nickname: New Employee Name
       responses:
         '200':
           description: Returns the updated Member object if the update succeeded.
@@ -3182,11 +3203,9 @@ paths:
                   items:
                     type: string
                   example:
-                    - members_list
-                    - members_read
-                    - members_view
-                    - members_write
-                    - members_delete
+                    - catalog_access
+                    - taxes_access
+                    - members_access
                   maxItems: 100
                 metadata:
                   $ref: '#/components/schemas/Metadata'
@@ -3344,16 +3363,20 @@ paths:
                   items:
                     type: string
                   example:
-                    - members_list
-                    - members_read
-                    - members_view
-                    - members_write
-                    - members_delete
+                    - catalog_access
+                    - taxes_access
+                    - members_access
                   maxItems: 100
                 description:
                   description: User-defined description of the role.
                   type: string
                   example: Manges the shop and the employees.
+              example:
+                name: Senior Shop Manager III
+                permissions:
+                  - catalog_edit
+                  - taxes_access
+                  - members_edit
       responses:
         '200':
           description: Returns the updated Role object if the update succeeded.
@@ -3393,7 +3416,7 @@ paths:
               - latest
         - name: merchant_code
           in: path
-          description: Merchant code.
+          description: Short unique identifier for the merchant.
           required: true
           schema:
             type: string
@@ -3430,6 +3453,8 @@ paths:
             - merchant.read
       tags:
         - Merchants
+      x-codegen:
+        method_name: get
       x-permissions:
         - merchant_read
       x-scopes:
@@ -3452,7 +3477,7 @@ paths:
               - latest
         - name: merchant_code
           in: path
-          description: Merchant code.
+          description: Short unique identifier for the merchant.
           required: true
           schema:
             type: string
@@ -3503,6 +3528,8 @@ paths:
             - merchant.read
       tags:
         - Merchants
+      x-codegen:
+        method_name: list_persons
       x-permissions:
         - persons_read
       x-scopes:
@@ -3525,7 +3552,7 @@ paths:
               - latest
         - name: merchant_code
           in: path
-          description: Merchant code.
+          description: Short unique identifier for the merchant.
           required: true
           schema:
             type: string
@@ -3586,6 +3613,8 @@ paths:
             - merchant.read
       tags:
         - Merchants
+      x-codegen:
+        method_name: get_person
       x-permissions:
         - persons_read
       x-scopes:
@@ -3660,6 +3689,7 @@ paths:
                   $ref: '#/components/schemas/Meta'
               required:
                 - pairing_code
+                - name
       responses:
         '201':
           description: Returns the Reader object if the creation succeeded.
@@ -6425,13 +6455,9 @@ components:
           type: array
           items:
             type: string
-          example:
-            - members_list
-            - members_read
-            - members_view
-            - members_write
-            - members_delete
+          example: []
           maxItems: 100
+          x-deprecation-notice: 'Permissions include only legacy permissions, please use roles instead. Member access is based on their roles within a given resource and the permissions these roles grant.'
         is_predefined:
           description: True if the role is provided by SumUp.
           type: boolean
@@ -6539,6 +6565,7 @@ components:
       externalDocs:
         description: Merchant documentation
         url: 'https://developer.sumup.com/tools/models/merchant'
+      title: Merchant
     Company:
       description: |
         Information about the company or business. This is legal information that is used for verification.
@@ -6581,8 +6608,9 @@ components:
         description: Company documentation
         url: 'https://developer.sumup.com/tools/models/merchant#company'
     Meta:
-      description: |
+      description: |-
         A set of key-value pairs that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
+
         **Warning**: Updating Meta will overwrite the existing data. Make sure to always include the complete JSON object.
       type: object
       example: {}
