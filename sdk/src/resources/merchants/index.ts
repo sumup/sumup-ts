@@ -327,8 +327,8 @@ export type BusinessProfile = {
 
 /**
  * A set of key-value pairs that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
- * **Warning**: Updating Meta will overwrite the existing data. Make sure to always include the complete JSON object.
  *
+ * **Warning**: Updating Meta will overwrite the existing data. Make sure to always include the complete JSON object.
  */
 export type Meta = Record<string, string>;
 
@@ -354,6 +354,11 @@ export type Timestamps = {
   updated_at: string;
 };
 
+/**
+ * Merchant
+ *
+ * Merchant documentation: https://developer.sumup.com/tools/models/merchant
+ */
 export type Merchant = {
   /**
    * Short unique identifier for the merchant.
@@ -459,7 +464,7 @@ export class Merchants extends Core.APIResource {
   /**
    * Retrieve a merchant.
    */
-  getMerchant(
+  get(
     merchantCode: string,
     query?: GetMerchantQueryParams,
     params?: Core.FetchParams,
