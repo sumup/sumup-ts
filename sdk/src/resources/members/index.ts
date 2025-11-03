@@ -121,6 +121,7 @@ export type ListMerchantMembersQueryParams = {
   limit?: number;
   scroll?: boolean;
   email?: string;
+  "user.id"?: string;
   status?: MembershipStatus;
   roles?: string[];
 };
@@ -148,7 +149,7 @@ export type CreateMerchantMemberParams = {
    */
   nickname?: string;
   /**
-   * List of roles to assign to the new member. In the case of service accounts, the roles are predefined.
+   * List of roles to assign to the new member.
    */
   roles: string[];
   metadata?: Metadata;
