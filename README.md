@@ -1,6 +1,6 @@
 <div align="center">
 
-# sumup-ts
+# SumUp Node.js SDK
 
 [![NPM Version](https://img.shields.io/npm/v/%40sumup%2Fsdk.svg)](https://www.npmjs.org/package/@sumup/sdk)
 [![JSR Version](https://jsr.io/badges/@sumup/sdk)](https://jsr.io/@sumup/sdk)
