@@ -9783,6 +9783,22 @@
           "citizenship": {
             "$ref": "#/components/schemas/CountryCode"
           },
+          "nationality": {
+            "description": "The persons nationality. May be an [ISO3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) country code, but legacy data may not conform to this standard.\n",
+            "type": "string",
+            "nullable": true,
+            "x-go-type": "nullable.Nullable[string]",
+            "x-go-type-skip-optional-pointer": true
+          },
+          "country_of_residence": {
+            "description": "An [ISO3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) country code representing the country where the person resides.\n",
+            "type": "string",
+            "maxLength": 2,
+            "minLength": 2,
+            "nullable": true,
+            "x-go-type": "nullable.Nullable[string]",
+            "x-go-type-skip-optional-pointer": true
+          },
           "version": {
             "$ref": "#/components/schemas/Version"
           },
