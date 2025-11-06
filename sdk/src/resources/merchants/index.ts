@@ -187,6 +187,16 @@ export type BasePerson = {
    */
   identifiers?: PersonalIdentifier[];
   citizenship?: CountryCode;
+  /**
+   * The persons nationality. May be an [ISO3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) country code, but legacy data may not conform to this standard.
+   *
+   */
+  nationality?: string | null;
+  /**
+   * An [ISO3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) country code representing the country where the person resides.
+   *
+   */
+  country_of_residence?: string | null;
   version?: Version;
   change_status?: ChangeStatus;
 };
