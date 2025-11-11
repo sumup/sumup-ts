@@ -2234,210 +2234,6 @@ paths:
       x-scopes:
         - user.profile
         - user.profile_readonly
-  '/v1.1/merchants/{merchant_code}/bank-accounts':
-    get:
-      operationId: ListBankAccountsV11
-      summary: List bank accounts
-      description: Retrieves bank accounts of the merchant.
-      parameters:
-        - name: merchant_code
-          in: path
-          required: true
-          schema:
-            type: string
-            example: MC0X0ABC
-        - name: primary
-          in: query
-          description: If true only the primary bank account (the one used for payouts) will be returned.
-          required: false
-          schema:
-            type: boolean
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/BankAccount'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              examples:
-                Invalid_Token:
-                  description: The access token is invalid or has expired.
-                  value:
-                    error_message: invalid access token
-                    error_code: NOT_AUTHORIZED
-                Not_Authorized_Token:
-                  description: The access token is valid but the application is not authorized.
-                  value:
-                    error_message: NOT_AUTHORIZED
-                    error_code: NOT_AUTHORIZED
-                Missing_Token:
-                  description: No access token is provided.
-                  value:
-                    message: access token required
-                    error_code: NOT_AUTHORIZED
-        '403':
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorForbidden'
-              examples:
-                Forbidden:
-                  description: You do not have required scopes for making this request.
-                  value:
-                    error_message: request_not_allowed
-                    error_code: FORBIDDEN
-                    status_code: '403'
-      security:
-        - apiKey: []
-        - oauth2:
-            - user.payout-settings
-            - user.profile
-            - user.profile_readonly
-      tags:
-        - Merchant
-      x-codegen:
-        method_name: list_bank_accounts
-      x-scopes:
-        - user.payout-settings
-        - user.profile
-        - user.profile_readonly
-  /v0.1/me/merchant-profile/bank-accounts:
-    get:
-      operationId: ListBankAccounts
-      summary: List bank accounts
-      description: Retrieves bank accounts of the merchant.
-      parameters:
-        - name: primary
-          in: query
-          description: If true only the primary bank account (the one used for payouts) will be returned.
-          required: false
-          schema:
-            type: boolean
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/BankAccount'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              examples:
-                Invalid_Token:
-                  description: The access token is invalid or has expired.
-                  value:
-                    error_message: invalid access token
-                    error_code: NOT_AUTHORIZED
-                Not_Authorized_Token:
-                  description: The access token is valid but the application is not authorized.
-                  value:
-                    error_message: NOT_AUTHORIZED
-                    error_code: NOT_AUTHORIZED
-                Missing_Token:
-                  description: No access token is provided.
-                  value:
-                    message: access token required
-                    error_code: NOT_AUTHORIZED
-        '403':
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorForbidden'
-              examples:
-                Forbidden:
-                  description: You do not have required scopes for making this request.
-                  value:
-                    error_message: request_not_allowed
-                    error_code: FORBIDDEN
-                    status_code: '403'
-      deprecated: true
-      security:
-        - apiKey: []
-        - oauth2:
-            - user.payout-settings
-            - user.profile
-            - user.profile_readonly
-      tags:
-        - Merchant
-      x-codegen:
-        method_name: list_bank_accounts_deprecated
-      x-scopes:
-        - user.payout-settings
-        - user.profile
-        - user.profile_readonly
-  /v0.1/me/merchant-profile/settings:
-    get:
-      operationId: GetSettings
-      summary: Get settings
-      description: Retrieves merchant settings.
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/MerchantSettings'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              examples:
-                Invalid_Token:
-                  description: The access token is invalid or has expired.
-                  value:
-                    error_message: invalid access token
-                    error_code: NOT_AUTHORIZED
-                Not_Authorized_Token:
-                  description: The access token is valid but the application is not authorized.
-                  value:
-                    error_message: NOT_AUTHORIZED
-                    error_code: NOT_AUTHORIZED
-                Missing_Token:
-                  description: No access token is provided.
-                  value:
-                    message: access token required
-                    error_code: NOT_AUTHORIZED
-        '403':
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorForbidden'
-              examples:
-                Forbidden:
-                  description: You do not have required scopes for making this request.
-                  value:
-                    error_message: request_not_allowed
-                    error_code: FORBIDDEN
-                    status_code: '403'
-      security:
-        - apiKey: []
-        - oauth2:
-            - user.payout-settings
-      tags:
-        - Merchant
-      x-codegen:
-        method_name: get_settings
-      x-scopes:
-        - user.payout-settings
   '/v1.1/receipts/{id}':
     get:
       operationId: GetReceipt
@@ -3450,7 +3246,6 @@ paths:
         - oauth2:
             - user.profile
             - user.profile_readonly
-            - merchant.read
       tags:
         - Merchants
       x-codegen:
@@ -3460,7 +3255,6 @@ paths:
       x-scopes:
         - user.profile
         - user.profile_readonly
-        - merchant.read
   '/v1/merchants/{merchant_code}/persons':
     get:
       operationId: ListPersons
@@ -3525,7 +3319,6 @@ paths:
         - oauth2:
             - user.profile
             - user.profile_readonly
-            - merchant.read
       tags:
         - Merchants
       x-codegen:
@@ -3535,7 +3328,6 @@ paths:
       x-scopes:
         - user.profile
         - user.profile_readonly
-        - merchant.read
   '/v1/merchants/{merchant_code}/persons/{person_id}':
     get:
       operationId: GetPerson
@@ -3610,7 +3402,6 @@ paths:
         - oauth2:
             - user.profile
             - user.profile_readonly
-            - merchant.read
       tags:
         - Merchants
       x-codegen:
@@ -3620,7 +3411,6 @@ paths:
       x-scopes:
         - user.profile
         - user.profile_readonly
-        - merchant.read
   '/v0.1/merchants/{merchant_code}/readers':
     get:
       operationId: ListReaders
@@ -7871,14 +7661,6 @@ components:
                 type: number
                 format: float
   responses:
-    BankAccounts:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/BankAccount'
     Checkout:
       description: Created
       content:
@@ -8402,4 +8184,3 @@ tags:
     description: A reader represents a device that accepts payments. You can use the SumUp Solo to accept in-person payments.
     x-core-objects:
       - $ref: '#/components/schemas/Reader'
-    x-beta: true
