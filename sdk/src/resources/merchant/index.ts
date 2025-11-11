@@ -574,18 +574,6 @@ export type GetAccountQueryParams = {
   )[];
 };
 
-export type ListBankAccountsV11QueryParams = {
-  primary?: boolean;
-};
-
-export type ListBankAccountsV11Response = BankAccount[];
-
-export type ListBankAccountsQueryParams = {
-  primary?: boolean;
-};
-
-export type ListBankAccountsResponse = BankAccount[];
-
 export class Merchant extends Core.APIResource {
   /**
    * Returns user profile information.
@@ -636,45 +624,6 @@ export class Merchant extends Core.APIResource {
       ...params,
     });
   }
-
-  /**
-   * Retrieves bank accounts of the merchant.
-   */
-  listBankAccounts(
-    merchantCode: string,
-    query?: ListBankAccountsV11QueryParams,
-    params?: Core.FetchParams,
-  ): Core.APIPromise<BankAccount[]> {
-    return this._client.get<BankAccount[]>({
-      path: `/v1.1/merchants/${merchantCode}/bank-accounts`,
-      query,
-      ...params,
-    });
-  }
-
-  /**
-   * Retrieves bank accounts of the merchant.
-   */
-  listBankAccountsDeprecated(
-    query?: ListBankAccountsQueryParams,
-    params?: Core.FetchParams,
-  ): Core.APIPromise<BankAccount[]> {
-    return this._client.get<BankAccount[]>({
-      path: `/v0.1/me/merchant-profile/bank-accounts`,
-      query,
-      ...params,
-    });
-  }
-
-  /**
-   * Retrieves merchant settings.
-   */
-  getSettings(params?: Core.FetchParams): Core.APIPromise<MerchantSettings> {
-    return this._client.get<MerchantSettings>({
-      path: `/v0.1/me/merchant-profile/settings`,
-      ...params,
-    });
-  }
 }
 
 export declare namespace Merchant {
@@ -689,8 +638,6 @@ export declare namespace Merchant {
     ErrorForbidden,
     GetAccountQueryParams,
     LegalTypeLegacy,
-    ListBankAccountsQueryParams,
-    ListBankAccountsV11QueryParams,
     MerchantAccount,
     MerchantProfileLegacy,
     MerchantSettings,
