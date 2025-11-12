@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.0.7](https://github.com/sumup/sumup-ts/compare/v0.0.6...v0.0.7) (2025-11-11)
+
+
+### Features
+
+* **codegen:** move codegen in here ([#130](https://github.com/sumup/sumup-ts/issues/130)) ([2aa4495](https://github.com/sumup/sumup-ts/commit/2aa4495455a9c3f0002f2c3694db827491c9480b))
+
+
+### Bug Fixes
+
+* **sdk:** version header string ([ab9fdd5](https://github.com/sumup/sumup-ts/commit/ab9fdd5722de584545a19b8ac49d523edd92c223))
+
 ## [0.0.6](https://github.com/sumup/sumup-ts/compare/v0.0.5...v0.0.6) (2025-11-11)
 
 
