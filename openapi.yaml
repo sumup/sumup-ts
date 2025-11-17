@@ -25,7 +25,7 @@ paths:
           required: true
           schema:
             type: string
-            example: M1234
+            example: MH4H92C7
         - name: amount
           in: query
           description: 'The amount for which the payment methods should be eligible, in major units. Note that currency must also be provided when filtering by amount.'
@@ -136,7 +136,7 @@ paths:
                   checkout_reference: f00a8f74-b05d-4605-bd73-2a901bae5802
                   amount: 10.1
                   currency: EUR
-                  merchant_code: MDUDGLR9
+                  merchant_code: MH4H92C7
                   description: Purchase
                   id: 2b79757a-de87-4a2e-90e4-b17c947c730d
                   status: PAID
@@ -176,7 +176,7 @@ paths:
                     checkout_reference: 8ea25ec3-3293-40e9-a165-6d7f3b3073c5
                     amount: 10.1
                     currency: EUR
-                    merchant_code: MCNPLE22
+                    merchant_code: MH4H92C7
                     merchant_country: DE
                     description: My Checkout
                     return_url: 'http://example.com'
@@ -188,7 +188,7 @@ paths:
                     mandate:
                       type: recurrent
                       status: active
-                      merchant_code: MDASYTPD
+                      merchant_code: MH4H92C7
                     transactions:
                       - id: 410fc44a-5956-44e1-b5cc-19c6f8d727a4
                         transaction_code: TEENSK4W2K
@@ -239,7 +239,7 @@ paths:
                     checkout_reference: 8ea25ec3-3293-40e9-a165-6d7f3b3073c5
                     amount: 10.1
                     currency: EUR
-                    merchant_code: MCNPLE22
+                    merchant_code: MH4H92C7
                     description: My Checkout
                     return_url: 'http://example.com'
                     id: 88fcf8de-304d-4820-8f1c-ec880290eb92
@@ -548,7 +548,7 @@ paths:
                     mandate:
                       type: recurrent
                       status: active
-                      merchant_code: MDASYTPD
+                      merchant_code: MH4H92C7
                     transactions:
                       - id: 410fc44a-5956-44e1-b5cc-19c6f8d727a4
                         transaction_code: TEENSK4W2K
@@ -756,85 +756,20 @@ paths:
           content:
             application/json:
               schema:
-                description: Details of the deleted checkout.
-                type: object
-                properties:
-                  checkout_reference:
-                    description: Unique ID of the payment checkout specified by the client application when creating the checkout resource.
-                    type: string
-                    maxLength: 90
-                  id:
-                    description: Unique ID of the checkout resource.
-                    type: string
-                    readOnly: true
-                  amount:
-                    description: Amount of the payment.
-                    type: number
-                    format: float
-                  currency:
-                    $ref: '#/components/schemas/Currency'
-                  merchant_code:
-                    description: Unique identifying code of the merchant profile.
-                    type: string
-                  description:
-                    description: 'Short description of the checkout visible in the SumUp dashboard. The description can contribute to reporting, allowing easier identification of a checkout.'
-                    type: string
-                  purpose:
-                    description: Purpose of the checkout creation initially
-                    type: string
-                    enum:
-                      - SETUP_RECURRING_PAYMENT
-                      - CHECKOUT
-                  status:
-                    description: Current status of the checkout.
-                    type: string
-                    enum:
-                      - EXPIRED
-                    readOnly: true
-                  date:
-                    description: 'Date and time of the creation of the payment checkout. Response format expressed according to [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) code.'
-                    type: string
-                    format: date-time
-                    example: '2020-02-29T10:56:56+00:00'
-                    readOnly: true
-                  valid_until:
-                    description: 'Date and time of the checkout expiration before which the client application needs to send a processing request. If no value is present, the checkout does not have an expiration time.'
-                    type: string
-                    format: date-time
-                    example: '2020-02-29T10:56:56+00:00'
-                    nullable: true
-                    readOnly: true
-                  merchant_name:
-                    description: Merchant name
-                    type: string
-                  merchant_country:
-                    description: The merchant's country
-                    type: string
-                  transactions:
-                    description: List of transactions related to the payment.
-                    type: array
-                    items:
-                      allOf:
-                        - $ref: '#/components/schemas/TransactionMixinBase'
-                        - $ref: '#/components/schemas/TransactionMixinCheckout'
-                    readOnly: true
-                    uniqueItems: true
-              examples:
-                DeletedCheckout:
-                  description: Response body for a successfully deactivated checkout
-                  value:
-                    checkout_reference: f00a8f74-b05d-4605-bd73-2a901bae5802
-                    id: 817340ce-f1d9-4609-b90a-6152f8ee267j
-                    amount: 2
-                    currency: EUR
-                    merchant_code: MH4H92C7
-                    description: Deletion example
-                    purpose: CHECKOUT
-                    status: EXPIRED
-                    date: '2020-02-29T10:56:56+00:00'
-                    valid_until: '2020-02-29T10:56:56+00:00'
-                    merchant_name: Sample Merchant
-                    transactions: []
+                $ref: '#/components/schemas/Checkout'
+              example:
+                checkout_reference: f00a8f74-b05d-4605-bd73-2a901bae5802
+                id: 817340ce-f1d9-4609-b90a-6152f8ee267j
+                amount: 2
+                currency: EUR
+                merchant_code: MH4H92C7
+                description: Deletion example
+                purpose: CHECKOUT
+                status: EXPIRED
+                date: '2020-02-29T10:56:56+00:00'
+                valid_until: '2020-02-29T10:56:56+00:00'
+                merchant_name: Sample Merchant
+                transactions: []
         '401':
           description: Unauthorized
           content:
@@ -1357,7 +1292,7 @@ paths:
           required: true
           schema:
             type: string
-            example: MC0X0ABC
+            example: MH4H92C7
         - name: id
           in: query
           description: Retrieves the transaction resource with the specified transaction ID (the `id` parameter in the transaction resource).
@@ -1531,7 +1466,7 @@ paths:
           required: true
           schema:
             type: string
-            example: MC0X0ABC
+            example: MH4H92C7
         - name: transaction_code
           in: query
           description: Retrieves the transaction resource with the specified transaction code.
@@ -1917,7 +1852,7 @@ paths:
           required: true
           schema:
             type: string
-            example: MC0X0ABC
+            example: MH4H92C7
         - name: start_date
           in: query
           description: 'Start date (in [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) format).'
@@ -4385,6 +4320,7 @@ components:
         merchant_code:
           description: Unique identifying code of the merchant profile.
           type: string
+          example: MH4H92C7
         description:
           description: 'Short description of the checkout visible in the SumUp dashboard. The description can contribute to reporting, allowing easier identification of a checkout.'
           type: string
@@ -4447,6 +4383,7 @@ components:
         merchant_code:
           description: Unique identifying code of the merchant profile.
           type: string
+          example: MH4H92C7
         description:
           description: 'Short description of the checkout visible in the SumUp dashboard. The description can contribute to reporting, allowing easier identification of a checkout.'
           type: string
@@ -4862,10 +4799,11 @@ components:
         merchant_code:
           description: Merchant code which has the mandate
           type: string
+          example: MH4H92C7
       example:
         type: recurrent
         status: active
-        merchant_code: MDASYTPD
+        merchant_code: MH4H92C7
     MerchantAccount:
       description: Details of the merchant account.
       type: object
@@ -4888,6 +4826,7 @@ components:
         merchant_code:
           description: Unique identifying code of the merchant profile
           type: string
+          example: MH4H92C7
         company_name:
           description: Company name
           type: string
@@ -5046,7 +4985,7 @@ components:
         mandate:
           type: recurrent
           status: active
-          merchant_code: MDASYTPD
+          merchant_code: MH4H92C7
         card:
           last_4_digits: '0001'
           type: VISA
@@ -5213,6 +5152,7 @@ components:
           properties:
             merchant_code:
               type: string
+              example: MH4H92C7
             business_name:
               type: string
             email:
@@ -5406,6 +5346,7 @@ components:
             - ECOM
             - RECURRING
             - BOLETO
+            - POS
         installments_count:
           description: Current number of the installment for deferred payments.
           type: integer
@@ -7517,7 +7458,7 @@ components:
                 checkout_reference: f00a8f74-b05d-4605-bd73-2a901bae5802
                 amount: 10.1
                 currency: EUR
-                merchant_code: MDUDGLR9
+                merchant_code: MH4H92C7
                 description: Purchase
                 id: 2b79757a-de87-4a2e-90e4-b17c947c730d
                 status: PAID
@@ -7674,7 +7615,7 @@ components:
                 checkout_reference: 8ea25ec3-3293-40e9-a165-6d7f3b3073c5
                 amount: 10.1
                 currency: EUR
-                merchant_code: MCNPLE22
+                merchant_code: MH4H92C7
                 merchant_country: DE
                 description: My Checkout
                 return_url: 'http://example.com'
@@ -7686,7 +7627,7 @@ components:
                 mandate:
                   type: recurrent
                   status: active
-                  merchant_code: MDASYTPD
+                  merchant_code: MH4H92C7
                 transactions:
                   - id: 410fc44a-5956-44e1-b5cc-19c6f8d727a4
                     transaction_code: TEENSK4W2K
@@ -7737,7 +7678,7 @@ components:
                 checkout_reference: 8ea25ec3-3293-40e9-a165-6d7f3b3073c5
                 amount: 10.1
                 currency: EUR
-                merchant_code: MCNPLE22
+                merchant_code: MH4H92C7
                 description: My Checkout
                 return_url: 'http://example.com'
                 id: 88fcf8de-304d-4820-8f1c-ec880290eb92
@@ -7800,7 +7741,7 @@ components:
                 mandate:
                   type: recurrent
                   status: active
-                  merchant_code: MDASYTPD
+                  merchant_code: MH4H92C7
                 transactions:
                   - id: 410fc44a-5956-44e1-b5cc-19c6f8d727a4
                     transaction_code: TEENSK4W2K
