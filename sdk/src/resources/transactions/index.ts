@@ -78,7 +78,7 @@ export type TransactionMixinBase = {
   /**
    * Payment type used for the transaction.
    */
-  payment_type?: "ECOM" | "RECURRING" | "BOLETO";
+  payment_type?: "ECOM" | "RECURRING" | "BOLETO" | "POS";
   /**
    * Current number of the installment for deferred payments.
    */

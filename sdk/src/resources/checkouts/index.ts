@@ -162,7 +162,7 @@ export type TransactionMixinBase = {
   /**
    * Payment type used for the transaction.
    */
-  payment_type?: "ECOM" | "RECURRING" | "BOLETO";
+  payment_type?: "ECOM" | "RECURRING" | "BOLETO" | "POS";
   /**
    * Current number of the installment for deferred payments.
    */
@@ -510,58 +510,6 @@ export type ListCheckoutsQueryParams = {
 
 export type ListCheckoutsResponse = CheckoutSuccess[];
 
-export type DeactivateCheckoutResponse = {
-  /**
-   * Unique ID of the payment checkout specified by the client application when creating the checkout resource.
-   */
-  checkout_reference?: string;
-  /**
-   * Unique ID of the checkout resource.
-   */
-  id?: string;
-  /**
-   * Amount of the payment.
-   */
-  amount?: number;
-  currency?: Currency;
-  /**
-   * Unique identifying code of the merchant profile.
-   */
-  merchant_code?: string;
-  /**
-   * Short description of the checkout visible in the SumUp dashboard. The description can contribute to reporting, allowing easier identification of a checkout.
-   */
-  description?: string;
-  /**
-   * Purpose of the checkout creation initially
-   */
-  purpose?: "SETUP_RECURRING_PAYMENT" | "CHECKOUT";
-  /**
-   * Current status of the checkout.
-   */
-  status?: "EXPIRED";
-  /**
-   * Date and time of the creation of the payment checkout. Response format expressed according to [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) code.
-   */
-  date?: string;
-  /**
-   * Date and time of the checkout expiration before which the client application needs to send a processing request. If no value is present, the checkout does not have an expiration time.
-   */
-  valid_until?: string | null;
-  /**
-   * Merchant name
-   */
-  merchant_name?: string;
-  /**
-   * The merchant's country
-   */
-  merchant_country?: string;
-  /**
-   * List of transactions related to the payment.
-   */
-  transactions?: (TransactionMixinBase & TransactionMixinCheckout)[];
-};
-
 export class Checkouts extends Core.APIResource {
   /**
    * Get payment methods available for the given merchant to use with a checkout.
@@ -642,11 +590,8 @@ export class Checkouts extends Core.APIResource {
   /**
    * Deactivates an identified checkout resource. If the checkout has already been processed it can not be deactivated.
    */
-  deactivate(
-    id: string,
-    params?: Core.FetchParams,
-  ): Core.APIPromise<DeactivateCheckoutResponse> {
-    return this._client.delete<DeactivateCheckoutResponse>({
+  deactivate(id: string, params?: Core.FetchParams): Core.APIPromise<Checkout> {
+    return this._client.delete<Checkout>({
       path: `/v0.1/checkouts/${id}`,
       ...params,
     });
