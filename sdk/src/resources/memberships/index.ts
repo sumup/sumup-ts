@@ -23,7 +23,7 @@ export type MembershipStatus =
   | "unknown";
 
 /**
- * The kind of the membership resource.
+ * The type of the membership resource.
  * Possible values are:
  * * `merchant` - merchant account(s)
  * * `organization` - organization(s)
@@ -117,6 +117,8 @@ export type ListMembershipsQueryParams = {
   offset?: number;
   limit?: number;
   kind?: ResourceType;
+  status?: MembershipStatus;
+  "resource.type"?: ResourceType;
   "resource.attributes.sandbox"?: boolean;
   "resource.name"?: string;
 };
