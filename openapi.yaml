@@ -2493,6 +2493,16 @@ paths:
           description: Filter memberships by resource kind.
           schema:
             $ref: '#/components/schemas/ResourceType'
+        - name: status
+          in: query
+          description: Filter the returned memberships by the membership status.
+          schema:
+            $ref: '#/components/schemas/MembershipStatus'
+        - name: resource.type
+          in: query
+          description: Filter memberships by resource kind.
+          schema:
+            $ref: '#/components/schemas/ResourceType'
         - name: resource.attributes.sandbox
           in: query
           description: Filter memberships by the sandbox status of the resource the membership is in.
@@ -2559,6 +2569,7 @@ paths:
             type: boolean
             example: true
             default: false
+          x-document: false
         - name: email
           in: query
           description: Filter the returned members by email address prefix.
@@ -2572,9 +2583,6 @@ paths:
             type: string
             format: uuid
             example: 245b2ead-85bf-45ff-856f-311a88a5d454
-            x-go-type: uuid.UUID
-            x-go-type-import:
-              path: github.com/gofrs/uuid/v5
         - name: status
           in: query
           description: Filter the returned members by the membership status.
@@ -2990,9 +2998,6 @@ paths:
           schema:
             type: string
             example: role_WZsm7QTPhVrompscmPhoGTXXcrd58fr9MOhP
-            x-go-type: memberships.RoleID
-            x-go-type-import:
-              path: github.com/sumup/identity/apps/portier-backend/internal/domain/memberships
       responses:
         '200':
           description: Returns the Role object for a valid identifier.
@@ -3033,9 +3038,6 @@ paths:
           schema:
             type: string
             example: role_WZsm7QTPhVrompscmPhoGTXXcrd58fr9MOhP
-            x-go-type: memberships.RoleID
-            x-go-type-import:
-              path: github.com/sumup/identity/apps/portier-backend/internal/domain/memberships
       responses:
         '200':
           description: Returns an empty response if the role deletion succeeded.
@@ -3074,9 +3076,6 @@ paths:
           schema:
             type: string
             example: role_WZsm7QTPhVrompscmPhoGTXXcrd58fr9MOhP
-            x-go-type: memberships.RoleID
-            x-go-type-import:
-              path: github.com/sumup/identity/apps/portier-backend/internal/domain/memberships
       requestBody:
         required: true
         content:
@@ -5861,9 +5860,6 @@ components:
         url: 'https://sumup.roadie.so/docs/default/Component/merchants/merchant/#addresses'
       required:
         - country
-      x-go-type: address.Address
-      x-go-type-import:
-        path: github.com/sumup/country-sdk/go-sdk/address
     PersonalIdentifier:
       type: object
       properties:
@@ -5892,7 +5888,7 @@ components:
         - unknown
     ResourceType:
       description: |-
-        The kind of the membership resource.
+        The type of the membership resource.
         Possible values are:
         * `merchant` - merchant account(s)
         * `organization` - organization(s)
@@ -5986,9 +5982,6 @@ components:
           format: uri
           example: 'https://images.sumup.com/img_2x4y6z8a0b1c2d3e4f5g6h7j8k.png'
           maxLength: 256
-          x-go-type: apitypes.URI
-          x-go-type-import:
-            path: github.com/sumup/x/apitypes
         created_at:
           description: The timestamp of when the membership resource was created.
           type: string
@@ -6170,9 +6163,6 @@ components:
           description: Unique identifier of the role.
           type: string
           example: role_WZsm7QTPhVrompscmPhoGTXXcrd58fr9MOhP
-          x-go-type: memberships.RoleIDOrSlug
-          x-go-type-import:
-            path: github.com/sumup/identity/apps/portier-backend/internal/domain/memberships
         name:
           description: User-defined name of the role.
           type: string
@@ -6331,8 +6321,6 @@ components:
             - 'https://www.sumup.com'
           maxLength: 255
           nullable: true
-          x-go-type: 'nullable.Nullable[string]'
-          x-go-type-skip-optional-pointer: true
         attributes:
           $ref: '#/components/schemas/Attributes'
       externalDocs:
@@ -6531,9 +6519,6 @@ components:
           examples:
             - pers_2EGQ057R6C8J791RVCG5NWAEAB
           readOnly: true
-          x-go-type: '*merchants.PersonID'
-          x-go-type-import:
-            path: github.com/sumup/merchants/internal/domain/merchants
         user_id:
           description: |
             A corresponding identity user ID for the person, if they have a user account.
@@ -6598,8 +6583,6 @@ components:
             The persons nationality. May be an [ISO3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) country code, but legacy data may not conform to this standard.
           type: string
           nullable: true
-          x-go-type: 'nullable.Nullable[string]'
-          x-go-type-skip-optional-pointer: true
         country_of_residence:
           description: |
             An [ISO3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) country code representing the country where the person resides.
@@ -6607,8 +6590,6 @@ components:
           maxLength: 2
           minLength: 2
           nullable: true
-          x-go-type: 'nullable.Nullable[string]'
-          x-go-type-skip-optional-pointer: true
         version:
           $ref: '#/components/schemas/Version'
         change_status:
@@ -6727,9 +6708,6 @@ components:
       example: rdr_3MSAFM23CK82VSTT4BN6RWSQ65
       maxLength: 30
       minLength: 30
-      x-go-type: readers.ReaderID
-      x-go-type-import:
-        path: github.com/sumup/identity/apps/portier-backend/internal/domain/readers
     ReaderName:
       description: 'Custom human-readable, user-defined name for easier identification of the reader.'
       type: string
