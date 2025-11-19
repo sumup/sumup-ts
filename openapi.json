@@ -3738,6 +3738,22 @@
             }
           },
           {
+            "name": "status",
+            "in": "query",
+            "description": "Filter the returned memberships by the membership status.",
+            "schema": {
+              "$ref": "#/components/schemas/MembershipStatus"
+            }
+          },
+          {
+            "name": "resource.type",
+            "in": "query",
+            "description": "Filter memberships by resource kind.",
+            "schema": {
+              "$ref": "#/components/schemas/ResourceType"
+            }
+          },
+          {
             "name": "resource.attributes.sandbox",
             "in": "query",
             "description": "Filter memberships by the sandbox status of the resource the membership is in.",
@@ -3836,7 +3852,8 @@
               "type": "boolean",
               "example": true,
               "default": false
-            }
+            },
+            "x-document": false
           },
           {
             "name": "email",
@@ -3854,11 +3871,7 @@
             "schema": {
               "type": "string",
               "format": "uuid",
-              "example": "245b2ead-85bf-45ff-856f-311a88a5d454",
-              "x-go-type": "uuid.UUID",
-              "x-go-type-import": {
-                "path": "github.com/gofrs/uuid/v5"
-              }
+              "example": "245b2ead-85bf-45ff-856f-311a88a5d454"
             }
           },
           {
@@ -4504,11 +4517,7 @@
             "required": true,
             "schema": {
               "type": "string",
-              "example": "role_WZsm7QTPhVrompscmPhoGTXXcrd58fr9MOhP",
-              "x-go-type": "memberships.RoleID",
-              "x-go-type-import": {
-                "path": "github.com/sumup/identity/apps/portier-backend/internal/domain/memberships"
-              }
+              "example": "role_WZsm7QTPhVrompscmPhoGTXXcrd58fr9MOhP"
             }
           }
         ],
@@ -4572,11 +4581,7 @@
             "required": true,
             "schema": {
               "type": "string",
-              "example": "role_WZsm7QTPhVrompscmPhoGTXXcrd58fr9MOhP",
-              "x-go-type": "memberships.RoleID",
-              "x-go-type-import": {
-                "path": "github.com/sumup/identity/apps/portier-backend/internal/domain/memberships"
-              }
+              "example": "role_WZsm7QTPhVrompscmPhoGTXXcrd58fr9MOhP"
             }
           }
         ],
@@ -4636,11 +4641,7 @@
             "required": true,
             "schema": {
               "type": "string",
-              "example": "role_WZsm7QTPhVrompscmPhoGTXXcrd58fr9MOhP",
-              "x-go-type": "memberships.RoleID",
-              "x-go-type-import": {
-                "path": "github.com/sumup/identity/apps/portier-backend/internal/domain/memberships"
-              }
+              "example": "role_WZsm7QTPhVrompscmPhoGTXXcrd58fr9MOhP"
             }
           }
         ],
@@ -8483,11 +8484,7 @@
         },
         "required": [
           "country"
-        ],
-        "x-go-type": "address.Address",
-        "x-go-type-import": {
-          "path": "github.com/sumup/country-sdk/go-sdk/address"
-        }
+        ]
       },
       "PersonalIdentifier": {
         "type": "object",
@@ -8524,7 +8521,7 @@
         ]
       },
       "ResourceType": {
-        "description": "The kind of the membership resource.\nPossible values are:\n* `merchant` - merchant account(s)\n* `organization` - organization(s)",
+        "description": "The type of the membership resource.\nPossible values are:\n* `merchant` - merchant account(s)\n* `organization` - organization(s)",
         "type": "string",
         "example": "merchant"
       },
@@ -8637,11 +8634,7 @@
             "type": "string",
             "format": "uri",
             "example": "https://images.sumup.com/img_2x4y6z8a0b1c2d3e4f5g6h7j8k.png",
-            "maxLength": 256,
-            "x-go-type": "apitypes.URI",
-            "x-go-type-import": {
-              "path": "github.com/sumup/x/apitypes"
-            }
+            "maxLength": 256
           },
           "created_at": {
             "description": "The timestamp of when the membership resource was created.",
@@ -8871,11 +8864,7 @@
           "id": {
             "description": "Unique identifier of the role.",
             "type": "string",
-            "example": "role_WZsm7QTPhVrompscmPhoGTXXcrd58fr9MOhP",
-            "x-go-type": "memberships.RoleIDOrSlug",
-            "x-go-type-import": {
-              "path": "github.com/sumup/identity/apps/portier-backend/internal/domain/memberships"
-            }
+            "example": "role_WZsm7QTPhVrompscmPhoGTXXcrd58fr9MOhP"
           },
           "name": {
             "description": "User-defined name of the role.",
@@ -9068,9 +9057,7 @@
               "https://www.sumup.com"
             ],
             "maxLength": 255,
-            "nullable": true,
-            "x-go-type": "nullable.Nullable[string]",
-            "x-go-type-skip-optional-pointer": true
+            "nullable": true
           },
           "attributes": {
             "$ref": "#/components/schemas/Attributes"
@@ -9303,11 +9290,7 @@
             "examples": [
               "pers_2EGQ057R6C8J791RVCG5NWAEAB"
             ],
-            "readOnly": true,
-            "x-go-type": "*merchants.PersonID",
-            "x-go-type-import": {
-              "path": "github.com/sumup/merchants/internal/domain/merchants"
-            }
+            "readOnly": true
           },
           "user_id": {
             "description": "A corresponding identity user ID for the person, if they have a user account.\n",
@@ -9378,18 +9361,14 @@
           "nationality": {
             "description": "The persons nationality. May be an [ISO3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) country code, but legacy data may not conform to this standard.\n",
             "type": "string",
-            "nullable": true,
-            "x-go-type": "nullable.Nullable[string]",
-            "x-go-type-skip-optional-pointer": true
+            "nullable": true
           },
           "country_of_residence": {
             "description": "An [ISO3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) country code representing the country where the person resides.\n",
             "type": "string",
             "maxLength": 2,
             "minLength": 2,
-            "nullable": true,
-            "x-go-type": "nullable.Nullable[string]",
-            "x-go-type-skip-optional-pointer": true
+            "nullable": true
           },
           "version": {
             "$ref": "#/components/schemas/Version"
@@ -9536,11 +9515,7 @@
         "type": "string",
         "example": "rdr_3MSAFM23CK82VSTT4BN6RWSQ65",
         "maxLength": 30,
-        "minLength": 30,
-        "x-go-type": "readers.ReaderID",
-        "x-go-type-import": {
-          "path": "github.com/sumup/identity/apps/portier-backend/internal/domain/readers"
-        }
+        "minLength": 30
       },
       "ReaderName": {
         "description": "Custom human-readable, user-defined name for easier identification of the reader.",
