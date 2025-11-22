@@ -6,14 +6,12 @@ export default defineConfig({
     {
       format: "esm",
       dts: true,
-      redirect: {
-        dts: {
-          extension: true,
-        },
-      },
     },
     {
       format: "cjs",
+      dts: {
+        autoExtension: true,
+      },
     },
   ],
   output: {
