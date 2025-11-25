@@ -3,34 +3,42 @@ updates:
   - package-ecosystem: "npm"
     directory: '/sdk'
     open-pull-requests-limit: 5
-    schedule:
-      interval: "weekly"
     groups:
       rslib:
         patterns:
           - "@rslib/*"
           - "rsbuild-*"
+    schedule:
+      interval: "weekly"
+    cooldown:
+      default-days: 7
   - package-ecosystem: "npm"
     directory: '/codegen'
     open-pull-requests-limit: 5
-    schedule:
-      interval: "weekly"
     groups:
       all:
         patterns:
           - "*"
-  - package-ecosystem: "github-actions"
-    directory: "/"
     schedule:
       interval: "weekly"
+    cooldown:
+      default-days: 7
+  - package-ecosystem: "github-actions"
+    directory: "/"
     open-pull-requests-limit: 5
+    schedule:
+      interval: "weekly"
+    cooldown:
+      default-days: 7
   - package-ecosystem: "npm"
     directories:
       - '/examples/**/*'
     open-pull-requests-limit: 5
-    schedule:
-      interval: "weekly"
     groups:
       all:
         patterns:
           - "*"
+    schedule:
+      interval: "weekly"
+    cooldown:
+      default-days: 7
