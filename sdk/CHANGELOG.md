@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.8](https://github.com/sumup/sumup-ts/compare/v0.0.7...v0.0.8) (2025-11-26)
+
+
+### Bug Fixes
+
+* **sdk:** address package bundle warning for common js ([ab5beb5](https://github.com/sumup/sumup-ts/commit/ab5beb5edaee14820cdcb5dba342b5792aab86b8))
+
 ## [0.0.7](https://github.com/sumup/sumup-ts/compare/v0.0.6...v0.0.7) (2025-11-11)
 
 
