@@ -3,9 +3,9 @@
 import * as Core from "../../core";
 
 /**
- * Set of user-defined key-value pairs attached to the object. Partial updates are not supported. When updating, always submit whole metadata.
+ * Set of user-defined key-value pairs attached to the object. Partial updates are not supported. When updating, always submit whole metadata. Maximum of 64 parameters are allowed in the object.
  */
-export type Metadata = Record<string, Record<string, unknown>>;
+export type Metadata = Record<string, unknown>;
 
 /**
  * Object attributes that are modifiable only by SumUp applications.

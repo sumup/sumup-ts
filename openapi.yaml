@@ -461,7 +461,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CheckoutProcessMixin'
+              $ref: '#/components/schemas/ProcessCheckout'
             examples:
               ProcessCard:
                 description: Process a checkout with a card
@@ -2325,11 +2325,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/Operator'
         '403':
-          description: Error response for compat API calls.
+          description: Operator creation was forbidden.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CompatError'
+                $ref: '#/components/schemas/Problem'
       deprecated: true
       security:
         - apiKey: []
@@ -2425,7 +2425,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CompatError'
+                $ref: '#/components/schemas/Problem'
       deprecated: true
       security:
         - apiKey: []
@@ -2602,11 +2602,11 @@ paths:
           style: form
         - name: merchant_code
           in: path
-          description: Merchant code.
+          description: Short unique identifier for the merchant.
           required: true
           schema:
             type: string
-            example: MC0X0ABC
+            example: MK10CL2A
       responses:
         '200':
           description: Returns a list of Member objects.
@@ -2626,6 +2626,10 @@ paths:
                   - items
         '404':
           description: Merchant not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
       security:
         - apiKey: []
         - oauth2: []
@@ -2645,11 +2649,11 @@ paths:
       parameters:
         - name: merchant_code
           in: path
-          description: Merchant code.
+          description: Short unique identifier for the merchant.
           required: true
           schema:
             type: string
-            example: MC0X0ABC
+            example: MK10CL2A
       requestBody:
         required: true
         content:
@@ -2698,10 +2702,22 @@ paths:
                 $ref: '#/components/schemas/Member'
         '400':
           description: Invalid request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
         '404':
           description: Merchant not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
         '429':
           description: Too many invitations sent to that user. The limit is 10 requests per 5 minutes and the Retry-After header is set to the number of minutes until the reset of the limit.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
       security:
         - apiKey: []
         - oauth2: []
@@ -2722,11 +2738,11 @@ paths:
       parameters:
         - name: merchant_code
           in: path
-          description: Merchant code.
+          description: Short unique identifier for the merchant.
           required: true
           schema:
             type: string
-            example: MC0X0ABC
+            example: MK10CL2A
         - name: member_id
           in: path
           description: The ID of the member to retrieve.
@@ -2743,6 +2759,10 @@ paths:
                 $ref: '#/components/schemas/Member'
         '404':
           description: Merchant or member not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
       security:
         - apiKey: []
         - oauth2: []
@@ -2762,11 +2782,11 @@ paths:
       parameters:
         - name: merchant_code
           in: path
-          description: Merchant code.
+          description: Short unique identifier for the merchant.
           required: true
           schema:
             type: string
-            example: MC0X0ABC
+            example: MK10CL2A
         - name: member_id
           in: path
           description: The ID of the member to retrieve.
@@ -2818,12 +2838,28 @@ paths:
                 $ref: '#/components/schemas/Member'
         '400':
           description: Cannot set password or nickname for an invited user.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
         '403':
           description: Cannot change password for managed user. Password was already used before.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
         '404':
           description: Merchant or member not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
         '409':
           description: Cannot update member as some data conflict with existing members.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
       security:
         - apiKey: []
         - oauth2: []
@@ -2843,11 +2879,11 @@ paths:
       parameters:
         - name: merchant_code
           in: path
-          description: Merchant code.
+          description: Short unique identifier for the merchant.
           required: true
           schema:
             type: string
-            example: MC0X0ABC
+            example: MK10CL2A
         - name: member_id
           in: path
           description: The ID of the member to retrieve.
@@ -2860,6 +2896,10 @@ paths:
           description: Returns an empty response if the deletion succeeded.
         '404':
           description: Merchant or member not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
       security:
         - apiKey: []
         - oauth2: []
@@ -2880,11 +2920,11 @@ paths:
       parameters:
         - name: merchant_code
           in: path
-          description: Merchant code.
+          description: Short unique identifier for the merchant.
           required: true
           schema:
             type: string
-            example: MC0X0ABC
+            example: MK10CL2A
       responses:
         '200':
           description: Returns a list of Role objects.
@@ -2901,6 +2941,10 @@ paths:
                   - items
         '404':
           description: Merchant not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
       security:
         - apiKey: []
         - oauth2: []
@@ -2920,11 +2964,11 @@ paths:
       parameters:
         - name: merchant_code
           in: path
-          description: Merchant code.
+          description: Short unique identifier for the merchant.
           required: true
           schema:
             type: string
-            example: MC0X0ABC
+            example: MK10CL2A
       requestBody:
         required: true
         content:
@@ -2964,8 +3008,16 @@ paths:
                 $ref: '#/components/schemas/Role'
         '400':
           description: Invalid request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
         '404':
           description: Merchant not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
       security:
         - apiKey: []
         - oauth2: []
@@ -2986,11 +3038,11 @@ paths:
       parameters:
         - name: merchant_code
           in: path
-          description: Merchant code.
+          description: Short unique identifier for the merchant.
           required: true
           schema:
             type: string
-            example: MC0X0ABC
+            example: MK10CL2A
         - name: role_id
           in: path
           description: The ID of the role to retrieve.
@@ -3007,6 +3059,10 @@ paths:
                 $ref: '#/components/schemas/Role'
         '404':
           description: Merchant or role not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
       security:
         - apiKey: []
         - oauth2: []
@@ -3026,11 +3082,11 @@ paths:
       parameters:
         - name: merchant_code
           in: path
-          description: Merchant code.
+          description: Short unique identifier for the merchant.
           required: true
           schema:
             type: string
-            example: MC0X0ABC
+            example: MK10CL2A
         - name: role_id
           in: path
           description: The ID of the role to retrieve.
@@ -3043,8 +3099,16 @@ paths:
           description: Returns an empty response if the role deletion succeeded.
         '400':
           description: Invalid request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
         '404':
           description: Merchant not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
       security:
         - apiKey: []
         - oauth2: []
@@ -3064,11 +3128,11 @@ paths:
       parameters:
         - name: merchant_code
           in: path
-          description: Merchant code.
+          description: Short unique identifier for the merchant.
           required: true
           schema:
             type: string
-            example: MC0X0ABC
+            example: MK10CL2A
         - name: role_id
           in: path
           description: The ID of the role to retrieve.
@@ -3116,8 +3180,16 @@ paths:
                 $ref: '#/components/schemas/Role'
         '400':
           description: Invalid request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
         '404':
           description: Merchant not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
       security:
         - apiKey: []
         - oauth2: []
@@ -3353,11 +3425,11 @@ paths:
       parameters:
         - name: merchant_code
           in: path
-          description: Unique identifier of the merchant account.
+          description: Short unique identifier for the merchant.
           required: true
           schema:
             type: string
-            example: MC0X0ABC
+            example: MK10CL2A
       responses:
         '200':
           description: Returns a list Reader objects.
@@ -3393,11 +3465,11 @@ paths:
       parameters:
         - name: merchant_code
           in: path
-          description: Unique identifier of the merchant account.
+          description: Short unique identifier for the merchant.
           required: true
           schema:
             type: string
-            example: MC0X0ABC
+            example: MK10CL2A
       requestBody:
         required: true
         content:
@@ -3409,8 +3481,8 @@ paths:
                   $ref: '#/components/schemas/ReaderPairingCode'
                 name:
                   $ref: '#/components/schemas/ReaderName'
-                meta:
-                  $ref: '#/components/schemas/Meta'
+                metadata:
+                  $ref: '#/components/schemas/Metadata'
               required:
                 - pairing_code
                 - name
@@ -3444,6 +3516,24 @@ paths:
               parameters:
                 id: $response.body#/id
               description: Delete the reader.
+        '400':
+          description: The request is invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '404':
+          description: There's no pending reader for the submitted pairing code.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '409':
+          description: The Reader is not in a pending state.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
       security:
         - apiKey: []
         - oauth2:
@@ -3485,11 +3575,11 @@ paths:
                 example: '2023-05-30T10:38:01+00:00'
         - name: merchant_code
           in: path
-          description: Unique identifier of the merchant account.
+          description: Short unique identifier for the merchant.
           required: true
           schema:
             type: string
-            example: MC0X0ABC
+            example: MK10CL2A
         - name: id
           in: path
           description: The unique identifier of the reader.
@@ -3505,6 +3595,10 @@ paths:
                 $ref: '#/components/schemas/Reader'
         '404':
           description: The requested Reader resource does not exists.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
       security:
         - apiKey: []
         - oauth2:
@@ -3526,11 +3620,11 @@ paths:
       parameters:
         - name: merchant_code
           in: path
-          description: Unique identifier of the merchant account.
+          description: Short unique identifier for the merchant.
           required: true
           schema:
             type: string
-            example: MC0X0ABC
+            example: MK10CL2A
         - name: id
           in: path
           description: The unique identifier of the reader.
@@ -3540,12 +3634,20 @@ paths:
       responses:
         '200':
           description: Returns an empty response if the deletion succeeded.
+        '404':
+          description: The requested Reader resource does not exists.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
       security:
         - apiKey: []
         - oauth2:
             - readers.write
       tags:
         - Readers
+      x-codegen:
+        method_name: delete
       x-permissions:
         - relation: readers_delete
           object_type: merchant
@@ -3559,11 +3661,11 @@ paths:
       parameters:
         - name: merchant_code
           in: path
-          description: Unique identifier of the merchant account.
+          description: Short unique identifier for the merchant.
           required: true
           schema:
             type: string
-            example: MC0X0ABC
+            example: MK10CL2A
         - name: id
           in: path
           description: The unique identifier of the reader.
@@ -3579,8 +3681,8 @@ paths:
               properties:
                 name:
                   $ref: '#/components/schemas/ReaderName'
-                meta:
-                  $ref: '#/components/schemas/Meta'
+                metadata:
+                  $ref: '#/components/schemas/Metadata'
       responses:
         '200':
           description: Returns the updated Reader object if the update succeeded.
@@ -3589,7 +3691,17 @@ paths:
               schema:
                 $ref: '#/components/schemas/Reader'
         '403':
-          description: The reader is not linked to the merchant account.
+          description: The request isn't sufficiently authorized to modify the reader.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '404':
+          description: The requested Reader resource does not exists.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
       security:
         - apiKey: []
         - oauth2:
@@ -4361,8 +4473,8 @@ components:
           type: array
           items:
             allOf:
-              - $ref: '#/components/schemas/TransactionMixinBase'
-              - $ref: '#/components/schemas/TransactionMixinCheckout'
+              - $ref: '#/components/schemas/TransactionBase'
+              - $ref: '#/components/schemas/TransactionCheckoutInfo'
           uniqueItems: true
       title: Checkout
     CheckoutCreateRequest:
@@ -4429,8 +4541,8 @@ components:
           type: array
           items:
             allOf:
-              - $ref: '#/components/schemas/TransactionMixinBase'
-              - $ref: '#/components/schemas/TransactionMixinCheckout'
+              - $ref: '#/components/schemas/TransactionBase'
+              - $ref: '#/components/schemas/TransactionCheckoutInfo'
           readOnly: true
           uniqueItems: true
         redirect_url:
@@ -4442,7 +4554,7 @@ components:
         - amount
         - currency
         - merchant_code
-    CheckoutProcessMixin:
+    ProcessCheckout:
       description: Details of the payment instrument for processing the checkout.
       type: object
       properties:
@@ -5306,7 +5418,7 @@ components:
           type: integer
         timestamp:
           $ref: '#/components/schemas/TimestampEvent'
-    TransactionMixinBase:
+    TransactionBase:
       description: Details of the transaction.
       type: object
       properties:
@@ -5350,7 +5462,7 @@ components:
           description: Current number of the installment for deferred payments.
           type: integer
           minimum: 1
-    TransactionMixinCheckout:
+    TransactionCheckoutInfo:
       type: object
       properties:
         merchant_code:
@@ -5402,7 +5514,7 @@ components:
             - ACCELERATED_INSTALLMENT
     TransactionHistory:
       allOf:
-        - $ref: '#/components/schemas/TransactionMixinBase'
+        - $ref: '#/components/schemas/TransactionBase'
         - $ref: '#/components/schemas/TransactionMixinHistory'
         - type: object
           properties:
@@ -5442,8 +5554,8 @@ components:
                 - UNKNOWN
     TransactionFull:
       allOf:
-        - $ref: '#/components/schemas/TransactionMixinBase'
-        - $ref: '#/components/schemas/TransactionMixinCheckout'
+        - $ref: '#/components/schemas/TransactionBase'
+        - $ref: '#/components/schemas/TransactionCheckoutInfo'
         - $ref: '#/components/schemas/TransactionMixinHistory'
         - type: object
           properties:
@@ -5706,25 +5818,12 @@ components:
         - updated_at
         - permissions
         - account_type
-    CompatError:
-      description: Error object for compat API calls.
-      type: object
-      properties:
-        error_code:
-          type: string
-          example: NOT_FOUND
-        message:
-          type: string
-          example: Resource not found.
-      required:
-        - error_code
-        - message
     Metadata:
-      description: 'Set of user-defined key-value pairs attached to the object. Partial updates are not supported. When updating, always submit whole metadata.'
+      description: 'Set of user-defined key-value pairs attached to the object. Partial updates are not supported. When updating, always submit whole metadata. Maximum of 64 parameters are allowed in the object.'
       type: object
-      example: {}
-      additionalProperties:
-        maxLength: 256
+      example:
+        my_system_id: f5f096de-c557-4ff3-9b77-9db0a1a2cb0d
+      maxProperties: 64
     Attributes:
       description: Object attributes that are modifiable only by SumUp applications.
       type: object
@@ -5877,6 +5976,37 @@ components:
       required:
         - ref
         - value
+    Problem:
+      description: |
+        A RFC 9457 problem details object.
+
+        Additional properties specific to the problem type may be present.
+      type: object
+      properties:
+        type:
+          description: A URI reference that identifies the problem type.
+          type: string
+          format: uri
+        title:
+          description: 'A short, human-readable summary of the problem type.'
+          type: string
+        status:
+          description: The HTTP status code generated by the origin server for this occurrence of the problem.
+          type: integer
+          example: 400
+          exclusiveMaximum: true
+          maximum: 600
+          minimum: 400
+        detail:
+          description: A human-readable explanation specific to this occurrence of the problem.
+          type: string
+        instance:
+          description: A URI reference that identifies the specific occurrence of the problem.
+          type: string
+          format: uri
+      additionalProperties: true
+      required:
+        - type
     MembershipStatus:
       description: The status of the membership.
       type: string
@@ -6679,8 +6809,8 @@ components:
           $ref: '#/components/schemas/ReaderStatus'
         device:
           $ref: '#/components/schemas/ReaderDevice'
-        meta:
-          $ref: '#/components/schemas/Meta'
+        metadata:
+          $ref: '#/components/schemas/Metadata'
         created_at:
           description: The timestamp of when the reader was created.
           type: string
@@ -6702,8 +6832,8 @@ components:
     ReaderID:
       description: |-
         Unique identifier of the object.
-        Note that this identifies the instance of the physical devices pairing with your SumUp account.
-        If you DELETE a reader, and pair the device again, the ID will be different. Do not use this ID to refer to a physical device.
+
+        Note that this identifies the instance of the physical devices pairing with your SumUp account. If you [delete](https://developer.sumup.com/api/readers/delete-reader) a reader, and pair the device again, the ID will be different. Do not use this ID to refer to a physical device.
       type: string
       example: rdr_3MSAFM23CK82VSTT4BN6RWSQ65
       maxLength: 30
@@ -7467,7 +7597,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/CheckoutProcessMixin'
+            $ref: '#/components/schemas/ProcessCheckout'
           examples:
             ProcessCard:
               description: Process a checkout with a card
@@ -7920,12 +8050,6 @@ components:
               value:
                 error_code: CHECKOUT_PROCESSED
                 message: Checkout is already processed
-    CompatErrorResponse:
-      description: Error response for compat API calls.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/CompatError'
     ListMemberships:
       description: Returns a list of Membership objects.
       content:

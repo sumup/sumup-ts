@@ -137,7 +137,7 @@ export type MandateResponse = {
 /**
  * Details of the transaction.
  */
-export type TransactionMixinBase = {
+export type TransactionBase = {
   /**
    * Unique ID of the transaction.
    */
@@ -169,7 +169,7 @@ export type TransactionMixinBase = {
   installments_count?: number;
 };
 
-export type TransactionMixinCheckout = {
+export type TransactionCheckoutInfo = {
   /**
    * Unique code of the registered merchant to whom the payment is made.
    */
@@ -247,7 +247,7 @@ export type Checkout = {
   /**
    * List of transactions related to the payment.
    */
-  transactions?: (TransactionMixinBase & TransactionMixinCheckout)[];
+  transactions?: (TransactionBase & TransactionCheckoutInfo)[];
 };
 
 /**
@@ -302,7 +302,7 @@ export type CheckoutCreateRequest = {
   /**
    * List of transactions related to the payment.
    */
-  transactions?: (TransactionMixinBase & TransactionMixinCheckout)[];
+  transactions?: (TransactionBase & TransactionCheckoutInfo)[];
   /**
    * __Required__ for [APMs](https://developer.sumup.com/online-payments/apm/introduction) and __recommended__ for card payments. Refers to a url where the end user is redirected once the payment processing completes. If not specified, the [Payment Widget](https://developer.sumup.com/online-payments/tools/card-widget) renders [3DS challenge](https://developer.sumup.com/online-payments/features/3ds) within an iframe instead of performing a full-page redirect.
    */
@@ -361,7 +361,7 @@ export type PersonalDetails = {
 /**
  * Details of the payment instrument for processing the checkout.
  */
-export type CheckoutProcessMixin = {
+export type ProcessCheckout = {
   /**
    * Describes the payment method used to attempt processing
    */
@@ -577,7 +577,7 @@ export class Checkouts extends Core.APIResource {
    */
   process(
     id: string,
-    body?: CheckoutProcessMixin,
+    body?: ProcessCheckout,
     params?: Core.FetchParams,
   ): Core.APIPromise<CheckoutSuccess | CheckoutAccepted> {
     return this._client.put<CheckoutSuccess | CheckoutAccepted>({
@@ -605,7 +605,6 @@ export declare namespace Checkouts {
     Checkout,
     CheckoutAccepted,
     CheckoutCreateRequest,
-    CheckoutProcessMixin,
     CheckoutSuccess,
     Currency,
     DetailsError,
@@ -616,7 +615,8 @@ export declare namespace Checkouts {
     MandatePayload,
     MandateResponse,
     PersonalDetails,
-    TransactionMixinBase,
-    TransactionMixinCheckout,
+    ProcessCheckout,
+    TransactionBase,
+    TransactionCheckoutInfo,
   };
 }
