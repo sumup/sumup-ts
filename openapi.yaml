@@ -5818,12 +5818,6 @@ components:
         - updated_at
         - permissions
         - account_type
-    Metadata:
-      description: 'Set of user-defined key-value pairs attached to the object. Partial updates are not supported. When updating, always submit whole metadata. Maximum of 64 parameters are allowed in the object.'
-      type: object
-      example:
-        my_system_id: f5f096de-c557-4ff3-9b77-9db0a1a2cb0d
-      maxProperties: 64
     Attributes:
       description: Object attributes that are modifiable only by SumUp applications.
       type: object
@@ -6333,6 +6327,12 @@ components:
         - created_at
         - updated_at
       title: Role
+    Metadata:
+      description: 'Set of user-defined key-value pairs attached to the object. Partial updates are not supported. When updating, always submit whole metadata. Maximum of 64 parameters are allowed in the object.'
+      type: object
+      example: {}
+      additionalProperties: true
+      maxProperties: 64
     ListPersonsResponseBody:
       type: object
       properties:
