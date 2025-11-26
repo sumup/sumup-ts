@@ -3,11 +3,6 @@
 import * as Core from "../../core";
 
 /**
- * Set of user-defined key-value pairs attached to the object. Partial updates are not supported. When updating, always submit whole metadata. Maximum of 64 parameters are allowed in the object.
- */
-export type Metadata = Record<string, unknown>;
-
-/**
  * A RFC 9457 problem details object.
  *
  * Additional properties specific to the problem type may be present.
@@ -35,6 +30,11 @@ export type Problem = {
    */
   instance?: string;
 };
+
+/**
+ * Set of user-defined key-value pairs attached to the object. Partial updates are not supported. When updating, always submit whole metadata. Maximum of 64 parameters are allowed in the object.
+ */
+export type Metadata = Record<string, unknown>;
 
 /**
  * Role
