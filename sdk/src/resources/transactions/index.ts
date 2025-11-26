@@ -53,7 +53,7 @@ export type Currency =
 /**
  * Details of the transaction.
  */
-export type TransactionMixinBase = {
+export type TransactionBase = {
   /**
    * Unique ID of the transaction.
    */
@@ -85,7 +85,7 @@ export type TransactionMixinBase = {
   installments_count?: number;
 };
 
-export type TransactionMixinCheckout = {
+export type TransactionCheckoutInfo = {
   /**
    * Unique code of the registered merchant to whom the payment is made.
    */
@@ -282,7 +282,7 @@ export type TransactionMixinHistory = {
     | "ACCELERATED_INSTALLMENT";
 };
 
-export type TransactionHistory = TransactionMixinBase &
+export type TransactionHistory = TransactionBase &
   TransactionMixinHistory & {
     transaction_id?: TransactionID;
     /**
@@ -343,8 +343,8 @@ export type LinkRefund = Link & {
   max_amount?: number;
 };
 
-export type TransactionFull = TransactionMixinBase &
-  TransactionMixinCheckout &
+export type TransactionFull = TransactionBase &
+  TransactionCheckoutInfo &
   TransactionMixinHistory & {
     /**
      * Email address of the registered user (merchant) to whom the payment is made.
@@ -629,12 +629,12 @@ export declare namespace Transactions {
     Product,
     RefundTransactionParams,
     TimestampEvent,
+    TransactionBase,
+    TransactionCheckoutInfo,
     TransactionEvent,
     TransactionFull,
     TransactionHistory,
     TransactionID,
-    TransactionMixinBase,
-    TransactionMixinCheckout,
     TransactionMixinHistory,
   };
 }
