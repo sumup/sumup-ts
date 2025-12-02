@@ -12,7 +12,7 @@
     "@sumup/sdk": "file:../../sdk",
     "cookie-parser": "^1.4.7",
     "express": "^5.1.0",
-    "oauth4webapi": "^3.8.2",
+    "oauth4webapi": "^3.8.3",
     "typescript": "^5.7.3"
   },
   "devDependencies": {
