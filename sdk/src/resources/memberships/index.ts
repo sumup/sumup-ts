@@ -121,6 +121,8 @@ export type ListMembershipsQueryParams = {
   "resource.type"?: ResourceType;
   "resource.attributes.sandbox"?: boolean;
   "resource.name"?: string;
+  "resource.parent.id"?: string;
+  "resource.parent.type"?: ResourceType;
 };
 
 export type ListMembershipsResponse = {
