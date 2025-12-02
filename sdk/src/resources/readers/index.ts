@@ -200,7 +200,7 @@ export type CreateReaderCheckoutRequest = {
      *
      */
     tags?: Record<string, unknown>;
-  };
+  } | null;
   /**
    * The card type of the card used for the transaction.
    * Is is required only for some countries (e.g: Brazil).
@@ -216,8 +216,11 @@ export type CreateReaderCheckoutRequest = {
    * It may vary according to the merchant country.
    * For example, in Brazil, the maximum number of installments is 12.
    *
+   * Omit if the merchant country does support installments.
+   * Otherwise, the checkout will be rejected.
+   *
    */
-  installments?: number;
+  installments?: number | null;
   /**
    * Webhook URL to which the payment result will be sent.
    * It must be a HTTPS url.

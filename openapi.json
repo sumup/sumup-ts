@@ -3768,6 +3768,22 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "resource.parent.id",
+            "in": "query",
+            "description": "Filter memberships by the parent of the resource the membership is in.\nWhen filtering by parent both `resource.parent.id` and `resource.parent.type` must be present.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "resource.parent.type",
+            "in": "query",
+            "description": "Filter memberships by the parent of the resource the membership is in.\nWhen filtering by parent both `resource.parent.id` and `resource.parent.type` must be present.",
+            "schema": {
+              "$ref": "#/components/schemas/ResourceType"
+            }
           }
         ],
         "responses": {
@@ -8064,6 +8080,7 @@
           "internal_id": {
             "description": "Internal unique ID of the transaction on the SumUp platform.",
             "type": "integer",
+            "format": "int64",
             "example": 1763892018
           }
         }
@@ -9809,6 +9826,16 @@
               }
             }
           },
+          "InstallmentsTooLow": {
+            "description": "Error returned when installments is not within the allowed range.",
+            "value": {
+              "errors": {
+                "installments": [
+                  "is invalid"
+                ]
+              }
+            }
+          },
           "ReaderCheckoutPending": {
             "description": "Error returned when a checkout was requested in the last 60 seconds.",
             "value": {
@@ -9959,6 +9986,7 @@
           "affiliate": {
             "description": "Affiliate metadata for the transaction.\nIt is a field that allow for integrators to track the source of the transaction.\n",
             "type": "object",
+            "nullable": true,
             "properties": {
               "app_id": {
                 "description": "Application ID of the affiliate.\nIt is a unique identifier for the application and should be set by the integrator in the [Affiliate Keys](https://developer.sumup.com/affiliate-keys) page.\n",
@@ -10020,9 +10048,11 @@
             "x-validate": null
           },
           "installments": {
-            "description": "Number of installments for the transaction.\nIt may vary according to the merchant country.\nFor example, in Brazil, the maximum number of installments is 12.\n",
+            "description": "Number of installments for the transaction.\nIt may vary according to the merchant country.\nFor example, in Brazil, the maximum number of installments is 12.\n\nOmit if the merchant country does support installments.\nOtherwise, the checkout will be rejected.\n",
             "type": "integer",
             "example": 1,
+            "minimum": 1,
+            "nullable": true,
             "x-struct": null,
             "x-validate": null
           },

@@ -2513,6 +2513,20 @@ paths:
           description: Filter memberships by the name of the resource the membership is in.
           schema:
             type: string
+        - name: resource.parent.id
+          in: query
+          description: |-
+            Filter memberships by the parent of the resource the membership is in.
+            When filtering by parent both `resource.parent.id` and `resource.parent.type` must be present.
+          schema:
+            type: string
+        - name: resource.parent.type
+          in: query
+          description: |-
+            Filter memberships by the parent of the resource the membership is in.
+            When filtering by parent both `resource.parent.id` and `resource.parent.type` must be present.
+          schema:
+            $ref: '#/components/schemas/ResourceType'
       responses:
         '200':
           description: Returns a list of Membership objects.
@@ -5492,6 +5506,7 @@ components:
         internal_id:
           description: Internal unique ID of the transaction on the SumUp platform.
           type: integer
+          format: int64
           example: 1763892018
     TransactionMixinHistory:
       type: object
@@ -6908,6 +6923,12 @@ components:
                 - must be between 0.01 and 0.99
               total_amount:
                 - must be greater than 0
+        InstallmentsTooLow:
+          description: Error returned when installments is not within the allowed range.
+          value:
+            errors:
+              installments:
+                - is invalid
         ReaderCheckoutPending:
           description: Error returned when a checkout was requested in the last 60 seconds.
           value:
@@ -7023,6 +7044,7 @@ components:
             Affiliate metadata for the transaction.
             It is a field that allow for integrators to track the source of the transaction.
           type: object
+          nullable: true
           properties:
             app_id:
               description: |
@@ -7088,8 +7110,13 @@ components:
             Number of installments for the transaction.
             It may vary according to the merchant country.
             For example, in Brazil, the maximum number of installments is 12.
+
+            Omit if the merchant country does support installments.
+            Otherwise, the checkout will be rejected.
           type: integer
           example: 1
+          minimum: 1
+          nullable: true
           x-struct: null
           x-validate: null
         return_url:
