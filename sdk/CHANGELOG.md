@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.9](https://github.com/sumup/sumup-ts/compare/v0.0.8...v0.0.9) (2025-12-02)
+
+
+### Bug Fixes
+
+* **sdk:** typo in package exports ([#174](https://github.com/sumup/sumup-ts/issues/174)) ([843f972](https://github.com/sumup/sumup-ts/commit/843f972d08b50e5816613462fbb35b5e1e7aa8c6))
+
 ## [0.0.8](https://github.com/sumup/sumup-ts/compare/v0.0.7...v0.0.8) (2025-11-26)
 
 
