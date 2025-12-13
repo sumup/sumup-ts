@@ -5,7 +5,7 @@ import * as Core from "../../core";
 /**
  * Object attributes that are modifiable only by SumUp applications.
  */
-export type Attributes = Record<string, Record<string, unknown>>;
+export type Attributes = Record<string, unknown>;
 
 /**
  * An [ISO3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)

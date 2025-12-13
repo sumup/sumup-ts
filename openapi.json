@@ -3784,6 +3784,23 @@
             "schema": {
               "$ref": "#/components/schemas/ResourceType"
             }
+          },
+          {
+            "name": "roles",
+            "in": "query",
+            "description": "Filter the returned memberships by role.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "example": [
+                "role_employee",
+                "role_accountant"
+              ]
+            },
+            "explode": true,
+            "style": "form"
           }
         ],
         "responses": {
@@ -8531,9 +8548,7 @@
         "description": "Object attributes that are modifiable only by SumUp applications.",
         "type": "object",
         "example": {},
-        "additionalProperties": {
-          "maxLength": 256
-        }
+        "additionalProperties": true
       },
       "CountryCode": {
         "description": "An [ISO3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)\ncountry code. This definition users `oneOf` with a two-character string\ntype to allow for support of future countries in client code.",
