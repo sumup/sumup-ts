@@ -369,10 +369,11 @@ export type TransactionFull = TransactionBase &
      */
     verification_method?:
       | "none"
+      | "na"
       | "signature"
-      | "offline pin"
-      | "online pin"
-      | "offline pin + signature"
+      | "offline PIN"
+      | "online PIN"
+      | "offline PIN + signature"
       | "confirmation code verified";
     card?: CardResponse;
     /**

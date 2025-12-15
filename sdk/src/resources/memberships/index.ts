@@ -5,7 +5,7 @@ import * as Core from "../../core";
 /**
  * Object attributes that are modifiable only by SumUp applications.
  */
-export type Attributes = Record<string, Record<string, unknown>>;
+export type Attributes = Record<string, unknown>;
 
 /**
  * The status of the membership.
@@ -123,6 +123,7 @@ export type ListMembershipsQueryParams = {
   "resource.name"?: string;
   "resource.parent.id"?: string;
   "resource.parent.type"?: ResourceType;
+  roles?: string[];
 };
 
 export type ListMembershipsResponse = {

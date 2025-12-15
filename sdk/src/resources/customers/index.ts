@@ -168,10 +168,7 @@ export class Customers extends Core.APIResource {
   /**
    * Creates a new saved customer resource which you can later manipulate and save payment instruments to.
    */
-  create(
-    body?: Customer,
-    params?: Core.FetchParams,
-  ): Core.APIPromise<Customer> {
+  create(body: Customer, params?: Core.FetchParams): Core.APIPromise<Customer> {
     return this._client.post<Customer>({
       path: `/v0.1/customers`,
       body,
@@ -200,7 +197,7 @@ export class Customers extends Core.APIResource {
    */
   update(
     customerId: string,
-    body?: UpdateCustomerParams,
+    body: UpdateCustomerParams,
     params?: Core.FetchParams,
   ): Core.APIPromise<Customer> {
     return this._client.put<Customer>({
