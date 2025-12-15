@@ -184,6 +184,7 @@
         "description": "Creates a new payment checkout resource. The unique `checkout_reference` created by this request, is used for further manipulation of the checkout.\n\nFor 3DS checkouts, add the `redirect_url` parameter to your request body schema.\n\nFollow by processing a checkout to charge the provided payment instrument.\n",
         "requestBody": {
           "description": "",
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
@@ -658,6 +659,7 @@
         "description": "Processing a checkout will attempt to charge the provided payment instrument for the amount of the specified checkout resource initiated in the `Create a checkout` endpoint.\n\nFollow this request with `Retrieve a checkout` to confirm its status.\n",
         "requestBody": {
           "description": "Details of the payment instrument for processing the checkout.",
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
@@ -1190,6 +1192,7 @@
         "description": "Creates a new saved customer resource which you can later manipulate and save payment instruments to.",
         "requestBody": {
           "description": "Details of the customer.",
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
@@ -1429,6 +1432,7 @@
         "description": "Updates an identified saved customer resource's personal details.\n\nThe request only overwrites the parameters included in the request, all other parameters will remain with their initially assigned values.\n",
         "requestBody": {
           "description": "",
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
@@ -3784,6 +3788,23 @@
             "schema": {
               "$ref": "#/components/schemas/ResourceType"
             }
+          },
+          {
+            "name": "roles",
+            "in": "query",
+            "description": "Filter the returned memberships by role.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "example": [
+                "role_employee",
+                "role_accountant"
+              ]
+            },
+            "explode": true,
+            "style": "form"
           }
         ],
         "responses": {
@@ -6652,7 +6673,8 @@
             "enum": [
               "PENDING",
               "FAILED",
-              "PAID"
+              "PAID",
+              "EXPIRED"
             ]
           },
           "date": {
@@ -8213,10 +8235,11 @@
                 "type": "string",
                 "enum": [
                   "none",
+                  "na",
                   "signature",
-                  "offline pin",
-                  "online pin",
-                  "offline pin + signature",
+                  "offline PIN",
+                  "online PIN",
+                  "offline PIN + signature",
                   "confirmation code verified"
                 ]
               },
@@ -8531,9 +8554,7 @@
         "description": "Object attributes that are modifiable only by SumUp applications.",
         "type": "object",
         "example": {},
-        "additionalProperties": {
-          "maxLength": 256
-        }
+        "additionalProperties": true
       },
       "CountryCode": {
         "description": "An [ISO3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)\ncountry code. This definition users `oneOf` with a two-character string\ntype to allow for support of future countries in client code.",
@@ -10637,6 +10658,7 @@
         }
       },
       "CheckoutCreate": {
+        "required": true,
         "content": {
           "application/json": {
             "schema": {
@@ -10686,6 +10708,7 @@
         }
       },
       "CheckoutProcess": {
+        "required": true,
         "description": "Details of the payment instrument for processing the checkout.",
         "content": {
           "application/json": {
@@ -10776,6 +10799,7 @@
         }
       },
       "CustomerCreate": {
+        "required": true,
         "description": "Details of the customer.",
         "content": {
           "application/json": {
@@ -10786,6 +10810,7 @@
         }
       },
       "CustomerUpdate": {
+        "required": true,
         "content": {
           "application/json": {
             "schema": {
