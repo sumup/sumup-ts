@@ -11,14 +11,14 @@
   "dependencies": {
     "@sumup/sdk": "file:../../sdk",
     "cookie-parser": "^1.4.7",
-    "express": "^5.1.0",
+    "express": "^5.2.1",
     "oauth4webapi": "^3.8.3",
     "typescript": "^5.7.3"
   },
   "devDependencies": {
     "@biomejs/biome": "2.1.2",
     "@types/cookie-parser": "^1.4.10",
-    "@types/express": "^5.0.0",
+    "@types/express": "^5.0.6",
     "@types/node": "^24.10.1"
   }
 }
