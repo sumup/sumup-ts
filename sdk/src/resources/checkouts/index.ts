@@ -230,7 +230,7 @@ export type Checkout = {
   /**
    * Current status of the checkout.
    */
-  status?: "PENDING" | "FAILED" | "PAID";
+  status?: "PENDING" | "FAILED" | "PAID" | "EXPIRED";
   /**
    * Date and time of the creation of the payment checkout. Response format expressed according to [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) code.
    */
@@ -549,7 +549,7 @@ export class Checkouts extends Core.APIResource {
    *
    */
   create(
-    body?: CheckoutCreateRequest,
+    body: CheckoutCreateRequest,
     params?: Core.FetchParams,
   ): Core.APIPromise<Checkout> {
     return this._client.post<Checkout>({
@@ -577,7 +577,7 @@ export class Checkouts extends Core.APIResource {
    */
   process(
     id: string,
-    body?: ProcessCheckout,
+    body: ProcessCheckout,
     params?: Core.FetchParams,
   ): Core.APIPromise<CheckoutSuccess | CheckoutAccepted> {
     return this._client.put<CheckoutSuccess | CheckoutAccepted>({

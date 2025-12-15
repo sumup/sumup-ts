@@ -5,7 +5,7 @@ import * as Core from "../../core";
 /**
  * Object attributes that are modifiable only by SumUp applications.
  */
-export type Attributes = Record<string, Record<string, unknown>>;
+export type Attributes = Record<string, unknown>;
 
 /**
  * A RFC 9457 problem details object.
