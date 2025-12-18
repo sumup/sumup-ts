@@ -124,12 +124,33 @@ export type CreateReaderCheckoutError = {
 };
 
 /**
+ * StatusResponse
+ *
+ * Status of a device
+ */
+export type StatusResponse = { data: Record<string, unknown> };
+
+/**
  * CreateReaderTerminateUnprocessableEntity
  *
  * Unprocessable entity
  */
 export type CreateReaderTerminateUnprocessableEntity = {
   errors: Record<string, unknown>;
+};
+
+/**
+ * BadGateway
+ *
+ * 502 Bad Gateway
+ */
+export type BadGateway = {
+  errors: {
+    /**
+     * Fuller message giving context to error
+     */
+    detail: string;
+  };
 };
 
 /**
@@ -147,6 +168,28 @@ export type CreateReaderTerminateError = {
 };
 
 /**
+ * BadRequest
+ *
+ * 400 Bad Request
+ */
+export type BadRequest = {
+  errors: {
+    /**
+     * Fuller message giving context to error
+     */
+    detail?: string;
+    /**
+     * Key indicating type of error
+     */
+    type:
+      | "INVALID_BEARER_TOKEN"
+      | "INVALID_USER_AGENT"
+      | "NOT_ENOUGH_UNPAID_PAYOUTS"
+      | "DUPLICATE_HEADERS";
+  };
+};
+
+/**
  * CreateReaderCheckoutResponse
  */
 export type CreateReaderCheckoutResponse = {
@@ -158,6 +201,52 @@ export type CreateReaderCheckoutResponse = {
      *
      */
     client_transaction_id: string;
+  };
+};
+
+/**
+ * GatewayTimeout
+ *
+ * 504 Gateway Timeout
+ */
+export type GatewayTimeout = {
+  errors: {
+    /**
+     * Fuller message giving context to error
+     */
+    detail: string;
+  };
+};
+
+/**
+ * Unauthorized
+ *
+ * 401 Unauthorized
+ */
+export type Unauthorized = {
+  errors: {
+    /**
+     * Fuller message giving context to error
+     */
+    detail?: string;
+    /**
+     * Key indicating type of error
+     */
+    type: "INVALID_ACCESS_TOKEN" | "INVALID_PASSWORD";
+  };
+};
+
+/**
+ * InternalServerError
+ *
+ * 500 Internal Server Error
+ */
+export type InternalServerError = {
+  errors: {
+    /**
+     * Fuller message giving context to error
+     */
+    detail: string;
   };
 };
 
@@ -269,6 +358,20 @@ export type CreateReaderCheckoutRequest = {
      * Integer value of the amount.
      */
     value: number;
+  };
+};
+
+/**
+ * NotFound
+ *
+ * 404 Not Found
+ */
+export type NotFound = {
+  errors: {
+    /**
+     * Fuller message giving context to error
+     */
+    detail: string;
   };
 };
 
@@ -385,6 +488,39 @@ export class Readers extends Core.APIResource {
   }
 
   /**
+   * Show the last known status for a Reader.
+   *
+   * This endpoint allows you to retrieve updates from the connected card reader, including the current screen being displayed during the payment process and the device status (battery level, connectivity, and update state).
+   *
+   * Supported States
+   *
+   * * `IDLE` – Reader ready for next transaction
+   * * `SELECTING_TIP` – Waiting for tip input
+   * * `WAITING_FOR_CARD` – Awaiting card insert/tap
+   * * `WAITING_FOR_PIN` – Waiting for PIN entry
+   * * `WAITING_FOR_SIGNATURE` – Waiting for customer signature
+   * * `UPDATING_FIRMWARE` – Firmware update in progress
+   *
+   * Device Status
+   *
+   * * `ONLINE` – Device connected and operational
+   * * `OFFLINE` – Device disconnected (last state persisted)
+   *
+   * **Note**: If the target device is a Solo, it must be in version 3.3.39.0 or higher.
+   *
+   */
+  showReaderStatus(
+    merchantCode: string,
+    readerId: string,
+    params?: Core.FetchParams,
+  ): Core.APIPromise<StatusResponse> {
+    return this._client.get<StatusResponse>({
+      path: `/v0.1/merchants/${merchantCode}/readers/${readerId}/status`,
+      ...params,
+    });
+  }
+
+  /**
    * Terminate a Reader Checkout stops the current transaction on the target device.
    *
    * This process is asynchronous and the actual termination may take some time to be performed on the device.
@@ -417,6 +553,8 @@ export class Readers extends Core.APIResource {
 
 export declare namespace Readers {
   export type {
+    BadGateway,
+    BadRequest,
     CreateReaderCheckoutError,
     CreateReaderCheckoutRequest,
     CreateReaderCheckoutResponse,
@@ -425,7 +563,10 @@ export declare namespace Readers {
     CreateReaderTerminateError,
     CreateReaderTerminateParams,
     CreateReaderTerminateUnprocessableEntity,
+    GatewayTimeout,
+    InternalServerError,
     Metadata,
+    NotFound,
     Problem,
     Reader,
     ReaderDevice,
@@ -433,6 +574,8 @@ export declare namespace Readers {
     ReaderName,
     ReaderPairingCode,
     ReaderStatus,
+    StatusResponse,
+    Unauthorized,
     UpdateReaderParams,
   };
 }
