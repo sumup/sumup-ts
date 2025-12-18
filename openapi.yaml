@@ -1526,9 +1526,13 @@ paths:
                 - CASH
                 - POS
                 - ECOM
+                - RECURRING
+                - BITCOIN
                 - BALANCE
                 - MOTO
                 - BOLETO
+                - DIRECT_DEBIT
+                - APM
                 - UNKNOWN
         - name: types
           in: query
@@ -1684,9 +1688,13 @@ paths:
                 - CASH
                 - POS
                 - ECOM
+                - RECURRING
+                - BITCOIN
                 - BALANCE
                 - MOTO
                 - BOLETO
+                - DIRECT_DEBIT
+                - APM
                 - UNKNOWN
         - name: types
           in: query
@@ -2521,16 +2529,19 @@ paths:
           in: query
           description: |-
             Filter memberships by the parent of the resource the membership is in.
-            When filtering by parent both `resource.parent.id` and `resource.parent.type` must be present.
+            When filtering by parent both `resource.parent.id` and `resource.parent.type` must be present. Pass explicit null to filter for resources without a parent.
           schema:
             type: string
+            nullable: true
         - name: resource.parent.type
           in: query
           description: |-
             Filter memberships by the parent of the resource the membership is in.
-            When filtering by parent both `resource.parent.id` and `resource.parent.type` must be present.
+            When filtering by parent both `resource.parent.id` and `resource.parent.type` must be present. Pass explicit null to filter for resources without a parent.
           schema:
-            $ref: '#/components/schemas/ResourceType'
+            allOf:
+              - $ref: '#/components/schemas/ResourceType'
+            nullable: true
         - name: roles
           in: query
           description: Filter the returned memberships by role.
@@ -3858,6 +3869,128 @@ paths:
         - readers_checkout_create
       x-scopes:
         - readers.write
+  '/v0.1/merchants/{merchant_code}/readers/{reader_id}/status':
+    get:
+      operationId: ShowReaderStatus
+      summary: Show a Reader Status
+      description: |
+        Show the last known status for a Reader.
+
+        This endpoint allows you to retrieve updates from the connected card reader, including the current screen being displayed during the payment process and the device status (battery level, connectivity, and update state).
+
+        Supported States
+
+        * `IDLE` – Reader ready for next transaction
+        * `SELECTING_TIP` – Waiting for tip input
+        * `WAITING_FOR_CARD` – Awaiting card insert/tap
+        * `WAITING_FOR_PIN` – Waiting for PIN entry
+        * `WAITING_FOR_SIGNATURE` – Waiting for customer signature
+        * `UPDATING_FIRMWARE` – Firmware update in progress
+
+        Device Status
+
+        * `ONLINE` – Device connected and operational
+        * `OFFLINE` – Device disconnected (last state persisted)
+
+        **Note**: If the target device is a Solo, it must be in version 3.3.39.0 or higher.
+      parameters:
+        - name: merchant_code
+          in: path
+          description: Merchant Code
+          required: true
+          schema:
+            type: string
+            x-struct: null
+            x-validate: null
+          example: MC0X0ABC
+        - name: reader_id
+          in: path
+          description: The unique identifier of the Reader
+          required: true
+          schema:
+            type: string
+            x-struct: null
+            x-validate: null
+          example: rdr_3MSAFM23CK82VSTT4BN6RWSQ65
+        - name: Accept
+          in: header
+          required: true
+          schema:
+            type: string
+            x-struct: null
+            x-validate: null
+          example: application/json
+        - name: Content-Type
+          in: header
+          required: true
+          schema:
+            type: string
+            x-struct: null
+            x-validate: null
+          example: application/json
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+            x-struct: null
+            x-validate: null
+          example: Bearer 4470641ddc7ac230dc463417aab0ba30ef499844c73072c3f6c7a88204c700bd
+      responses:
+        '200':
+          description: Response with the device status.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusResponse'
+        '400':
+          description: Response when given params (or one of them) are invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        '401':
+          description: Response when given merchant's token is invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '404':
+          description: Response when given reader is not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
+        '500':
+          description: Generic error response for backend failure
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+        '502':
+          description: Generic error response for an upstream service failure
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadGateway'
+        '504':
+          description: Generic error response for an upstream service timeout
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GatewayTimeout'
+      security:
+        - apiKey: []
+        - oauth2:
+            - readers.read
+      tags:
+        - Readers
+      x-codegen:
+        method_name: show_reader_status
+      x-permissions:
+        - readers_view
+      x-scopes:
+        - readers.read
   '/v0.1/merchants/{merchant_code}/readers/{reader_id}/terminate':
     post:
       operationId: CreateReaderTerminate
@@ -4042,9 +4175,13 @@ components:
             - CASH
             - POS
             - ECOM
+            - RECURRING
+            - BITCOIN
             - BALANCE
             - MOTO
             - BOLETO
+            - DIRECT_DEBIT
+            - APM
             - UNKNOWN
     ReadersFilter:
       name: readers
@@ -5485,10 +5622,17 @@ components:
           description: Payment type used for the transaction.
           type: string
           enum:
+            - CASH
+            - POS
             - ECOM
             - RECURRING
+            - BITCOIN
+            - BALANCE
+            - MOTO
             - BOLETO
-            - POS
+            - DIRECT_DEBIT
+            - APM
+            - UNKNOWN
         installments_count:
           description: Current number of the installment for deferred payments.
           type: integer
@@ -6946,11 +7090,12 @@ components:
             errors:
               installments:
                 - is invalid
-        ReaderCheckoutPending:
+        ReaderBusy:
           description: Error returned when a checkout was requested in the last 60 seconds.
           value:
             errors:
-              detail: A pending transaction already exists for this device
+              detail: There is a pending checkout for the device.
+              type: READER_BUSY
         ReaderOffline:
           description: Error returned when the target device is not online.
           value:
@@ -6983,6 +7128,93 @@ components:
       title: CreateReaderCheckoutError
       x-struct: Elixir.SoloEdgeWeb.OpenApi.ReadersController.CreateReaderCheckoutError
       x-validate: null
+    StatusResponse:
+      description: Status of a device
+      type: object
+      properties:
+        data:
+          properties:
+            battery_level:
+              description: Battery level percentage
+              type: float
+              example: 10.5
+              maximum: 100
+              minimum: 0
+              x-struct: null
+              x-validate: null
+            battery_temperature:
+              description: Battery temperature in Celsius
+              type: integer
+              example: 35
+              x-struct: null
+              x-validate: null
+            connection_type:
+              description: Type of connection used by the device
+              type: string
+              example: Wi-Fi
+              enum:
+                - btle
+                - edge
+                - gprs
+                - lte
+                - umts
+                - usb
+                - Wi-Fi
+              x-struct: null
+              x-validate: null
+            firmware_version:
+              description: Firmware version of the device
+              type: string
+              example: 3.3.3.21
+              x-struct: null
+              x-validate: null
+            last_activity:
+              description: Timestamp of the last activity from the device
+              type: string
+              format: date-time
+              example: '2025-09-25T15:20:00Z'
+              x-struct: null
+              x-validate: null
+            state:
+              description: Latest state of the device
+              type: string
+              example: IDLE
+              enum:
+                - IDLE
+                - SELECTING_TIP
+                - WAITING_FOR_CARD
+                - WAITING_FOR_PIN
+                - WAITING_FOR_SIGNATURE
+                - UPDATING_FIRMWARE
+              x-struct: null
+              x-validate: null
+            status:
+              description: Status of a device
+              type: string
+              example: ONLINE
+              enum:
+                - ONLINE
+                - OFFLINE
+              x-struct: null
+              x-validate: null
+          required:
+            - status
+          x-struct: null
+          x-validate: null
+      example:
+        data:
+          battery_level: 10
+          battery_temperature: 35
+          connection_type: Wi-Fi
+          firmware_version: 3.3.3.21
+          last_activity: '2025-09-25T15:20:00Z'
+          state: IDLE
+          status: ONLINE
+      required:
+        - data
+      title: StatusResponse
+      x-struct: Elixir.SoloEdgeWeb.OpenApi.ReadersController.StatusResponse
+      x-validate: null
     CreateReaderTerminateUnprocessableEntity:
       description: Unprocessable entity
       type: object
@@ -7004,6 +7236,30 @@ components:
       title: CreateReaderTerminateUnprocessableEntity
       x-struct: Elixir.SoloEdgeWeb.OpenApi.ReadersController.CreateReaderTerminateUnprocessableEntity
       x-validate: null
+    BadGateway:
+      description: 502 Bad Gateway
+      type: object
+      properties:
+        errors:
+          type: object
+          properties:
+            detail:
+              description: Fuller message giving context to error
+              type: string
+              x-struct: null
+              x-validate: null
+          required:
+            - detail
+          x-struct: null
+          x-validate: null
+      example:
+        errors:
+          detail: Bad Gateway
+      required:
+        - errors
+      title: BadGateway
+      x-struct: Elixir.SoloEdgeWeb.OpenApi.Errors.BadGateway
+      x-validate: null
     CreateReaderTerminateError:
       description: Error description
       type: object
@@ -7024,6 +7280,41 @@ components:
         - errors
       title: CreateReaderTerminateError
       x-struct: Elixir.SoloEdgeWeb.OpenApi.ReadersController.CreateReaderTerminateError
+      x-validate: null
+    BadRequest:
+      description: 400 Bad Request
+      type: object
+      properties:
+        errors:
+          type: object
+          properties:
+            detail:
+              description: Fuller message giving context to error
+              type: string
+              x-struct: null
+              x-validate: null
+            type:
+              description: Key indicating type of error
+              type: string
+              enum:
+                - INVALID_BEARER_TOKEN
+                - INVALID_USER_AGENT
+                - NOT_ENOUGH_UNPAID_PAYOUTS
+                - DUPLICATE_HEADERS
+              x-struct: null
+              x-validate: null
+          required:
+            - type
+          x-struct: null
+          x-validate: null
+      example:
+        errors:
+          detail: Bad request
+          type: INVALID_BEARER_TOKEN
+      required:
+        - errors
+      title: BadRequest
+      x-struct: Elixir.SoloEdgeWeb.OpenApi.Errors.BadRequest
       x-validate: null
     CreateReaderCheckoutResponse:
       type: object
@@ -7051,6 +7342,87 @@ components:
         - data
       title: CreateReaderCheckoutResponse
       x-struct: Elixir.SoloEdgeWeb.OpenApi.ReadersController.CreateReaderCheckoutResponse
+      x-validate: null
+    GatewayTimeout:
+      description: 504 Gateway Timeout
+      type: object
+      properties:
+        errors:
+          type: object
+          properties:
+            detail:
+              description: Fuller message giving context to error
+              type: string
+              x-struct: null
+              x-validate: null
+          required:
+            - detail
+          x-struct: null
+          x-validate: null
+      example:
+        errors:
+          detail: Gateway Timeout
+      required:
+        - errors
+      title: GatewayTimeout
+      x-struct: Elixir.SoloEdgeWeb.OpenApi.Errors.GatewayTimeout
+      x-validate: null
+    Unauthorized:
+      description: 401 Unauthorized
+      type: object
+      properties:
+        errors:
+          type: object
+          properties:
+            detail:
+              description: Fuller message giving context to error
+              type: string
+              x-struct: null
+              x-validate: null
+            type:
+              description: Key indicating type of error
+              type: string
+              enum:
+                - INVALID_ACCESS_TOKEN
+                - INVALID_PASSWORD
+              x-struct: null
+              x-validate: null
+          required:
+            - type
+          x-struct: null
+          x-validate: null
+      example:
+        errors:
+          detail: Invalid or expired access token
+          type: INVALID_ACCESS_TOKEN
+      required:
+        - errors
+      title: Unauthorized
+      x-struct: Elixir.SoloEdgeWeb.OpenApi.Errors.Unauthorized
+      x-validate: null
+    InternalServerError:
+      description: 500 Internal Server Error
+      type: object
+      properties:
+        errors:
+          type: object
+          properties:
+            detail:
+              description: Fuller message giving context to error
+              type: string
+              x-struct: null
+              x-validate: null
+          required:
+            - detail
+          x-struct: null
+          x-validate: null
+      example:
+        errors:
+          detail: Internal Server Error
+      required:
+        - errors
+      title: InternalServerError
+      x-struct: Elixir.SoloEdgeWeb.OpenApi.Errors.InternalServerError
       x-validate: null
     CreateReaderCheckoutRequest:
       description: Reader Checkout
@@ -7311,6 +7683,30 @@ components:
         - timestamp
       title: ReaderCheckoutStatusChange
       x-struct: Elixir.SoloEdgeWeb.OpenApi.ReadersController.ReaderCheckoutStatusChange
+      x-validate: null
+    NotFound:
+      description: 404 Not Found
+      type: object
+      properties:
+        errors:
+          type: object
+          properties:
+            detail:
+              description: Fuller message giving context to error
+              type: string
+              x-struct: null
+              x-validate: null
+          required:
+            - detail
+          x-struct: null
+          x-validate: null
+      example:
+        errors:
+          detail: Not Found
+      required:
+        - errors
+      title: NotFound
+      x-struct: Elixir.SoloEdgeWeb.OpenApi.Errors.NotFound
       x-validate: null
     AddressPayloadLegacy:
       description: Personal address

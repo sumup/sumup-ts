@@ -78,7 +78,18 @@ export type TransactionBase = {
   /**
    * Payment type used for the transaction.
    */
-  payment_type?: "ECOM" | "RECURRING" | "BOLETO" | "POS";
+  payment_type?:
+    | "CASH"
+    | "POS"
+    | "ECOM"
+    | "RECURRING"
+    | "BITCOIN"
+    | "BALANCE"
+    | "MOTO"
+    | "BOLETO"
+    | "DIRECT_DEBIT"
+    | "APM"
+    | "UNKNOWN";
   /**
    * Current number of the installment for deferred payments.
    */
@@ -468,9 +479,13 @@ export type ListTransactionsV2_1QueryParams = {
     | "CASH"
     | "POS"
     | "ECOM"
+    | "RECURRING"
+    | "BITCOIN"
     | "BALANCE"
     | "MOTO"
     | "BOLETO"
+    | "DIRECT_DEBIT"
+    | "APM"
     | "UNKNOWN"
   )[];
   types?: ("PAYMENT" | "REFUND" | "CHARGE_BACK")[];
@@ -502,9 +517,13 @@ export type ListTransactionsQueryParams = {
     | "CASH"
     | "POS"
     | "ECOM"
+    | "RECURRING"
+    | "BITCOIN"
     | "BALANCE"
     | "MOTO"
     | "BOLETO"
+    | "DIRECT_DEBIT"
+    | "APM"
     | "UNKNOWN"
   )[];
   types?: ("PAYMENT" | "REFUND" | "CHARGE_BACK")[];
