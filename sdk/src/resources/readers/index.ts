@@ -488,7 +488,7 @@ export class Readers extends Core.APIResource {
   }
 
   /**
-   * Show the last known status for a Reader.
+   * Provides the last known status for a Reader.
    *
    * This endpoint allows you to retrieve updates from the connected card reader, including the current screen being displayed during the payment process and the device status (battery level, connectivity, and update state).
    *
@@ -509,7 +509,7 @@ export class Readers extends Core.APIResource {
    * **Note**: If the target device is a Solo, it must be in version 3.3.39.0 or higher.
    *
    */
-  showReaderStatus(
+  getStatus(
     merchantCode: string,
     readerId: string,
     params?: Core.FetchParams,

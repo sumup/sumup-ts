@@ -5895,9 +5895,9 @@
     },
     "/v0.1/merchants/{merchant_code}/readers/{reader_id}/status": {
       "get": {
-        "operationId": "ShowReaderStatus",
-        "summary": "Show a Reader Status",
-        "description": "Show the last known status for a Reader.\n\nThis endpoint allows you to retrieve updates from the connected card reader, including the current screen being displayed during the payment process and the device status (battery level, connectivity, and update state).\n\nSupported States\n\n* `IDLE` – Reader ready for next transaction\n* `SELECTING_TIP` – Waiting for tip input\n* `WAITING_FOR_CARD` – Awaiting card insert/tap\n* `WAITING_FOR_PIN` – Waiting for PIN entry\n* `WAITING_FOR_SIGNATURE` – Waiting for customer signature\n* `UPDATING_FIRMWARE` – Firmware update in progress\n\nDevice Status\n\n* `ONLINE` – Device connected and operational\n* `OFFLINE` – Device disconnected (last state persisted)\n\n**Note**: If the target device is a Solo, it must be in version 3.3.39.0 or higher.\n",
+        "operationId": "GetReaderStatus",
+        "summary": "Get a Reader Status",
+        "description": "Provides the last known status for a Reader.\n\nThis endpoint allows you to retrieve updates from the connected card reader, including the current screen being displayed during the payment process and the device status (battery level, connectivity, and update state).\n\nSupported States\n\n* `IDLE` – Reader ready for next transaction\n* `SELECTING_TIP` – Waiting for tip input\n* `WAITING_FOR_CARD` – Awaiting card insert/tap\n* `WAITING_FOR_PIN` – Waiting for PIN entry\n* `WAITING_FOR_SIGNATURE` – Waiting for customer signature\n* `UPDATING_FIRMWARE` – Firmware update in progress\n\nDevice Status\n\n* `ONLINE` – Device connected and operational\n* `OFFLINE` – Device disconnected (last state persisted)\n\n**Note**: If the target device is a Solo, it must be in version 3.3.39.0 or higher.\n",
         "parameters": [
           {
             "name": "merchant_code",
@@ -6043,7 +6043,7 @@
           "Readers"
         ],
         "x-codegen": {
-          "method_name": "show_reader_status"
+          "method_name": "get_status"
         },
         "x-permissions": [
           "readers_view"
