@@ -3871,10 +3871,10 @@ paths:
         - readers.write
   '/v0.1/merchants/{merchant_code}/readers/{reader_id}/status':
     get:
-      operationId: ShowReaderStatus
-      summary: Show a Reader Status
+      operationId: GetReaderStatus
+      summary: Get a Reader Status
       description: |
-        Show the last known status for a Reader.
+        Provides the last known status for a Reader.
 
         This endpoint allows you to retrieve updates from the connected card reader, including the current screen being displayed during the payment process and the device status (battery level, connectivity, and update state).
 
@@ -3986,7 +3986,7 @@ paths:
       tags:
         - Readers
       x-codegen:
-        method_name: show_reader_status
+        method_name: get_status
       x-permissions:
         - readers_view
       x-scopes:
