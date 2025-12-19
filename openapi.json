@@ -6728,25 +6728,7 @@
             "readOnly": true
           },
           "type": {
-            "description": "Issuing card network of the payment card.",
-            "type": "string",
-            "enum": [
-              "AMEX",
-              "CUP",
-              "DINERS",
-              "DISCOVER",
-              "ELO",
-              "ELV",
-              "HIPERCARD",
-              "JCB",
-              "MAESTRO",
-              "MASTERCARD",
-              "VISA",
-              "VISA_ELECTRON",
-              "VISA_VPAY",
-              "UNKNOWN"
-            ],
-            "readOnly": true
+            "$ref": "#/components/schemas/CardType"
           }
         }
       },
