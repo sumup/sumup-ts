@@ -29,24 +29,7 @@ export type CardResponse = {
    * Last 4 digits of the payment card number.
    */
   last_4_digits?: string;
-  /**
-   * Issuing card network of the payment card.
-   */
-  type?:
-    | "AMEX"
-    | "CUP"
-    | "DINERS"
-    | "DISCOVER"
-    | "ELO"
-    | "ELV"
-    | "HIPERCARD"
-    | "JCB"
-    | "MAESTRO"
-    | "MASTERCARD"
-    | "VISA"
-    | "VISA_ELECTRON"
-    | "VISA_VPAY"
-    | "UNKNOWN";
+  type?: CardType;
 };
 
 /**
