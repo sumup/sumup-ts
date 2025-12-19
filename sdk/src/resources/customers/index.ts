@@ -33,6 +33,25 @@ export type AddressLegacy = {
 };
 
 /**
+ * Issuing card network of the payment card used for the transaction.
+ */
+export type CardType =
+  | "AMEX"
+  | "CUP"
+  | "DINERS"
+  | "DISCOVER"
+  | "ELO"
+  | "ELV"
+  | "HIPERCARD"
+  | "JCB"
+  | "MAESTRO"
+  | "MASTERCARD"
+  | "VISA"
+  | "VISA_ELECTRON"
+  | "VISA_VPAY"
+  | "UNKNOWN";
+
+/**
  * Created mandate
  */
 export type MandateResponse = {
@@ -134,24 +153,7 @@ export type PaymentInstrumentResponse = {
      * Last 4 digits of the payment card number.
      */
     last_4_digits?: string;
-    /**
-     * Issuing card network of the payment card.
-     */
-    type?:
-      | "AMEX"
-      | "CUP"
-      | "DINERS"
-      | "DISCOVER"
-      | "ELO"
-      | "ELV"
-      | "HIPERCARD"
-      | "JCB"
-      | "MAESTRO"
-      | "MASTERCARD"
-      | "VISA"
-      | "VISA_ELECTRON"
-      | "VISA_VPAY"
-      | "UNKNOWN";
+    type?: CardType;
   };
   mandate?: MandateResponse;
   /**
@@ -238,6 +240,7 @@ export class Customers extends Core.APIResource {
 export declare namespace Customers {
   export type {
     AddressLegacy,
+    CardType,
     Customer,
     ErrorForbidden,
     MandateResponse,

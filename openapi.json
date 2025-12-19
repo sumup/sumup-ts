@@ -2245,20 +2245,7 @@
             "schema": {
               "type": "array",
               "items": {
-                "type": "string",
-                "enum": [
-                  "CASH",
-                  "POS",
-                  "ECOM",
-                  "RECURRING",
-                  "BITCOIN",
-                  "BALANCE",
-                  "MOTO",
-                  "BOLETO",
-                  "DIRECT_DEBIT",
-                  "APM",
-                  "UNKNOWN"
-                ]
+                "$ref": "#/components/schemas/PaymentType"
               }
             }
           },
@@ -2484,20 +2471,7 @@
             "schema": {
               "type": "array",
               "items": {
-                "type": "string",
-                "enum": [
-                  "CASH",
-                  "POS",
-                  "ECOM",
-                  "RECURRING",
-                  "BITCOIN",
-                  "BALANCE",
-                  "MOTO",
-                  "BOLETO",
-                  "DIRECT_DEBIT",
-                  "APM",
-                  "UNKNOWN"
-                ]
+                "$ref": "#/components/schemas/PaymentType"
               }
             }
           },
@@ -6280,20 +6254,7 @@
         "schema": {
           "type": "array",
           "items": {
-            "type": "string",
-            "enum": [
-              "CASH",
-              "POS",
-              "ECOM",
-              "RECURRING",
-              "BITCOIN",
-              "BALANCE",
-              "MOTO",
-              "BOLETO",
-              "DIRECT_DEBIT",
-              "APM",
-              "UNKNOWN"
-            ]
+            "$ref": "#/components/schemas/PaymentType"
           }
         }
       },
@@ -6741,25 +6702,7 @@
             "readOnly": true
           },
           "type": {
-            "description": "Issuing card network of the payment card.",
-            "type": "string",
-            "enum": [
-              "AMEX",
-              "CUP",
-              "DINERS",
-              "DISCOVER",
-              "ELO",
-              "ELV",
-              "HIPERCARD",
-              "JCB",
-              "MAESTRO",
-              "MASTERCARD",
-              "VISA",
-              "VISA_ELECTRON",
-              "VISA_VPAY",
-              "UNKNOWN"
-            ],
-            "readOnly": true
+            "$ref": "#/components/schemas/CardType"
           }
         },
         "required": [
@@ -7702,25 +7645,7 @@
                 "readOnly": true
               },
               "type": {
-                "description": "Issuing card network of the payment card.",
-                "type": "string",
-                "enum": [
-                  "AMEX",
-                  "CUP",
-                  "DINERS",
-                  "DISCOVER",
-                  "ELO",
-                  "ELV",
-                  "HIPERCARD",
-                  "JCB",
-                  "MAESTRO",
-                  "MASTERCARD",
-                  "VISA",
-                  "VISA_ELECTRON",
-                  "VISA_VPAY",
-                  "UNKNOWN"
-                ],
-                "readOnly": true
+                "$ref": "#/components/schemas/CardType"
               }
             }
           },
@@ -8228,21 +8153,7 @@
             ]
           },
           "payment_type": {
-            "description": "Payment type used for the transaction.",
-            "type": "string",
-            "enum": [
-              "CASH",
-              "POS",
-              "ECOM",
-              "RECURRING",
-              "BITCOIN",
-              "BALANCE",
-              "MOTO",
-              "BOLETO",
-              "DIRECT_DEBIT",
-              "APM",
-              "UNKNOWN"
-            ]
+            "$ref": "#/components/schemas/PaymentType"
           },
           "installments_count": {
             "description": "Current number of the installment for deferred payments.",
@@ -8272,36 +8183,7 @@
             "example": 3
           },
           "entry_mode": {
-            "description": "Entry mode of the payment details.",
-            "type": "string",
-            "enum": [
-              "BOLETO",
-              "SOFORT",
-              "IDEAL",
-              "BANCONTACT",
-              "EPS",
-              "MYBANK",
-              "SATISPAY",
-              "BLIK",
-              "P24",
-              "GIROPAY",
-              "PIX",
-              "QR_CODE_PIX",
-              "APPLE_PAY",
-              "GOOGLE_PAY",
-              "PAYPAL",
-              "NONE",
-              "CHIP",
-              "MANUAL_ENTRY",
-              "CUSTOMER_ENTRY",
-              "MAGSTRIPE_FALLBACK",
-              "MAGSTRIPE",
-              "DIRECT_DEBIT",
-              "CONTACTLESS",
-              "MOTO",
-              "CONTACTLESS_MAGSTRIPE",
-              "N/A"
-            ]
+            "$ref": "#/components/schemas/EntryMode"
           },
           "auth_code": {
             "description": "Authorization code for the transaction sent by the payment card issuer or bank. Applicable only to card payments.",
@@ -8375,27 +8257,79 @@
                 ]
               },
               "card_type": {
-                "description": "Issuing card network of the payment card used for the transaction.",
-                "type": "string",
-                "enum": [
-                  "VISA",
-                  "AMEX",
-                  "CUP",
-                  "DINERS",
-                  "DISCOVER",
-                  "ELO",
-                  "ELV",
-                  "HIPERCARD",
-                  "JCB",
-                  "MAESTRO",
-                  "MASTERCARD",
-                  "VISA_ELECTRON",
-                  "VISA_VPAY",
-                  "UNKNOWN"
-                ]
+                "$ref": "#/components/schemas/CardType"
               }
             }
           }
+        ]
+      },
+      "PaymentType": {
+        "description": "Payment type used for the transaction.",
+        "type": "string",
+        "enum": [
+          "CASH",
+          "POS",
+          "ECOM",
+          "RECURRING",
+          "BITCOIN",
+          "BALANCE",
+          "MOTO",
+          "BOLETO",
+          "DIRECT_DEBIT",
+          "APM",
+          "UNKNOWN"
+        ]
+      },
+      "EntryMode": {
+        "description": "Entry mode of the payment details.",
+        "type": "string",
+        "enum": [
+          "BOLETO",
+          "SOFORT",
+          "IDEAL",
+          "BANCONTACT",
+          "EPS",
+          "MYBANK",
+          "SATISPAY",
+          "BLIK",
+          "P24",
+          "GIROPAY",
+          "PIX",
+          "QR_CODE_PIX",
+          "APPLE_PAY",
+          "GOOGLE_PAY",
+          "PAYPAL",
+          "NONE",
+          "CHIP",
+          "MANUAL_ENTRY",
+          "CUSTOMER_ENTRY",
+          "MAGSTRIPE_FALLBACK",
+          "MAGSTRIPE",
+          "DIRECT_DEBIT",
+          "CONTACTLESS",
+          "MOTO",
+          "CONTACTLESS_MAGSTRIPE",
+          "N/A"
+        ]
+      },
+      "CardType": {
+        "description": "Issuing card network of the payment card used for the transaction.",
+        "type": "string",
+        "enum": [
+          "AMEX",
+          "CUP",
+          "DINERS",
+          "DISCOVER",
+          "ELO",
+          "ELV",
+          "HIPERCARD",
+          "JCB",
+          "MAESTRO",
+          "MASTERCARD",
+          "VISA",
+          "VISA_ELECTRON",
+          "VISA_VPAY",
+          "UNKNOWN"
         ]
       },
       "TransactionFull": {
