@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.0.11](https://github.com/sumup/sumup-ts/compare/v0.0.10...v0.0.11) (2025-12-19)
+
+
+### Bug Fixes
+
+* reader status call response ([7be6747](https://github.com/sumup/sumup-ts/commit/7be674785286c10128523dc09bf69a99ca36c718))
+* transaction entry_mode enum ([85c2785](https://github.com/sumup/sumup-ts/commit/85c27852b60d24a7e9f3ea11b877458fb549885c))
+
 ## [0.0.10](https://github.com/sumup/sumup-ts/compare/v0.0.9...v0.0.10) (2025-12-07)
 
 
