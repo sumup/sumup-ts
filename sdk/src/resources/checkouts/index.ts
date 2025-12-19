@@ -33,6 +33,25 @@ export type AddressLegacy = {
 };
 
 /**
+ * Issuing card network of the payment card used for the transaction.
+ */
+export type CardType =
+  | "AMEX"
+  | "CUP"
+  | "DINERS"
+  | "DISCOVER"
+  | "ELO"
+  | "ELV"
+  | "HIPERCARD"
+  | "JCB"
+  | "MAESTRO"
+  | "MASTERCARD"
+  | "VISA"
+  | "VISA_ELECTRON"
+  | "VISA_VPAY"
+  | "UNKNOWN";
+
+/**
  * __Required when payment type is `card`.__ Details of the payment card.
  */
 export type Card = {
@@ -76,24 +95,7 @@ export type Card = {
    * Last 4 digits of the payment card number.
    */
   last_4_digits: string;
-  /**
-   * Issuing card network of the payment card.
-   */
-  type:
-    | "AMEX"
-    | "CUP"
-    | "DINERS"
-    | "DISCOVER"
-    | "ELO"
-    | "ELV"
-    | "HIPERCARD"
-    | "JCB"
-    | "MAESTRO"
-    | "MASTERCARD"
-    | "VISA"
-    | "VISA_ELECTRON"
-    | "VISA_VPAY"
-    | "UNKNOWN";
+  type: CardType;
 };
 
 /**
@@ -135,6 +137,22 @@ export type MandateResponse = {
 };
 
 /**
+ * Payment type used for the transaction.
+ */
+export type PaymentType =
+  | "CASH"
+  | "POS"
+  | "ECOM"
+  | "RECURRING"
+  | "BITCOIN"
+  | "BALANCE"
+  | "MOTO"
+  | "BOLETO"
+  | "DIRECT_DEBIT"
+  | "APM"
+  | "UNKNOWN";
+
+/**
  * Details of the transaction.
  */
 export type TransactionBase = {
@@ -159,26 +177,43 @@ export type TransactionBase = {
    * Current status of the transaction.
    */
   status?: "SUCCESSFUL" | "CANCELLED" | "FAILED" | "PENDING";
-  /**
-   * Payment type used for the transaction.
-   */
-  payment_type?:
-    | "CASH"
-    | "POS"
-    | "ECOM"
-    | "RECURRING"
-    | "BITCOIN"
-    | "BALANCE"
-    | "MOTO"
-    | "BOLETO"
-    | "DIRECT_DEBIT"
-    | "APM"
-    | "UNKNOWN";
+  payment_type?: PaymentType;
   /**
    * Current number of the installment for deferred payments.
    */
   installments_count?: number;
 };
+
+/**
+ * Entry mode of the payment details.
+ */
+export type EntryMode =
+  | "BOLETO"
+  | "SOFORT"
+  | "IDEAL"
+  | "BANCONTACT"
+  | "EPS"
+  | "MYBANK"
+  | "SATISPAY"
+  | "BLIK"
+  | "P24"
+  | "GIROPAY"
+  | "PIX"
+  | "QR_CODE_PIX"
+  | "APPLE_PAY"
+  | "GOOGLE_PAY"
+  | "PAYPAL"
+  | "NONE"
+  | "CHIP"
+  | "MANUAL_ENTRY"
+  | "CUSTOMER_ENTRY"
+  | "MAGSTRIPE_FALLBACK"
+  | "MAGSTRIPE"
+  | "DIRECT_DEBIT"
+  | "CONTACTLESS"
+  | "MOTO"
+  | "CONTACTLESS_MAGSTRIPE"
+  | "N/A";
 
 export type TransactionCheckoutInfo = {
   /**
@@ -193,36 +228,7 @@ export type TransactionCheckoutInfo = {
    * Amount of the tip (out of the total transaction amount).
    */
   tip_amount?: number;
-  /**
-   * Entry mode of the payment details.
-   */
-  entry_mode?:
-    | "BOLETO"
-    | "SOFORT"
-    | "IDEAL"
-    | "BANCONTACT"
-    | "EPS"
-    | "MYBANK"
-    | "SATISPAY"
-    | "BLIK"
-    | "P24"
-    | "GIROPAY"
-    | "PIX"
-    | "QR_CODE_PIX"
-    | "APPLE_PAY"
-    | "GOOGLE_PAY"
-    | "PAYPAL"
-    | "NONE"
-    | "CHIP"
-    | "MANUAL_ENTRY"
-    | "CUSTOMER_ENTRY"
-    | "MAGSTRIPE_FALLBACK"
-    | "MAGSTRIPE"
-    | "DIRECT_DEBIT"
-    | "CONTACTLESS"
-    | "MOTO"
-    | "CONTACTLESS_MAGSTRIPE"
-    | "N/A";
+  entry_mode?: EntryMode;
   /**
    * Authorization code for the transaction sent by the payment card issuer or bank. Applicable only to card payments.
    */
@@ -639,18 +645,21 @@ export declare namespace Checkouts {
   export type {
     AddressLegacy,
     Card,
+    CardType,
     Checkout,
     CheckoutAccepted,
     CheckoutCreateRequest,
     CheckoutSuccess,
     Currency,
     DetailsError,
+    EntryMode,
     ErrorExtended,
     ErrorForbidden,
     GetPaymentMethodsQueryParams,
     ListCheckoutsQueryParams,
     MandatePayload,
     MandateResponse,
+    PaymentType,
     PersonalDetails,
     ProcessCheckout,
     TransactionBase,

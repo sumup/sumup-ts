@@ -3,6 +3,25 @@
 import * as Core from "../../core";
 
 /**
+ * Issuing card network of the payment card used for the transaction.
+ */
+export type CardType =
+  | "AMEX"
+  | "CUP"
+  | "DINERS"
+  | "DISCOVER"
+  | "ELO"
+  | "ELV"
+  | "HIPERCARD"
+  | "JCB"
+  | "MAESTRO"
+  | "MASTERCARD"
+  | "VISA"
+  | "VISA_ELECTRON"
+  | "VISA_VPAY"
+  | "UNKNOWN";
+
+/**
  * Details of the payment card.
  */
 export type CardResponse = {
@@ -51,6 +70,22 @@ export type Currency =
   | "USD";
 
 /**
+ * Payment type used for the transaction.
+ */
+export type PaymentType =
+  | "CASH"
+  | "POS"
+  | "ECOM"
+  | "RECURRING"
+  | "BITCOIN"
+  | "BALANCE"
+  | "MOTO"
+  | "BOLETO"
+  | "DIRECT_DEBIT"
+  | "APM"
+  | "UNKNOWN";
+
+/**
  * Details of the transaction.
  */
 export type TransactionBase = {
@@ -75,26 +110,43 @@ export type TransactionBase = {
    * Current status of the transaction.
    */
   status?: "SUCCESSFUL" | "CANCELLED" | "FAILED" | "PENDING";
-  /**
-   * Payment type used for the transaction.
-   */
-  payment_type?:
-    | "CASH"
-    | "POS"
-    | "ECOM"
-    | "RECURRING"
-    | "BITCOIN"
-    | "BALANCE"
-    | "MOTO"
-    | "BOLETO"
-    | "DIRECT_DEBIT"
-    | "APM"
-    | "UNKNOWN";
+  payment_type?: PaymentType;
   /**
    * Current number of the installment for deferred payments.
    */
   installments_count?: number;
 };
+
+/**
+ * Entry mode of the payment details.
+ */
+export type EntryMode =
+  | "BOLETO"
+  | "SOFORT"
+  | "IDEAL"
+  | "BANCONTACT"
+  | "EPS"
+  | "MYBANK"
+  | "SATISPAY"
+  | "BLIK"
+  | "P24"
+  | "GIROPAY"
+  | "PIX"
+  | "QR_CODE_PIX"
+  | "APPLE_PAY"
+  | "GOOGLE_PAY"
+  | "PAYPAL"
+  | "NONE"
+  | "CHIP"
+  | "MANUAL_ENTRY"
+  | "CUSTOMER_ENTRY"
+  | "MAGSTRIPE_FALLBACK"
+  | "MAGSTRIPE"
+  | "DIRECT_DEBIT"
+  | "CONTACTLESS"
+  | "MOTO"
+  | "CONTACTLESS_MAGSTRIPE"
+  | "N/A";
 
 export type TransactionCheckoutInfo = {
   /**
@@ -109,36 +161,7 @@ export type TransactionCheckoutInfo = {
    * Amount of the tip (out of the total transaction amount).
    */
   tip_amount?: number;
-  /**
-   * Entry mode of the payment details.
-   */
-  entry_mode?:
-    | "BOLETO"
-    | "SOFORT"
-    | "IDEAL"
-    | "BANCONTACT"
-    | "EPS"
-    | "MYBANK"
-    | "SATISPAY"
-    | "BLIK"
-    | "P24"
-    | "GIROPAY"
-    | "PIX"
-    | "QR_CODE_PIX"
-    | "APPLE_PAY"
-    | "GOOGLE_PAY"
-    | "PAYPAL"
-    | "NONE"
-    | "CHIP"
-    | "MANUAL_ENTRY"
-    | "CUSTOMER_ENTRY"
-    | "MAGSTRIPE_FALLBACK"
-    | "MAGSTRIPE"
-    | "DIRECT_DEBIT"
-    | "CONTACTLESS"
-    | "MOTO"
-    | "CONTACTLESS_MAGSTRIPE"
-    | "N/A";
+  entry_mode?: EntryMode;
   /**
    * Authorization code for the transaction sent by the payment card issuer or bank. Applicable only to card payments.
    */
@@ -334,24 +357,7 @@ export type TransactionHistory = TransactionBase &
      * Type of the transaction for the registered user specified in the `user` property.
      */
     type?: "PAYMENT" | "REFUND" | "CHARGE_BACK";
-    /**
-     * Issuing card network of the payment card used for the transaction.
-     */
-    card_type?:
-      | "VISA"
-      | "AMEX"
-      | "CUP"
-      | "DINERS"
-      | "DISCOVER"
-      | "ELO"
-      | "ELV"
-      | "HIPERCARD"
-      | "JCB"
-      | "MAESTRO"
-      | "MASTERCARD"
-      | "VISA_ELECTRON"
-      | "VISA_VPAY"
-      | "UNKNOWN";
+    card_type?: CardType;
   };
 
 /**
@@ -501,19 +507,7 @@ export type ListTransactionsV2_1QueryParams = {
     | "REFUNDED"
     | "CHARGE_BACK"
   )[];
-  payment_types?: (
-    | "CASH"
-    | "POS"
-    | "ECOM"
-    | "RECURRING"
-    | "BITCOIN"
-    | "BALANCE"
-    | "MOTO"
-    | "BOLETO"
-    | "DIRECT_DEBIT"
-    | "APM"
-    | "UNKNOWN"
-  )[];
+  payment_types?: PaymentType[];
   types?: ("PAYMENT" | "REFUND" | "CHARGE_BACK")[];
   changes_since?: string;
   newest_time?: string;
@@ -539,19 +533,7 @@ export type ListTransactionsQueryParams = {
     | "REFUNDED"
     | "CHARGE_BACK"
   )[];
-  payment_types?: (
-    | "CASH"
-    | "POS"
-    | "ECOM"
-    | "RECURRING"
-    | "BITCOIN"
-    | "BALANCE"
-    | "MOTO"
-    | "BOLETO"
-    | "DIRECT_DEBIT"
-    | "APM"
-    | "UNKNOWN"
-  )[];
+  payment_types?: PaymentType[];
   types?: ("PAYMENT" | "REFUND" | "CHARGE_BACK")[];
   changes_since?: string;
   newest_time?: string;
@@ -658,7 +640,9 @@ export declare namespace Transactions {
   export type {
     AmountEvent,
     CardResponse,
+    CardType,
     Currency,
+    EntryMode,
     Event,
     EventID,
     EventStatus,
@@ -672,6 +656,7 @@ export declare namespace Transactions {
     ListTransactionsQueryParams,
     ListTransactionsV2_1QueryParams,
     Lon,
+    PaymentType,
     Product,
     RefundTransactionParams,
     TimestampEvent,
