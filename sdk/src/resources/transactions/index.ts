@@ -112,7 +112,33 @@ export type TransactionCheckoutInfo = {
   /**
    * Entry mode of the payment details.
    */
-  entry_mode?: "CUSTOMER_ENTRY" | "BOLETO";
+  entry_mode?:
+    | "BOLETO"
+    | "SOFORT"
+    | "IDEAL"
+    | "BANCONTACT"
+    | "EPS"
+    | "MYBANK"
+    | "SATISPAY"
+    | "BLIK"
+    | "P24"
+    | "GIROPAY"
+    | "PIX"
+    | "QR_CODE_PIX"
+    | "APPLE_PAY"
+    | "GOOGLE_PAY"
+    | "PAYPAL"
+    | "NONE"
+    | "CHIP"
+    | "MANUAL_ENTRY"
+    | "CUSTOMER_ENTRY"
+    | "MAGSTRIPE_FALLBACK"
+    | "MAGSTRIPE"
+    | "DIRECT_DEBIT"
+    | "CONTACTLESS"
+    | "MOTO"
+    | "CONTACTLESS_MAGSTRIPE"
+    | "N/A";
   /**
    * Authorization code for the transaction sent by the payment card issuer or bank. Applicable only to card payments.
    */
