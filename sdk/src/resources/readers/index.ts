@@ -133,7 +133,7 @@ export type StatusResponse = {
     /**
      * Battery level percentage
      */
-    battery_level?: Record<string, unknown>;
+    battery_level?: number;
     /**
      * Battery temperature in Celsius
      */
