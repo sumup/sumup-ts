@@ -7080,7 +7080,8 @@ components:
           properties:
             battery_level:
               description: Battery level percentage
-              type: float
+              type: number
+              format: float
               example: 10.5
               maximum: 100
               minimum: 0
