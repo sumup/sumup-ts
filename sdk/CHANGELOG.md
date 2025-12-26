@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.12](https://github.com/sumup/sumup-ts/compare/v0.0.11...v0.0.12) (2025-12-26)
+
+
+### Bug Fixes
+
+* reader status battery_level type ([a9dca80](https://github.com/sumup/sumup-ts/commit/a9dca80b52c8b3c01a8aae2a577b41e596b5bff2))
+
 ## [0.0.11](https://github.com/sumup/sumup-ts/compare/v0.0.10...v0.0.11) (2025-12-19)
 
 
