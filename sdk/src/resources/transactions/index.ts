@@ -104,32 +104,32 @@ export type TransactionBase = {
  * Entry mode of the payment details.
  */
 export type EntryMode =
-  | "BOLETO"
-  | "SOFORT"
-  | "IDEAL"
-  | "BANCONTACT"
-  | "EPS"
-  | "MYBANK"
-  | "SATISPAY"
-  | "BLIK"
-  | "P24"
-  | "GIROPAY"
-  | "PIX"
-  | "QR_CODE_PIX"
-  | "APPLE_PAY"
-  | "GOOGLE_PAY"
-  | "PAYPAL"
-  | "NONE"
-  | "CHIP"
-  | "MANUAL_ENTRY"
-  | "CUSTOMER_ENTRY"
-  | "MAGSTRIPE_FALLBACK"
-  | "MAGSTRIPE"
-  | "DIRECT_DEBIT"
-  | "CONTACTLESS"
-  | "MOTO"
-  | "CONTACTLESS_MAGSTRIPE"
-  | "N/A";
+  | "none"
+  | "magstripe"
+  | "chip"
+  | "manual entry"
+  | "customer entry"
+  | "magstripe fallback"
+  | "contactless"
+  | "moto"
+  | "contactless magstripe"
+  | "boleto"
+  | "direct debit"
+  | "sofort"
+  | "ideal"
+  | "bancontact"
+  | "eps"
+  | "mybank"
+  | "satispay"
+  | "blik"
+  | "p24"
+  | "giropay"
+  | "pix"
+  | "qr code pix"
+  | "apple pay"
+  | "google pay"
+  | "paypal"
+  | "na";
 
 export type TransactionCheckoutInfo = {
   /**
@@ -457,6 +457,37 @@ export type TransactionFull = TransactionBase &
     tax_enabled?: boolean;
   };
 
+/**
+ * Entry mode value accepted by the `entry_modes[]` filter.
+ */
+export type EntryModeFilter =
+  | "BOLETO"
+  | "SOFORT"
+  | "IDEAL"
+  | "BANCONTACT"
+  | "EPS"
+  | "MYBANK"
+  | "SATISPAY"
+  | "BLIK"
+  | "P24"
+  | "GIROPAY"
+  | "PIX"
+  | "QR_CODE_PIX"
+  | "APPLE_PAY"
+  | "GOOGLE_PAY"
+  | "PAYPAL"
+  | "NONE"
+  | "CHIP"
+  | "MANUAL_ENTRY"
+  | "CUSTOMER_ENTRY"
+  | "MAGSTRIPE_FALLBACK"
+  | "MAGSTRIPE"
+  | "DIRECT_DEBIT"
+  | "CONTACTLESS"
+  | "MOTO"
+  | "CONTACTLESS_MAGSTRIPE"
+  | "N/A";
+
 export type RefundTransactionParams = {
   /**
    * Amount to be refunded. Eligible amount can't exceed the amount of the transaction and varies based on country and currency. If you do not specify a value, the system performs a full refund of the transaction.
@@ -491,6 +522,7 @@ export type ListTransactionsV2_1QueryParams = {
     | "CHARGE_BACK"
   )[];
   payment_types?: PaymentType[];
+  "entry_modes[]"?: EntryModeFilter[];
   types?: ("PAYMENT" | "REFUND" | "CHARGE_BACK")[];
   changes_since?: string;
   newest_time?: string;
@@ -626,6 +658,7 @@ export declare namespace Transactions {
     CardType,
     Currency,
     EntryMode,
+    EntryModeFilter,
     Event,
     EventID,
     EventStatus,
