@@ -2250,6 +2250,18 @@
             }
           },
           {
+            "name": "entry_modes[]",
+            "in": "query",
+            "description": "Filters the returned results by the specified list of entry modes.",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/EntryModeFilter"
+              }
+            }
+          },
+          {
             "name": "types",
             "in": "query",
             "description": "Filters the returned results by the specified list of transaction types.",
@@ -6197,6 +6209,18 @@
           "type": "string"
         }
       },
+      "EntryModesFilter": {
+        "name": "entry_modes[]",
+        "in": "query",
+        "description": "Filters the returned results by the specified list of entry modes.",
+        "required": false,
+        "schema": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/EntryModeFilter"
+          }
+        }
+      },
       "GeoCoordinatesFilter": {
         "name": "geo_coordinates",
         "in": "query",
@@ -8266,32 +8290,32 @@
         "description": "Entry mode of the payment details.",
         "type": "string",
         "enum": [
-          "BOLETO",
-          "SOFORT",
-          "IDEAL",
-          "BANCONTACT",
-          "EPS",
-          "MYBANK",
-          "SATISPAY",
-          "BLIK",
-          "P24",
-          "GIROPAY",
-          "PIX",
-          "QR_CODE_PIX",
-          "APPLE_PAY",
-          "GOOGLE_PAY",
-          "PAYPAL",
-          "NONE",
-          "CHIP",
-          "MANUAL_ENTRY",
-          "CUSTOMER_ENTRY",
-          "MAGSTRIPE_FALLBACK",
-          "MAGSTRIPE",
-          "DIRECT_DEBIT",
-          "CONTACTLESS",
-          "MOTO",
-          "CONTACTLESS_MAGSTRIPE",
-          "N/A"
+          "none",
+          "magstripe",
+          "chip",
+          "manual entry",
+          "customer entry",
+          "magstripe fallback",
+          "contactless",
+          "moto",
+          "contactless magstripe",
+          "boleto",
+          "direct debit",
+          "sofort",
+          "ideal",
+          "bancontact",
+          "eps",
+          "mybank",
+          "satispay",
+          "blik",
+          "p24",
+          "giropay",
+          "pix",
+          "qr code pix",
+          "apple pay",
+          "google pay",
+          "paypal",
+          "na"
         ]
       },
       "CardType": {
@@ -11067,6 +11091,38 @@
           "last_name",
           "date_of_birth",
           "address"
+        ]
+      },
+      "EntryModeFilter": {
+        "description": "Entry mode value accepted by the `entry_modes[]` filter.",
+        "type": "string",
+        "enum": [
+          "BOLETO",
+          "SOFORT",
+          "IDEAL",
+          "BANCONTACT",
+          "EPS",
+          "MYBANK",
+          "SATISPAY",
+          "BLIK",
+          "P24",
+          "GIROPAY",
+          "PIX",
+          "QR_CODE_PIX",
+          "APPLE_PAY",
+          "GOOGLE_PAY",
+          "PAYPAL",
+          "NONE",
+          "CHIP",
+          "MANUAL_ENTRY",
+          "CUSTOMER_ENTRY",
+          "MAGSTRIPE_FALLBACK",
+          "MAGSTRIPE",
+          "DIRECT_DEBIT",
+          "CONTACTLESS",
+          "MOTO",
+          "CONTACTLESS_MAGSTRIPE",
+          "N/A"
         ]
       }
     },
