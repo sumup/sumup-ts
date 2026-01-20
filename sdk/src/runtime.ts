@@ -134,7 +134,7 @@ export function buildRuntimeHeaders(): Record<string, string> {
 
   return {
     "X-Sumup-Api-Version": API_VERSION,
-    "X-Sumup-Lang": "js",
+    "X-Sumup-Lang": "javascript",
     "X-Sumup-Package-Version": VERSION,
     "X-Sumup-Os": os,
     "X-Sumup-Arch": arch,
