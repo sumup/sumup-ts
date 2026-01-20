@@ -32,13 +32,16 @@ updates:
       default-days: 7
   - package-ecosystem: "npm"
     directories:
-      - '/examples/**/*'
+      - '/examples/card-reader-checkout'
+      - '/examples/checkout'
+      - '/examples/oauth2'
+      - '/examples/payment-widget'
     open-pull-requests-limit: 5
     groups:
-      all:
+      examples:
         patterns:
           - "*"
     schedule:
-      interval: "weekly"
+      interval: "monthly"
     cooldown:
       default-days: 7

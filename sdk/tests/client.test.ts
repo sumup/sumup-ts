@@ -1,6 +1,9 @@
 import { describe, expect, it } from "vitest";
 
 import { SumUp } from "../src";
+import { API_VERSION } from "../src/api-version";
+import { buildRuntimeHeaders } from "../src/runtime";
+import { VERSION } from "../src/version";
 
 describe("instantiate client", () => {
   const client = new SumUp({
@@ -8,16 +11,18 @@ describe("instantiate client", () => {
   });
 
   it("default headers", () => {
-    expect(JSON.stringify(client.baseParams)).toStrictEqual(
-      JSON.stringify({
-        headers: new Headers({
-          "accept": "application/json",
-          "authorization": "Bearer API_KEY",
-          "content-type": "application/json",
-          "user-agent": "sumup-ts/0.0.1",
-        }),
-      } as SumUp.FetchParams),
-    );
+    const headers = client.baseParams.headers as Headers;
+
+    expect(headers.get("accept")).toBe("application/json");
+    expect(headers.get("authorization")).toBe("Bearer API_KEY");
+    expect(headers.get("content-type")).toBe("application/json");
+    expect(headers.get("user-agent")).toBe(`sumup-ts/v${VERSION}`);
+    expect(headers.get("x-sumup-api-version")).toBe(API_VERSION);
+
+    const runtimeHeaders = buildRuntimeHeaders();
+    for (const [key, value] of Object.entries(runtimeHeaders)) {
+      expect(headers.get(key)).toBe(value);
+    }
   });
 });
 

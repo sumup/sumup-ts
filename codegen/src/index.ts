@@ -6,6 +6,7 @@ import SwaggerParser from "@apidevtools/swagger-parser";
 import { program } from "commander";
 import type { OpenAPIV3_1 } from "openapi-types";
 import { generateIndex } from "./api";
+import { generateApiVersion } from "./api-version";
 import { generateCore } from "./core";
 import { generateResource } from "./resource";
 
@@ -33,6 +34,7 @@ async function generate(specFile: string, destDir: string) {
   // just ruled out v2 and v3.1
   const spec = rawSpec as OpenAPIV3_1.Document;
 
+  await generateApiVersion(spec, destDirAbs);
   await generateIndex(spec, destDirAbs);
   await generateCore(spec, destDirAbs);
   for (const t of spec.tags || []) {
