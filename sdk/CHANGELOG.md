@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.0.12](https://github.com/sumup/sumup-ts/compare/v0.0.11...v0.0.12) (2026-01-21)
+
+
+### Features
+
+* report runtime properties ([#229](https://github.com/sumup/sumup-ts/issues/229)) ([7fd15e2](https://github.com/sumup/sumup-ts/commit/7fd15e2164c7257cd1188ce1137fd9516e4d2692))
+
+
+### Bug Fixes
+
+* reader status battery_level type ([a9dca80](https://github.com/sumup/sumup-ts/commit/a9dca80b52c8b3c01a8aae2a577b41e596b5bff2))
+* runtime header for language ([8ddb862](https://github.com/sumup/sumup-ts/commit/8ddb862c5d34cd289b502c631f34aa4b9850cbb7))
+
 ## [0.0.11](https://github.com/sumup/sumup-ts/compare/v0.0.10...v0.0.11) (2025-12-19)
 
 
