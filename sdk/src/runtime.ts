@@ -29,8 +29,7 @@ function getRuntimeInfo(): RuntimeInfo {
     return cachedRuntimeInfo;
   }
 
-  const isVercel =
-    typeof process !== "undefined" && process.env.VERCEL === "1";
+  const isVercel = typeof process !== "undefined" && process.env.VERCEL === "1";
 
   const globalAny = globalThis as {
     process?: {

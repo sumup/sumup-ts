@@ -73,9 +73,18 @@ export class APIPromise<T> implements Promise<T> {
 
   async parse(): Promise<T> {
     const res = await this.resp;
+
+    if (res.status === 204 || res.status === 205) {
+      return undefined as T;
+    }
+
+    const contentLength = res.headers.get("content-length");
+    if (contentLength === "0") {
+      return undefined as T;
+    }
+
     const contentType = res.headers.get("content-type");
     const isJSON = contentType?.includes("application/json");
-
     if (!isJSON) {
       throw new SumUpError("Unexpected non-json response.");
     }
