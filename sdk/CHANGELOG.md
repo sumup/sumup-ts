@@ -1,5 +1,26 @@
 # Changelog
 
+## [0.0.13](https://github.com/sumup/sumup-ts/compare/v0.0.12...v0.0.13) (2026-02-06)
+
+
+### Features
+
+* **codegen:** move codegen in here ([#130](https://github.com/sumup/sumup-ts/issues/130)) ([2aa4495](https://github.com/sumup/sumup-ts/commit/2aa4495455a9c3f0002f2c3694db827491c9480b))
+* report runtime properties ([#229](https://github.com/sumup/sumup-ts/issues/229)) ([7fd15e2](https://github.com/sumup/sumup-ts/commit/7fd15e2164c7257cd1188ce1137fd9516e4d2692))
+
+
+### Bug Fixes
+
+* reader status battery_level type ([a9dca80](https://github.com/sumup/sumup-ts/commit/a9dca80b52c8b3c01a8aae2a577b41e596b5bff2))
+* reader status call response ([7be6747](https://github.com/sumup/sumup-ts/commit/7be674785286c10128523dc09bf69a99ca36c718))
+* runtime header for language ([8ddb862](https://github.com/sumup/sumup-ts/commit/8ddb862c5d34cd289b502c631f34aa4b9850cbb7))
+* **sdk:** address package bundle warning for common js ([ab5beb5](https://github.com/sumup/sumup-ts/commit/ab5beb5edaee14820cdcb5dba342b5792aab86b8))
+* **sdk:** handle correctly empty success responses ([ef46ee6](https://github.com/sumup/sumup-ts/commit/ef46ee6007bb8fc99f3bd65819d45dc226666ac3))
+* **sdk:** missing exports for response types ([#241](https://github.com/sumup/sumup-ts/issues/241)) ([7129f25](https://github.com/sumup/sumup-ts/commit/7129f25dbfcf9f36fdd3f0863edd967fbba58271))
+* **sdk:** typo in package exports ([#174](https://github.com/sumup/sumup-ts/issues/174)) ([843f972](https://github.com/sumup/sumup-ts/commit/843f972d08b50e5816613462fbb35b5e1e7aa8c6))
+* **sdk:** version header string ([ab9fdd5](https://github.com/sumup/sumup-ts/commit/ab9fdd5722de584545a19b8ac49d523edd92c223))
+* transaction entry_mode enum ([85c2785](https://github.com/sumup/sumup-ts/commit/85c27852b60d24a7e9f3ea11b877458fb549885c))
+
 ## [0.0.12](https://github.com/sumup/sumup-ts/compare/v0.0.11...v0.0.12) (2026-02-06)
 
 
