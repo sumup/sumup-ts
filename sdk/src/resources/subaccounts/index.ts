@@ -169,6 +169,7 @@ export declare namespace Subaccounts {
   export type {
     CreateSubAccountParams,
     ListSubAccountsQueryParams,
+    ListSubAccountsResponse,
     Operator,
     Permissions,
     Problem,

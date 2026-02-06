@@ -130,6 +130,7 @@ import * as Core from '../../core';
       writer.w0(`export type ${responseType(opName)} = `);
       schemaToTypes(resp, writer);
       writer.w("\n");
+      exports.push(responseType(opName));
     }
   }
 

@@ -183,6 +183,7 @@ export class Roles extends Core.APIResource {
 export declare namespace Roles {
   export type {
     CreateMerchantRoleParams,
+    ListMerchantRolesResponse,
     Metadata,
     Problem,
     Role,

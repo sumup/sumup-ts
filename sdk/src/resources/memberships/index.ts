@@ -152,6 +152,7 @@ export declare namespace Memberships {
     Attributes,
     Invite,
     ListMembershipsQueryParams,
+    ListMembershipsResponse,
     Membership,
     MembershipResource,
     MembershipStatus,

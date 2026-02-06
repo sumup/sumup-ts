@@ -609,6 +609,7 @@ export declare namespace Readers {
     CreateReaderTerminateUnprocessableEntity,
     GatewayTimeout,
     InternalServerError,
+    ListReadersResponse,
     Metadata,
     NotFound,
     Problem,

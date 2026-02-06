@@ -253,6 +253,7 @@ export declare namespace Customers {
     CardType,
     Customer,
     ErrorForbidden,
+    ListPaymentInstrumentsResponse,
     MandateResponse,
     PaymentInstrumentResponse,
     PersonalDetails,
