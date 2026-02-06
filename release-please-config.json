@@ -2,13 +2,13 @@
   "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
   "bump-minor-pre-major": true,
   "bump-patch-for-minor-pre-major": true,
+  "draft": true,
+  "extra-label": "release",
   "include-component-in-tag": false,
   "include-v-in-tag": true,
   "pull-request-header": "Automated sumup-ts release",
   "pull-request-title-pattern": "release: ${version}",
   "versioning": "prerelease",
-  "extra-label": "release",
-  "draft": true,
   "packages": {
     "sdk": {
       "release-type": "node",
