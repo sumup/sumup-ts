@@ -286,6 +286,7 @@ export declare namespace Members {
     CreateMerchantMemberParams,
     Invite,
     ListMerchantMembersQueryParams,
+    ListMerchantMembersResponse,
     Member,
     MembershipStatus,
     MembershipUser,
