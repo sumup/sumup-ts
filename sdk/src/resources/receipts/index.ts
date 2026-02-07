@@ -32,16 +32,6 @@ export type EventStatus =
   | "SUCCESSFUL"
   | "PAID_OUT";
 
-/**
- * Amount of the event.
- */
-export type AmountEvent = number;
-
-/**
- * Date and time of the transaction event.
- */
-export type TimestampEvent = string;
-
 export type ReceiptCard = {
   /**
    * Card last 4 digits.
@@ -58,8 +48,14 @@ export type ReceiptEvent = {
   transaction_id?: TransactionID;
   type?: EventType;
   status?: EventStatus;
-  amount?: AmountEvent;
-  timestamp?: TimestampEvent;
+  /**
+   * Amount of the event.
+   */
+  amount?: string;
+  /**
+   * Date and time of the transaction event.
+   */
+  timestamp?: string;
   receipt_no?: string;
 };
 
@@ -117,25 +113,41 @@ export type ReceiptTransaction = {
    */
   products?: {
     /**
-     * Product name.
+     * Product name
      */
     name?: string;
     /**
-     * Product description.
+     * Product price
      */
-    description?: string;
+    price?: string;
     /**
-     * Product price.
+     * VAT rate
      */
-    price?: number;
+    vat_rate?: string;
     /**
-     * Product quantity.
+     * VAT amount for a single product
+     */
+    single_vat_amount?: string;
+    /**
+     * Product price including VAT
+     */
+    price_with_vat?: string;
+    /**
+     * VAT amount
+     */
+    vat_amount?: string;
+    /**
+     * Product quantity
      */
     quantity?: number;
     /**
-     * Quantity x product price.
+     * Quantity x product price
      */
-    total_price?: number;
+    total_price?: string;
+    /**
+     * Total price including VAT
+     */
+    total_with_vat?: string;
   }[];
   /**
    * Vat rates.
@@ -228,7 +240,6 @@ export class Receipts extends Core.APIResource {
 
 export declare namespace Receipts {
   export type {
-    AmountEvent,
     EventID,
     EventStatus,
     EventType,
@@ -238,7 +249,6 @@ export declare namespace Receipts {
     ReceiptEvent,
     ReceiptMerchantData,
     ReceiptTransaction,
-    TimestampEvent,
     TransactionID,
   };
 }
