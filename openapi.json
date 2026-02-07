@@ -7286,10 +7286,14 @@
             "$ref": "#/components/schemas/EventStatus"
           },
           "amount": {
-            "$ref": "#/components/schemas/AmountEvent"
+            "description": "Amount of the event.",
+            "type": "number",
+            "format": "float"
           },
           "timestamp": {
-            "$ref": "#/components/schemas/TimestampEvent"
+            "description": "Date and time of the transaction event.",
+            "type": "string",
+            "format": "date-time"
           },
           "fee_amount": {
             "description": "Amount of the fee related to the event.",
@@ -7874,10 +7878,14 @@
             "$ref": "#/components/schemas/EventStatus"
           },
           "amount": {
-            "$ref": "#/components/schemas/AmountEvent"
+            "description": "Amount of the event.",
+            "type": "string",
+            "format": "double"
           },
           "timestamp": {
-            "$ref": "#/components/schemas/TimestampEvent"
+            "description": "Date and time of the transaction event.",
+            "type": "string",
+            "format": "date-time"
           },
           "receipt_no": {
             "type": "string"
@@ -8006,26 +8014,57 @@
               "type": "object",
               "properties": {
                 "name": {
-                  "description": "Product name.",
-                  "type": "string"
-                },
-                "description": {
-                  "description": "Product description.",
-                  "type": "string"
+                  "description": "Product name",
+                  "type": "string",
+                  "example": "Coffee"
                 },
                 "price": {
-                  "description": "Product price.",
-                  "type": "number",
-                  "format": "float"
+                  "description": "Product price",
+                  "type": "string",
+                  "format": "double",
+                  "example": "150.0"
+                },
+                "vat_rate": {
+                  "description": "VAT rate",
+                  "type": "string",
+                  "format": "double",
+                  "example": "0.0"
+                },
+                "single_vat_amount": {
+                  "description": "VAT amount for a single product",
+                  "type": "string",
+                  "format": "double",
+                  "example": "0.0"
+                },
+                "price_with_vat": {
+                  "description": "Product price including VAT",
+                  "type": "string",
+                  "format": "double",
+                  "example": "150.0"
+                },
+                "vat_amount": {
+                  "description": "VAT amount",
+                  "type": "string",
+                  "format": "double",
+                  "example": "0.0"
                 },
                 "quantity": {
-                  "description": "Product quantity.",
-                  "type": "integer"
+                  "description": "Product quantity",
+                  "type": "integer",
+                  "format": "int64",
+                  "example": 1
                 },
                 "total_price": {
-                  "description": "Quantity x product price.",
-                  "type": "number",
-                  "format": "float"
+                  "description": "Quantity x product price",
+                  "type": "string",
+                  "format": "double",
+                  "example": "150.0"
+                },
+                "total_with_vat": {
+                  "description": "Total price including VAT",
+                  "type": "string",
+                  "format": "double",
+                  "example": "150.0"
                 }
               }
             }
@@ -8104,7 +8143,9 @@
             "$ref": "#/components/schemas/EventStatus"
           },
           "amount": {
-            "$ref": "#/components/schemas/AmountEvent"
+            "description": "Amount of the event.",
+            "type": "number",
+            "format": "float"
           },
           "due_date": {
             "description": "Date when the transaction event is due to occur.",
@@ -8121,7 +8162,9 @@
             "type": "integer"
           },
           "timestamp": {
-            "$ref": "#/components/schemas/TimestampEvent"
+            "description": "Date and time of the transaction event.",
+            "type": "string",
+            "format": "date-time"
           }
         }
       },
@@ -8531,11 +8574,6 @@
           }
         }
       },
-      "AmountEvent": {
-        "description": "Amount of the event.",
-        "type": "number",
-        "format": "float"
-      },
       "Currency": {
         "description": "Three-letter [ISO4217](https://en.wikipedia.org/wiki/ISO_4217) code of the currency for the amount. Currently supported currency values are enumerated above.",
         "type": "string",
@@ -8630,11 +8668,6 @@
         "description": "Unique ID of the transaction.",
         "type": "string"
       },
-      "TimestampEvent": {
-        "description": "Date and time of the transaction event.",
-        "type": "string",
-        "format": "date-time"
-      },
       "Permissions": {
         "description": "Permissions assigned to an operator or user.",
         "type": "object",
@@ -8721,12 +8754,41 @@
         "example": {},
         "additionalProperties": true
       },
-      "CountryCode": {
-        "description": "An [ISO3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)\ncountry code. This definition users `oneOf` with a two-character string\ntype to allow for support of future countries in client code.",
-        "type": "string",
-        "example": "BR",
-        "maxLength": 2,
-        "minLength": 2
+      "Problem": {
+        "description": "A RFC 9457 problem details object.\n\nAdditional properties specific to the problem type may be present.\n",
+        "type": "object",
+        "properties": {
+          "type": {
+            "description": "A URI reference that identifies the problem type.",
+            "type": "string",
+            "format": "uri",
+            "example": "https://developer.sumup.com/problem/not-found"
+          },
+          "title": {
+            "description": "A short, human-readable summary of the problem type.",
+            "type": "string",
+            "example": "Requested resource couldn't be found."
+          },
+          "status": {
+            "description": "The HTTP status code generated by the origin server for this occurrence of the problem.",
+            "type": "integer",
+            "example": 404
+          },
+          "detail": {
+            "description": "A human-readable explanation specific to this occurrence of the problem.",
+            "type": "string",
+            "example": "The requested resource doesn't exist or does not belong to you."
+          },
+          "instance": {
+            "description": "A URI reference that identifies the specific occurrence of the problem.",
+            "type": "string",
+            "format": "uri"
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "type"
+        ]
       },
       "Address": {
         "description": "An address somewhere in the world. The address fields used depend on the country conventions. For example, in Great Britain, `city` is `post_town`. In the United States, the top-level administrative unit used in addresses is `state`, whereas in Chile it's `region`.\nWhether an address is valid or not depends on whether the locally required fields are present. Fields not supported in a country will be ignored.",
@@ -8856,18 +8918,28 @@
           "country"
         ]
       },
+      "CountryCode": {
+        "description": "An [ISO3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)\ncountry code. This definition users `oneOf` with a two-character string\ntype to allow for support of future countries in client code.",
+        "type": "string",
+        "example": "BR",
+        "maxLength": 2,
+        "minLength": 2,
+        "pattern": "^[A-Z]{2}$"
+      },
       "PersonalIdentifier": {
         "type": "object",
         "properties": {
           "ref": {
             "description": "The unique reference for the personal identifier type.",
             "type": "string",
-            "example": "br.cpf"
+            "example": "br.cpf",
+            "maxLength": 32
           },
           "value": {
             "description": "The company identifier value.",
             "type": "string",
-            "example": "847.060.136-90"
+            "example": "847.060.136-90",
+            "maxLength": 128
           }
         },
         "example": {
@@ -8877,42 +8949,6 @@
         "required": [
           "ref",
           "value"
-        ]
-      },
-      "Problem": {
-        "description": "A RFC 9457 problem details object.\n\nAdditional properties specific to the problem type may be present.\n",
-        "type": "object",
-        "properties": {
-          "type": {
-            "description": "A URI reference that identifies the problem type.",
-            "type": "string",
-            "format": "uri"
-          },
-          "title": {
-            "description": "A short, human-readable summary of the problem type.",
-            "type": "string"
-          },
-          "status": {
-            "description": "The HTTP status code generated by the origin server for this occurrence of the problem.",
-            "type": "integer",
-            "example": 400,
-            "exclusiveMaximum": true,
-            "maximum": 600,
-            "minimum": 400
-          },
-          "detail": {
-            "description": "A human-readable explanation specific to this occurrence of the problem.",
-            "type": "string"
-          },
-          "instance": {
-            "description": "A URI reference that identifies the specific occurrence of the problem.",
-            "type": "string",
-            "format": "uri"
-          }
-        },
-        "additionalProperties": true,
-        "required": [
-          "type"
         ]
       },
       "MembershipStatus": {

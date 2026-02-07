@@ -195,23 +195,19 @@ export type EventStatus =
   | "SUCCESSFUL"
   | "PAID_OUT";
 
-/**
- * Amount of the event.
- */
-export type AmountEvent = number;
-
-/**
- * Date and time of the transaction event.
- */
-export type TimestampEvent = string;
-
 export type Event = {
   id?: EventID;
   transaction_id?: TransactionID;
   type?: EventType;
   status?: EventStatus;
-  amount?: AmountEvent;
-  timestamp?: TimestampEvent;
+  /**
+   * Amount of the event.
+   */
+  amount?: number;
+  /**
+   * Date and time of the transaction event.
+   */
+  timestamp?: string;
   /**
    * Amount of the fee related to the event.
    */
@@ -297,7 +293,10 @@ export type TransactionEvent = {
   id?: EventID;
   event_type?: EventType;
   status?: EventStatus;
-  amount?: AmountEvent;
+  /**
+   * Amount of the event.
+   */
+  amount?: number;
   /**
    * Date when the transaction event is due to occur.
    */
@@ -310,7 +309,10 @@ export type TransactionEvent = {
    * Consecutive number of the installment that is paid. Applicable only payout events, i.e. `event_type = PAYOUT`.
    */
   installment_number?: number;
-  timestamp?: TimestampEvent;
+  /**
+   * Date and time of the transaction event.
+   */
+  timestamp?: string;
 };
 
 export type TransactionMixinHistory = {
@@ -663,7 +665,6 @@ export class Transactions extends Core.APIResource {
 
 export declare namespace Transactions {
   export type {
-    AmountEvent,
     CardResponse,
     CardType,
     Currency,
@@ -687,7 +688,6 @@ export declare namespace Transactions {
     PaymentType,
     Product,
     RefundTransactionParams,
-    TimestampEvent,
     TransactionBase,
     TransactionCheckoutInfo,
     TransactionEvent,
