@@ -9936,6 +9936,12 @@
           "metadata": {
             "$ref": "#/components/schemas/Metadata"
           },
+          "service_account_id": {
+            "description": "Identifier of the system-managed service account associated with this reader.\nPresent only for readers that are already paired.\nThis field is currently in beta and may change.",
+            "type": "string",
+            "format": "uuid",
+            "x-beta": true
+          },
           "created_at": {
             "description": "The timestamp of when the reader was created.",
             "type": "string",
