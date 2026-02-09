@@ -86,6 +86,12 @@ export type Reader = {
   device: ReaderDevice;
   metadata?: Metadata;
   /**
+   * Identifier of the system-managed service account associated with this reader.
+   * Present only for readers that are already paired.
+   * This field is currently in beta and may change.
+   */
+  service_account_id?: string;
+  /**
    * The timestamp of when the reader was created.
    */
   created_at: string;
