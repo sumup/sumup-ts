@@ -35,7 +35,7 @@ export type Checkout = {
   /**
    * Unique ID of the checkout resource.
    */
-  id?: string;
+  readonly id?: string;
   /**
    * Current status of the checkout.
    */

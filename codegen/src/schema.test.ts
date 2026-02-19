@@ -69,3 +69,18 @@ test("collectSchemaRefs includes aliased references", () => {
 
   expect([...refs].sort()).toEqual(["ErrorBody", "MerchantProfileLegacy"]);
 });
+
+test("readOnly properties are generated as readonly", () => {
+  expect(
+    render({
+      type: "object",
+      properties: {
+        id: { type: "string", readOnly: true },
+        name: { type: "string" },
+      },
+      required: ["id", "name"],
+    }),
+  ).toBe(`{readonly "id": string,
+"name": string,
+}`);
+});

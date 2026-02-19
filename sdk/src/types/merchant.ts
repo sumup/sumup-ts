@@ -18,7 +18,7 @@ export type Merchant = {
   /**
    * Short unique identifier for the merchant.
    */
-  merchant_code: string;
+  readonly merchant_code: string;
   /**
    * ID of the organization the merchant belongs to (if any).
    */
@@ -50,7 +50,7 @@ export type Merchant = {
    * Three-letter [ISO currency code](https://en.wikipedia.org/wiki/ISO_4217) representing the default currency for the account.
    *
    */
-  default_currency: string;
+  readonly default_currency: string;
   /**
    * Merchant's default locale, represented as a BCP47 [RFC5646](https://datatracker.ietf.org/doc/html/rfc5646) language tag. This is typically an ISO 639-1 Alpha-2 [ISO639‑1](https://www.iso.org/iso-639-language-code) language code in lowercase and an ISO 3166-1 Alpha-2 [ISO3166‑1](https://www.iso.org/iso-3166-country-codes.html) country code in uppercase, separated by a dash. For example, en-US or fr-CA.
    * In multilingual countries this is the merchant's preferred locale out of those, that are officially spoken in the country. In a countries with a single official language this will match the official language.
