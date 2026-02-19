@@ -117,8 +117,10 @@ export const schemaToTypes = (
         if (comment) {
           writer.w(comment);
         }
+        const readonly =
+          !("$ref" in subSchema) && subSchema.readOnly ? "readonly " : "";
         const optional = s.required?.includes(name) ? "" : "?";
-        writer.w0(`${JSON.stringify(name)}${optional}: `);
+        writer.w0(`${readonly}${JSON.stringify(name)}${optional}: `);
         schemaToTypes(subSchema, writer, options);
         writer.w(",");
       }

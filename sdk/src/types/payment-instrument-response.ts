@@ -10,11 +10,11 @@ export type PaymentInstrumentResponse = {
   /**
    * Unique token identifying the saved payment card for a customer.
    */
-  token?: string;
+  readonly token?: string;
   /**
    * Indicates whether the payment instrument is active and can be used for payments. To deactivate it, send a `DELETE` request to the resource endpoint.
    */
-  active?: boolean;
+  readonly active?: boolean;
   /**
    * Type of the payment instrument.
    */
@@ -26,7 +26,7 @@ export type PaymentInstrumentResponse = {
     /**
      * Last 4 digits of the payment card number.
      */
-    last_4_digits?: string;
+    readonly last_4_digits?: string;
     type?: CardType;
   };
   mandate?: MandateResponse;

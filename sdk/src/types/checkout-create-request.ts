@@ -40,15 +40,15 @@ export type CheckoutCreateRequest = {
   /**
    * Unique ID of the checkout resource.
    */
-  id?: string;
+  readonly id?: string;
   /**
    * Current status of the checkout.
    */
-  status?: "PENDING" | "FAILED" | "PAID";
+  readonly status?: "PENDING" | "FAILED" | "PAID";
   /**
    * Date and time of the creation of the payment checkout. Response format expressed according to [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) code.
    */
-  date?: string;
+  readonly date?: string;
   /**
    * Date and time of the checkout expiration before which the client application needs to send a processing request. If no value is present, the checkout does not have an expiration time.
    */
@@ -56,7 +56,7 @@ export type CheckoutCreateRequest = {
   /**
    * List of transactions related to the payment.
    */
-  transactions?: (TransactionBase & TransactionCheckoutInfo)[];
+  readonly transactions?: (TransactionBase & TransactionCheckoutInfo)[];
   /**
    * __Required__ for [APMs](https://developer.sumup.com/online-payments/apm/introduction) and __recommended__ for card payments. Refers to a url where the end user is redirected once the payment processing completes. If not specified, the [Payment Widget](https://developer.sumup.com/online-payments/tools/card-widget) renders [3DS challenge](https://developer.sumup.com/online-payments/features/3ds) within an iframe instead of performing a full-page redirect.
    */

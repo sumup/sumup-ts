@@ -19,7 +19,7 @@ export type BasePerson = {
    * The unique identifier for the person. This is a [typeid](https://github.com/sumup/typeid).
    *
    */
-  id: string;
+  readonly id: string;
   /**
    * A corresponding identity user ID for the person, if they have a user account.
    *

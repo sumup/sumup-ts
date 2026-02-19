@@ -7,7 +7,7 @@
  */
 
 import { expect, test } from "vitest";
-import { pathToTemplateStr, topologicalSort } from "./util";
+import { extractDoc, pathToTemplateStr, topologicalSort } from "./util";
 
 test("pathToTemplateStr", () => {
   expect(
@@ -24,4 +24,14 @@ test("topologicalSort", () => {
       ["d", []],
     ]),
   ).toEqual(["c", "b", "a", "d"]);
+});
+
+test("extractDoc does not include @readonly for readOnly fields", () => {
+  expect(
+    extractDoc({
+      type: "string",
+      description: "Read-only identifier",
+      readOnly: true,
+    }),
+  ).not.toContain("@readonly");
 });

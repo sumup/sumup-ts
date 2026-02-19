@@ -6,11 +6,11 @@ export type CheckoutSuccess = Checkout & {
   /**
    * Transaction code of the successful transaction with which the payment for the checkout is completed.
    */
-  transaction_code?: string;
+  readonly transaction_code?: string;
   /**
    * Transaction ID of the successful transaction with which the payment for the checkout is completed.
    */
-  transaction_id?: string;
+  readonly transaction_id?: string;
   /**
    * Name of the merchant
    */

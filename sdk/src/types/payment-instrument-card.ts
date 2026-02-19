@@ -9,11 +9,11 @@ export type PaymentInstrumentCard = {
   /**
    * Unique token identifying the saved payment card for a customer.
    */
-  token: string;
+  readonly token: string;
   /**
    * Indicates whether the payment instrument is active and can be used for payments. To deactivate it, send a `DELETE` request to the resource endpoint.
    */
-  active: boolean;
+  readonly active: boolean;
   /**
    * Type of the payment instrument.
    */

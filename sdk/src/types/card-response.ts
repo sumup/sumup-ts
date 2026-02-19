@@ -9,6 +9,6 @@ export type CardResponse = {
   /**
    * Last 4 digits of the payment card number.
    */
-  last_4_digits?: string;
+  readonly last_4_digits?: string;
   type?: CardType;
 };
