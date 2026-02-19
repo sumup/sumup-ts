@@ -43,7 +43,9 @@ export async function generateResource(
   const writer = fileWriter(outFile);
 
   const exports: string[] = [];
-  const unique = (types: (string | null)[]) => [...new Set(types.filter(Boolean))];
+  const unique = (types: (string | null)[]) => [
+    ...new Set(types.filter(Boolean)),
+  ];
   const resolveResponseObject = (
     response: OpenAPIV3_1.ResponseObject | OpenAPIV3_1.ReferenceObject,
   ) => {
@@ -148,7 +150,9 @@ import * as Core from '../../core';
       methodSpec.responses["204"];
 
     const resp = responseSchema(
-      successResponse ? resolveResponseObject(successResponse) || successResponse : successResponse,
+      successResponse
+        ? resolveResponseObject(successResponse) || successResponse
+        : successResponse,
     );
     if (resp && !("$ref" in resp)) {
       writer.w0(`export type ${responseType(opName)} = `);
@@ -161,7 +165,9 @@ import * as Core from '../../core';
       .filter(([code]) => !code.startsWith("2"))
       .map(([, resp]) => resolveResponseObject(resp) || resp)
       .map((resp) => responseSchema(resp))
-      .filter((resp): resp is OpenAPIV3_1.SchemaObject => !!resp && !("$ref" in resp));
+      .filter(
+        (resp): resp is OpenAPIV3_1.SchemaObject => !!resp && !("$ref" in resp),
+      );
 
     if (errorResponses.length > 0) {
       writer.w0(`export type ${errorType(opName)} = `);
@@ -211,7 +217,9 @@ export class ${resourceName} extends Core.APIResource {`);
     const errorResponses = Object.entries(methodSpec.responses)
       .filter(([code]) => !code.startsWith("2"))
       .map(([, resp]) => resolveResponseObject(resp) || resp)
-      .map((resp) => getResponse(methodNameType, resp, errorType(methodNameType)));
+      .map((resp) =>
+        getResponse(methodNameType, resp, errorType(methodNameType)),
+      );
 
     const successTypes = unique(successResponses);
     const errorTypes = unique(errorResponses);
