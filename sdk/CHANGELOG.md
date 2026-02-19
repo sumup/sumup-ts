@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.1.0](https://github.com/sumup/sumup-ts/compare/v0.0.13...v0.1.0) (2026-02-19)
+
+
+### Features
+
+* improve error handling ([#253](https://github.com/sumup/sumup-ts/issues/253)) ([8a296af](https://github.com/sumup/sumup-ts/commit/8a296af524a515f8ee3ac0940840f0ca84ff7169))
+* readonly properties ([#255](https://github.com/sumup/sumup-ts/issues/255)) ([ddaa73b](https://github.com/sumup/sumup-ts/commit/ddaa73bab50f117cc473e99ab02af2e639aa97a9))
+* release 0.1.0 ([a5190d1](https://github.com/sumup/sumup-ts/commit/a5190d12fea49ac00af285713594f23b8d578991))
+* **sdk:** handle schemas with additional properties ([#252](https://github.com/sumup/sumup-ts/issues/252)) ([bbf9d31](https://github.com/sumup/sumup-ts/commit/bbf9d31dca629794bda80a7958b7c69bc0a9c3b1))
+
+
+### Bug Fixes
+
+* **sdk:** missing README ([019ead6](https://github.com/sumup/sumup-ts/commit/019ead6a243bc14f3bbadac881aeaea26d58f21c))
+
 ## [0.0.13](https://github.com/sumup/sumup-ts/compare/v0.0.12...v0.0.13) (2026-02-06)
 
 
