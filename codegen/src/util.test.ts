@@ -12,7 +12,7 @@ import { pathToTemplateStr, topologicalSort } from "./util";
 test("pathToTemplateStr", () => {
   expect(
     pathToTemplateStr("/projects/{project_name}/disks/{disk_name}"),
-  ).toEqual("`/projects/${projectName}/disks/${diskName}`");
+  ).toEqual(`\`/projects/\${projectName}/disks/\${diskName}\``);
 });
 
 test("topologicalSort", () => {

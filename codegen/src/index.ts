@@ -9,6 +9,7 @@ import { generateIndex } from "./api";
 import { generateApiVersion } from "./api-version";
 import { generateCore } from "./core";
 import { generateResource } from "./resource";
+import { generateTypes } from "./types";
 
 /**
  * Main code generation function.
@@ -35,6 +36,7 @@ async function generate(specFile: string, destDir: string) {
   const spec = rawSpec as OpenAPIV3_1.Document;
 
   await generateApiVersion(spec, destDirAbs);
+  await generateTypes(spec, destDirAbs);
   await generateIndex(spec, destDirAbs);
   await generateCore(spec, destDirAbs);
   for (const t of spec.tags || []) {
