@@ -4933,26 +4933,11 @@
             }
           },
           "404": {
-            "description": "No user with the specified ID exists.\n",
+            "description": "The requested Merchant does not exist.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
-                  "allOf": [
-                    {
-                      "$ref": "#/components/schemas/BaseError"
-                    },
-                    {
-                      "type": "object",
-                      "properties": {
-                        "category": {
-                          "$ref": "#/components/schemas/ErrorCategoryClient"
-                        },
-                        "code": {
-                          "$ref": "#/components/schemas/ErrorCodeNotFound"
-                        }
-                      }
-                    }
-                  ]
+                  "$ref": "#/components/schemas/Problem"
                 }
               }
             }
@@ -5028,26 +5013,11 @@
             }
           },
           "404": {
-            "description": "No user with the specified ID exists.\n",
+            "description": "The requested Merchant does not exist.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
-                  "allOf": [
-                    {
-                      "$ref": "#/components/schemas/BaseError"
-                    },
-                    {
-                      "type": "object",
-                      "properties": {
-                        "category": {
-                          "$ref": "#/components/schemas/ErrorCategoryClient"
-                        },
-                        "code": {
-                          "$ref": "#/components/schemas/ErrorCodeNotFound"
-                        }
-                      }
-                    }
-                  ]
+                  "$ref": "#/components/schemas/Problem"
                 }
               }
             }
@@ -5055,24 +5025,9 @@
           "500": {
             "description": "An internal server error occurred.\n",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
-                  "allOf": [
-                    {
-                      "$ref": "#/components/schemas/BaseError"
-                    },
-                    {
-                      "type": "object",
-                      "properties": {
-                        "category": {
-                          "$ref": "#/components/schemas/ErrorCategoryServer"
-                        },
-                        "code": {
-                          "$ref": "#/components/schemas/ErrorCodeInternalServerError"
-                        }
-                      }
-                    }
-                  ]
+                  "$ref": "#/components/schemas/Problem"
                 }
               }
             }
@@ -5162,26 +5117,11 @@
             }
           },
           "404": {
-            "description": "No user with the specified ID exists.\n",
+            "description": "The requested Person does not exist.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
-                  "allOf": [
-                    {
-                      "$ref": "#/components/schemas/BaseError"
-                    },
-                    {
-                      "type": "object",
-                      "properties": {
-                        "category": {
-                          "$ref": "#/components/schemas/ErrorCategoryClient"
-                        },
-                        "code": {
-                          "$ref": "#/components/schemas/ErrorCodeNotFound"
-                        }
-                      }
-                    }
-                  ]
+                  "$ref": "#/components/schemas/Problem"
                 }
               }
             }
@@ -5189,24 +5129,9 @@
           "500": {
             "description": "An internal server error occurred.\n",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
-                  "allOf": [
-                    {
-                      "$ref": "#/components/schemas/BaseError"
-                    },
-                    {
-                      "type": "object",
-                      "properties": {
-                        "category": {
-                          "$ref": "#/components/schemas/ErrorCategoryServer"
-                        },
-                        "code": {
-                          "$ref": "#/components/schemas/ErrorCodeInternalServerError"
-                        }
-                      }
-                    }
-                  ]
+                  "$ref": "#/components/schemas/Problem"
                 }
               }
             }
@@ -9533,25 +9458,26 @@
           "name": {
             "description": "The customer-facing business name.",
             "type": "string",
-            "example": "Gin & Dougnuts",
+            "example": "Example Coffee",
             "maxLength": 512
           },
           "dynamic_descriptor": {
             "description": "The descriptor is the text that your customer sees on their bank account statement.\nThe more recognisable your descriptor is, the less risk you have of receiving disputes (e.g. chargebacks).\n",
             "type": "string",
+            "example": "Example Coffee",
             "maxLength": 30,
             "pattern": "^[a-zA-Z0-9 \\-+\\'_.]{0,30}$"
           },
           "website": {
             "description": "The business's publicly available website.",
             "type": "string",
-            "example": "https://gindoughnuts.com",
+            "example": "https://example.com",
             "maxLength": 512
           },
           "email": {
             "description": "A publicly available email address.",
             "type": "string",
-            "example": "contact@gindoughnuts.com",
+            "example": "contact@example.com",
             "maxLength": 256
           },
           "phone_number": {
@@ -9874,47 +9800,6 @@
         "required": [
           "created_at",
           "updated_at"
-        ]
-      },
-      "BaseError": {
-        "type": "object",
-        "properties": {
-          "instance": {
-            "description": "A unique identifier for the error instance. This can be used to trace the error back to the server logs.\n",
-            "type": "string"
-          },
-          "message": {
-            "description": "A human-readable message describing the error that occurred.\n",
-            "type": "string"
-          }
-        }
-      },
-      "ErrorCategoryClient": {
-        "description": "The category of the error.\n",
-        "type": "string",
-        "enum": [
-          "client_error"
-        ]
-      },
-      "ErrorCodeNotFound": {
-        "description": "An error code specifying the exact error that occurred.\n",
-        "type": "string",
-        "enum": [
-          "not_found"
-        ]
-      },
-      "ErrorCategoryServer": {
-        "description": "The category of the error.\n",
-        "type": "string",
-        "enum": [
-          "server_error"
-        ]
-      },
-      "ErrorCodeInternalServerError": {
-        "description": "An error code specifying the exact error that occurred.\n",
-        "type": "string",
-        "enum": [
-          "internal_error"
         ]
       },
       "Reader": {
@@ -11990,56 +11875,6 @@
               },
               "required": [
                 "items"
-              ]
-            }
-          }
-        }
-      },
-      "404NotFound": {
-        "description": "No user with the specified ID exists.\n",
-        "content": {
-          "application/json": {
-            "schema": {
-              "allOf": [
-                {
-                  "$ref": "#/components/schemas/BaseError"
-                },
-                {
-                  "type": "object",
-                  "properties": {
-                    "category": {
-                      "$ref": "#/components/schemas/ErrorCategoryClient"
-                    },
-                    "code": {
-                      "$ref": "#/components/schemas/ErrorCodeNotFound"
-                    }
-                  }
-                }
-              ]
-            }
-          }
-        }
-      },
-      "500InternalServerError": {
-        "description": "An internal server error occurred.\n",
-        "content": {
-          "application/json": {
-            "schema": {
-              "allOf": [
-                {
-                  "$ref": "#/components/schemas/BaseError"
-                },
-                {
-                  "type": "object",
-                  "properties": {
-                    "category": {
-                      "$ref": "#/components/schemas/ErrorCategoryServer"
-                    },
-                    "code": {
-                      "$ref": "#/components/schemas/ErrorCodeInternalServerError"
-                    }
-                  }
-                }
               ]
             }
           }
