@@ -563,6 +563,12 @@ export type ListCheckoutsQueryParams = {
 
 export type ListCheckoutsResponse = CheckoutSuccess[];
 
+export type ProcessCheckoutError =
+  | ErrorExtended /**
+   * List of error messages.
+   */
+  | ErrorExtended[];
+
 export class Checkouts extends Core.APIResource {
   /**
    * Get payment methods available for the given merchant to use with a checkout.
@@ -572,7 +578,7 @@ export class Checkouts extends Core.APIResource {
     query?: GetPaymentMethodsQueryParams,
     params?: Core.FetchParams,
   ): Core.APIPromise<GetPaymentMethodsResponse> {
-    return this._client.get<GetPaymentMethodsResponse>({
+    return this._client.get<GetPaymentMethodsResponse, DetailsError | Error>({
       path: `/v0.1/merchants/${merchantCode}/payment-methods`,
       query,
       ...params,
@@ -586,7 +592,7 @@ export class Checkouts extends Core.APIResource {
     query?: ListCheckoutsQueryParams,
     params?: Core.FetchParams,
   ): Core.APIPromise<CheckoutSuccess[]> {
-    return this._client.get<CheckoutSuccess[]>({
+    return this._client.get<CheckoutSuccess[], Error>({
       path: `/v0.1/checkouts`,
       query,
       ...params,
@@ -605,7 +611,7 @@ export class Checkouts extends Core.APIResource {
     body: CheckoutCreateRequest,
     params?: Core.FetchParams,
   ): Core.APIPromise<Checkout> {
-    return this._client.post<Checkout>({
+    return this._client.post<Checkout, ErrorExtended | Error | ErrorForbidden>({
       path: `/v0.1/checkouts`,
       body,
       ...params,
@@ -616,7 +622,7 @@ export class Checkouts extends Core.APIResource {
    * Retrieves an identified checkout resource. Use this request after processing a checkout to confirm its status and inform the end user respectively.
    */
   get(id: string, params?: Core.FetchParams): Core.APIPromise<CheckoutSuccess> {
-    return this._client.get<CheckoutSuccess>({
+    return this._client.get<CheckoutSuccess, Error>({
       path: `/v0.1/checkouts/${id}`,
       ...params,
     });
@@ -633,7 +639,10 @@ export class Checkouts extends Core.APIResource {
     body: ProcessCheckout,
     params?: Core.FetchParams,
   ): Core.APIPromise<CheckoutSuccess | CheckoutAccepted> {
-    return this._client.put<CheckoutSuccess | CheckoutAccepted>({
+    return this._client.put<
+      CheckoutSuccess | CheckoutAccepted,
+      ProcessCheckoutError | Error
+    >({
       path: `/v0.1/checkouts/${id}`,
       body,
       ...params,
@@ -644,7 +653,7 @@ export class Checkouts extends Core.APIResource {
    * Deactivates an identified checkout resource. If the checkout has already been processed it can not be deactivated.
    */
   deactivate(id: string, params?: Core.FetchParams): Core.APIPromise<Checkout> {
-    return this._client.delete<Checkout>({
+    return this._client.delete<Checkout, Error>({
       path: `/v0.1/checkouts/${id}`,
       ...params,
     });
@@ -674,6 +683,7 @@ export declare namespace Checkouts {
     PaymentType,
     PersonalDetails,
     ProcessCheckout,
+    ProcessCheckoutError,
     TransactionBase,
     TransactionCheckoutInfo,
   };

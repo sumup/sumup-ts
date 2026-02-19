@@ -65,7 +65,7 @@ export class APIPromise<T> implements Promise<T> {
     }
 
     const contentType = res.headers.get("content-type");
-    const isJSON = contentType?.includes("application/json");
+    const isJSON = contentType?.includes("json");
     if (!isJSON) {
       throw new SumUpError("Unexpected non-json response.");
     }

@@ -583,7 +583,7 @@ export class Transactions extends Core.APIResource {
     body?: RefundTransactionParams,
     params?: Core.FetchParams,
   ): Core.APIPromise<void> {
-    return this._client.post<void>({
+    return this._client.post<void, Error>({
       path: `/v0.1/me/refund/${txnId}`,
       body,
       ...params,
@@ -605,7 +605,7 @@ export class Transactions extends Core.APIResource {
     query?: GetTransactionV2_1QueryParams,
     params?: Core.FetchParams,
   ): Core.APIPromise<TransactionFull> {
-    return this._client.get<TransactionFull>({
+    return this._client.get<TransactionFull, Error>({
       path: `/v2.1/merchants/${merchantCode}/transactions`,
       query,
       ...params,
@@ -626,7 +626,7 @@ export class Transactions extends Core.APIResource {
     query?: GetTransactionQueryParams,
     params?: Core.FetchParams,
   ): Core.APIPromise<TransactionFull> {
-    return this._client.get<TransactionFull>({
+    return this._client.get<TransactionFull, Error>({
       path: `/v0.1/me/transactions`,
       query,
       ...params,
@@ -641,7 +641,7 @@ export class Transactions extends Core.APIResource {
     query?: ListTransactionsV2_1QueryParams,
     params?: Core.FetchParams,
   ): Core.APIPromise<ListTransactionsV2_1Response> {
-    return this._client.get<ListTransactionsV2_1Response>({
+    return this._client.get<ListTransactionsV2_1Response, Error>({
       path: `/v2.1/merchants/${merchantCode}/transactions/history`,
       query,
       ...params,
@@ -655,7 +655,7 @@ export class Transactions extends Core.APIResource {
     query?: ListTransactionsQueryParams,
     params?: Core.FetchParams,
   ): Core.APIPromise<ListTransactionsResponse> {
-    return this._client.get<ListTransactionsResponse>({
+    return this._client.get<ListTransactionsResponse, Error>({
       path: `/v0.1/me/transactions/history`,
       query,
       ...params,

@@ -6,6 +6,30 @@ import { bodyType, responseType, topologicalSort } from "./util";
 
 const HttpMethods = OpenAPIV3.HttpMethods;
 
+const getJsonMediaType = (content?: OpenAPIV3_1.ContentObject) => {
+  if (!content) {
+    return null;
+  }
+
+  const mediaTypes = Object.keys(content);
+  const selectedMediaType =
+    mediaTypes.find((mediaType) => mediaType === "application/json") ||
+    mediaTypes.find(
+      (mediaType) =>
+        mediaType.endsWith("+json") || mediaType.includes("/json"),
+    );
+
+  if (!selectedMediaType) {
+    return null;
+  }
+
+  return content[selectedMediaType] || null;
+};
+
+const getJsonSchemaFromContent = (content?: OpenAPIV3_1.ContentObject) => {
+  return getJsonMediaType(content)?.schema || null;
+};
+
 /**
  * Returns a list of schema names sorted by dependency order.
  * Schemas that depend on others come after their dependencies.
@@ -27,11 +51,11 @@ export const getSortedSchemas = (spec: OpenAPIV3_1.Document) => {
 export function responseSchema(
   o: OpenAPIV3_1.ResponseObject | OpenAPIV3_1.ReferenceObject,
 ) {
-  if (!(o && "content" in o && o.content?.["application/json"]?.schema)) {
+  if (!(o && "content" in o)) {
     return null;
   }
 
-  return o.content["application/json"].schema;
+  return getJsonSchemaFromContent(o.content);
 }
 
 /**
@@ -49,13 +73,15 @@ export function getRequestBody(
     !o ||
     !o.requestBody ||
     !("content" in o.requestBody) ||
-    !o.requestBody?.content["application/json"]
+    !getJsonMediaType(o.requestBody.content)
   ) {
     return null;
   }
 
+  const requestSchema = getJsonSchemaFromContent(o.requestBody.content);
+
   // Returns empty JSON body
-  if (!o.requestBody?.content["application/json"].schema) {
+  if (!requestSchema) {
     return {
       typeName: bodyType(Case.pascal(operationId)),
       required: !!o.requestBody.required,
@@ -65,7 +91,7 @@ export function getRequestBody(
     };
   }
 
-  const body = o.requestBody?.content["application/json"]?.schema;
+  const body = requestSchema;
   if ("$ref" in body) {
     return {
       typeName: refToSchemaName(body.$ref),
@@ -87,25 +113,28 @@ export function getRequestBody(
 export function getResponse(
   opName: string,
   o: Schema | OpenAPIV3_1.RequestBodyObject | undefined,
-  prefix = "",
+  inlineTypeName = responseType(opName),
 ) {
-  if (!(o && "content" in o && o.content?.["application/json"]?.schema)) {
+  if (!(o && "content" in o)) {
     return null;
   }
-  const schema = o.content["application/json"].schema;
+  const schema = getJsonSchemaFromContent(o.content);
+  if (!schema) {
+    return null;
+  }
 
   if ("$ref" in schema) {
-    return prefix + refToSchemaName(schema.$ref);
+    return refToSchemaName(schema.$ref);
   }
 
   if (schema.type === "array") {
     if ("$ref" in schema.items) {
-      return `${prefix + refToSchemaName(schema.items.$ref)}[]`;
+      return `${refToSchemaName(schema.items.$ref)}[]`;
     }
     return null;
   }
 
-  return responseType(opName);
+  return inlineTypeName;
 }
 
 type PathConfig = ReturnType<typeof iterPathConfig>[number];

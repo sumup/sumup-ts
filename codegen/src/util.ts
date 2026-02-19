@@ -4,6 +4,7 @@ import type { OpenAPIV3_1 } from "openapi-types";
 export const bodyType = (opId: string) => `${opId}Params`;
 export const queryParamsType = (opId: string) => `${opId}QueryParams`;
 export const responseType = (opId: string) => `${opId}Response`;
+export const errorType = (opId: string) => `${opId}Error`;
 
 /**
  * Converts a path segment to template string interpolation.

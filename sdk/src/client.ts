@@ -107,7 +107,7 @@ export class HTTPClient {
 
     if (!res.ok) {
       const contentType = res.headers.get("content-type");
-      const isJSON = contentType?.includes("application/json");
+      const isJSON = contentType?.includes("json");
       throw new Core.APIError(
         res.status,
         isJSON ? ((await res.json()) as E) : await res.text(),

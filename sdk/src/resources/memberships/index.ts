@@ -139,7 +139,7 @@ export class Memberships extends Core.APIResource {
     query?: ListMembershipsQueryParams,
     params?: Core.FetchParams,
   ): Core.APIPromise<ListMembershipsResponse> {
-    return this._client.get<ListMembershipsResponse>({
+    return this._client.get<ListMembershipsResponse, unknown>({
       path: `/v0.1/memberships`,
       query,
       ...params,

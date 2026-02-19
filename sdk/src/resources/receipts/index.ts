@@ -230,7 +230,7 @@ export class Receipts extends Core.APIResource {
     query: GetReceiptQueryParams,
     params?: Core.FetchParams,
   ): Core.APIPromise<Receipt> {
-    return this._client.get<Receipt>({
+    return this._client.get<Receipt, Error>({
       path: `/v1.1/receipts/${id}`,
       query,
       ...params,
