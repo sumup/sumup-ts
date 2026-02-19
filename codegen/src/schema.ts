@@ -17,6 +17,25 @@ const withNullable = (schema: Schema, writer: FileWriter) => {
   }
 };
 
+const hasExplicitAdditionalProperties = (
+  schema: OpenAPIV3_1.SchemaObject,
+): boolean =>
+  schema.additionalProperties === true ||
+  typeof schema.additionalProperties === "object";
+
+const writeAdditionalPropertiesRecord = (
+  schema: OpenAPIV3_1.SchemaObject,
+  writer: FileWriter,
+): void => {
+  writer.w0("Record<string, ");
+  if (typeof schema.additionalProperties === "object") {
+    schemaToTypes(schema.additionalProperties, writer);
+  } else {
+    writer.w0("unknown");
+  }
+  writer.w0(">");
+};
+
 /**
  * Converts an OpenAPI schema to TypeScript type definitions
  */
@@ -62,17 +81,12 @@ export const schemaToTypes = (schema: Schema, writer: FileWriter): void => {
     .with({ type: "object" }, (s) => {
       // record type, which only tells us the type of the values
       if (!s.properties || Object.keys(s.properties).length === 0) {
-        writer.w0("Record<string,");
-        if (typeof s.additionalProperties === "object") {
-          schemaToTypes(s.additionalProperties, writer);
-        } else {
-          writer.w0("unknown");
-        }
-        writer.w0(">");
+        writeAdditionalPropertiesRecord(s, writer);
         withNullable(s, writer);
         return;
       }
 
+      const propertyNames = Object.keys(s.properties);
       writer.w0("{");
       for (const [name, subSchema] of Object.entries(s.properties || {})) {
         const comment = docComment(extractDoc(subSchema));
@@ -85,6 +99,17 @@ export const schemaToTypes = (schema: Schema, writer: FileWriter): void => {
         writer.w(",");
       }
       writer.w0("}");
+
+      if (hasExplicitAdditionalProperties(s)) {
+        writer.w0(" & Omit<");
+        writeAdditionalPropertiesRecord(s, writer);
+        writer.w0(", ");
+        for (const [i, name] of propertyNames.entries()) {
+          if (i > 0) writer.w0(" | ");
+          writer.w0(JSON.stringify(name));
+        }
+        writer.w0(">");
+      }
       withNullable(s, writer);
     })
     .with({ oneOf: P.not(P.nullish) }, (s) => {

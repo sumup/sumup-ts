@@ -29,7 +29,10 @@ export type Problem = {
    * A URI reference that identifies the specific occurrence of the problem.
    */
   instance?: string;
-};
+} & Omit<
+  Record<string, unknown>,
+  "type" | "title" | "status" | "detail" | "instance"
+>;
 
 /**
  * Set of user-defined key-value pairs attached to the object. Partial updates are not supported. When updating, always submit whole metadata. Maximum of 64 parameters are allowed in the object.

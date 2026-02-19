@@ -34,7 +34,10 @@ export type Problem = {
    * A URI reference that identifies the specific occurrence of the problem.
    */
   instance?: string;
-};
+} & Omit<
+  Record<string, unknown>,
+  "type" | "title" | "status" | "detail" | "instance"
+>;
 
 /**
  * The status of the membership.

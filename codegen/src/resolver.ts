@@ -1,5 +1,4 @@
 import type { OpenAPIV3_1 } from "openapi-types";
-import { match, P } from "ts-pattern";
 
 /**
  * Collects all schema references used by operations with a specific tag.
@@ -24,27 +23,38 @@ export const collectReferencedSchemas = (
   ) => {
     if (!schema) return;
 
-    match(schema)
-      .with({ $ref: P.string }, (s) => addSchemaRef(s.$ref))
-      .with({ properties: P.not(P.nullish) }, (s) => {
-        Object.values(s.properties!).forEach(processSchema);
-      })
-      .with({ items: P.not(P.nullish) }, (s) => {
-        processSchema(s.items);
-      })
-      .with({ allOf: P.array() }, (s) => {
-        s.allOf!.forEach(processSchema);
-      })
-      .with({ oneOf: P.array() }, (s) => {
-        s.oneOf!.forEach(processSchema);
-      })
-      .with({ anyOf: P.array() }, (s) => {
-        s.anyOf!.forEach(processSchema);
-      })
-      .with({ not: P.not(P.nullish) }, (s) => {
-        processSchema(s.not);
-      })
-      .otherwise(() => {});
+    if ("$ref" in schema) {
+      addSchemaRef(schema.$ref);
+      return;
+    }
+
+    if (schema.properties) {
+      Object.values(schema.properties).forEach(processSchema);
+    }
+
+    if (typeof schema.additionalProperties === "object") {
+      processSchema(schema.additionalProperties);
+    }
+
+    if ("items" in schema && schema.items) {
+      processSchema(schema.items);
+    }
+
+    if (schema.allOf) {
+      schema.allOf.forEach(processSchema);
+    }
+
+    if (schema.oneOf) {
+      schema.oneOf.forEach(processSchema);
+    }
+
+    if (schema.anyOf) {
+      schema.anyOf.forEach(processSchema);
+    }
+
+    if (schema.not) {
+      processSchema(schema.not);
+    }
   };
 
   const processOperation = (operation: OpenAPIV3_1.OperationObject) => {

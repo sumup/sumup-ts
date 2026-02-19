@@ -34,7 +34,10 @@ export type Problem = {
    * A URI reference that identifies the specific occurrence of the problem.
    */
   instance?: string;
-};
+} & Omit<
+  Record<string, unknown>,
+  "type" | "title" | "status" | "detail" | "instance"
+>;
 
 /**
  * An [ISO3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)
