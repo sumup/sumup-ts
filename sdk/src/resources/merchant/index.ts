@@ -581,7 +581,7 @@ export class Merchant extends Core.APIResource {
   get(
     query?: GetAccountQueryParams,
     params?: Core.FetchParams,
-  ): Core.APIPromise<MerchantAccount> {
+  ): Core.APIPromise<MerchantAccount, Error> {
     return this._client.get<MerchantAccount, Error>({
       path: `/v0.1/me`,
       query,
@@ -594,7 +594,7 @@ export class Merchant extends Core.APIResource {
    */
   getPersonalProfile(
     params?: Core.FetchParams,
-  ): Core.APIPromise<PersonalProfileLegacy> {
+  ): Core.APIPromise<PersonalProfileLegacy, Error> {
     return this._client.get<PersonalProfileLegacy, Error>({
       path: `/v0.1/me/personal-profile`,
       ...params,
@@ -606,7 +606,7 @@ export class Merchant extends Core.APIResource {
    */
   getMerchantProfile(
     params?: Core.FetchParams,
-  ): Core.APIPromise<MerchantProfileLegacy> {
+  ): Core.APIPromise<MerchantProfileLegacy, Error | ErrorForbidden> {
     return this._client.get<MerchantProfileLegacy, Error | ErrorForbidden>({
       path: `/v0.1/me/merchant-profile`,
       ...params,
@@ -618,7 +618,7 @@ export class Merchant extends Core.APIResource {
    */
   getDoingBusinessAs(
     params?: Core.FetchParams,
-  ): Core.APIPromise<DoingBusinessAsLegacy> {
+  ): Core.APIPromise<DoingBusinessAsLegacy, Error> {
     return this._client.get<DoingBusinessAsLegacy, Error>({
       path: `/v0.1/me/merchant-profile/doing-business-as`,
       ...params,

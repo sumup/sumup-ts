@@ -473,7 +473,7 @@ export class Merchants extends Core.APIResource {
     merchantCode: string,
     query?: GetMerchantQueryParams,
     params?: Core.FetchParams,
-  ): Core.APIPromise<Merchant> {
+  ): Core.APIPromise<Merchant, Problem> {
     return this._client.get<Merchant, Problem>({
       path: `/v1/merchants/${merchantCode}`,
       query,
@@ -488,7 +488,7 @@ export class Merchants extends Core.APIResource {
     merchantCode: string,
     query?: ListPersonsQueryParams,
     params?: Core.FetchParams,
-  ): Core.APIPromise<ListPersonsResponseBody> {
+  ): Core.APIPromise<ListPersonsResponseBody, Problem> {
     return this._client.get<ListPersonsResponseBody, Problem>({
       path: `/v1/merchants/${merchantCode}/persons`,
       query,
@@ -504,7 +504,7 @@ export class Merchants extends Core.APIResource {
     personId: string,
     query?: GetPersonQueryParams,
     params?: Core.FetchParams,
-  ): Core.APIPromise<Person> {
+  ): Core.APIPromise<Person, Problem> {
     return this._client.get<Person, Problem>({
       path: `/v1/merchants/${merchantCode}/persons/${personId}`,
       query,

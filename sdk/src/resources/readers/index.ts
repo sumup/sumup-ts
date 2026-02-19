@@ -447,7 +447,7 @@ export class Readers extends Core.APIResource {
   list(
     merchantCode: string,
     params?: Core.FetchParams,
-  ): Core.APIPromise<ListReadersResponse> {
+  ): Core.APIPromise<ListReadersResponse, unknown> {
     return this._client.get<ListReadersResponse, unknown>({
       path: `/v0.1/merchants/${merchantCode}/readers`,
       ...params,
@@ -461,7 +461,7 @@ export class Readers extends Core.APIResource {
     merchantCode: string,
     body: CreateReaderParams,
     params?: Core.FetchParams,
-  ): Core.APIPromise<Reader> {
+  ): Core.APIPromise<Reader, Problem> {
     return this._client.post<Reader, Problem>({
       path: `/v0.1/merchants/${merchantCode}/readers`,
       body,
@@ -476,7 +476,7 @@ export class Readers extends Core.APIResource {
     merchantCode: string,
     id: ReaderID,
     params?: Core.FetchParams,
-  ): Core.APIPromise<Reader> {
+  ): Core.APIPromise<Reader, Problem> {
     return this._client.get<Reader, Problem>({
       path: `/v0.1/merchants/${merchantCode}/readers/${id}`,
       ...params,
@@ -490,7 +490,7 @@ export class Readers extends Core.APIResource {
     merchantCode: string,
     id: ReaderID,
     params?: Core.FetchParams,
-  ): Core.APIPromise<void> {
+  ): Core.APIPromise<void, Problem> {
     return this._client.delete<void, Problem>({
       path: `/v0.1/merchants/${merchantCode}/readers/${id}`,
       ...params,
@@ -505,7 +505,7 @@ export class Readers extends Core.APIResource {
     id: ReaderID,
     body: UpdateReaderParams,
     params?: Core.FetchParams,
-  ): Core.APIPromise<Reader> {
+  ): Core.APIPromise<Reader, Problem> {
     return this._client.patch<Reader, Problem>({
       path: `/v0.1/merchants/${merchantCode}/readers/${id}`,
       body,
@@ -532,7 +532,10 @@ export class Readers extends Core.APIResource {
     readerId: string,
     body: CreateReaderCheckoutRequest,
     params?: Core.FetchParams,
-  ): Core.APIPromise<CreateReaderCheckoutResponse> {
+  ): Core.APIPromise<
+    CreateReaderCheckoutResponse,
+    CreateReaderCheckoutError | CreateReaderCheckoutUnprocessableEntity
+  > {
     return this._client.post<
       CreateReaderCheckoutResponse,
       CreateReaderCheckoutError | CreateReaderCheckoutUnprocessableEntity
@@ -569,7 +572,15 @@ export class Readers extends Core.APIResource {
     merchantCode: string,
     readerId: string,
     params?: Core.FetchParams,
-  ): Core.APIPromise<StatusResponse> {
+  ): Core.APIPromise<
+    StatusResponse,
+    | BadRequest
+    | Unauthorized
+    | NotFound
+    | InternalServerError
+    | BadGateway
+    | GatewayTimeout
+  > {
     return this._client.get<
       StatusResponse,
       | BadRequest
@@ -606,7 +617,10 @@ export class Readers extends Core.APIResource {
     readerId: string,
     body?: CreateReaderTerminateParams,
     params?: Core.FetchParams,
-  ): Core.APIPromise<void> {
+  ): Core.APIPromise<
+    void,
+    CreateReaderTerminateError | CreateReaderTerminateUnprocessableEntity
+  > {
     return this._client.post<
       void,
       CreateReaderTerminateError | CreateReaderTerminateUnprocessableEntity

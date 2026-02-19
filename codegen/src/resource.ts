@@ -253,7 +253,7 @@ export class ${resourceName} extends Core.APIResource {`);
       writer.w0(`: ${queryParamsType(methodNameType)}, `);
     }
 
-    writer.w(`params?: Core.FetchParams): Core.APIPromise<${successType}> {
+    writer.w(`params?: Core.FetchParams): Core.APIPromise<${successType}, ${errorTypeName}> {
          return this._client.${method}<${successType}, ${errorTypeName}>({
            path: ${pathToTemplateStr(path)},`);
     if (methodSpec.requestBody) {

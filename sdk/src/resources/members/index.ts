@@ -215,7 +215,7 @@ export class Members extends Core.APIResource {
     merchantCode: string,
     query?: ListMerchantMembersQueryParams,
     params?: Core.FetchParams,
-  ): Core.APIPromise<ListMerchantMembersResponse> {
+  ): Core.APIPromise<ListMerchantMembersResponse, Problem> {
     return this._client.get<ListMerchantMembersResponse, Problem>({
       path: `/v0.1/merchants/${merchantCode}/members`,
       query,
@@ -230,7 +230,7 @@ export class Members extends Core.APIResource {
     merchantCode: string,
     body: CreateMerchantMemberParams,
     params?: Core.FetchParams,
-  ): Core.APIPromise<Member> {
+  ): Core.APIPromise<Member, Problem> {
     return this._client.post<Member, Problem>({
       path: `/v0.1/merchants/${merchantCode}/members`,
       body,
@@ -245,7 +245,7 @@ export class Members extends Core.APIResource {
     merchantCode: string,
     memberId: string,
     params?: Core.FetchParams,
-  ): Core.APIPromise<Member> {
+  ): Core.APIPromise<Member, Problem> {
     return this._client.get<Member, Problem>({
       path: `/v0.1/merchants/${merchantCode}/members/${memberId}`,
       ...params,
@@ -260,7 +260,7 @@ export class Members extends Core.APIResource {
     memberId: string,
     body: UpdateMerchantMemberParams,
     params?: Core.FetchParams,
-  ): Core.APIPromise<Member> {
+  ): Core.APIPromise<Member, Problem> {
     return this._client.put<Member, Problem>({
       path: `/v0.1/merchants/${merchantCode}/members/${memberId}`,
       body,
@@ -275,7 +275,7 @@ export class Members extends Core.APIResource {
     merchantCode: string,
     memberId: string,
     params?: Core.FetchParams,
-  ): Core.APIPromise<void> {
+  ): Core.APIPromise<void, Problem> {
     return this._client.delete<void, Problem>({
       path: `/v0.1/merchants/${merchantCode}/members/${memberId}`,
       ...params,

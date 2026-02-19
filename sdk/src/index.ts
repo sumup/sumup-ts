@@ -4,6 +4,7 @@ import { HTTPClient } from "./client";
 import type * as Core from "./core";
 
 export type { APIConfig } from "./client";
+export { APIError, SumUpError } from "./core";
 
 import { Checkouts } from "./resources/checkouts";
 import { Customers } from "./resources/customers";

@@ -180,7 +180,10 @@ export class Customers extends Core.APIResource {
   /**
    * Creates a new saved customer resource which you can later manipulate and save payment instruments to.
    */
-  create(body: Customer, params?: Core.FetchParams): Core.APIPromise<Customer> {
+  create(
+    body: Customer,
+    params?: Core.FetchParams,
+  ): Core.APIPromise<Customer, Error | ErrorForbidden> {
     return this._client.post<Customer, Error | ErrorForbidden>({
       path: `/v0.1/customers`,
       body,
@@ -194,7 +197,7 @@ export class Customers extends Core.APIResource {
   get(
     customerId: string,
     params?: Core.FetchParams,
-  ): Core.APIPromise<Customer> {
+  ): Core.APIPromise<Customer, Error | ErrorForbidden> {
     return this._client.get<Customer, Error | ErrorForbidden>({
       path: `/v0.1/customers/${customerId}`,
       ...params,
@@ -211,7 +214,7 @@ export class Customers extends Core.APIResource {
     customerId: string,
     body: UpdateCustomerParams,
     params?: Core.FetchParams,
-  ): Core.APIPromise<Customer> {
+  ): Core.APIPromise<Customer, Error | ErrorForbidden> {
     return this._client.put<Customer, Error | ErrorForbidden>({
       path: `/v0.1/customers/${customerId}`,
       body,
@@ -225,7 +228,7 @@ export class Customers extends Core.APIResource {
   listPaymentInstruments(
     customerId: string,
     params?: Core.FetchParams,
-  ): Core.APIPromise<PaymentInstrumentResponse[]> {
+  ): Core.APIPromise<PaymentInstrumentResponse[], Error | ErrorForbidden> {
     return this._client.get<
       PaymentInstrumentResponse[],
       Error | ErrorForbidden
@@ -242,7 +245,7 @@ export class Customers extends Core.APIResource {
     customerId: string,
     token: string,
     params?: Core.FetchParams,
-  ): Core.APIPromise<void> {
+  ): Core.APIPromise<void, Error | ErrorForbidden> {
     return this._client.delete<void, Error | ErrorForbidden>({
       path: `/v0.1/customers/${customerId}/payment-instruments/${token}`,
       ...params,
