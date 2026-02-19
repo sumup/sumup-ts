@@ -116,7 +116,7 @@ export class Roles extends Core.APIResource {
   list(
     merchantCode: string,
     params?: Core.FetchParams,
-  ): Core.APIPromise<ListMerchantRolesResponse> {
+  ): Core.APIPromise<ListMerchantRolesResponse, Problem> {
     return this._client.get<ListMerchantRolesResponse, Problem>({
       path: `/v0.1/merchants/${merchantCode}/roles`,
       ...params,
@@ -130,7 +130,7 @@ export class Roles extends Core.APIResource {
     merchantCode: string,
     body: CreateMerchantRoleParams,
     params?: Core.FetchParams,
-  ): Core.APIPromise<Role> {
+  ): Core.APIPromise<Role, Problem> {
     return this._client.post<Role, Problem>({
       path: `/v0.1/merchants/${merchantCode}/roles`,
       body,
@@ -145,7 +145,7 @@ export class Roles extends Core.APIResource {
     merchantCode: string,
     roleId: string,
     params?: Core.FetchParams,
-  ): Core.APIPromise<Role> {
+  ): Core.APIPromise<Role, Problem> {
     return this._client.get<Role, Problem>({
       path: `/v0.1/merchants/${merchantCode}/roles/${roleId}`,
       ...params,
@@ -159,7 +159,7 @@ export class Roles extends Core.APIResource {
     merchantCode: string,
     roleId: string,
     params?: Core.FetchParams,
-  ): Core.APIPromise<void> {
+  ): Core.APIPromise<void, Problem> {
     return this._client.delete<void, Problem>({
       path: `/v0.1/merchants/${merchantCode}/roles/${roleId}`,
       ...params,
@@ -174,7 +174,7 @@ export class Roles extends Core.APIResource {
     roleId: string,
     body: UpdateMerchantRoleParams,
     params?: Core.FetchParams,
-  ): Core.APIPromise<Role> {
+  ): Core.APIPromise<Role, Problem> {
     return this._client.patch<Role, Problem>({
       path: `/v0.1/merchants/${merchantCode}/roles/${roleId}`,
       body,

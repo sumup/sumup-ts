@@ -37,7 +37,7 @@ export class HTTPClient {
 
   public get<R, E = Core.APIError<unknown>>({
     ...params
-  }: Omit<Core.FullParams, "method">): Core.APIPromise<R> {
+  }: Omit<Core.FullParams, "method">): Core.APIPromise<R, E> {
     return this.request<R, E>({
       method: "GET",
       ...params,
@@ -46,7 +46,7 @@ export class HTTPClient {
 
   public post<R, E = Core.APIError<unknown>>({
     ...params
-  }: Omit<Core.FullParams, "method">): Core.APIPromise<R> {
+  }: Omit<Core.FullParams, "method">): Core.APIPromise<R, E> {
     return this.request<R, E>({
       method: "POST",
       ...params,
@@ -55,7 +55,7 @@ export class HTTPClient {
 
   public put<R, E = Core.APIError<unknown>>({
     ...params
-  }: Omit<Core.FullParams, "method">): Core.APIPromise<R> {
+  }: Omit<Core.FullParams, "method">): Core.APIPromise<R, E> {
     return this.request<R, E>({
       method: "put",
       ...params,
@@ -64,7 +64,7 @@ export class HTTPClient {
 
   public patch<R, E = Core.APIError<unknown>>({
     ...params
-  }: Omit<Core.FullParams, "method">): Core.APIPromise<R> {
+  }: Omit<Core.FullParams, "method">): Core.APIPromise<R, E> {
     return this.request<R, E>({
       method: "PATCH",
       ...params,
@@ -73,7 +73,7 @@ export class HTTPClient {
 
   public delete<R, E = Core.APIError<unknown>>({
     ...params
-  }: Omit<Core.FullParams, "method">): Core.APIPromise<R> {
+  }: Omit<Core.FullParams, "method">): Core.APIPromise<R, E> {
     return this.request<R, E>({
       method: "DELETE",
       ...params,
@@ -86,7 +86,7 @@ export class HTTPClient {
     query,
     host: hostOverride,
     ...fetchParams
-  }: Core.FullParams): Core.APIPromise<T> {
+  }: Core.FullParams): Core.APIPromise<T, E> {
     const host = hostOverride || this.host;
     const url = new URL(
       host +
@@ -99,7 +99,7 @@ export class HTTPClient {
       ...mergeParams(this.baseParams, fetchParams),
       body: JSON.stringify(body),
     };
-    return new Core.APIPromise<T>(this.do<E>(url, init));
+    return new Core.APIPromise<T, E>(this.do<E>(url, init));
   }
 
   protected async do<E>(input: URL, init: RequestInit): Promise<Response> {

@@ -104,7 +104,7 @@ export class Subaccounts extends Core.APIResource {
   listSubAccounts(
     query?: ListSubAccountsQueryParams,
     params?: Core.FetchParams,
-  ): Core.APIPromise<Operator[]> {
+  ): Core.APIPromise<Operator[], unknown> {
     return this._client.get<Operator[], unknown>({
       path: `/v0.1/me/accounts`,
       query,
@@ -118,7 +118,7 @@ export class Subaccounts extends Core.APIResource {
   createSubAccount(
     body: CreateSubAccountParams,
     params?: Core.FetchParams,
-  ): Core.APIPromise<Operator> {
+  ): Core.APIPromise<Operator, Problem> {
     return this._client.post<Operator, Problem>({
       path: `/v0.1/me/accounts`,
       body,
@@ -132,7 +132,7 @@ export class Subaccounts extends Core.APIResource {
   compatGetOperator(
     operatorId: number,
     params?: Core.FetchParams,
-  ): Core.APIPromise<Operator> {
+  ): Core.APIPromise<Operator, unknown> {
     return this._client.get<Operator, unknown>({
       path: `/v0.1/me/accounts/${operatorId}`,
       ...params,
@@ -146,7 +146,7 @@ export class Subaccounts extends Core.APIResource {
     operatorId: number,
     body: UpdateSubAccountParams,
     params?: Core.FetchParams,
-  ): Core.APIPromise<Operator> {
+  ): Core.APIPromise<Operator, Problem> {
     return this._client.put<Operator, Problem>({
       path: `/v0.1/me/accounts/${operatorId}`,
       body,
@@ -160,7 +160,7 @@ export class Subaccounts extends Core.APIResource {
   deactivateSubAccount(
     operatorId: number,
     params?: Core.FetchParams,
-  ): Core.APIPromise<Operator> {
+  ): Core.APIPromise<Operator, unknown> {
     return this._client.delete<Operator, unknown>({
       path: `/v0.1/me/accounts/${operatorId}`,
       ...params,

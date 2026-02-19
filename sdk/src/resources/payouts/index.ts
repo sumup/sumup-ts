@@ -46,7 +46,7 @@ export class Payouts extends Core.APIResource {
     merchantCode: string,
     query: ListPayoutsV1QueryParams,
     params?: Core.FetchParams,
-  ): Core.APIPromise<FinancialPayouts> {
+  ): Core.APIPromise<FinancialPayouts, Error> {
     return this._client.get<FinancialPayouts, Error>({
       path: `/v1.0/merchants/${merchantCode}/payouts`,
       query,
@@ -60,7 +60,7 @@ export class Payouts extends Core.APIResource {
   listDeprecated(
     query: ListPayoutsQueryParams,
     params?: Core.FetchParams,
-  ): Core.APIPromise<FinancialPayouts> {
+  ): Core.APIPromise<FinancialPayouts, Error> {
     return this._client.get<FinancialPayouts, Error>({
       path: `/v0.1/me/financials/payouts`,
       query,

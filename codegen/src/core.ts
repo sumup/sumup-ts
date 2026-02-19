@@ -68,7 +68,7 @@ export class APIError<T> extends SumUpError {
   }
 }
 
-export class APIPromise<T> implements Promise<T> {
+export class APIPromise<T, E = unknown> implements Promise<T> {
   constructor(private resp: Promise<Response>) {}
 
   async parse(): Promise<T> {
@@ -100,15 +100,17 @@ export class APIPromise<T> implements Promise<T> {
   // biome-ignore lint/suspicious/noThenProperty: custom promise to enable \`withResponse\`
   then<TResult1 = T, TResult2 = never>(
     onFulfilled?: (value: T) => TResult1 | PromiseLike<TResult1>,
-    // biome-ignore lint/suspicious/noExplicitAny: must satisfy promise interface
-    onRejected?: (reason: any) => TResult2 | PromiseLike<TResult2>,
+    onRejected?: (
+      reason: APIError<E> | SumUpError | Error
+    ) => TResult2 | PromiseLike<TResult2>,
   ): Promise<TResult1 | TResult2> {
     return this.parse().then(onFulfilled, onRejected);
   }
 
   catch<TResult = never>(
-    // biome-ignore lint/suspicious/noExplicitAny: must satisfy promise interface
-    onRejected?: (reason: any) => TResult | PromiseLike<TResult>,
+    onRejected?: (
+      reason: APIError<E> | SumUpError | Error
+    ) => TResult | PromiseLike<TResult>,
   ): Promise<T | TResult> {
     return this.parse().catch(onRejected);
   }
