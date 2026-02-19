@@ -1,6 +1,6 @@
 import { expect, test } from "vitest";
 import type { FileWriter } from "./io";
-import { type Schema, schemaToTypes } from "./schema";
+import { collectSchemaRefs, type Schema, schemaToTypes } from "./schema";
 
 class TestWriter {
   buf = "";
@@ -48,4 +48,24 @@ test("object with properties and typed additionalProperties keeps extra value ty
     }),
   ).toBe(`{"status": number,
 } & Omit<Record<string, string>, "status">`);
+});
+
+test("component Error schema reference maps to ErrorBody", () => {
+  expect(
+    render({
+      $ref: "#/components/schemas/Error",
+    }),
+  ).toBe("ErrorBody");
+});
+
+test("collectSchemaRefs includes aliased references", () => {
+  const refs = collectSchemaRefs({
+    type: "object",
+    properties: {
+      error: { $ref: "#/components/schemas/Error" },
+      profile: { $ref: "#/components/schemas/MerchantProfileLegacy" },
+    },
+  });
+
+  expect([...refs].sort()).toEqual(["ErrorBody", "MerchantProfileLegacy"]);
 });

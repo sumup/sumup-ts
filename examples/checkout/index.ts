@@ -1,4 +1,4 @@
-import SumUp from "@sumup/sdk";
+import SumUp, { type CheckoutCreateRequest } from "@sumup/sdk";
 
 const client = new SumUp({
   apiKey: process.env.SUMUP_API_KEY,
@@ -19,12 +19,14 @@ async function main() {
     return;
   }
 
-  const checkout = await client.checkouts.create({
+  const request: CheckoutCreateRequest = {
     amount: 19,
     checkout_reference: "CO746453",
     currency: "EUR",
     merchant_code: merchantCode,
-  });
+  };
+
+  const checkout = await client.checkouts.create(request);
 
   // Collect customer's card data
 

@@ -5,8 +5,22 @@ import { docComment, extractDoc } from "./util";
 
 export type Schema = OpenAPIV3_1.ReferenceObject | OpenAPIV3_1.SchemaObject;
 
+const schemaNameAliases: Record<string, string> = {
+  Error: "ErrorBody",
+};
+
+export const schemaNameToTypeName = (name: string) =>
+  schemaNameAliases[name] || name;
+
 export const refToSchemaName = (s: string) =>
-  s.replace("#/components/schemas/", "");
+  schemaNameToTypeName(s.replace("#/components/schemas/", ""));
+
+export type SchemaToTypesOptions = {
+  refName?: (name: string) => string;
+  onRef?: (name: string) => void;
+};
+
+const defaultRefName = (name: string) => name;
 
 /**
  * Helper to add nullable suffix to a type if the schema is nullable
@@ -26,10 +40,11 @@ const hasExplicitAdditionalProperties = (
 const writeAdditionalPropertiesRecord = (
   schema: OpenAPIV3_1.SchemaObject,
   writer: FileWriter,
+  options: SchemaToTypesOptions,
 ): void => {
   writer.w0("Record<string, ");
   if (typeof schema.additionalProperties === "object") {
-    schemaToTypes(schema.additionalProperties, writer);
+    schemaToTypes(schema.additionalProperties, writer, options);
   } else {
     writer.w0("unknown");
   }
@@ -39,10 +54,19 @@ const writeAdditionalPropertiesRecord = (
 /**
  * Converts an OpenAPI schema to TypeScript type definitions
  */
-export const schemaToTypes = (schema: Schema, writer: FileWriter): void => {
+export const schemaToTypes = (
+  schema: Schema,
+  writer: FileWriter,
+  options: SchemaToTypesOptions = {},
+): void => {
+  const refName = options.refName || defaultRefName;
+  const onRef = options.onRef;
+
   match(schema)
     .with({ $ref: P.string }, (s) => {
-      writer.w0(refToSchemaName(s.$ref));
+      const typeName = refToSchemaName(s.$ref);
+      onRef?.(typeName);
+      writer.w0(refName(typeName));
       withNullable(s, writer);
     })
     .with({ enum: P.array(P.not(P.nullish)) }, (s) => {
@@ -74,14 +98,14 @@ export const schemaToTypes = (schema: Schema, writer: FileWriter): void => {
     })
     .with({ type: "array" }, (s) => {
       writer.w0("(");
-      schemaToTypes(s.items, writer);
+      schemaToTypes(s.items, writer, options);
       writer.w0(")[]");
       withNullable(s, writer);
     })
     .with({ type: "object" }, (s) => {
       // record type, which only tells us the type of the values
       if (!s.properties || Object.keys(s.properties).length === 0) {
-        writeAdditionalPropertiesRecord(s, writer);
+        writeAdditionalPropertiesRecord(s, writer, options);
         withNullable(s, writer);
         return;
       }
@@ -95,14 +119,14 @@ export const schemaToTypes = (schema: Schema, writer: FileWriter): void => {
         }
         const optional = s.required?.includes(name) ? "" : "?";
         writer.w0(`${JSON.stringify(name)}${optional}: `);
-        schemaToTypes(subSchema, writer);
+        schemaToTypes(subSchema, writer, options);
         writer.w(",");
       }
       writer.w0("}");
 
       if (hasExplicitAdditionalProperties(s)) {
         writer.w0(" & Omit<");
-        writeAdditionalPropertiesRecord(s, writer);
+        writeAdditionalPropertiesRecord(s, writer, options);
         writer.w0(", ");
         for (const [i, name] of propertyNames.entries()) {
           if (i > 0) writer.w0(" | ");
@@ -120,7 +144,7 @@ export const schemaToTypes = (schema: Schema, writer: FileWriter): void => {
           writer.w(comment);
         }
         writer.w0("| ");
-        schemaToTypes(sub, writer);
+        schemaToTypes(sub, writer, options);
       }
       withNullable(s, writer);
     })
@@ -132,7 +156,7 @@ export const schemaToTypes = (schema: Schema, writer: FileWriter): void => {
           writer.w(comment);
         }
         writer.w0("& ");
-        schemaToTypes(sub, writer);
+        schemaToTypes(sub, writer, options);
       }
       withNullable(s, writer);
     })
@@ -142,4 +166,43 @@ export const schemaToTypes = (schema: Schema, writer: FileWriter): void => {
     .otherwise((s) => {
       throw Error(`UNHANDLED SCHEMA: ${JSON.stringify(s, null, 2)}`);
     });
+};
+
+const collectSchemaRefsInner = (schema: Schema, refs: Set<string>): void => {
+  if ("$ref" in schema) {
+    refs.add(refToSchemaName(schema.$ref));
+    return;
+  }
+
+  if (schema.properties) {
+    for (const value of Object.values(schema.properties)) {
+      collectSchemaRefsInner(value, refs);
+    }
+  }
+
+  if (typeof schema.additionalProperties === "object") {
+    collectSchemaRefsInner(schema.additionalProperties, refs);
+  }
+
+  if (schema.items) {
+    collectSchemaRefsInner(schema.items, refs);
+  }
+
+  if (schema.allOf) {
+    for (const subSchema of schema.allOf) {
+      collectSchemaRefsInner(subSchema, refs);
+    }
+  }
+
+  if (schema.oneOf) {
+    for (const subSchema of schema.oneOf) {
+      collectSchemaRefsInner(subSchema, refs);
+    }
+  }
+};
+
+export const collectSchemaRefs = (schema: Schema): Set<string> => {
+  const refs = new Set<string>();
+  collectSchemaRefsInner(schema, refs);
+  return refs;
 };

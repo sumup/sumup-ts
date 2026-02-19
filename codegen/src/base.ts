@@ -113,6 +113,7 @@ export function getResponse(
   opName: string,
   o: Schema | OpenAPIV3_1.RequestBodyObject | undefined,
   inlineTypeName = responseType(opName),
+  refTypeName: (name: string) => string = (name) => name,
 ) {
   if (!(o && "content" in o)) {
     return null;
@@ -123,12 +124,12 @@ export function getResponse(
   }
 
   if ("$ref" in schema) {
-    return refToSchemaName(schema.$ref);
+    return refTypeName(refToSchemaName(schema.$ref));
   }
 
   if (schema.type === "array") {
     if ("$ref" in schema.items) {
-      return `${refToSchemaName(schema.items.$ref)}[]`;
+      return `${refTypeName(refToSchemaName(schema.items.$ref))}[]`;
     }
     return null;
   }
