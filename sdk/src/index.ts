@@ -3,31 +3,51 @@
 import { HTTPClient } from "./client";
 
 export type { APIConfig } from "./client";
-export { APIError, SumUpError } from "./core";
 export type { FetchParams } from "./core";
+export { APIError, SumUpError } from "./core";
+export * from "./resources/checkouts";
 export * from "./types";
 
-export * from "./resources/checkouts";
 import { Checkouts } from "./resources/checkouts";
+
 export * from "./resources/customers";
+
 import { Customers } from "./resources/customers";
+
 export * from "./resources/members";
+
 import { Members } from "./resources/members";
+
 export * from "./resources/memberships";
+
 import { Memberships } from "./resources/memberships";
+
 export * from "./resources/merchants";
+
 import { Merchants } from "./resources/merchants";
+
 export * from "./resources/payouts";
+
 import { Payouts } from "./resources/payouts";
+
 export * from "./resources/readers";
+
 import { Readers } from "./resources/readers";
+
 export * from "./resources/receipts";
+
 import { Receipts } from "./resources/receipts";
+
 export * from "./resources/roles";
+
 import { Roles } from "./resources/roles";
+
 export * from "./resources/subaccounts";
+
 import { Subaccounts } from "./resources/subaccounts";
+
 export * from "./resources/transactions";
+
 import { Transactions } from "./resources/transactions";
 
 export class SumUp extends HTTPClient {
