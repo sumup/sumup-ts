@@ -11,5 +11,9 @@ export type CreateReaderCheckoutError = {
      * Error message
      */
     detail?: string;
+    /**
+     * Error code
+     */
+    type: string;
   };
 };
