@@ -21,4 +21,16 @@ export type TransactionHistory = TransactionBase &
      */
     type?: "PAYMENT" | "REFUND" | "CHARGE_BACK";
     card_type?: CardType;
+    /**
+     * Payout date (if paid out at once).
+     */
+    payout_date?: string;
+    /**
+     * Payout type.
+     */
+    payout_type?: "BANK_ACCOUNT" | "PREPAID_CARD";
+    /**
+     * Total refunded amount.
+     */
+    refunded_amount?: number;
   };

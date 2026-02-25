@@ -2344,7 +2344,7 @@
                     "links": {
                       "type": "array",
                       "items": {
-                        "$ref": "#/components/schemas/Link"
+                        "$ref": "#/components/schemas/TransactionsHistoryLink"
                       }
                     }
                   }
@@ -2570,7 +2570,7 @@
                     "links": {
                       "type": "array",
                       "items": {
-                        "$ref": "#/components/schemas/Link"
+                        "$ref": "#/components/schemas/TransactionsHistoryLink"
                       }
                     }
                   }
@@ -2631,102 +2631,6 @@
         },
         "x-scopes": [
           "transactions.history"
-        ]
-      }
-    },
-    "/v0.1/me": {
-      "get": {
-        "operationId": "GetAccount",
-        "summary": "Retrieve a profile",
-        "description": "Returns user profile information.",
-        "parameters": [
-          {
-            "name": "include[]",
-            "in": "query",
-            "description": "A list of additional information you want to receive for the user. By default only personal and merchant profile information will be returned.",
-            "required": false,
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string",
-                "enum": [
-                  "settings",
-                  "doing_business_as",
-                  "bank_accounts",
-                  "app_settings",
-                  "country_details"
-                ]
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/MerchantAccount"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                },
-                "examples": {
-                  "Invalid_Token": {
-                    "description": "The access token is invalid or has expired.",
-                    "value": {
-                      "error_message": "invalid access token",
-                      "error_code": "NOT_AUTHORIZED"
-                    }
-                  },
-                  "Not_Authorized_Token": {
-                    "description": "The access token is valid but the application is not authorized.",
-                    "value": {
-                      "error_message": "NOT_AUTHORIZED",
-                      "error_code": "NOT_AUTHORIZED"
-                    }
-                  },
-                  "Missing_Token": {
-                    "description": "No access token is provided.",
-                    "value": {
-                      "message": "access token required",
-                      "error_code": "NOT_AUTHORIZED"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "deprecated": true,
-        "security": [
-          {
-            "apiKey": []
-          },
-          {
-            "oauth2": [
-              "user.profile",
-              "user.profile_readonly"
-            ]
-          }
-        ],
-        "tags": [
-          "Merchant"
-        ],
-        "x-codegen": {
-          "method_name": "get"
-        },
-        "x-deprecation-notice": "The _Retrieve a profile_ endpoint is deprecated, please use the `Merchant` object instead (see [Merchants](https://developer.sumup.com/api/merchants)).",
-        "x-scopes": [
-          "user.profile",
-          "user.profile_readonly"
         ]
       }
     },
@@ -2988,251 +2892,6 @@
         "x-codegen": {
           "method_name": "list_deprecated"
         },
-        "x-scopes": [
-          "user.profile",
-          "user.profile_readonly"
-        ]
-      }
-    },
-    "/v0.1/me/personal-profile": {
-      "get": {
-        "operationId": "GetPersonalProfile",
-        "summary": "Retrieve a personal profile",
-        "description": "Retrieves personal profile data.",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PersonalProfileLegacy"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                },
-                "examples": {
-                  "Invalid_Token": {
-                    "description": "The access token is invalid or has expired.",
-                    "value": {
-                      "error_message": "invalid access token",
-                      "error_code": "NOT_AUTHORIZED"
-                    }
-                  },
-                  "Not_Authorized_Token": {
-                    "description": "The access token is valid but the application is not authorized.",
-                    "value": {
-                      "error_message": "NOT_AUTHORIZED",
-                      "error_code": "NOT_AUTHORIZED"
-                    }
-                  },
-                  "Missing_Token": {
-                    "description": "No access token is provided.",
-                    "value": {
-                      "message": "access token required",
-                      "error_code": "NOT_AUTHORIZED"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "deprecated": true,
-        "security": [
-          {
-            "apiKey": []
-          },
-          {
-            "oauth2": [
-              "user.profile",
-              "user.profile_readonly"
-            ]
-          }
-        ],
-        "tags": [
-          "Merchant"
-        ],
-        "x-codegen": {
-          "method_name": "get_personal_profile"
-        },
-        "x-deprecation-notice": "The _Retrieve a personal profile_ endpoint is deprecated, please use the `persons` field of the `Merchant` object instead. (see [Merchants](https://developer.sumup.com/api/merchants)).",
-        "x-scopes": [
-          "user.profile",
-          "user.profile_readonly"
-        ]
-      }
-    },
-    "/v0.1/me/merchant-profile": {
-      "get": {
-        "operationId": "GetMerchantProfile",
-        "summary": "Retrieve a merchant profile",
-        "description": "Retrieves merchant profile data.",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/MerchantProfileLegacy"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                },
-                "examples": {
-                  "Invalid_Token": {
-                    "description": "The access token is invalid or has expired.",
-                    "value": {
-                      "error_message": "invalid access token",
-                      "error_code": "NOT_AUTHORIZED"
-                    }
-                  },
-                  "Not_Authorized_Token": {
-                    "description": "The access token is valid but the application is not authorized.",
-                    "value": {
-                      "error_message": "NOT_AUTHORIZED",
-                      "error_code": "NOT_AUTHORIZED"
-                    }
-                  },
-                  "Missing_Token": {
-                    "description": "No access token is provided.",
-                    "value": {
-                      "message": "access token required",
-                      "error_code": "NOT_AUTHORIZED"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorForbidden"
-                },
-                "examples": {
-                  "Forbidden": {
-                    "description": "You do not have required scopes for making this request.",
-                    "value": {
-                      "error_message": "request_not_allowed",
-                      "error_code": "FORBIDDEN",
-                      "status_code": "403"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "deprecated": true,
-        "security": [
-          {
-            "apiKey": []
-          },
-          {
-            "oauth2": [
-              "user.profile",
-              "user.profile_readonly"
-            ]
-          }
-        ],
-        "tags": [
-          "Merchant"
-        ],
-        "x-codegen": {
-          "method_name": "get_merchant_profile"
-        },
-        "x-deprecation-notice": "The _Retrieve a merchant profile_ endpoint is deprecated, please use the `Merchant` object instead (see [Merchants](https://developer.sumup.com/api/merchants)).",
-        "x-scopes": [
-          "user.profile",
-          "user.profile_readonly"
-        ]
-      }
-    },
-    "/v0.1/me/merchant-profile/doing-business-as": {
-      "get": {
-        "operationId": "GetDoingBusinessAs",
-        "summary": "Retrieve DBA",
-        "description": "Retrieves Doing Business As profile.",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DoingBusinessAsLegacy"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                },
-                "examples": {
-                  "Invalid_Token": {
-                    "description": "The access token is invalid or has expired.",
-                    "value": {
-                      "error_message": "invalid access token",
-                      "error_code": "NOT_AUTHORIZED"
-                    }
-                  },
-                  "Not_Authorized_Token": {
-                    "description": "The access token is valid but the application is not authorized.",
-                    "value": {
-                      "error_message": "NOT_AUTHORIZED",
-                      "error_code": "NOT_AUTHORIZED"
-                    }
-                  },
-                  "Missing_Token": {
-                    "description": "No access token is provided.",
-                    "value": {
-                      "message": "access token required",
-                      "error_code": "NOT_AUTHORIZED"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "deprecated": true,
-        "security": [
-          {
-            "apiKey": []
-          },
-          {
-            "oauth2": [
-              "user.profile",
-              "user.profile_readonly"
-            ]
-          }
-        ],
-        "tags": [
-          "Merchant"
-        ],
-        "x-codegen": {
-          "method_name": "get_doing_business_as"
-        },
-        "x-deprecation-notice": "The _Retrieve DBA_ endpoint is deprecated, please use the `business_profile` field of the `Merchant` object instead (see [Merchants](https://developer.sumup.com/api/merchants)).",
         "x-scopes": [
           "user.profile",
           "user.profile_readonly"
@@ -5834,42 +5493,6 @@
               "x-validate": null
             },
             "example": "rdr_3MSAFM23CK82VSTT4BN6RWSQ65"
-          },
-          {
-            "name": "Accept",
-            "in": "header",
-            "description": "",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "x-struct": null,
-              "x-validate": null
-            },
-            "example": "application/json"
-          },
-          {
-            "name": "Content-Type",
-            "in": "header",
-            "description": "",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "x-struct": null,
-              "x-validate": null
-            },
-            "example": "application/json"
-          },
-          {
-            "name": "Authorization",
-            "in": "header",
-            "description": "",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "x-struct": null,
-              "x-validate": null
-            },
-            "example": "Bearer 4470641ddc7ac230dc463417aab0ba30ef499844c73072c3f6c7a88204c700bd"
           }
         ],
         "responses": {
@@ -6312,24 +5935,6 @@
       }
     },
     "schemas": {
-      "AccountLegacy": {
-        "description": "Profile information.",
-        "type": "object",
-        "properties": {
-          "username": {
-            "description": "Username of the user profile.",
-            "type": "string"
-          },
-          "type": {
-            "description": "The role of the user.",
-            "type": "string",
-            "enum": [
-              "normal",
-              "operator"
-            ]
-          }
-        }
-      },
       "AddressLegacy": {
         "description": "Profile's personal address information.",
         "type": "object",
@@ -6363,229 +5968,6 @@
             "description": "State name or abbreviation from the address.",
             "type": "string",
             "example": "Berlin"
-          }
-        }
-      },
-      "AddressWithDetails": {
-        "description": "Details of the registered address.",
-        "type": "object",
-        "properties": {
-          "address_line1": {
-            "description": "Address line 1",
-            "type": "string"
-          },
-          "address_line2": {
-            "description": "Address line 2",
-            "type": "string"
-          },
-          "city": {
-            "description": "City",
-            "type": "string"
-          },
-          "country": {
-            "description": "Country ISO 3166-1 code",
-            "type": "string"
-          },
-          "region_id": {
-            "description": "Country region id",
-            "type": "number"
-          },
-          "region_name": {
-            "description": "Region name",
-            "type": "string"
-          },
-          "region_code": {
-            "description": "Region code",
-            "type": "string"
-          },
-          "post_code": {
-            "description": "Postal code",
-            "type": "string"
-          },
-          "landline": {
-            "description": "Landline number",
-            "type": "string"
-          },
-          "first_name": {
-            "description": "undefined",
-            "type": "string"
-          },
-          "last_name": {
-            "description": "undefined",
-            "type": "string"
-          },
-          "company": {
-            "description": "undefined",
-            "type": "string"
-          },
-          "country_details": {
-            "$ref": "#/components/schemas/CountryDetails"
-          },
-          "timeoffset_details": {
-            "$ref": "#/components/schemas/TimeoffsetDetails"
-          },
-          "state_id": {
-            "description": "undefined",
-            "type": "string"
-          }
-        }
-      },
-      "AppSettings": {
-        "description": "Mobile app settings",
-        "type": "object",
-        "properties": {
-          "checkout_preference": {
-            "description": "Checkout preference",
-            "type": "string"
-          },
-          "include_vat": {
-            "description": "Include vat.",
-            "type": "boolean"
-          },
-          "manual_entry_tutorial": {
-            "description": "Manual entry tutorial.",
-            "type": "boolean"
-          },
-          "mobile_payment_tutorial": {
-            "description": "Mobile payment tutorial.",
-            "type": "boolean"
-          },
-          "tax_enabled": {
-            "description": "Tax enabled.",
-            "type": "boolean"
-          },
-          "mobile_payment": {
-            "description": "Mobile payment.",
-            "type": "string"
-          },
-          "reader_payment": {
-            "description": "Reader payment.",
-            "type": "string"
-          },
-          "cash_payment": {
-            "description": "Cash payment.",
-            "type": "string"
-          },
-          "advanced_mode": {
-            "description": "Advanced mode.",
-            "type": "string"
-          },
-          "expected_max_transaction_amount": {
-            "description": "Expected max transaction amount.",
-            "type": "number"
-          },
-          "manual_entry": {
-            "description": "Manual entry.",
-            "type": "string"
-          },
-          "terminal_mode_tutorial": {
-            "description": "Terminal mode tutorial.",
-            "type": "boolean"
-          },
-          "tipping": {
-            "description": "Tipping.",
-            "type": "string"
-          },
-          "tip_rates": {
-            "description": "Tip rates.",
-            "type": "array",
-            "items": {
-              "type": "number",
-              "format": "float"
-            }
-          },
-          "barcode_scanner": {
-            "description": "Barcode scanner.",
-            "type": "string"
-          },
-          "referral": {
-            "description": "Referral.",
-            "type": "string"
-          }
-        }
-      },
-      "BankAccount": {
-        "type": "object",
-        "properties": {
-          "bank_code": {
-            "description": "Bank code",
-            "type": "string"
-          },
-          "branch_code": {
-            "description": "Branch code",
-            "type": "string"
-          },
-          "swift": {
-            "description": "SWIFT code",
-            "type": "string"
-          },
-          "account_number": {
-            "description": "Account number",
-            "type": "string"
-          },
-          "iban": {
-            "description": "IBAN",
-            "type": "string"
-          },
-          "account_type": {
-            "description": "Type of the account",
-            "type": "string"
-          },
-          "account_category": {
-            "description": "Account category - business or personal",
-            "type": "string"
-          },
-          "account_holder_name": {
-            "type": "string"
-          },
-          "status": {
-            "description": "Status in the verification process",
-            "type": "string"
-          },
-          "primary": {
-            "description": "The primary bank account is the one used for payouts",
-            "type": "boolean"
-          },
-          "created_at": {
-            "description": "Creation date of the bank account",
-            "type": "string"
-          },
-          "bank_name": {
-            "description": "Bank name",
-            "type": "string"
-          }
-        }
-      },
-      "BusinessOwners": {
-        "description": "Business owners information.",
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "first_name": {
-              "description": "BO's first name",
-              "type": "string"
-            },
-            "last_name": {
-              "description": "BO's last name of the user",
-              "type": "string"
-            },
-            "date_of_birth": {
-              "description": "Date of birth",
-              "type": "string"
-            },
-            "mobile_phone": {
-              "description": "Mobile phone number",
-              "type": "string"
-            },
-            "landline": {
-              "description": "BO's Landline",
-              "type": "string"
-            },
-            "ownership": {
-              "description": "Ownership percentage",
-              "type": "number"
-            }
           }
         }
       },
@@ -6684,6 +6066,61 @@
           },
           "type": {
             "$ref": "#/components/schemas/CardType"
+          }
+        }
+      },
+      "Device": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Device name.",
+            "type": "string",
+            "example": "m0xx"
+          },
+          "system_name": {
+            "description": "Device OS.",
+            "type": "string",
+            "example": "Android"
+          },
+          "model": {
+            "description": "Device model.",
+            "type": "string",
+            "example": "GT-I9300"
+          },
+          "system_version": {
+            "description": "Device OS version.",
+            "type": "string",
+            "example": "4.3"
+          },
+          "uuid": {
+            "description": "Device UUID.",
+            "type": "string",
+            "example": "3ae2a6b7-fb0d-3b50-adbf-cb7e2db30cd2"
+          }
+        }
+      },
+      "ElvCardAccount": {
+        "type": "object",
+        "properties": {
+          "sort_code": {
+            "description": "ELV card sort code.",
+            "type": "string",
+            "example": "87096214"
+          },
+          "last_4_digits": {
+            "description": "ELV card account number last 4 digits.",
+            "type": "string",
+            "example": "5674"
+          },
+          "sequence_no": {
+            "description": "ELV card sequence number.",
+            "type": "integer",
+            "example": 1
+          },
+          "iban": {
+            "description": "ELV IBAN.",
+            "type": "string",
+            "example": "DE60870962140012345674"
           }
         }
       },
@@ -7034,87 +6471,6 @@
         ],
         "title": "Customer"
       },
-      "CountryDetails": {
-        "description": "Country Details",
-        "type": "object",
-        "properties": {
-          "currency": {
-            "description": "Currency ISO 4217 code",
-            "type": "string"
-          },
-          "iso_code": {
-            "description": "Country ISO code",
-            "type": "string"
-          },
-          "en_name": {
-            "description": "Country EN name",
-            "type": "string"
-          },
-          "native_name": {
-            "description": "Country native name",
-            "type": "string"
-          }
-        }
-      },
-      "DoingBusinessAsLegacy": {
-        "description": "Doing Business As information",
-        "type": "object",
-        "properties": {
-          "business_name": {
-            "description": "Doing business as name",
-            "type": "string"
-          },
-          "company_registration_number": {
-            "description": "Doing business as company registration number",
-            "type": "string"
-          },
-          "vat_id": {
-            "description": "Doing business as VAT ID",
-            "type": "string"
-          },
-          "website": {
-            "description": "Doing business as website",
-            "type": "string"
-          },
-          "email": {
-            "description": "Doing business as email",
-            "type": "string"
-          },
-          "address": {
-            "type": "object",
-            "properties": {
-              "address_line1": {
-                "description": "Address line 1",
-                "type": "string"
-              },
-              "address_line2": {
-                "description": "Address line 2",
-                "type": "string"
-              },
-              "city": {
-                "description": "City",
-                "type": "string"
-              },
-              "country": {
-                "description": "Country ISO 3166-1 code",
-                "type": "string"
-              },
-              "region_id": {
-                "description": "Country region ID",
-                "type": "number"
-              },
-              "region_name": {
-                "description": "Country region name",
-                "type": "string"
-              },
-              "post_code": {
-                "description": "Postal code",
-                "type": "string"
-              }
-            }
-          }
-        }
-      },
       "Error": {
         "description": "Error message structure.",
         "type": "object",
@@ -7291,28 +6647,6 @@
         },
         "title": "Financial Payouts"
       },
-      "LegalTypeLegacy": {
-        "description": "Id of the legal type of the merchant profile",
-        "type": "object",
-        "properties": {
-          "id": {
-            "description": "Unique id",
-            "type": "number"
-          },
-          "full_description": {
-            "description": "Legal type description",
-            "type": "string"
-          },
-          "description": {
-            "description": "Legal type short description",
-            "type": "string"
-          },
-          "sole_trader": {
-            "description": "Sole trader legal type if true",
-            "type": "boolean"
-          }
-        }
-      },
       "Link": {
         "description": "Details of a link to a related resource.",
         "type": "object",
@@ -7331,6 +6665,25 @@
             "type": "string"
           }
         }
+      },
+      "TransactionsHistoryLink": {
+        "type": "object",
+        "properties": {
+          "rel": {
+            "description": "Relation.",
+            "type": "string",
+            "example": "next"
+          },
+          "href": {
+            "description": "Location.",
+            "type": "string",
+            "example": "limit=10&oldest_ref=090df9bf-93b7-40f1-8181-fbdb236568a1&order=ascending"
+          }
+        },
+        "required": [
+          "rel",
+          "href"
+        ]
       },
       "MandatePayload": {
         "description": "Mandate is passed when a card is to be tokenized",
@@ -7384,171 +6737,6 @@
           "type": "recurrent",
           "status": "active",
           "merchant_code": "MH4H92C7"
-        }
-      },
-      "MerchantAccount": {
-        "description": "Details of the merchant account.",
-        "type": "object",
-        "properties": {
-          "account": {
-            "$ref": "#/components/schemas/AccountLegacy"
-          },
-          "personal_profile": {
-            "$ref": "#/components/schemas/PersonalProfileLegacy"
-          },
-          "merchant_profile": {
-            "$ref": "#/components/schemas/MerchantProfileLegacy"
-          },
-          "app_settings": {
-            "$ref": "#/components/schemas/AppSettings"
-          },
-          "permissions": {
-            "$ref": "#/components/schemas/PermissionsLegacy"
-          }
-        },
-        "title": "Merchant Account"
-      },
-      "MerchantProfileLegacy": {
-        "description": "Account's merchant profile",
-        "type": "object",
-        "properties": {
-          "merchant_code": {
-            "description": "Unique identifying code of the merchant profile",
-            "type": "string",
-            "example": "MH4H92C7"
-          },
-          "company_name": {
-            "description": "Company name",
-            "type": "string"
-          },
-          "website": {
-            "description": "Website",
-            "type": "string"
-          },
-          "legal_type": {
-            "$ref": "#/components/schemas/LegalTypeLegacy"
-          },
-          "merchant_category_code": {
-            "description": "Merchant category code",
-            "type": "string"
-          },
-          "mobile_phone": {
-            "description": "Mobile phone number",
-            "type": "string"
-          },
-          "company_registration_number": {
-            "description": "Company registration number",
-            "type": "string"
-          },
-          "vat_id": {
-            "description": "Vat ID",
-            "type": "string"
-          },
-          "permanent_certificate_access_code": {
-            "description": "Permanent certificate access code &#40;Portugal&#41;",
-            "type": "string"
-          },
-          "nature_and_purpose": {
-            "description": "Nature and purpose of the business",
-            "type": "string"
-          },
-          "address": {
-            "$ref": "#/components/schemas/AddressWithDetails"
-          },
-          "business_owners": {
-            "$ref": "#/components/schemas/BusinessOwners"
-          },
-          "doing_business_as": {
-            "$ref": "#/components/schemas/DoingBusinessAsLegacy"
-          },
-          "settings": {
-            "$ref": "#/components/schemas/MerchantSettings"
-          },
-          "vat_rates": {
-            "$ref": "#/components/schemas/VatRates"
-          },
-          "locale": {
-            "description": "Merchant locale &#40;for internal usage only&#41;",
-            "type": "string"
-          },
-          "bank_accounts": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/BankAccount"
-            }
-          },
-          "extdev": {
-            "description": "True if the merchant is extdev",
-            "type": "boolean"
-          },
-          "payout_zone_migrated": {
-            "description": "True if the payout zone of this merchant is migrated",
-            "type": "boolean"
-          },
-          "country": {
-            "description": "Merchant country code formatted according to [ISO3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) &#40;for internal usage only&#41;",
-            "type": "string"
-          }
-        }
-      },
-      "MerchantSettings": {
-        "description": "Merchant settings &#40;like \\\"payout_type\\\", \\\"payout_period\\\"&#41;",
-        "type": "object",
-        "properties": {
-          "tax_enabled": {
-            "description": "Whether to show tax in receipts &#40;saved per transaction&#41;",
-            "type": "boolean"
-          },
-          "payout_type": {
-            "description": "Payout type",
-            "type": "string"
-          },
-          "payout_period": {
-            "description": "Payout frequency",
-            "type": "string"
-          },
-          "payout_on_demand_available": {
-            "description": "Whether merchant can edit payouts on demand",
-            "type": "boolean"
-          },
-          "payout_on_demand": {
-            "description": "Whether merchant will receive payouts on demand",
-            "type": "boolean"
-          },
-          "printers_enabled": {
-            "description": "Whether to show printers in mobile app",
-            "type": "boolean"
-          },
-          "payout_instrument": {
-            "description": "Payout Instrument",
-            "type": "string"
-          },
-          "moto_payment": {
-            "description": "Whether merchant can make MOTO payments",
-            "type": "string",
-            "enum": [
-              "UNAVAILABLE",
-              "ENFORCED",
-              "ON",
-              "OFF"
-            ]
-          },
-          "stone_merchant_code": {
-            "description": "Stone merchant code",
-            "type": "string"
-          },
-          "daily_payout_email": {
-            "description": "Whether merchant will receive daily payout emails",
-            "type": "boolean"
-          },
-          "monthly_payout_email": {
-            "description": "Whether merchant will receive monthly payout emails",
-            "type": "boolean"
-          },
-          "gross_settlement": {
-            "description": "Whether merchant has gross settlement enabled",
-            "type": "boolean"
-          }
         }
       },
       "PaymentInstrumentResponse": {
@@ -7615,28 +6803,6 @@
           "created_at": "2021-03-30T10:06:07.000+00:00"
         }
       },
-      "PermissionsLegacy": {
-        "description": "User permissions",
-        "type": "object",
-        "properties": {
-          "create_moto_payments": {
-            "description": "Create MOTO payments",
-            "type": "boolean"
-          },
-          "full_transaction_history_view": {
-            "description": "Can view full merchant transaction history",
-            "type": "boolean"
-          },
-          "refund_transactions": {
-            "description": "Refund transactions",
-            "type": "boolean"
-          },
-          "create_referral": {
-            "description": "Create referral",
-            "type": "boolean"
-          }
-        }
-      },
       "PersonalDetails": {
         "description": "Personal details for the customer.",
         "type": "object",
@@ -7678,80 +6844,60 @@
           }
         }
       },
-      "PersonalProfileLegacy": {
-        "description": "Account's personal profile.",
-        "type": "object",
-        "properties": {
-          "first_name": {
-            "description": "First name of the user",
-            "type": "string"
-          },
-          "last_name": {
-            "description": "Last name of the user",
-            "type": "string"
-          },
-          "date_of_birth": {
-            "description": "Date of birth",
-            "type": "string"
-          },
-          "mobile_phone": {
-            "description": "Mobile phone number",
-            "type": "string"
-          },
-          "address": {
-            "$ref": "#/components/schemas/AddressWithDetails"
-          },
-          "complete": {
-            "type": "boolean"
-          }
-        }
-      },
       "Product": {
-        "description": "Details of the product for which the payment is made.",
+        "description": "Purchase product.",
         "type": "object",
         "properties": {
           "name": {
-            "description": "Name of the product from the merchant's catalog.",
+            "description": "Product name.",
+            "type": "string",
+            "example": "Purchase reader for merchant with code ME3FCAVF"
+          },
+          "price_label": {
+            "description": "Product description.",
             "type": "string"
           },
           "price": {
-            "description": "Price of the product without VAT.",
+            "description": "Product price.",
             "type": "number",
-            "format": "float"
+            "format": "decimal",
+            "example": 100
           },
           "vat_rate": {
-            "description": "VAT rate applicable to the product.",
+            "description": "VAT percentage.",
             "type": "number",
-            "format": "float"
+            "format": "decimal"
           },
           "single_vat_amount": {
-            "description": "Amount of the VAT for a single product item (calculated as the product of `price` and `vat_rate`, i.e. `single_vat_amount = price * vat_rate`).",
+            "description": "VAT amount for a single product.",
             "type": "number",
-            "format": "float"
+            "format": "decimal"
           },
           "price_with_vat": {
-            "description": "Price of a single product item with VAT.",
+            "description": "Product price incl. VAT.",
             "type": "number",
-            "format": "float"
+            "format": "decimal"
           },
           "vat_amount": {
-            "description": "Total VAT amount for the purchase (calculated as the product of `single_vat_amount` and `quantity`, i.e. `vat_amount = single_vat_amount * quantity`).",
+            "description": "VAT amount.",
             "type": "number",
-            "format": "float"
+            "format": "decimal"
           },
           "quantity": {
-            "description": "Number of product items for the purchase.",
-            "type": "number"
+            "description": "Product quantity.",
+            "type": "integer",
+            "example": 1
           },
           "total_price": {
-            "description": "Total price of the product items without VAT (calculated as the product of `price` and `quantity`, i.e. `total_price = price * quantity`).",
+            "description": "Quantity x product price.",
             "type": "number",
-            "format": "float"
+            "format": "decimal",
+            "example": 100
           },
           "total_with_vat": {
-            "description": "Total price of the product items including VAT (calculated as the product of `price_with_vat` and `quantity`, i.e. `total_with_vat = price_with_vat * quantity`).",
+            "description": "Total price incl. VAT.",
             "type": "number",
-            "format": "float"
+            "format": "decimal"
           }
         }
       },
@@ -8036,24 +7182,6 @@
           }
         }
       },
-      "TimeoffsetDetails": {
-        "description": "TimeOffset Details",
-        "type": "object",
-        "properties": {
-          "post_code": {
-            "description": "Postal code",
-            "type": "string"
-          },
-          "offset": {
-            "description": "UTC offset",
-            "type": "number"
-          },
-          "dst": {
-            "description": "Daylight Saving Time",
-            "type": "boolean"
-          }
-        }
-      },
       "TransactionEvent": {
         "description": "Details of a transaction event.",
         "type": "object",
@@ -8070,26 +7198,31 @@
           "amount": {
             "description": "Amount of the event.",
             "type": "number",
-            "format": "float"
+            "format": "decimal",
+            "example": 58.8
           },
           "due_date": {
             "description": "Date when the transaction event is due to occur.",
             "type": "string",
-            "format": "date"
+            "format": "date",
+            "example": "2020-05-25"
           },
           "date": {
             "description": "Date when the transaction event occurred.",
             "type": "string",
-            "format": "date"
+            "format": "date",
+            "example": "2020-05-25"
           },
           "installment_number": {
             "description": "Consecutive number of the installment that is paid. Applicable only payout events, i.e. `event_type = PAYOUT`.",
-            "type": "integer"
+            "type": "integer",
+            "example": 1
           },
           "timestamp": {
             "description": "Date and time of the transaction event.",
             "type": "string",
-            "format": "date-time"
+            "format": "date-time",
+            "example": "2020-05-25T10:49:42.784Z"
           }
         }
       },
@@ -8238,6 +7371,27 @@
               },
               "card_type": {
                 "$ref": "#/components/schemas/CardType"
+              },
+              "payout_date": {
+                "description": "Payout date (if paid out at once).",
+                "type": "string",
+                "format": "date",
+                "example": "2019-08-28"
+              },
+              "payout_type": {
+                "description": "Payout type.",
+                "type": "string",
+                "example": "BANK_ACCOUNT",
+                "enum": [
+                  "BANK_ACCOUNT",
+                  "PREPAID_CARD"
+                ]
+              },
+              "refunded_amount": {
+                "description": "Total refunded amount.",
+                "type": "number",
+                "format": "decimal",
+                "example": 0
               }
             }
           }
@@ -8336,10 +7490,26 @@
           {
             "type": "object",
             "properties": {
+              "foreign_transaction_id": {
+                "description": "External/foreign transaction id (passed by clients).",
+                "type": "string",
+                "example": "J13253253x1"
+              },
+              "client_transaction_id": {
+                "description": "Client transaction id.",
+                "type": "string",
+                "example": "urn:sumup:pos:sale:MNKKNGST:1D4E3B2D-111D-48D7-9AF0-832DAEF63DD7;2"
+              },
               "username": {
                 "description": "Email address of the registered user (merchant) to whom the payment is made.",
                 "type": "string",
                 "format": "email"
+              },
+              "fee_amount": {
+                "description": "Transaction SumUp total fee amount.",
+                "type": "number",
+                "format": "decimal",
+                "example": 8
               },
               "lat": {
                 "$ref": "#/components/schemas/Lat"
@@ -8350,17 +7520,33 @@
               "horizontal_accuracy": {
                 "$ref": "#/components/schemas/HorizontalAccuracy"
               },
+              "merchant_id": {
+                "description": "SumUp merchant internal Id.",
+                "type": "integer",
+                "format": "int64",
+                "example": 136902
+              },
+              "device_info": {
+                "$ref": "#/components/schemas/Device"
+              },
               "simple_payment_type": {
                 "description": "Simple name of the payment type.",
                 "type": "string",
                 "enum": [
-                  "MOTO",
                   "CASH",
                   "CC_SIGNATURE",
                   "ELV",
+                  "ELV_WITHOUT_SIGNATURE",
                   "CC_CUSTOMER_ENTERED",
                   "MANUAL_ENTRY",
-                  "EMV"
+                  "EMV",
+                  "RECURRING",
+                  "BALANCE",
+                  "MOTO",
+                  "BOLETO",
+                  "APM",
+                  "BITCOIN",
+                  "CARD"
                 ]
               },
               "verification_method": {
@@ -8368,29 +7554,45 @@
                 "type": "string",
                 "enum": [
                   "none",
-                  "na",
                   "signature",
                   "offline PIN",
                   "online PIN",
                   "offline PIN + signature",
-                  "confirmation code verified"
+                  "na"
                 ]
               },
               "card": {
                 "$ref": "#/components/schemas/CardResponse"
+              },
+              "elv_account": {
+                "$ref": "#/components/schemas/ElvCardAccount"
               },
               "local_time": {
                 "description": "Local date and time of the creation of the transaction.",
                 "type": "string",
                 "format": "date-time"
               },
+              "payout_date": {
+                "description": "The date of the payout.",
+                "type": "string",
+                "format": "date",
+                "example": "2019-08-28"
+              },
               "payout_type": {
                 "description": "Payout type for the transaction.",
                 "type": "string",
                 "enum": [
                   "BANK_ACCOUNT",
-                  "BALANCE",
                   "PREPAID_CARD"
+                ]
+              },
+              "process_as": {
+                "description": "Debit/Credit.",
+                "type": "string",
+                "example": "CREDIT",
+                "enum": [
+                  "CREDIT",
+                  "DEBIT"
                 ]
               },
               "products": {
@@ -8403,7 +7605,35 @@
               "vat_rates": {
                 "description": "List of VAT rates applicable to the transaction.",
                 "type": "array",
-                "items": {}
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "rate": {
+                      "description": "VAT rate.",
+                      "type": "number",
+                      "format": "decimal",
+                      "example": 0.045
+                    },
+                    "net": {
+                      "description": "NET amount of products having this VAT rate applied.",
+                      "type": "number",
+                      "format": "decimal",
+                      "example": 1.36
+                    },
+                    "vat": {
+                      "description": "VAT amount of this rate applied.",
+                      "type": "number",
+                      "format": "decimal",
+                      "example": 0.06
+                    },
+                    "gross": {
+                      "description": "Gross amount of products having this VAT rate applied.",
+                      "type": "number",
+                      "format": "decimal",
+                      "example": 1.42
+                    }
+                  }
+                }
               },
               "transaction_events": {
                 "description": "List of transaction events related to the transaction.",
@@ -8424,31 +7654,23 @@
                   "FAILED",
                   "REFUND_FAILED",
                   "REFUNDED",
-                  "NON_COLLECTION"
+                  "NON_COLLECTION",
+                  "PENDING"
                 ]
               },
               "links": {
                 "description": "List of hyperlinks for accessing related resources.",
                 "type": "array",
                 "items": {
-                  "anyOf": [
-                    {
-                      "$ref": "#/components/schemas/Link"
-                    },
-                    {
-                      "$ref": "#/components/schemas/LinkRefund"
-                    }
-                  ]
-                },
-                "uniqueItems": true
+                  "$ref": "#/components/schemas/Link"
+                }
               },
               "events": {
                 "description": "List of events related to the transaction.",
                 "type": "array",
                 "items": {
                   "$ref": "#/components/schemas/Event"
-                },
-                "uniqueItems": true
+                }
               },
               "location": {
                 "description": "Details of the payment location as received from the payment terminal.",
@@ -8473,32 +7695,6 @@
           }
         ]
       },
-      "VatRates": {
-        "description": "Merchant VAT rates",
-        "type": "object",
-        "properties": {
-          "id": {
-            "description": "Internal ID",
-            "type": "number"
-          },
-          "description": {
-            "description": "Description",
-            "type": "string"
-          },
-          "rate": {
-            "description": "Rate",
-            "type": "number"
-          },
-          "ordering": {
-            "description": "Ordering",
-            "type": "number"
-          },
-          "country": {
-            "description": "Country ISO code",
-            "type": "string"
-          }
-        }
-      },
       "Currency": {
         "description": "Three-letter [ISO4217](https://en.wikipedia.org/wiki/ISO_4217) code of the currency for the amount. Currently supported currency values are enumerated above.",
         "type": "string",
@@ -8508,6 +7704,7 @@
           "BRL",
           "CHF",
           "CLP",
+          "COP",
           "CZK",
           "DKK",
           "EUR",
@@ -8559,28 +7756,6 @@
         "format": "float",
         "maximum": 90,
         "minimum": 0
-      },
-      "LinkRefund": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Link"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "min_amount": {
-                "description": "Minimum allowed amount for the refund.",
-                "type": "number",
-                "format": "float"
-              },
-              "max_amount": {
-                "description": "Maximum allowed amount for the refund.",
-                "type": "number",
-                "format": "float"
-              }
-            }
-          }
-        ]
       },
       "Lon": {
         "description": "Longitude value from the coordinates of the payment location (as received from the payment terminal reader).",
@@ -8837,7 +8012,7 @@
         },
         "externalDocs": {
           "description": "Address documentation",
-          "url": "https://sumup.roadie.so/docs/default/Component/merchants/merchant/#addresses"
+          "url": "https://backstage.sumup.net/docs/default/Component/merchants/merchant/#addresses"
         },
         "required": [
           "country"
@@ -9987,6 +9162,12 @@
                 "type": "string",
                 "x-struct": null,
                 "x-validate": null
+              },
+              "type": {
+                "description": "Error code",
+                "type": "string",
+                "x-struct": null,
+                "x-validate": null
               }
             },
             "required": [
@@ -10181,6 +9362,12 @@
             "properties": {
               "detail": {
                 "description": "Error message",
+                "type": "string",
+                "x-struct": null,
+                "x-validate": null
+              },
+              "type": {
+                "description": "Error code",
                 "type": "string",
                 "x-struct": null,
                 "x-validate": null
@@ -10689,6 +9876,46 @@
         "x-struct": "Elixir.SoloEdgeWeb.OpenApi.Errors.NotFound",
         "x-validate": null
       },
+      "CountryDetails": {
+        "description": "Country Details",
+        "type": "object",
+        "properties": {
+          "currency": {
+            "description": "Currency ISO 4217 code",
+            "type": "string"
+          },
+          "iso_code": {
+            "description": "Country ISO code",
+            "type": "string"
+          },
+          "en_name": {
+            "description": "Country EN name",
+            "type": "string"
+          },
+          "native_name": {
+            "description": "Country native name",
+            "type": "string"
+          }
+        }
+      },
+      "TimeoffsetDetails": {
+        "description": "TimeOffset Details",
+        "type": "object",
+        "properties": {
+          "post_code": {
+            "description": "Postal code",
+            "type": "string"
+          },
+          "offset": {
+            "description": "UTC offset",
+            "type": "number"
+          },
+          "dst": {
+            "description": "Daylight Saving Time",
+            "type": "boolean"
+          }
+        }
+      },
       "AddressPayloadLegacy": {
         "description": "Personal address",
         "type": "object",
@@ -10744,6 +9971,103 @@
           "country",
           "post_code"
         ]
+      },
+      "BusinessOwners": {
+        "description": "Business owners information.",
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "first_name": {
+              "description": "BO's first name",
+              "type": "string"
+            },
+            "last_name": {
+              "description": "BO's last name of the user",
+              "type": "string"
+            },
+            "date_of_birth": {
+              "description": "Date of birth",
+              "type": "string"
+            },
+            "mobile_phone": {
+              "description": "Mobile phone number",
+              "type": "string"
+            },
+            "landline": {
+              "description": "BO's Landline",
+              "type": "string"
+            },
+            "ownership": {
+              "description": "Ownership percentage",
+              "type": "number"
+            }
+          }
+        }
+      },
+      "AddressWithDetails": {
+        "description": "Details of the registered address.",
+        "type": "object",
+        "properties": {
+          "address_line1": {
+            "description": "Address line 1",
+            "type": "string"
+          },
+          "address_line2": {
+            "description": "Address line 2",
+            "type": "string"
+          },
+          "city": {
+            "description": "City",
+            "type": "string"
+          },
+          "country": {
+            "description": "Country ISO 3166-1 code",
+            "type": "string"
+          },
+          "region_id": {
+            "description": "Country region id",
+            "type": "number"
+          },
+          "region_name": {
+            "description": "Region name",
+            "type": "string"
+          },
+          "region_code": {
+            "description": "Region code",
+            "type": "string"
+          },
+          "post_code": {
+            "description": "Postal code",
+            "type": "string"
+          },
+          "landline": {
+            "description": "Landline number",
+            "type": "string"
+          },
+          "first_name": {
+            "description": "undefined",
+            "type": "string"
+          },
+          "last_name": {
+            "description": "undefined",
+            "type": "string"
+          },
+          "company": {
+            "description": "undefined",
+            "type": "string"
+          },
+          "country_details": {
+            "$ref": "#/components/schemas/CountryDetails"
+          },
+          "timeoffset_details": {
+            "$ref": "#/components/schemas/TimeoffsetDetails"
+          },
+          "state_id": {
+            "description": "undefined",
+            "type": "string"
+          }
+        }
       },
       "BankAccountPayload": {
         "type": "object",
@@ -11035,6 +10359,86 @@
           "date_of_birth",
           "address"
         ]
+      },
+      "BankAccount": {
+        "type": "object",
+        "properties": {
+          "bank_code": {
+            "description": "Bank code",
+            "type": "string"
+          },
+          "branch_code": {
+            "description": "Branch code",
+            "type": "string"
+          },
+          "swift": {
+            "description": "SWIFT code",
+            "type": "string"
+          },
+          "account_number": {
+            "description": "Account number",
+            "type": "string"
+          },
+          "iban": {
+            "description": "IBAN",
+            "type": "string"
+          },
+          "account_type": {
+            "description": "Type of the account",
+            "type": "string"
+          },
+          "account_category": {
+            "description": "Account category - business or personal",
+            "type": "string"
+          },
+          "account_holder_name": {
+            "type": "string"
+          },
+          "status": {
+            "description": "Status in the verification process",
+            "type": "string"
+          },
+          "primary": {
+            "description": "The primary bank account is the one used for payouts",
+            "type": "boolean"
+          },
+          "created_at": {
+            "description": "Creation date of the bank account",
+            "type": "string"
+          },
+          "bank_name": {
+            "description": "Bank name",
+            "type": "string"
+          }
+        }
+      },
+      "PersonalProfileLegacy": {
+        "description": "Account's personal profile.",
+        "type": "object",
+        "properties": {
+          "first_name": {
+            "description": "First name of the user",
+            "type": "string"
+          },
+          "last_name": {
+            "description": "Last name of the user",
+            "type": "string"
+          },
+          "date_of_birth": {
+            "description": "Date of birth",
+            "type": "string"
+          },
+          "mobile_phone": {
+            "description": "Mobile phone number",
+            "type": "string"
+          },
+          "address": {
+            "$ref": "#/components/schemas/AddressWithDetails"
+          },
+          "complete": {
+            "type": "boolean"
+          }
+        }
       },
       "EntryModeFilter": {
         "description": "Entry mode value accepted by the `entry_modes[]` filter.",
@@ -11694,16 +11098,6 @@
           }
         }
       },
-      "PersonalProfileLegacy": {
-        "description": "OK",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/PersonalProfileLegacy"
-            }
-          }
-        }
-      },
       "Transaction": {
         "description": "OK",
         "content": {
@@ -11961,15 +11355,6 @@
       "x-core-objects": [
         {
           "$ref": "#/components/schemas/Receipt"
-        }
-      ]
-    },
-    {
-      "name": "Merchant",
-      "description": "Manage merchant profile.",
-      "x-core-objects": [
-        {
-          "$ref": "#/components/schemas/MerchantAccount"
         }
       ]
     },

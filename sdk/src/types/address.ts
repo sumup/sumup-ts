@@ -6,7 +6,7 @@ import type { CountryCode } from "./country-code";
  * An address somewhere in the world. The address fields used depend on the country conventions. For example, in Great Britain, `city` is `post_town`. In the United States, the top-level administrative unit used in addresses is `state`, whereas in Chile it's `region`.
  * Whether an address is valid or not depends on whether the locally required fields are present. Fields not supported in a country will be ignored.
  *
- * Address documentation: https://sumup.roadie.so/docs/default/Component/merchants/merchant/#addresses
+ * Address documentation: https://backstage.sumup.net/docs/default/Component/merchants/merchant/#addresses
  */
 export type Address = {
   street_address?: string[];
