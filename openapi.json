@@ -3309,52 +3309,6 @@
           "members_update"
         ],
         "x-scopes": []
-      },
-      "delete": {
-        "operationId": "DeactivateSubAccount",
-        "summary": "Disable an operator.",
-        "description": "Disable the specified operator for the merchant account.",
-        "parameters": [
-          {
-            "name": "operator_id",
-            "in": "path",
-            "description": "The unique identifier for the operator.",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Operator successfully disabled.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Operator"
-                }
-              }
-            }
-          }
-        },
-        "deprecated": true,
-        "security": [
-          {
-            "apiKey": []
-          },
-          {
-            "oauth2": []
-          }
-        ],
-        "tags": [
-          "Subaccounts"
-        ],
-        "x-deprecation-notice": "Subaccounts API is deprecated, to remove a user that's a member of your merchant account please use [Delete member](https://developer.sumup.com/api/members/delete) instead.",
-        "x-permissions": [
-          "members_delete"
-        ],
-        "x-scopes": []
       }
     },
     "/v0.1/memberships": {
