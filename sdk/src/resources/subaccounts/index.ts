@@ -91,17 +91,4 @@ export class Subaccounts extends APIResource {
       ...params,
     });
   }
-
-  /**
-   * Disable the specified operator for the merchant account.
-   */
-  deactivateSubAccount(
-    operatorId: number,
-    params?: FetchParams,
-  ): APIPromise<Operator, unknown> {
-    return this._client.delete<Operator, unknown>({
-      path: `/v0.1/me/accounts/${operatorId}`,
-      ...params,
-    });
-  }
 }
