@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.1.1](https://github.com/sumup/sumup-ts/compare/v0.1.0...v0.1.1) (2026-03-03)
+
+
+### Chores
+
+* **deps-dev:** bump @biomejs/biome from 2.4.2 to 2.4.4 in /sdk ([#269](https://github.com/sumup/sumup-ts/issues/269)) ([5cd239c](https://github.com/sumup/sumup-ts/commit/5cd239c3eb03d507bc6edeccdacbbce5e03ea95a))
+* synced file(s) with sumup/apis ([#263](https://github.com/sumup/sumup-ts/issues/263)) ([812bd53](https://github.com/sumup/sumup-ts/commit/812bd531e2a729ac0dca897714631c2f16e8f936))
+* update to latest openapi specs ([dfe7d2d](https://github.com/sumup/sumup-ts/commit/dfe7d2d4eced08bac937146075d2ff07d2f1661a))
+
+
+### Build System & Dependencies
+
+* **deps-dev:** bump @biomejs/biome from 2.3.14 to 2.4.2 in /sdk ([#261](https://github.com/sumup/sumup-ts/issues/261)) ([170b3bc](https://github.com/sumup/sumup-ts/commit/170b3bc2aa196d17f367edfbf5cfbd88ac1b23cf))
+* **deps-dev:** bump minimatch from 9.0.5 to 9.0.9 in /sdk ([#266](https://github.com/sumup/sumup-ts/issues/266)) ([0ce1166](https://github.com/sumup/sumup-ts/commit/0ce116625aa54e89f8f291949a6c1ff1aa53dfbc))
+* **deps-dev:** bump rollup from 4.57.1 to 4.59.0 in /sdk ([#265](https://github.com/sumup/sumup-ts/issues/265)) ([b21609f](https://github.com/sumup/sumup-ts/commit/b21609f143425ab13d97a626d273a67b8e62250b))
+* **deps-dev:** bump the rslib group in /sdk with 2 updates ([#259](https://github.com/sumup/sumup-ts/issues/259)) ([0a31657](https://github.com/sumup/sumup-ts/commit/0a31657701e78c2033e196b4eb88bf2dc78559ef))
+* **deps-dev:** bump typedoc from 0.28.16 to 0.28.17 in /sdk ([#260](https://github.com/sumup/sumup-ts/issues/260)) ([2615d2a](https://github.com/sumup/sumup-ts/commit/2615d2a7fac6f4f696bc16b3f303aba3beacb548))
+
 ## [0.1.0](https://github.com/sumup/sumup-ts/compare/v0.0.13...v0.1.0) (2026-02-19)
 
 
