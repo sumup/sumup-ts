@@ -9,6 +9,54 @@
   "pull-request-header": "Automated sumup-ts release",
   "pull-request-title-pattern": "release: ${version}",
   "versioning": "prerelease",
+  "changelog-sections": [
+    {
+      "type": "feat",
+      "section": "Features"
+    },
+    {
+      "type": "fix",
+      "section": "Bug Fixes"
+    },
+    {
+      "type": "perf",
+      "section": "Performance Improvements"
+    },
+    {
+      "type": "revert",
+      "section": "Reverts"
+    },
+    {
+      "type": "chore",
+      "section": "Chores"
+    },
+    {
+      "type": "docs",
+      "section": "Documentation"
+    },
+    {
+      "type": "style",
+      "section": "Styles"
+    },
+    {
+      "type": "refactor",
+      "section": "Refactors"
+    },
+    {
+      "type": "test",
+      "section": "Tests",
+      "hidden": true
+    },
+    {
+      "type": "build",
+      "section": "Build System & Dependencies"
+    },
+    {
+      "type": "ci",
+      "section": "Continuous Integration",
+      "hidden": true
+    }
+  ],
   "packages": {
     "sdk": {
       "release-type": "node",
