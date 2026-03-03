@@ -5268,9 +5268,7 @@
             "description": "Merchant Code",
             "required": true,
             "schema": {
-              "type": "string",
-              "x-struct": null,
-              "x-validate": null
+              "type": "string"
             },
             "example": "MC0X0ABC"
           },
@@ -5280,9 +5278,7 @@
             "description": "The unique identifier of the Reader",
             "required": true,
             "schema": {
-              "type": "string",
-              "x-struct": null,
-              "x-validate": null
+              "type": "string"
             },
             "example": "rdr_3MSAFM23CK82VSTT4BN6RWSQ65"
           }
@@ -5430,9 +5426,7 @@
             "description": "Merchant Code",
             "required": true,
             "schema": {
-              "type": "string",
-              "x-struct": null,
-              "x-validate": null
+              "type": "string"
             },
             "example": "MC0X0ABC"
           },
@@ -5442,9 +5436,7 @@
             "description": "The unique identifier of the Reader",
             "required": true,
             "schema": {
-              "type": "string",
-              "x-struct": null,
-              "x-validate": null
+              "type": "string"
             },
             "example": "rdr_3MSAFM23CK82VSTT4BN6RWSQ65"
           }
@@ -5558,9 +5550,7 @@
             "description": "Merchant Code",
             "required": true,
             "schema": {
-              "type": "string",
-              "x-struct": null,
-              "x-validate": null
+              "type": "string"
             },
             "example": "MC0X0ABC"
           },
@@ -5570,9 +5560,7 @@
             "description": "The unique identifier of the Reader",
             "required": true,
             "schema": {
-              "type": "string",
-              "x-struct": null,
-              "x-validate": null
+              "type": "string"
             },
             "example": "rdr_3MSAFM23CK82VSTT4BN6RWSQ65"
           }
@@ -9040,9 +9028,7 @@
         "properties": {
           "errors": {
             "type": "object",
-            "additionalProperties": true,
-            "x-struct": null,
-            "x-validate": null
+            "additionalProperties": true
           }
         },
         "example": {
@@ -9100,9 +9086,7 @@
         "required": [
           "errors"
         ],
-        "title": "CreateReaderCheckoutUnprocessableEntity",
-        "x-struct": "Elixir.SoloEdgeWeb.OpenApi.ReadersController.CreateReaderCheckoutUnprocessableEntity",
-        "x-validate": null
+        "title": "CreateReaderCheckoutUnprocessableEntity"
       },
       "CreateReaderCheckoutError": {
         "description": "Error description",
@@ -9113,30 +9097,22 @@
             "properties": {
               "detail": {
                 "description": "Error message",
-                "type": "string",
-                "x-struct": null,
-                "x-validate": null
+                "type": "string"
               },
               "type": {
                 "description": "Error code",
-                "type": "string",
-                "x-struct": null,
-                "x-validate": null
+                "type": "string"
               }
             },
             "required": [
               "type"
-            ],
-            "x-struct": null,
-            "x-validate": null
+            ]
           }
         },
         "required": [
           "errors"
         ],
-        "title": "CreateReaderCheckoutError",
-        "x-struct": "Elixir.SoloEdgeWeb.OpenApi.ReadersController.CreateReaderCheckoutError",
-        "x-validate": null
+        "title": "CreateReaderCheckoutError"
       },
       "StatusResponse": {
         "description": "Status of a device",
@@ -9151,16 +9127,12 @@
                 "format": "float",
                 "example": 10.5,
                 "maximum": 100,
-                "minimum": 0,
-                "x-struct": null,
-                "x-validate": null
+                "minimum": 0
               },
               "battery_temperature": {
                 "description": "Battery temperature in Celsius",
                 "type": "integer",
-                "example": 35,
-                "x-struct": null,
-                "x-validate": null
+                "example": 35
               },
               "connection_type": {
                 "description": "Type of connection used by the device",
@@ -9174,24 +9146,18 @@
                   "umts",
                   "usb",
                   "Wi-Fi"
-                ],
-                "x-struct": null,
-                "x-validate": null
+                ]
               },
               "firmware_version": {
                 "description": "Firmware version of the device",
                 "type": "string",
-                "example": "3.3.3.21",
-                "x-struct": null,
-                "x-validate": null
+                "example": "3.3.3.21"
               },
               "last_activity": {
                 "description": "Timestamp of the last activity from the device",
                 "type": "string",
                 "format": "date-time",
-                "example": "2025-09-25T15:20:00Z",
-                "x-struct": null,
-                "x-validate": null
+                "example": "2025-09-25T15:20:00Z"
               },
               "state": {
                 "description": "Latest state of the device",
@@ -9204,9 +9170,7 @@
                   "WAITING_FOR_PIN",
                   "WAITING_FOR_SIGNATURE",
                   "UPDATING_FIRMWARE"
-                ],
-                "x-struct": null,
-                "x-validate": null
+                ]
               },
               "status": {
                 "description": "Status of a device",
@@ -9215,16 +9179,12 @@
                 "enum": [
                   "ONLINE",
                   "OFFLINE"
-                ],
-                "x-struct": null,
-                "x-validate": null
+                ]
               }
             },
             "required": [
               "status"
-            ],
-            "x-struct": null,
-            "x-validate": null
+            ]
           }
         },
         "example": {
@@ -9241,9 +9201,7 @@
         "required": [
           "data"
         ],
-        "title": "StatusResponse",
-        "x-struct": "Elixir.SoloEdgeWeb.OpenApi.ReadersController.StatusResponse",
-        "x-validate": null
+        "title": "StatusResponse"
       },
       "CreateReaderTerminateUnprocessableEntity": {
         "description": "Unprocessable entity",
@@ -9251,9 +9209,7 @@
         "properties": {
           "errors": {
             "type": "object",
-            "additionalProperties": true,
-            "x-struct": null,
-            "x-validate": null
+            "additionalProperties": true
           }
         },
         "example": {
@@ -9270,9 +9226,7 @@
         "required": [
           "errors"
         ],
-        "title": "CreateReaderTerminateUnprocessableEntity",
-        "x-struct": "Elixir.SoloEdgeWeb.OpenApi.ReadersController.CreateReaderTerminateUnprocessableEntity",
-        "x-validate": null
+        "title": "CreateReaderTerminateUnprocessableEntity"
       },
       "BadGateway": {
         "description": "502 Bad Gateway",
@@ -9283,16 +9237,12 @@
             "properties": {
               "detail": {
                 "description": "Fuller message giving context to error",
-                "type": "string",
-                "x-struct": null,
-                "x-validate": null
+                "type": "string"
               }
             },
             "required": [
               "detail"
-            ],
-            "x-struct": null,
-            "x-validate": null
+            ]
           }
         },
         "example": {
@@ -9303,9 +9253,7 @@
         "required": [
           "errors"
         ],
-        "title": "BadGateway",
-        "x-struct": "Elixir.SoloEdgeWeb.OpenApi.Errors.BadGateway",
-        "x-validate": null
+        "title": "BadGateway"
       },
       "CreateReaderTerminateError": {
         "description": "Error description",
@@ -9316,30 +9264,22 @@
             "properties": {
               "detail": {
                 "description": "Error message",
-                "type": "string",
-                "x-struct": null,
-                "x-validate": null
+                "type": "string"
               },
               "type": {
                 "description": "Error code",
-                "type": "string",
-                "x-struct": null,
-                "x-validate": null
+                "type": "string"
               }
             },
             "required": [
               "type"
-            ],
-            "x-struct": null,
-            "x-validate": null
+            ]
           }
         },
         "required": [
           "errors"
         ],
-        "title": "CreateReaderTerminateError",
-        "x-struct": "Elixir.SoloEdgeWeb.OpenApi.ReadersController.CreateReaderTerminateError",
-        "x-validate": null
+        "title": "CreateReaderTerminateError"
       },
       "BadRequest": {
         "description": "400 Bad Request",
@@ -9350,9 +9290,7 @@
             "properties": {
               "detail": {
                 "description": "Fuller message giving context to error",
-                "type": "string",
-                "x-struct": null,
-                "x-validate": null
+                "type": "string"
               },
               "type": {
                 "description": "Key indicating type of error",
@@ -9362,16 +9300,12 @@
                   "INVALID_USER_AGENT",
                   "NOT_ENOUGH_UNPAID_PAYOUTS",
                   "DUPLICATE_HEADERS"
-                ],
-                "x-struct": null,
-                "x-validate": null
+                ]
               }
             },
             "required": [
               "type"
-            ],
-            "x-struct": null,
-            "x-validate": null
+            ]
           }
         },
         "example": {
@@ -9383,9 +9317,7 @@
         "required": [
           "errors"
         ],
-        "title": "BadRequest",
-        "x-struct": "Elixir.SoloEdgeWeb.OpenApi.Errors.BadRequest",
-        "x-validate": null
+        "title": "BadRequest"
       },
       "CreateReaderCheckoutResponse": {
         "type": "object",
@@ -9396,16 +9328,12 @@
               "client_transaction_id": {
                 "description": "The client transaction ID is a unique identifier for the transaction that is generated for the client.\n\nIt can be used later to fetch the transaction details via the [Transactions API](https://developer.sumup.com/api/transactions/get).\n",
                 "type": "string",
-                "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                "x-struct": null,
-                "x-validate": null
+                "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
               }
             },
             "required": [
               "client_transaction_id"
-            ],
-            "x-struct": null,
-            "x-validate": null
+            ]
           }
         },
         "example": {
@@ -9416,9 +9344,7 @@
         "required": [
           "data"
         ],
-        "title": "CreateReaderCheckoutResponse",
-        "x-struct": "Elixir.SoloEdgeWeb.OpenApi.ReadersController.CreateReaderCheckoutResponse",
-        "x-validate": null
+        "title": "CreateReaderCheckoutResponse"
       },
       "GatewayTimeout": {
         "description": "504 Gateway Timeout",
@@ -9429,16 +9355,12 @@
             "properties": {
               "detail": {
                 "description": "Fuller message giving context to error",
-                "type": "string",
-                "x-struct": null,
-                "x-validate": null
+                "type": "string"
               }
             },
             "required": [
               "detail"
-            ],
-            "x-struct": null,
-            "x-validate": null
+            ]
           }
         },
         "example": {
@@ -9449,9 +9371,7 @@
         "required": [
           "errors"
         ],
-        "title": "GatewayTimeout",
-        "x-struct": "Elixir.SoloEdgeWeb.OpenApi.Errors.GatewayTimeout",
-        "x-validate": null
+        "title": "GatewayTimeout"
       },
       "Unauthorized": {
         "description": "401 Unauthorized",
@@ -9462,9 +9382,7 @@
             "properties": {
               "detail": {
                 "description": "Fuller message giving context to error",
-                "type": "string",
-                "x-struct": null,
-                "x-validate": null
+                "type": "string"
               },
               "type": {
                 "description": "Key indicating type of error",
@@ -9472,16 +9390,12 @@
                 "enum": [
                   "INVALID_ACCESS_TOKEN",
                   "INVALID_PASSWORD"
-                ],
-                "x-struct": null,
-                "x-validate": null
+                ]
               }
             },
             "required": [
               "type"
-            ],
-            "x-struct": null,
-            "x-validate": null
+            ]
           }
         },
         "example": {
@@ -9493,9 +9407,7 @@
         "required": [
           "errors"
         ],
-        "title": "Unauthorized",
-        "x-struct": "Elixir.SoloEdgeWeb.OpenApi.Errors.Unauthorized",
-        "x-validate": null
+        "title": "Unauthorized"
       },
       "InternalServerError": {
         "description": "500 Internal Server Error",
@@ -9506,16 +9418,12 @@
             "properties": {
               "detail": {
                 "description": "Fuller message giving context to error",
-                "type": "string",
-                "x-struct": null,
-                "x-validate": null
+                "type": "string"
               }
             },
             "required": [
               "detail"
-            ],
-            "x-struct": null,
-            "x-validate": null
+            ]
           }
         },
         "example": {
@@ -9526,9 +9434,7 @@
         "required": [
           "errors"
         ],
-        "title": "InternalServerError",
-        "x-struct": "Elixir.SoloEdgeWeb.OpenApi.Errors.InternalServerError",
-        "x-validate": null
+        "title": "InternalServerError"
       },
       "CreateReaderCheckoutRequest": {
         "description": "Reader Checkout",
@@ -9542,23 +9448,17 @@
               "app_id": {
                 "description": "Application ID of the affiliate.\nIt is a unique identifier for the application and should be set by the integrator in the [Affiliate Keys](https://developer.sumup.com/affiliate-keys) page.\n",
                 "type": "string",
-                "example": "com.example.app",
-                "x-struct": null,
-                "x-validate": null
+                "example": "com.example.app"
               },
               "foreign_transaction_id": {
                 "description": "Foreign transaction ID of the affiliate.\nIt is a unique identifier for the transaction.\nIt can be used later to fetch the transaction details via the [Transactions API](https://developer.sumup.com/api/transactions/get).\n",
                 "type": "string",
-                "example": "19e12390-72cf-4f9f-80b5-b0c8a67fa43f",
-                "x-struct": null,
-                "x-validate": null
+                "example": "19e12390-72cf-4f9f-80b5-b0c8a67fa43f"
               },
               "key": {
                 "description": "Key of the affiliate.\nIt is a unique identifier for the key  and should be generated by the integrator in the [Affiliate Keys](https://developer.sumup.com/affiliate-keys) page.\n",
                 "type": "string",
-                "example": "123e4567-e89b-12d3-a456-426614174000",
-                "x-struct": null,
-                "x-validate": null
+                "example": "123e4567-e89b-12d3-a456-426614174000"
               },
               "tags": {
                 "description": "Additional metadata for the transaction.\nIt is key-value object that can be associated with the transaction.\n",
@@ -9567,9 +9467,7 @@
                   "custom_key_1": "custom_value_1",
                   "custom_key_2": "custom_value_2"
                 },
-                "additionalProperties": true,
-                "x-struct": null,
-                "x-validate": null
+                "additionalProperties": true
               }
             },
             "required": [
@@ -9577,9 +9475,7 @@
               "key",
               "foreign_transaction_id"
             ],
-            "title": "Affiliate",
-            "x-struct": "Elixir.SoloEdgeWeb.OpenApi.Common.Affiliate",
-            "x-validate": null
+            "title": "Affiliate"
           },
           "card_type": {
             "description": "The card type of the card used for the transaction.\nIs is required only for some countries (e.g: Brazil).\n",
@@ -9588,32 +9484,24 @@
             "enum": [
               "credit",
               "debit"
-            ],
-            "x-struct": null,
-            "x-validate": null
+            ]
           },
           "description": {
             "description": "Description of the checkout to be shown in the Merchant Sales",
-            "type": "string",
-            "x-struct": null,
-            "x-validate": null
+            "type": "string"
           },
           "installments": {
             "description": "Number of installments for the transaction.\nIt may vary according to the merchant country.\nFor example, in Brazil, the maximum number of installments is 12.\n\nOmit if the merchant country does support installments.\nOtherwise, the checkout will be rejected.\n",
             "type": "integer",
             "example": 1,
             "minimum": 1,
-            "nullable": true,
-            "x-struct": null,
-            "x-validate": null
+            "nullable": true
           },
           "return_url": {
             "description": "Webhook URL to which the payment result will be sent.\nIt must be a HTTPS url.\n",
             "type": "string",
             "format": "uri",
-            "example": "https://www.example.com",
-            "x-struct": null,
-            "x-validate": null
+            "example": "https://www.example.com"
           },
           "tip_rates": {
             "description": "List of tipping rates to be displayed to the cardholder.\nThe rates are in percentage and should be between 0.01 and 0.99.\nThe list should be sorted in ascending order.\n",
@@ -9621,12 +9509,8 @@
             "items": {
               "format": "float",
               "multipleOf": 0.01,
-              "type": "number",
-              "x-struct": null,
-              "x-validate": null
-            },
-            "x-struct": null,
-            "x-validate": null
+              "type": "number"
+            }
           },
           "tip_timeout": {
             "description": "Time in seconds the cardholder has to select a tip rate.\nIf not provided, the default value is 30 seconds.\n\nIt can only be set if `tip_rates` is provided.\n\n**Note**: If the target device is a Solo, it must be in version 3.3.38.0 or higher.\n",
@@ -9634,9 +9518,7 @@
             "example": 30,
             "default": 30,
             "maximum": 120,
-            "minimum": 30,
-            "x-struct": null,
-            "x-validate": null
+            "minimum": 30
           },
           "total_amount": {
             "description": "Amount structure.\n\nThe amount is represented as an integer value altogether with the currency and the minor unit.\n\nFor example, EUR 1.00 is represented as value 100 with minor unit of 2.\n",
@@ -9650,25 +9532,19 @@
               "currency": {
                 "description": "Currency ISO 4217 code",
                 "type": "string",
-                "example": "EUR",
-                "x-struct": null,
-                "x-validate": null
+                "example": "EUR"
               },
               "minor_unit": {
                 "description": "The minor units of the currency.\nIt represents the number of decimals of the currency. For the currencies CLP, COP and HUF, the minor unit is 0.\n",
                 "type": "integer",
                 "example": 2,
-                "minimum": 0,
-                "x-struct": null,
-                "x-validate": null
+                "minimum": 0
               },
               "value": {
                 "description": "Integer value of the amount.",
                 "type": "integer",
                 "example": 1000,
-                "minimum": 0,
-                "x-struct": null,
-                "x-validate": null
+                "minimum": 0
               }
             },
             "required": [
@@ -9676,9 +9552,7 @@
               "minor_unit",
               "value"
             ],
-            "title": "Money",
-            "x-struct": "Elixir.SoloEdgeWeb.OpenApi.Common.Money",
-            "x-validate": null
+            "title": "Money"
           }
         },
         "example": {
@@ -9707,9 +9581,7 @@
         "required": [
           "total_amount"
         ],
-        "title": "CreateReaderCheckoutRequest",
-        "x-struct": "Elixir.SoloEdgeWeb.OpenApi.ReadersController.CreateReaderCheckoutRequest",
-        "x-validate": null
+        "title": "CreateReaderCheckoutRequest"
       },
       "ReaderCheckoutStatusChange": {
         "description": "The callback payload containing the status change of the Reader Checkout.",
@@ -9718,17 +9590,13 @@
           "event_type": {
             "description": "Type of event.",
             "type": "string",
-            "example": "solo.transaction.updated",
-            "x-struct": null,
-            "x-validate": null
+            "example": "solo.transaction.updated"
           },
           "id": {
             "description": "Unique identifier for the event.",
             "type": "string",
             "format": "uuid",
-            "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-            "x-struct": null,
-            "x-validate": null
+            "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
           },
           "payload": {
             "description": "The event payload.",
@@ -9738,16 +9606,12 @@
                 "description": "The unique client transaction id. It is the same returned by the Checkout.",
                 "type": "string",
                 "format": "uuid",
-                "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                "x-struct": null,
-                "x-validate": null
+                "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
               },
               "merchant_code": {
                 "description": "The merchant code associated with the transaction.",
                 "type": "string",
-                "example": "M1234567",
-                "x-struct": null,
-                "x-validate": null
+                "example": "M1234567"
               },
               "status": {
                 "description": "The current status of the transaction.",
@@ -9756,35 +9620,27 @@
                 "enum": [
                   "successful",
                   "failed"
-                ],
-                "x-struct": null,
-                "x-validate": null
+                ]
               },
               "transaction_id": {
                 "description": "The transaction id. Deprecated: use `client_transaction_id` instead.",
                 "type": "string",
                 "format": "uuid",
                 "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                "deprecated": true,
-                "x-struct": null,
-                "x-validate": null
+                "deprecated": true
               }
             },
             "required": [
               "client_transaction_id",
               "merchant_code",
               "status"
-            ],
-            "x-struct": null,
-            "x-validate": null
+            ]
           },
           "timestamp": {
             "description": "Timestamp of the event.",
             "type": "string",
             "format": "date-time",
-            "example": "2023-10-05T14:48:00Z",
-            "x-struct": null,
-            "x-validate": null
+            "example": "2023-10-05T14:48:00Z"
           }
         },
         "required": [
@@ -9793,9 +9649,7 @@
           "payload",
           "timestamp"
         ],
-        "title": "ReaderCheckoutStatusChange",
-        "x-struct": "Elixir.SoloEdgeWeb.OpenApi.ReadersController.ReaderCheckoutStatusChange",
-        "x-validate": null
+        "title": "ReaderCheckoutStatusChange"
       },
       "NotFound": {
         "description": "404 Not Found",
@@ -9806,16 +9660,12 @@
             "properties": {
               "detail": {
                 "description": "Fuller message giving context to error",
-                "type": "string",
-                "x-struct": null,
-                "x-validate": null
+                "type": "string"
               }
             },
             "required": [
               "detail"
-            ],
-            "x-struct": null,
-            "x-validate": null
+            ]
           }
         },
         "example": {
@@ -9826,9 +9676,7 @@
         "required": [
           "errors"
         ],
-        "title": "NotFound",
-        "x-struct": "Elixir.SoloEdgeWeb.OpenApi.Errors.NotFound",
-        "x-validate": null
+        "title": "NotFound"
       },
       "CountryDetails": {
         "description": "Country Details",
