@@ -13,7 +13,9 @@ describe("instantiate client", () => {
   it("default headers", () => {
     const headers = client.baseParams.headers as Headers;
 
-    expect(headers.get("accept")).toBe("application/json");
+    expect(headers.get("accept")).toBe(
+      "application/problem+json, application/json",
+    );
     expect(headers.get("authorization")).toBe("Bearer API_KEY");
     expect(headers.get("content-type")).toBe("application/json");
     expect(headers.get("user-agent")).toBe(`sumup-ts/v${VERSION}`);

@@ -24,7 +24,7 @@ export class HTTPClient {
     this.apiKey = apiKey;
 
     const headers = new Headers({
-      "Accept": "application/json",
+      "Accept": "application/problem+json, application/json",
       "Content-Type": "application/json",
       "User-Agent": `sumup-ts/v${VERSION}`,
       ...buildRuntimeHeaders(),
