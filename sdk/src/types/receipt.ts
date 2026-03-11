@@ -5,11 +5,19 @@ import type { ReceiptTransaction } from "./receipt-transaction";
 
 /**
  * Receipt
+ *
+ * Receipt details for a transaction.
  */
 export type Receipt = {
   transaction_data?: ReceiptTransaction;
   merchant_data?: ReceiptMerchantData;
+  /**
+   * EMV-specific metadata returned for card-present payments.
+   */
   emv_data?: Record<string, unknown>;
+  /**
+   * Acquirer-specific metadata related to the card authorization.
+   */
   acquirer_data?: {
     tid?: string;
     authorization_code?: string;

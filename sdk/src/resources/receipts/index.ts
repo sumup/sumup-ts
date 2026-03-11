@@ -2,7 +2,7 @@
 
 import { type APIPromise, APIResource, type FetchParams } from "../../core";
 
-import type { ErrorBody, Receipt } from "../../types";
+import type { ErrorBody, Problem, Receipt } from "../../types";
 export type GetReceiptQueryParams = {
   mid: string;
   tx_event_id?: number;
@@ -16,8 +16,8 @@ export class Receipts extends APIResource {
     id: string,
     query: GetReceiptQueryParams,
     params?: FetchParams,
-  ): APIPromise<Receipt, ErrorBody> {
-    return this._client.get<Receipt, ErrorBody>({
+  ): APIPromise<Receipt, ErrorBody | Problem> {
+    return this._client.get<Receipt, ErrorBody | Problem>({
       path: `/v1.1/receipts/${id}`,
       query,
       ...params,

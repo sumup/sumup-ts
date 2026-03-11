@@ -5,6 +5,8 @@ import type { MandatePayload } from "./mandate-payload";
 import type { PersonalDetails } from "./personal-details";
 
 /**
+ * Process Checkout
+ *
  * Details of the payment instrument for processing the checkout.
  */
 export type ProcessCheckout = {

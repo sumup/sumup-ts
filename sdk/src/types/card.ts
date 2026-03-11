@@ -3,6 +3,8 @@
 import type { CardType } from "./card-type";
 
 /**
+ * Card
+ *
  * __Required when payment type is `card`.__ Details of the payment card.
  */
 export type Card = {

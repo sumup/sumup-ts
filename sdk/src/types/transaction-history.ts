@@ -5,6 +5,11 @@ import type { TransactionBase } from "./transaction-base";
 import type { TransactionID } from "./transaction-id";
 import type { TransactionMixinHistory } from "./transaction-mixin-history";
 
+/**
+ * Transaction History
+ *
+ * Transaction entry returned in history listing responses.
+ */
 export type TransactionHistory = TransactionBase &
   TransactionMixinHistory & {
     transaction_id?: TransactionID;

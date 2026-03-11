@@ -11,6 +11,7 @@ import type {
   ErrorBody,
   ErrorExtended,
   ErrorForbidden,
+  Problem,
   ProcessCheckout,
 } from "../../types";
 export type GetPaymentMethodsQueryParams = {
@@ -47,11 +48,8 @@ export class Checkouts extends APIResource {
     merchantCode: string,
     query?: GetPaymentMethodsQueryParams,
     params?: FetchParams,
-  ): APIPromise<GetPaymentMethodsResponse, DetailsError | ErrorBody> {
-    return this._client.get<
-      GetPaymentMethodsResponse,
-      DetailsError | ErrorBody
-    >({
+  ): APIPromise<GetPaymentMethodsResponse, DetailsError> {
+    return this._client.get<GetPaymentMethodsResponse, DetailsError>({
       path: `/v0.1/merchants/${merchantCode}/payment-methods`,
       query,
       ...params,
@@ -64,8 +62,8 @@ export class Checkouts extends APIResource {
   list(
     query?: ListCheckoutsQueryParams,
     params?: FetchParams,
-  ): APIPromise<CheckoutSuccess[], ErrorBody> {
-    return this._client.get<CheckoutSuccess[], ErrorBody>({
+  ): APIPromise<CheckoutSuccess[], Problem> {
+    return this._client.get<CheckoutSuccess[], Problem>({
       path: `/v0.1/checkouts`,
       query,
       ...params,
@@ -83,10 +81,13 @@ export class Checkouts extends APIResource {
   create(
     body: CheckoutCreateRequest,
     params?: FetchParams,
-  ): APIPromise<Checkout, ErrorExtended | ErrorBody | ErrorForbidden> {
+  ): APIPromise<
+    Checkout,
+    ErrorExtended | Problem | ErrorForbidden | ErrorBody
+  > {
     return this._client.post<
       Checkout,
-      ErrorExtended | ErrorBody | ErrorForbidden
+      ErrorExtended | Problem | ErrorForbidden | ErrorBody
     >({
       path: `/v0.1/checkouts`,
       body,
@@ -100,8 +101,8 @@ export class Checkouts extends APIResource {
   get(
     id: string,
     params?: FetchParams,
-  ): APIPromise<CheckoutSuccess, ErrorBody> {
-    return this._client.get<CheckoutSuccess, ErrorBody>({
+  ): APIPromise<CheckoutSuccess, Problem | ErrorBody> {
+    return this._client.get<CheckoutSuccess, Problem | ErrorBody>({
       path: `/v0.1/checkouts/${id}`,
       ...params,
     });
@@ -119,11 +120,11 @@ export class Checkouts extends APIResource {
     params?: FetchParams,
   ): APIPromise<
     CheckoutSuccess | CheckoutAccepted,
-    ProcessCheckoutError | ErrorBody
+    ProcessCheckoutError | Problem | ErrorBody
   > {
     return this._client.put<
       CheckoutSuccess | CheckoutAccepted,
-      ProcessCheckoutError | ErrorBody
+      ProcessCheckoutError | Problem | ErrorBody
     >({
       path: `/v0.1/checkouts/${id}`,
       body,
@@ -137,8 +138,8 @@ export class Checkouts extends APIResource {
   deactivate(
     id: string,
     params?: FetchParams,
-  ): APIPromise<Checkout, ErrorBody> {
-    return this._client.delete<Checkout, ErrorBody>({
+  ): APIPromise<Checkout, Problem | ErrorBody> {
+    return this._client.delete<Checkout, Problem | ErrorBody>({
       path: `/v0.1/checkouts/${id}`,
       ...params,
     });

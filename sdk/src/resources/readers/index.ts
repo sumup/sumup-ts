@@ -3,25 +3,15 @@
 import { type APIPromise, APIResource, type FetchParams } from "../../core";
 
 import type {
-  BadGateway,
-  BadRequest,
-  CreateReaderCheckoutError,
   CreateReaderCheckoutRequest,
   CreateReaderCheckoutResponse,
-  CreateReaderCheckoutUnprocessableEntity,
-  CreateReaderTerminateError,
-  CreateReaderTerminateUnprocessableEntity,
-  GatewayTimeout,
-  InternalServerError,
   Metadata,
-  NotFound,
   Problem,
   Reader,
   ReaderID,
   ReaderName,
   ReaderPairingCode,
   StatusResponse,
-  Unauthorized,
 } from "../../types";
 export type ListReadersResponse = { items: Reader[] };
 
@@ -127,14 +117,8 @@ export class Readers extends APIResource {
     readerId: string,
     body: CreateReaderCheckoutRequest,
     params?: FetchParams,
-  ): APIPromise<
-    CreateReaderCheckoutResponse,
-    CreateReaderCheckoutError | CreateReaderCheckoutUnprocessableEntity
-  > {
-    return this._client.post<
-      CreateReaderCheckoutResponse,
-      CreateReaderCheckoutError | CreateReaderCheckoutUnprocessableEntity
-    >({
+  ): APIPromise<CreateReaderCheckoutResponse, Problem> {
+    return this._client.post<CreateReaderCheckoutResponse, Problem>({
       path: `/v0.1/merchants/${merchantCode}/readers/${readerId}/checkout`,
       body,
       ...params,
@@ -167,24 +151,8 @@ export class Readers extends APIResource {
     merchantCode: string,
     readerId: string,
     params?: FetchParams,
-  ): APIPromise<
-    StatusResponse,
-    | BadRequest
-    | Unauthorized
-    | NotFound
-    | InternalServerError
-    | BadGateway
-    | GatewayTimeout
-  > {
-    return this._client.get<
-      StatusResponse,
-      | BadRequest
-      | Unauthorized
-      | NotFound
-      | InternalServerError
-      | BadGateway
-      | GatewayTimeout
-    >({
+  ): APIPromise<StatusResponse, Problem> {
+    return this._client.get<StatusResponse, Problem>({
       path: `/v0.1/merchants/${merchantCode}/readers/${readerId}/status`,
       ...params,
     });
@@ -212,14 +180,8 @@ export class Readers extends APIResource {
     readerId: string,
     body?: CreateReaderTerminateParams,
     params?: FetchParams,
-  ): APIPromise<
-    void,
-    CreateReaderTerminateError | CreateReaderTerminateUnprocessableEntity
-  > {
-    return this._client.post<
-      void,
-      CreateReaderTerminateError | CreateReaderTerminateUnprocessableEntity
-    >({
+  ): APIPromise<void, Problem> {
+    return this._client.post<void, Problem>({
       path: `/v0.1/merchants/${merchantCode}/readers/${readerId}/terminate`,
       body,
       ...params,

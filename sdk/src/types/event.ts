@@ -5,6 +5,11 @@ import type { EventStatus } from "./event-status";
 import type { EventType } from "./event-type";
 import type { TransactionID } from "./transaction-id";
 
+/**
+ * Event
+ *
+ * Transaction event details.
+ */
 export type Event = {
   id?: EventID;
   transaction_id?: TransactionID;

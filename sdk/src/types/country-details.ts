@@ -2,6 +2,8 @@
 
 /**
  * Country Details
+ *
+ * Country Details
  */
 export type CountryDetails = {
   /**

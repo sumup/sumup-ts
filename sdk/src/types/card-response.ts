@@ -3,6 +3,8 @@
 import type { CardType } from "./card-type";
 
 /**
+ * Card Response
+ *
  * Details of the payment card.
  */
 export type CardResponse = {

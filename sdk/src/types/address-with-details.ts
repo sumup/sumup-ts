@@ -4,6 +4,8 @@ import type { CountryDetails } from "./country-details";
 import type { TimeoffsetDetails } from "./timeoffset-details";
 
 /**
+ * Address With Details
+ *
  * Details of the registered address.
  */
 export type AddressWithDetails = {

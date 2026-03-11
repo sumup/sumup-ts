@@ -14,6 +14,11 @@ import type { TransactionCheckoutInfo } from "./transaction-checkout-info";
 import type { TransactionEvent } from "./transaction-event";
 import type { TransactionMixinHistory } from "./transaction-mixin-history";
 
+/**
+ * Transaction Full
+ *
+ * Full transaction resource with checkout, payout, and event details.
+ */
 export type TransactionFull = TransactionBase &
   TransactionCheckoutInfo &
   TransactionMixinHistory & {

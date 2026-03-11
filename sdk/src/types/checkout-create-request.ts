@@ -5,6 +5,8 @@ import type { TransactionBase } from "./transaction-base";
 import type { TransactionCheckoutInfo } from "./transaction-checkout-info";
 
 /**
+ * Checkout Create Request
+ *
  * Details of the payment checkout.
  */
 export type CheckoutCreateRequest = {

@@ -3,6 +3,8 @@
 import type { AddressLegacy } from "./address-legacy";
 
 /**
+ * Personal Details
+ *
  * Personal details for the customer.
  */
 export type PersonalDetails = {

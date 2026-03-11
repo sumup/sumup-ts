@@ -3,6 +3,8 @@
 import type { AddressWithDetails } from "./address-with-details";
 
 /**
+ * Personal Profile Legacy
+ *
  * Account's personal profile.
  */
 export type PersonalProfileLegacy = {
@@ -23,5 +25,8 @@ export type PersonalProfileLegacy = {
    */
   mobile_phone?: string;
   address?: AddressWithDetails;
+  /**
+   * Indicates whether the profile data is complete.
+   */
   complete?: boolean;
 };

@@ -2,6 +2,11 @@
 
 import type { EntryMode } from "./entry-mode";
 
+/**
+ * Transaction Checkout Info
+ *
+ * Checkout-specific fields associated with a transaction.
+ */
 export type TransactionCheckoutInfo = {
   /**
    * Unique code of the registered merchant to whom the payment is made.
