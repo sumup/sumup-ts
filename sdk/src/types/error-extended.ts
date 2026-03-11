@@ -2,6 +2,11 @@
 
 import type { ErrorBody } from "./error-body";
 
+/**
+ * Error Extended
+ *
+ * Error payload with the invalid parameter reference.
+ */
 export type ErrorExtended = ErrorBody & {
   /**
    * Parameter name (with relative location) to which the error applies. Parameters from embedded resources are displayed using dot notation. For example, `card.name` refers to the `name` parameter embedded in the `card` object.

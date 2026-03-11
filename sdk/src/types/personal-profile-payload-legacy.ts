@@ -3,6 +3,8 @@
 import type { AddressPayloadLegacy } from "./address-payload-legacy";
 
 /**
+ * Personal Profile Payload Legacy
+ *
  * Account's personal profile.
  */
 export type PersonalProfilePayloadLegacy = {

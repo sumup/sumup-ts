@@ -5,10 +5,16 @@ import { type APIPromise, APIResource, type FetchParams } from "../../core";
 import type {
   Customer,
   ErrorBody,
+  ErrorExtended,
   ErrorForbidden,
   PaymentInstrumentResponse,
   PersonalDetails,
+  Problem,
 } from "../../types";
+export type CreateCustomerError =
+  | ErrorExtended
+  | { instance?: string; error_code?: string; error_message?: string };
+
 export type UpdateCustomerParams = { personal_details?: PersonalDetails };
 
 export type ListPaymentInstrumentsResponse = PaymentInstrumentResponse[];
@@ -20,8 +26,14 @@ export class Customers extends APIResource {
   create(
     body: Customer,
     params?: FetchParams,
-  ): APIPromise<Customer, ErrorBody | ErrorForbidden> {
-    return this._client.post<Customer, ErrorBody | ErrorForbidden>({
+  ): APIPromise<
+    Customer,
+    CreateCustomerError | Problem | ErrorForbidden | ErrorBody
+  > {
+    return this._client.post<
+      Customer,
+      CreateCustomerError | Problem | ErrorForbidden | ErrorBody
+    >({
       path: `/v0.1/customers`,
       body,
       ...params,
@@ -34,8 +46,8 @@ export class Customers extends APIResource {
   get(
     customerId: string,
     params?: FetchParams,
-  ): APIPromise<Customer, ErrorBody | ErrorForbidden> {
-    return this._client.get<Customer, ErrorBody | ErrorForbidden>({
+  ): APIPromise<Customer, Problem | ErrorForbidden | ErrorBody> {
+    return this._client.get<Customer, Problem | ErrorForbidden | ErrorBody>({
       path: `/v0.1/customers/${customerId}`,
       ...params,
     });
@@ -51,8 +63,8 @@ export class Customers extends APIResource {
     customerId: string,
     body: UpdateCustomerParams,
     params?: FetchParams,
-  ): APIPromise<Customer, ErrorBody | ErrorForbidden> {
-    return this._client.put<Customer, ErrorBody | ErrorForbidden>({
+  ): APIPromise<Customer, Problem | ErrorForbidden | ErrorBody> {
+    return this._client.put<Customer, Problem | ErrorForbidden | ErrorBody>({
       path: `/v0.1/customers/${customerId}`,
       body,
       ...params,
@@ -65,10 +77,13 @@ export class Customers extends APIResource {
   listPaymentInstruments(
     customerId: string,
     params?: FetchParams,
-  ): APIPromise<PaymentInstrumentResponse[], ErrorBody | ErrorForbidden> {
+  ): APIPromise<
+    PaymentInstrumentResponse[],
+    Problem | ErrorForbidden | ErrorBody
+  > {
     return this._client.get<
       PaymentInstrumentResponse[],
-      ErrorBody | ErrorForbidden
+      Problem | ErrorForbidden | ErrorBody
     >({
       path: `/v0.1/customers/${customerId}/payment-instruments`,
       ...params,
@@ -82,8 +97,8 @@ export class Customers extends APIResource {
     customerId: string,
     token: string,
     params?: FetchParams,
-  ): APIPromise<void, ErrorBody | ErrorForbidden> {
-    return this._client.delete<void, ErrorBody | ErrorForbidden>({
+  ): APIPromise<void, ErrorBody | Problem | ErrorForbidden> {
+    return this._client.delete<void, ErrorBody | Problem | ErrorForbidden>({
       path: `/v0.1/customers/${customerId}/payment-instruments/${token}`,
       ...params,
     });

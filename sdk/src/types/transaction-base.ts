@@ -4,6 +4,8 @@ import type { Currency } from "./currency";
 import type { PaymentType } from "./payment-type";
 
 /**
+ * Transaction Base
+ *
  * Details of the transaction.
  */
 export type TransactionBase = {

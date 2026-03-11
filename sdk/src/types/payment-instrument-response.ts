@@ -5,6 +5,8 @@ import type { MandateResponse } from "./mandate-response";
 
 /**
  * Payment Instrument Response
+ *
+ * Payment Instrument Response
  */
 export type PaymentInstrumentResponse = {
   /**

@@ -2,6 +2,8 @@
 
 /**
  * Financial Payouts
+ *
+ * List of payout summaries.
  */
 export type FinancialPayouts = {
   amount?: number;

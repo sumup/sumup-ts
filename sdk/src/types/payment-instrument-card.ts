@@ -3,6 +3,8 @@
 import type { Card } from "./card";
 
 /**
+ * Payment Instrument Card
+ *
  * Details of the payment card that is saved as a payment instrument.
  */
 export type PaymentInstrumentCard = {

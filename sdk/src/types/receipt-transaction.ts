@@ -4,6 +4,8 @@ import type { ReceiptCard } from "./receipt-card";
 import type { ReceiptEvent } from "./receipt-event";
 
 /**
+ * Receipt Transaction
+ *
  * Transaction information.
  */
 export type ReceiptTransaction = {

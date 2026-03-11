@@ -4,6 +4,8 @@ import type { AddressPayloadLegacy } from "./address-payload-legacy";
 import type { BusinessOwners } from "./business-owners";
 
 /**
+ * Merchant Profile Payload
+ *
  * Account's merchant profile
  */
 export type MerchantProfilePayload = {
@@ -44,6 +46,9 @@ export type MerchantProfilePayload = {
    */
   mobile_phone?: string;
   address: AddressPayloadLegacy;
+  /**
+   * Doing-business-as details associated with the merchant profile.
+   */
   doing_business_as?: {
     /**
      * Doing business as name

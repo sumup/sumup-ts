@@ -6,6 +6,7 @@ import type {
   EntryModeFilter,
   ErrorBody,
   PaymentType,
+  Problem,
   TransactionFull,
   TransactionHistory,
   TransactionsHistoryLink,
@@ -36,7 +37,7 @@ export type ListTransactionsV2_1QueryParams = {
   order?: "ascending" | "descending";
   limit?: number;
   users?: string[];
-  statuses?: (
+  "statuses[]"?: (
     | "SUCCESSFUL"
     | "CANCELLED"
     | "FAILED"
@@ -63,7 +64,7 @@ export type ListTransactionsQueryParams = {
   order?: "ascending" | "descending";
   limit?: number;
   users?: string[];
-  statuses?: (
+  "statuses[]"?: (
     | "SUCCESSFUL"
     | "CANCELLED"
     | "FAILED"
@@ -114,8 +115,8 @@ export class Transactions extends APIResource {
     merchantCode: string,
     query?: GetTransactionV2_1QueryParams,
     params?: FetchParams,
-  ): APIPromise<TransactionFull, ErrorBody> {
-    return this._client.get<TransactionFull, ErrorBody>({
+  ): APIPromise<TransactionFull, Problem | ErrorBody> {
+    return this._client.get<TransactionFull, Problem | ErrorBody>({
       path: `/v2.1/merchants/${merchantCode}/transactions`,
       query,
       ...params,
@@ -135,8 +136,8 @@ export class Transactions extends APIResource {
   getDeprecated(
     query?: GetTransactionQueryParams,
     params?: FetchParams,
-  ): APIPromise<TransactionFull, ErrorBody> {
-    return this._client.get<TransactionFull, ErrorBody>({
+  ): APIPromise<TransactionFull, Problem | ErrorBody> {
+    return this._client.get<TransactionFull, Problem | ErrorBody>({
       path: `/v0.1/me/transactions`,
       query,
       ...params,
@@ -150,8 +151,8 @@ export class Transactions extends APIResource {
     merchantCode: string,
     query?: ListTransactionsV2_1QueryParams,
     params?: FetchParams,
-  ): APIPromise<ListTransactionsV2_1Response, ErrorBody> {
-    return this._client.get<ListTransactionsV2_1Response, ErrorBody>({
+  ): APIPromise<ListTransactionsV2_1Response, ErrorBody | Problem> {
+    return this._client.get<ListTransactionsV2_1Response, ErrorBody | Problem>({
       path: `/v2.1/merchants/${merchantCode}/transactions/history`,
       query,
       ...params,
@@ -164,8 +165,8 @@ export class Transactions extends APIResource {
   listDeprecated(
     query?: ListTransactionsQueryParams,
     params?: FetchParams,
-  ): APIPromise<ListTransactionsResponse, ErrorBody> {
-    return this._client.get<ListTransactionsResponse, ErrorBody>({
+  ): APIPromise<ListTransactionsResponse, ErrorBody | Problem> {
+    return this._client.get<ListTransactionsResponse, ErrorBody | Problem>({
       path: `/v0.1/me/transactions/history`,
       query,
       ...params,

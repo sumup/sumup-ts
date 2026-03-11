@@ -2,6 +2,11 @@
 
 import type { Checkout } from "./checkout";
 
+/**
+ * Checkout Success
+ *
+ * Checkout response returned after a successful processing attempt.
+ */
 export type CheckoutSuccess = Checkout & {
   /**
    * Transaction code of the successful transaction with which the payment for the checkout is completed.

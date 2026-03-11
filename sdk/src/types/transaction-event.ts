@@ -5,6 +5,8 @@ import type { EventStatus } from "./event-status";
 import type { EventType } from "./event-type";
 
 /**
+ * Transaction Event
+ *
  * Details of a transaction event.
  */
 export type TransactionEvent = {

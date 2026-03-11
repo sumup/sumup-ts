@@ -3,6 +3,8 @@
 import type { AddressPayloadLegacy } from "./address-payload-legacy";
 
 /**
+ * Doing Business As Payload Legacy
+ *
  * Doing Business As information
  */
 export type DoingBusinessAsPayloadLegacy = {

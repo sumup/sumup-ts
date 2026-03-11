@@ -2,7 +2,7 @@
 
 import { type APIPromise, APIResource, type FetchParams } from "../../core";
 
-import type { ErrorBody, FinancialPayouts } from "../../types";
+import type { ErrorExtended, FinancialPayouts, Problem } from "../../types";
 export type ListPayoutsV1QueryParams = {
   start_date: string;
   end_date: string;
@@ -10,6 +10,8 @@ export type ListPayoutsV1QueryParams = {
   limit?: number;
   order?: "desc" | "asc";
 };
+
+export type ListPayoutsV1Error = ErrorExtended[];
 
 export type ListPayoutsQueryParams = {
   start_date: string;
@@ -19,6 +21,8 @@ export type ListPayoutsQueryParams = {
   order?: "desc" | "asc";
 };
 
+export type ListPayoutsError = ErrorExtended[];
+
 export class Payouts extends APIResource {
   /**
    * Lists ordered payouts for the merchant profile.
@@ -27,8 +31,8 @@ export class Payouts extends APIResource {
     merchantCode: string,
     query: ListPayoutsV1QueryParams,
     params?: FetchParams,
-  ): APIPromise<FinancialPayouts, ErrorBody> {
-    return this._client.get<FinancialPayouts, ErrorBody>({
+  ): APIPromise<FinancialPayouts, ErrorExtended[] | Problem> {
+    return this._client.get<FinancialPayouts, ErrorExtended[] | Problem>({
       path: `/v1.0/merchants/${merchantCode}/payouts`,
       query,
       ...params,
@@ -41,8 +45,8 @@ export class Payouts extends APIResource {
   listDeprecated(
     query: ListPayoutsQueryParams,
     params?: FetchParams,
-  ): APIPromise<FinancialPayouts, ErrorBody> {
-    return this._client.get<FinancialPayouts, ErrorBody>({
+  ): APIPromise<FinancialPayouts, ErrorExtended[] | Problem> {
+    return this._client.get<FinancialPayouts, ErrorExtended[] | Problem>({
       path: `/v0.1/me/financials/payouts`,
       query,
       ...params,

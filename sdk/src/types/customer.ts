@@ -4,6 +4,8 @@ import type { PersonalDetails } from "./personal-details";
 
 /**
  * Customer
+ *
+ * Saved customer details.
  */
 export type Customer = {
   /**

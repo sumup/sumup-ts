@@ -10,10 +10,10 @@ export type Unauthorized = {
     /**
      * Fuller message giving context to error
      */
-    detail?: string;
+    detail: string;
     /**
-     * Key indicating type of error
+     * Key indicating type of error. Present only for typed 401 responses (e.g. invalid token, invalid password). Absent for generic unauthorized responses.
      */
-    type: "INVALID_ACCESS_TOKEN" | "INVALID_PASSWORD";
+    type?: "INVALID_ACCESS_TOKEN" | "INVALID_PASSWORD";
   };
 };

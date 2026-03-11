@@ -5,6 +5,11 @@ import type { EventStatus } from "./event-status";
 import type { EventType } from "./event-type";
 import type { TransactionID } from "./transaction-id";
 
+/**
+ * Receipt Event
+ *
+ * Transaction event details as rendered on the receipt.
+ */
 export type ReceiptEvent = {
   id?: EventID;
   transaction_id?: TransactionID;
@@ -18,5 +23,8 @@ export type ReceiptEvent = {
    * Date and time of the transaction event.
    */
   timestamp?: string;
+  /**
+   * Receipt number associated with the event.
+   */
   receipt_no?: string;
 };
