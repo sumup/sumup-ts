@@ -35,7 +35,7 @@
           {
             "name": "amount",
             "in": "query",
-            "description": "The amount for which the payment methods should be eligible, in major units. Note that currency must also be provided when filtering by amount.",
+            "description": "The amount for which the payment methods should be eligible, in major units.",
             "required": false,
             "schema": {
               "type": "number",
@@ -98,7 +98,7 @@
             }
           },
           "400": {
-            "description": "Bad Request",
+            "description": "The request is invalid for the submitted query parameters.",
             "content": {
               "application/json": {
                 "schema": {
@@ -121,39 +121,6 @@
                 }
               }
             }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                },
-                "examples": {
-                  "Invalid_Token": {
-                    "description": "The access token is invalid or has expired.",
-                    "value": {
-                      "error_message": "invalid access token",
-                      "error_code": "NOT_AUTHORIZED"
-                    }
-                  },
-                  "Not_Authorized_Token": {
-                    "description": "The access token is valid but the application is not authorized.",
-                    "value": {
-                      "error_message": "NOT_AUTHORIZED",
-                      "error_code": "NOT_AUTHORIZED"
-                    }
-                  },
-                  "Missing_Token": {
-                    "description": "No access token is provided.",
-                    "value": {
-                      "message": "access token required",
-                      "error_code": "NOT_AUTHORIZED"
-                    }
-                  }
-                }
-              }
-            }
           }
         },
         "security": [
@@ -161,9 +128,7 @@
             "apiKey": []
           },
           {
-            "oauth2": [
-              "payments"
-            ]
+            "oauth2": []
           }
         ],
         "tags": [
@@ -172,9 +137,7 @@
         "x-codegen": {
           "method_name": "list_available_payment_methods"
         },
-        "x-scopes": [
-          "payments"
-        ]
+        "x-scopes": []
       }
     },
     "/v0.1/checkouts": {
@@ -183,7 +146,7 @@
         "summary": "Create a checkout",
         "description": "Creates a new payment checkout resource. The unique `checkout_reference` created by this request, is used for further manipulation of the checkout.\n\nFor 3DS checkouts, add the `redirect_url` parameter to your request body schema.\n\nFollow by processing a checkout to charge the provided payment instrument.\n",
         "requestBody": {
-          "description": "",
+          "description": "Details for creating a checkout resource.",
           "required": true,
           "content": {
             "application/json": {
@@ -235,7 +198,7 @@
         },
         "responses": {
           "201": {
-            "description": "Created",
+            "description": "Returns the created checkout resource.",
             "content": {
               "application/json": {
                 "schema": {
@@ -357,7 +320,7 @@
             }
           },
           "400": {
-            "description": "Bad Request",
+            "description": "The request body is invalid.",
             "content": {
               "application/json": {
                 "schema": {
@@ -377,32 +340,21 @@
             }
           },
           "401": {
-            "description": "Unauthorized",
+            "description": "The request is not authorized.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/Problem"
                 },
                 "examples": {
-                  "Invalid_Token": {
-                    "description": "The access token is invalid or has expired.",
+                  "Problem_Details": {
+                    "description": "Unauthorized response returned by API gateway.",
                     "value": {
-                      "error_message": "invalid access token",
-                      "error_code": "NOT_AUTHORIZED"
-                    }
-                  },
-                  "Not_Authorized_Token": {
-                    "description": "The access token is valid but the application is not authorized.",
-                    "value": {
-                      "error_message": "NOT_AUTHORIZED",
-                      "error_code": "NOT_AUTHORIZED"
-                    }
-                  },
-                  "Missing_Token": {
-                    "description": "No access token is provided.",
-                    "value": {
-                      "message": "access token required",
-                      "error_code": "NOT_AUTHORIZED"
+                      "detail": "Unauthorized.",
+                      "status": 401,
+                      "title": "Unauthorized",
+                      "trace_id": "3c77294349d3b5647ea2d990f0d8f017",
+                      "type": "https://developer.sumup.com/problem/unauthorized"
                     }
                   }
                 }
@@ -410,7 +362,7 @@
             }
           },
           "403": {
-            "description": "Forbidden",
+            "description": "The request isn't sufficiently authorized to create a checkout.",
             "content": {
               "application/json": {
                 "schema": {
@@ -430,7 +382,7 @@
             }
           },
           "409": {
-            "description": "Conflict",
+            "description": "A checkout already exists for the provided unique parameters.",
             "content": {
               "application/json": {
                 "schema": {
@@ -486,7 +438,7 @@
         ],
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "Returns a list of checkout resources.",
             "content": {
               "application/json": {
                 "schema": {
@@ -499,32 +451,21 @@
             }
           },
           "401": {
-            "description": "Unauthorized",
+            "description": "The request is not authorized.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/Problem"
                 },
                 "examples": {
-                  "Invalid_Token": {
-                    "description": "The access token is invalid or has expired.",
+                  "Problem_Details": {
+                    "description": "Unauthorized response returned by API gateway.",
                     "value": {
-                      "error_message": "invalid access token",
-                      "error_code": "NOT_AUTHORIZED"
-                    }
-                  },
-                  "Not_Authorized_Token": {
-                    "description": "The access token is valid but the application is not authorized.",
-                    "value": {
-                      "error_message": "NOT_AUTHORIZED",
-                      "error_code": "NOT_AUTHORIZED"
-                    }
-                  },
-                  "Missing_Token": {
-                    "description": "No access token is provided.",
-                    "value": {
-                      "message": "access token required",
-                      "error_code": "NOT_AUTHORIZED"
+                      "detail": "Unauthorized.",
+                      "status": 401,
+                      "title": "Unauthorized",
+                      "trace_id": "3c77294349d3b5647ea2d990f0d8f017",
+                      "type": "https://developer.sumup.com/problem/unauthorized"
                     }
                   }
                 }
@@ -571,7 +512,7 @@
         "description": "Retrieves an identified checkout resource. Use this request after processing a checkout to confirm its status and inform the end user respectively.",
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "Returns the requested checkout resource.",
             "content": {
               "application/json": {
                 "schema": {
@@ -581,32 +522,21 @@
             }
           },
           "401": {
-            "description": "Unauthorized",
+            "description": "The request is not authorized.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/Problem"
                 },
                 "examples": {
-                  "Invalid_Token": {
-                    "description": "The access token is invalid or has expired.",
+                  "Problem_Details": {
+                    "description": "Unauthorized response returned by API gateway.",
                     "value": {
-                      "error_message": "invalid access token",
-                      "error_code": "NOT_AUTHORIZED"
-                    }
-                  },
-                  "Not_Authorized_Token": {
-                    "description": "The access token is valid but the application is not authorized.",
-                    "value": {
-                      "error_message": "NOT_AUTHORIZED",
-                      "error_code": "NOT_AUTHORIZED"
-                    }
-                  },
-                  "Missing_Token": {
-                    "description": "No access token is provided.",
-                    "value": {
-                      "message": "access token required",
-                      "error_code": "NOT_AUTHORIZED"
+                      "detail": "Unauthorized.",
+                      "status": 401,
+                      "title": "Unauthorized",
+                      "trace_id": "3c77294349d3b5647ea2d990f0d8f017",
+                      "type": "https://developer.sumup.com/problem/unauthorized"
                     }
                   }
                 }
@@ -614,7 +544,7 @@
             }
           },
           "404": {
-            "description": "Not Found",
+            "description": "The requested resource does not exist.",
             "content": {
               "application/json": {
                 "schema": {
@@ -750,7 +680,7 @@
         },
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "Returns the checkout resource after a processing attempt.",
             "content": {
               "application/json": {
                 "schema": {
@@ -915,7 +845,7 @@
             }
           },
           "202": {
-            "description": "Accepted",
+            "description": "Returns the next required action for asynchronous checkout processing.",
             "content": {
               "application/json": {
                 "schema": {
@@ -925,7 +855,7 @@
             }
           },
           "400": {
-            "description": "Bad Request",
+            "description": "The request body is invalid for processing the checkout.",
             "content": {
               "application/json": {
                 "schema": {
@@ -976,32 +906,21 @@
             }
           },
           "401": {
-            "description": "Unauthorized",
+            "description": "The request is not authorized.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/Problem"
                 },
                 "examples": {
-                  "Invalid_Token": {
-                    "description": "The access token is invalid or has expired.",
+                  "Problem_Details": {
+                    "description": "Unauthorized response returned by API gateway.",
                     "value": {
-                      "error_message": "invalid access token",
-                      "error_code": "NOT_AUTHORIZED"
-                    }
-                  },
-                  "Not_Authorized_Token": {
-                    "description": "The access token is valid but the application is not authorized.",
-                    "value": {
-                      "error_message": "NOT_AUTHORIZED",
-                      "error_code": "NOT_AUTHORIZED"
-                    }
-                  },
-                  "Missing_Token": {
-                    "description": "No access token is provided.",
-                    "value": {
-                      "message": "access token required",
-                      "error_code": "NOT_AUTHORIZED"
+                      "detail": "Unauthorized.",
+                      "status": 401,
+                      "title": "Unauthorized",
+                      "trace_id": "3c77294349d3b5647ea2d990f0d8f017",
+                      "type": "https://developer.sumup.com/problem/unauthorized"
                     }
                   }
                 }
@@ -1009,7 +928,7 @@
             }
           },
           "404": {
-            "description": "Not Found",
+            "description": "The requested resource does not exist.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1028,7 +947,7 @@
             }
           },
           "409": {
-            "description": "Conflict",
+            "description": "The request conflicts with the current state of the resource.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1069,7 +988,7 @@
         "description": "Deactivates an identified checkout resource. If the checkout has already been processed it can not be deactivated.",
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "Returns the checkout object after successful deactivation.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1093,32 +1012,21 @@
             }
           },
           "401": {
-            "description": "Unauthorized",
+            "description": "The request is not authorized.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/Problem"
                 },
                 "examples": {
-                  "Invalid_Token": {
-                    "description": "The access token is invalid or has expired.",
+                  "Problem_Details": {
+                    "description": "Unauthorized response returned by API gateway.",
                     "value": {
-                      "error_message": "invalid access token",
-                      "error_code": "NOT_AUTHORIZED"
-                    }
-                  },
-                  "Not_Authorized_Token": {
-                    "description": "The access token is valid but the application is not authorized.",
-                    "value": {
-                      "error_message": "NOT_AUTHORIZED",
-                      "error_code": "NOT_AUTHORIZED"
-                    }
-                  },
-                  "Missing_Token": {
-                    "description": "No access token is provided.",
-                    "value": {
-                      "message": "access token required",
-                      "error_code": "NOT_AUTHORIZED"
+                      "detail": "Unauthorized.",
+                      "status": 401,
+                      "title": "Unauthorized",
+                      "trace_id": "3c77294349d3b5647ea2d990f0d8f017",
+                      "type": "https://developer.sumup.com/problem/unauthorized"
                     }
                   }
                 }
@@ -1126,7 +1034,7 @@
             }
           },
           "404": {
-            "description": "Not Found",
+            "description": "The requested resource does not exist.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1145,7 +1053,7 @@
             }
           },
           "409": {
-            "description": "Conflict",
+            "description": "The request conflicts with the current state of the resource.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1203,7 +1111,7 @@
         },
         "responses": {
           "201": {
-            "description": "Created",
+            "description": "Returns the customer resource.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1212,33 +1120,60 @@
               }
             }
           },
-          "401": {
-            "description": "Unauthorized",
+          "400": {
+            "description": "The request body is invalid.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ErrorExtended"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "instance": {
+                          "type": "string"
+                        },
+                        "error_code": {
+                          "type": "string"
+                        },
+                        "error_message": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  ]
                 },
                 "examples": {
-                  "Invalid_Token": {
-                    "description": "The access token is invalid or has expired.",
+                  "Missing_Customer_ID": {
+                    "description": "The required customer identifier is missing.",
                     "value": {
-                      "error_message": "invalid access token",
-                      "error_code": "NOT_AUTHORIZED"
+                      "instance": "32a44c6c-85d3-49e8-86bf-a5bba98c4621",
+                      "error_code": "INVALID",
+                      "error_message": "customer_id"
                     }
-                  },
-                  "Not_Authorized_Token": {
-                    "description": "The access token is valid but the application is not authorized.",
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The request is not authorized.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                },
+                "examples": {
+                  "Problem_Details": {
+                    "description": "Unauthorized response returned by API gateway.",
                     "value": {
-                      "error_message": "NOT_AUTHORIZED",
-                      "error_code": "NOT_AUTHORIZED"
-                    }
-                  },
-                  "Missing_Token": {
-                    "description": "No access token is provided.",
-                    "value": {
-                      "message": "access token required",
-                      "error_code": "NOT_AUTHORIZED"
+                      "detail": "Unauthorized.",
+                      "status": 401,
+                      "title": "Unauthorized",
+                      "trace_id": "3c77294349d3b5647ea2d990f0d8f017",
+                      "type": "https://developer.sumup.com/problem/unauthorized"
                     }
                   }
                 }
@@ -1246,7 +1181,7 @@
             }
           },
           "403": {
-            "description": "Forbidden",
+            "description": "The request is authenticated but not permitted for this operation.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1266,7 +1201,7 @@
             }
           },
           "409": {
-            "description": "Conflict",
+            "description": "A customer with the provided identifier already exists.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1324,7 +1259,7 @@
         "description": "Retrieves an identified saved customer resource through the unique `customer_id` parameter, generated upon customer creation.",
         "responses": {
           "200": {
-            "description": "Created",
+            "description": "Returns the customer resource.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1334,32 +1269,21 @@
             }
           },
           "401": {
-            "description": "Unauthorized",
+            "description": "The request is not authorized.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/Problem"
                 },
                 "examples": {
-                  "Invalid_Token": {
-                    "description": "The access token is invalid or has expired.",
+                  "Problem_Details": {
+                    "description": "Unauthorized response returned by API gateway.",
                     "value": {
-                      "error_message": "invalid access token",
-                      "error_code": "NOT_AUTHORIZED"
-                    }
-                  },
-                  "Not_Authorized_Token": {
-                    "description": "The access token is valid but the application is not authorized.",
-                    "value": {
-                      "error_message": "NOT_AUTHORIZED",
-                      "error_code": "NOT_AUTHORIZED"
-                    }
-                  },
-                  "Missing_Token": {
-                    "description": "No access token is provided.",
-                    "value": {
-                      "message": "access token required",
-                      "error_code": "NOT_AUTHORIZED"
+                      "detail": "Unauthorized.",
+                      "status": 401,
+                      "title": "Unauthorized",
+                      "trace_id": "3c77294349d3b5647ea2d990f0d8f017",
+                      "type": "https://developer.sumup.com/problem/unauthorized"
                     }
                   }
                 }
@@ -1367,7 +1291,7 @@
             }
           },
           "403": {
-            "description": "Forbidden",
+            "description": "The request is authenticated but not permitted for this operation.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1387,7 +1311,7 @@
             }
           },
           "404": {
-            "description": "Not Found",
+            "description": "The requested resource does not exist.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1431,7 +1355,7 @@
         "summary": "Update a customer",
         "description": "Updates an identified saved customer resource's personal details.\n\nThe request only overwrites the parameters included in the request, all other parameters will remain with their initially assigned values.\n",
         "requestBody": {
-          "description": "",
+          "description": "Customer fields to update.",
           "required": true,
           "content": {
             "application/json": {
@@ -1448,7 +1372,7 @@
         },
         "responses": {
           "200": {
-            "description": "Created",
+            "description": "Returns the customer resource.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1458,32 +1382,21 @@
             }
           },
           "401": {
-            "description": "Unauthorized",
+            "description": "The request is not authorized.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/Problem"
                 },
                 "examples": {
-                  "Invalid_Token": {
-                    "description": "The access token is invalid or has expired.",
+                  "Problem_Details": {
+                    "description": "Unauthorized response returned by API gateway.",
                     "value": {
-                      "error_message": "invalid access token",
-                      "error_code": "NOT_AUTHORIZED"
-                    }
-                  },
-                  "Not_Authorized_Token": {
-                    "description": "The access token is valid but the application is not authorized.",
-                    "value": {
-                      "error_message": "NOT_AUTHORIZED",
-                      "error_code": "NOT_AUTHORIZED"
-                    }
-                  },
-                  "Missing_Token": {
-                    "description": "No access token is provided.",
-                    "value": {
-                      "message": "access token required",
-                      "error_code": "NOT_AUTHORIZED"
+                      "detail": "Unauthorized.",
+                      "status": 401,
+                      "title": "Unauthorized",
+                      "trace_id": "3c77294349d3b5647ea2d990f0d8f017",
+                      "type": "https://developer.sumup.com/problem/unauthorized"
                     }
                   }
                 }
@@ -1491,7 +1404,7 @@
             }
           },
           "403": {
-            "description": "Forbidden",
+            "description": "The request is authenticated but not permitted for this operation.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1511,7 +1424,7 @@
             }
           },
           "404": {
-            "description": "Not Found",
+            "description": "The requested resource does not exist.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1569,7 +1482,7 @@
         "description": "Lists all payment instrument resources that are saved for an identified customer.",
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "Returns the list of saved payment instruments for the customer.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1582,32 +1495,21 @@
             }
           },
           "401": {
-            "description": "Unauthorized",
+            "description": "The request is not authorized.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/Problem"
                 },
                 "examples": {
-                  "Invalid_Token": {
-                    "description": "The access token is invalid or has expired.",
+                  "Problem_Details": {
+                    "description": "Unauthorized response returned by API gateway.",
                     "value": {
-                      "error_message": "invalid access token",
-                      "error_code": "NOT_AUTHORIZED"
-                    }
-                  },
-                  "Not_Authorized_Token": {
-                    "description": "The access token is valid but the application is not authorized.",
-                    "value": {
-                      "error_message": "NOT_AUTHORIZED",
-                      "error_code": "NOT_AUTHORIZED"
-                    }
-                  },
-                  "Missing_Token": {
-                    "description": "No access token is provided.",
-                    "value": {
-                      "message": "access token required",
-                      "error_code": "NOT_AUTHORIZED"
+                      "detail": "Unauthorized.",
+                      "status": 401,
+                      "title": "Unauthorized",
+                      "trace_id": "3c77294349d3b5647ea2d990f0d8f017",
+                      "type": "https://developer.sumup.com/problem/unauthorized"
                     }
                   }
                 }
@@ -1615,7 +1517,7 @@
             }
           },
           "403": {
-            "description": "Forbidden",
+            "description": "The request is authenticated but not permitted for this operation.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1635,7 +1537,7 @@
             }
           },
           "404": {
-            "description": "Not Found",
+            "description": "The requested resource does not exist.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1702,35 +1604,43 @@
         "description": "Deactivates an identified card payment instrument resource for a customer.",
         "responses": {
           "204": {
-            "description": "No Content"
+            "description": "Returns an empty response body when the operation succeeds."
           },
-          "401": {
-            "description": "Unauthorized",
+          "400": {
+            "description": "The request is invalid.",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
                 },
                 "examples": {
-                  "Invalid_Token": {
-                    "description": "The access token is invalid or has expired.",
+                  "Invalid_Request": {
+                    "description": "The request cannot be processed.",
                     "value": {
-                      "error_message": "invalid access token",
-                      "error_code": "NOT_AUTHORIZED"
+                      "error_code": "INVALID_REQUEST",
+                      "message": "bad request"
                     }
-                  },
-                  "Not_Authorized_Token": {
-                    "description": "The access token is valid but the application is not authorized.",
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The request is not authorized.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                },
+                "examples": {
+                  "Problem_Details": {
+                    "description": "Unauthorized response returned by API gateway.",
                     "value": {
-                      "error_message": "NOT_AUTHORIZED",
-                      "error_code": "NOT_AUTHORIZED"
-                    }
-                  },
-                  "Missing_Token": {
-                    "description": "No access token is provided.",
-                    "value": {
-                      "message": "access token required",
-                      "error_code": "NOT_AUTHORIZED"
+                      "detail": "Unauthorized.",
+                      "status": 401,
+                      "title": "Unauthorized",
+                      "trace_id": "3c77294349d3b5647ea2d990f0d8f017",
+                      "type": "https://developer.sumup.com/problem/unauthorized"
                     }
                   }
                 }
@@ -1738,7 +1648,7 @@
             }
           },
           "403": {
-            "description": "Forbidden",
+            "description": "The request is authenticated but not permitted for this operation.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1758,7 +1668,7 @@
             }
           },
           "404": {
-            "description": "Not Found",
+            "description": "The requested resource does not exist.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1815,7 +1725,7 @@
         "summary": "Refund a transaction",
         "description": "Refunds an identified transaction either in full or partially.",
         "requestBody": {
-          "description": "",
+          "description": "Optional amount for partial refunds.",
           "content": {
             "application/json": {
               "schema": {
@@ -1834,10 +1744,10 @@
         },
         "responses": {
           "204": {
-            "description": "No Content"
+            "description": "Returns an empty response body when the operation succeeds."
           },
           "404": {
-            "description": "Not Found",
+            "description": "The requested resource does not exist.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1856,7 +1766,7 @@
             }
           },
           "409": {
-            "description": "Conflict",
+            "description": "The transaction cannot be refunded due to business constraints.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1868,6 +1778,13 @@
                     "value": {
                       "error_code": "CONFLICT",
                       "message": "The transaction is not refundable in its current state"
+                    }
+                  },
+                  "Not_Enough_Balance": {
+                    "description": "The merchant balance does not allow performing the refund.",
+                    "value": {
+                      "error_code": "NOT_ENOUGH_BALANCE",
+                      "message": "Not enough available balance to perform the operation at the moment"
                     }
                   }
                 }
@@ -1957,7 +1874,7 @@
         ],
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "Returns the requested transaction resource.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1967,32 +1884,21 @@
             }
           },
           "401": {
-            "description": "Unauthorized",
+            "description": "The request is not authorized.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/Problem"
                 },
                 "examples": {
-                  "Invalid_Token": {
-                    "description": "The access token is invalid or has expired.",
+                  "Problem_Details": {
+                    "description": "Unauthorized response returned by API gateway.",
                     "value": {
-                      "error_message": "invalid access token",
-                      "error_code": "NOT_AUTHORIZED"
-                    }
-                  },
-                  "Not_Authorized_Token": {
-                    "description": "The access token is valid but the application is not authorized.",
-                    "value": {
-                      "error_message": "NOT_AUTHORIZED",
-                      "error_code": "NOT_AUTHORIZED"
-                    }
-                  },
-                  "Missing_Token": {
-                    "description": "No access token is provided.",
-                    "value": {
-                      "message": "access token required",
-                      "error_code": "NOT_AUTHORIZED"
+                      "detail": "Unauthorized.",
+                      "status": 401,
+                      "title": "Unauthorized",
+                      "trace_id": "3c77294349d3b5647ea2d990f0d8f017",
+                      "type": "https://developer.sumup.com/problem/unauthorized"
                     }
                   }
                 }
@@ -2000,7 +1906,7 @@
             }
           },
           "404": {
-            "description": "Not Found",
+            "description": "The requested resource does not exist.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2076,7 +1982,7 @@
         ],
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "Returns the requested transaction resource.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2086,32 +1992,21 @@
             }
           },
           "401": {
-            "description": "Unauthorized",
+            "description": "The request is not authorized.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/Problem"
                 },
                 "examples": {
-                  "Invalid_Token": {
-                    "description": "The access token is invalid or has expired.",
+                  "Problem_Details": {
+                    "description": "Unauthorized response returned by API gateway.",
                     "value": {
-                      "error_message": "invalid access token",
-                      "error_code": "NOT_AUTHORIZED"
-                    }
-                  },
-                  "Not_Authorized_Token": {
-                    "description": "The access token is valid but the application is not authorized.",
-                    "value": {
-                      "error_message": "NOT_AUTHORIZED",
-                      "error_code": "NOT_AUTHORIZED"
-                    }
-                  },
-                  "Missing_Token": {
-                    "description": "No access token is provided.",
-                    "value": {
-                      "message": "access token required",
-                      "error_code": "NOT_AUTHORIZED"
+                      "detail": "Unauthorized.",
+                      "status": 401,
+                      "title": "Unauthorized",
+                      "trace_id": "3c77294349d3b5647ea2d990f0d8f017",
+                      "type": "https://developer.sumup.com/problem/unauthorized"
                     }
                   }
                 }
@@ -2119,7 +2014,7 @@
             }
           },
           "404": {
-            "description": "Not Found",
+            "description": "The requested resource does not exist.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2219,7 +2114,7 @@
             }
           },
           {
-            "name": "statuses",
+            "name": "statuses[]",
             "in": "query",
             "description": "Filters the returned results by the specified list of final statuses of the transactions.",
             "required": false,
@@ -2329,7 +2224,7 @@
         ],
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "Returns a page of transaction history items.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2352,33 +2247,41 @@
               }
             }
           },
-          "401": {
-            "description": "Unauthorized",
+          "400": {
+            "description": "The request is invalid for the submitted query parameters.",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
                 },
                 "examples": {
-                  "Invalid_Token": {
-                    "description": "The access token is invalid or has expired.",
+                  "Invalid_Parameter": {
+                    "description": "A request parameter has an invalid value.",
                     "value": {
-                      "error_message": "invalid access token",
-                      "error_code": "NOT_AUTHORIZED"
+                      "message": "Validation error",
+                      "error_code": "INVALID"
                     }
-                  },
-                  "Not_Authorized_Token": {
-                    "description": "The access token is valid but the application is not authorized.",
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The request is not authorized.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                },
+                "examples": {
+                  "Problem_Details": {
+                    "description": "Unauthorized response returned by API gateway.",
                     "value": {
-                      "error_message": "NOT_AUTHORIZED",
-                      "error_code": "NOT_AUTHORIZED"
-                    }
-                  },
-                  "Missing_Token": {
-                    "description": "No access token is provided.",
-                    "value": {
-                      "message": "access token required",
-                      "error_code": "NOT_AUTHORIZED"
+                      "detail": "Unauthorized.",
+                      "status": 401,
+                      "title": "Unauthorized",
+                      "trace_id": "3c77294349d3b5647ea2d990f0d8f017",
+                      "type": "https://developer.sumup.com/problem/unauthorized"
                     }
                   }
                 }
@@ -2457,7 +2360,7 @@
             }
           },
           {
-            "name": "statuses",
+            "name": "statuses[]",
             "in": "query",
             "description": "Filters the returned results by the specified list of final statuses of the transactions.",
             "required": false,
@@ -2555,7 +2458,7 @@
         ],
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "Returns a page of transaction history items.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2578,33 +2481,41 @@
               }
             }
           },
-          "401": {
-            "description": "Unauthorized",
+          "400": {
+            "description": "The request is invalid for the submitted query parameters.",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
                 },
                 "examples": {
-                  "Invalid_Token": {
-                    "description": "The access token is invalid or has expired.",
+                  "Invalid_Parameter": {
+                    "description": "A request parameter has an invalid value.",
                     "value": {
-                      "error_message": "invalid access token",
-                      "error_code": "NOT_AUTHORIZED"
+                      "message": "Validation error",
+                      "error_code": "INVALID"
                     }
-                  },
-                  "Not_Authorized_Token": {
-                    "description": "The access token is valid but the application is not authorized.",
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The request is not authorized.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                },
+                "examples": {
+                  "Problem_Details": {
+                    "description": "Unauthorized response returned by API gateway.",
                     "value": {
-                      "error_message": "NOT_AUTHORIZED",
-                      "error_code": "NOT_AUTHORIZED"
-                    }
-                  },
-                  "Missing_Token": {
-                    "description": "No access token is provided.",
-                    "value": {
-                      "message": "access token required",
-                      "error_code": "NOT_AUTHORIZED"
+                      "detail": "Unauthorized.",
+                      "status": 401,
+                      "title": "Unauthorized",
+                      "trace_id": "3c77294349d3b5647ea2d990f0d8f017",
+                      "type": "https://developer.sumup.com/problem/unauthorized"
                     }
                   }
                 }
@@ -2704,7 +2615,7 @@
         ],
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "Returns the list of payouts for the requested period.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2713,33 +2624,52 @@
               }
             }
           },
-          "401": {
-            "description": "Unauthorized",
+          "400": {
+            "description": "The request is invalid for the submitted query parameters.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ErrorExtended"
+                  }
                 },
                 "examples": {
-                  "Invalid_Token": {
-                    "description": "The access token is invalid or has expired.",
+                  "Missing_Required_Dates": {
+                    "description": "Required date filters are missing.",
+                    "value": [
+                      {
+                        "error_code": "MISSING",
+                        "message": "Validation error: required",
+                        "param": "start_date"
+                      },
+                      {
+                        "error_code": "MISSING",
+                        "message": "Validation error: required",
+                        "param": "end_date"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The request is not authorized.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                },
+                "examples": {
+                  "Problem_Details": {
+                    "description": "Unauthorized response returned by API gateway.",
                     "value": {
-                      "error_message": "invalid access token",
-                      "error_code": "NOT_AUTHORIZED"
-                    }
-                  },
-                  "Not_Authorized_Token": {
-                    "description": "The access token is valid but the application is not authorized.",
-                    "value": {
-                      "error_message": "NOT_AUTHORIZED",
-                      "error_code": "NOT_AUTHORIZED"
-                    }
-                  },
-                  "Missing_Token": {
-                    "description": "No access token is provided.",
-                    "value": {
-                      "message": "access token required",
-                      "error_code": "NOT_AUTHORIZED"
+                      "detail": "Unauthorized.",
+                      "status": 401,
+                      "title": "Unauthorized",
+                      "trace_id": "3c77294349d3b5647ea2d990f0d8f017",
+                      "type": "https://developer.sumup.com/problem/unauthorized"
                     }
                   }
                 }
@@ -2831,7 +2761,7 @@
         ],
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "Returns the list of payouts for the requested period.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2840,33 +2770,52 @@
               }
             }
           },
-          "401": {
-            "description": "Unauthorized",
+          "400": {
+            "description": "The request is invalid for the submitted query parameters.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ErrorExtended"
+                  }
                 },
                 "examples": {
-                  "Invalid_Token": {
-                    "description": "The access token is invalid or has expired.",
+                  "Missing_Required_Dates": {
+                    "description": "Required date filters are missing.",
+                    "value": [
+                      {
+                        "error_code": "MISSING",
+                        "message": "Validation error: required",
+                        "param": "start_date"
+                      },
+                      {
+                        "error_code": "MISSING",
+                        "message": "Validation error: required",
+                        "param": "end_date"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The request is not authorized.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                },
+                "examples": {
+                  "Problem_Details": {
+                    "description": "Unauthorized response returned by API gateway.",
                     "value": {
-                      "error_message": "invalid access token",
-                      "error_code": "NOT_AUTHORIZED"
-                    }
-                  },
-                  "Not_Authorized_Token": {
-                    "description": "The access token is valid but the application is not authorized.",
-                    "value": {
-                      "error_message": "NOT_AUTHORIZED",
-                      "error_code": "NOT_AUTHORIZED"
-                    }
-                  },
-                  "Missing_Token": {
-                    "description": "No access token is provided.",
-                    "value": {
-                      "message": "access token required",
-                      "error_code": "NOT_AUTHORIZED"
+                      "detail": "Unauthorized.",
+                      "status": 401,
+                      "title": "Unauthorized",
+                      "trace_id": "3c77294349d3b5647ea2d990f0d8f017",
+                      "type": "https://developer.sumup.com/problem/unauthorized"
                     }
                   }
                 }
@@ -2934,7 +2883,7 @@
         ],
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "Returns receipt details for the requested transaction.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2944,18 +2893,18 @@
             }
           },
           "400": {
-            "description": "Not Found",
+            "description": "The request is invalid for the submitted parameters.",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
                 },
                 "examples": {
-                  "Not_Found": {
-                    "description": "The identified resource is not found on the server.",
+                  "Invalid_Merchant_Code": {
+                    "description": "The provided merchant code is invalid.",
                     "value": {
-                      "error_code": "NOT_FOUND",
-                      "message": "Resource not found"
+                      "message": "is not a valid merchant code",
+                      "error_code": "INVALID"
                     }
                   }
                 }
@@ -2963,32 +2912,40 @@
             }
           },
           "401": {
-            "description": "Unauthorized",
+            "description": "The request is not authorized.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                },
+                "examples": {
+                  "Problem_Details": {
+                    "description": "Unauthorized response returned by API gateway.",
+                    "value": {
+                      "detail": "Unauthorized.",
+                      "status": 401,
+                      "title": "Unauthorized",
+                      "trace_id": "3c77294349d3b5647ea2d990f0d8f017",
+                      "type": "https://developer.sumup.com/problem/unauthorized"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested transaction event does not exist for the provided transaction.",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
                 },
                 "examples": {
-                  "Invalid_Token": {
-                    "description": "The access token is invalid or has expired.",
+                  "Event_Not_Found": {
+                    "description": "The provided transaction event ID cannot be found for this transaction.",
                     "value": {
-                      "error_message": "invalid access token",
-                      "error_code": "NOT_AUTHORIZED"
-                    }
-                  },
-                  "Not_Authorized_Token": {
-                    "description": "The access token is valid but the application is not authorized.",
-                    "value": {
-                      "error_message": "NOT_AUTHORIZED",
-                      "error_code": "NOT_AUTHORIZED"
-                    }
-                  },
-                  "Missing_Token": {
-                    "description": "No access token is provided.",
-                    "value": {
-                      "message": "access token required",
-                      "error_code": "NOT_AUTHORIZED"
+                      "message": "No such tx event (ID=9567461191) for transaction 4ffb8dfc-7f2b-413d-a497-2ad00766585e",
+                      "error_code": "NOT_FOUND"
                     }
                   }
                 }
@@ -3134,7 +3091,7 @@
           "403": {
             "description": "Operator creation was forbidden.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
@@ -3284,7 +3241,7 @@
           "400": {
             "description": "Invalid Operators' email or password was already used.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
@@ -3589,7 +3546,7 @@
           "404": {
             "description": "Merchant not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
@@ -3705,7 +3662,7 @@
           "400": {
             "description": "Invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
@@ -3715,7 +3672,7 @@
           "404": {
             "description": "Merchant not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
@@ -3725,7 +3682,7 @@
           "429": {
             "description": "Too many invitations sent to that user. The limit is 10 requests per 5 minutes and the Retry-After header is set to the number of minutes until the reset of the limit.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
@@ -3798,7 +3755,7 @@
           "404": {
             "description": "Merchant or member not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
@@ -3922,7 +3879,7 @@
           "400": {
             "description": "Cannot set password or nickname for an invited user.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
@@ -3932,7 +3889,7 @@
           "403": {
             "description": "Cannot change password for managed user. Password was already used before.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
@@ -3942,7 +3899,7 @@
           "404": {
             "description": "Merchant or member not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
@@ -3952,7 +3909,7 @@
           "409": {
             "description": "Cannot update member as some data conflict with existing members.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
@@ -4016,7 +3973,7 @@
           "404": {
             "description": "Merchant or member not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
@@ -4090,7 +4047,7 @@
           "404": {
             "description": "Merchant not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
@@ -4193,7 +4150,7 @@
           "400": {
             "description": "Invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
@@ -4203,7 +4160,7 @@
           "404": {
             "description": "Merchant not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
@@ -4276,7 +4233,7 @@
           "404": {
             "description": "Merchant or role not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
@@ -4340,7 +4297,7 @@
           "400": {
             "description": "Invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
@@ -4350,7 +4307,7 @@
           "404": {
             "description": "Merchant not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
@@ -4464,7 +4421,7 @@
           "400": {
             "description": "Invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
@@ -4474,7 +4431,7 @@
           "404": {
             "description": "Merchant not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
@@ -4934,7 +4891,7 @@
           "400": {
             "description": "The request is invalid.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
@@ -4944,7 +4901,7 @@
           "404": {
             "description": "There's no pending reader for the submitted pairing code.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
@@ -4954,7 +4911,7 @@
           "409": {
             "description": "The Reader is not in a pending state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
@@ -5051,7 +5008,7 @@
           "404": {
             "description": "The requested Reader resource does not exist.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
@@ -5118,7 +5075,7 @@
           "404": {
             "description": "The requested Reader resource does not exist.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
@@ -5210,7 +5167,7 @@
           "403": {
             "description": "The request isn't sufficiently authorized to modify the reader.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
@@ -5220,7 +5177,7 @@
           "404": {
             "description": "The requested Reader resource does not exist.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
@@ -5312,6 +5269,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/CreateReaderCheckoutError"
                 }
+              },
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
               }
             }
           },
@@ -5321,6 +5283,26 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/CreateReaderCheckoutError"
+                }
+              },
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Response when given reader is not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFound"
+                }
+              },
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
                 }
               }
             }
@@ -5332,35 +5314,10 @@
                 "schema": {
                   "$ref": "#/components/schemas/CreateReaderCheckoutUnprocessableEntity"
                 }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "application/json": {
+              },
+              "application/problem+json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CreateReaderCheckoutError"
-                }
-              }
-            }
-          },
-          "502": {
-            "description": "Bad Gateway",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CreateReaderCheckoutError"
-                }
-              }
-            }
-          },
-          "504": {
-            "description": "Gateway Timeout",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CreateReaderCheckoutError"
+                  "$ref": "#/components/schemas/Problem"
                 }
               }
             }
@@ -5459,6 +5416,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/BadRequest"
                 }
+              },
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
               }
             }
           },
@@ -5468,6 +5430,11 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Unauthorized"
+                }
+              },
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
                 }
               }
             }
@@ -5479,35 +5446,10 @@
                 "schema": {
                   "$ref": "#/components/schemas/NotFound"
                 }
-              }
-            }
-          },
-          "500": {
-            "description": "Generic error response for backend failure",
-            "content": {
-              "application/json": {
+              },
+              "application/problem+json": {
                 "schema": {
-                  "$ref": "#/components/schemas/InternalServerError"
-                }
-              }
-            }
-          },
-          "502": {
-            "description": "Generic error response for an upstream service failure",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BadGateway"
-                }
-              }
-            }
-          },
-          "504": {
-            "description": "Generic error response for an upstream service timeout",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/GatewayTimeout"
+                  "$ref": "#/components/schemas/Problem"
                 }
               }
             }
@@ -5586,6 +5528,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/CreateReaderTerminateError"
                 }
+              },
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
               }
             }
           },
@@ -5595,6 +5542,26 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/CreateReaderTerminateError"
+                }
+              },
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Response when given reader is not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFound"
+                }
+              },
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
                 }
               }
             }
@@ -5606,35 +5573,10 @@
                 "schema": {
                   "$ref": "#/components/schemas/CreateReaderTerminateUnprocessableEntity"
                 }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "application/json": {
+              },
+              "application/problem+json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CreateReaderTerminateError"
-                }
-              }
-            }
-          },
-          "502": {
-            "description": "Bad Gateway",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CreateReaderTerminateError"
-                }
-              }
-            }
-          },
-          "504": {
-            "description": "Gateway Timeout",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CreateReaderTerminateError"
+                  "$ref": "#/components/schemas/Problem"
                 }
               }
             }
@@ -5791,7 +5733,7 @@
         }
       },
       "StatusesFilter": {
-        "name": "statuses",
+        "name": "statuses[]",
         "in": "query",
         "description": "Filters the returned results by the specified list of final statuses of the transactions.",
         "required": false,
@@ -5911,7 +5853,8 @@
             "type": "string",
             "example": "Berlin"
           }
-        }
+        },
+        "title": "Address Legacy"
       },
       "Card": {
         "description": "__Required when payment type is `card`.__ Details of the payment card.",
@@ -5992,7 +5935,8 @@
           "cvv",
           "last_4_digits",
           "type"
-        ]
+        ],
+        "title": "Card"
       },
       "CardResponse": {
         "description": "Details of the payment card.",
@@ -6009,9 +5953,11 @@
           "type": {
             "$ref": "#/components/schemas/CardType"
           }
-        }
+        },
+        "title": "Card Response"
       },
       "Device": {
+        "description": "Details of the device used to create the transaction.",
         "type": "object",
         "properties": {
           "name": {
@@ -6039,9 +5985,11 @@
             "type": "string",
             "example": "3ae2a6b7-fb0d-3b50-adbf-cb7e2db30cd2"
           }
-        }
+        },
+        "title": "Device"
       },
       "ElvCardAccount": {
+        "description": "Details of the ELV card account associated with the transaction.",
         "type": "object",
         "properties": {
           "sort_code": {
@@ -6064,7 +6012,8 @@
             "type": "string",
             "example": "DE60870962140012345674"
           }
-        }
+        },
+        "title": "ELV Card Account"
       },
       "Checkout": {
         "description": "Details of the payment checkout.",
@@ -6253,7 +6202,8 @@
           "amount",
           "currency",
           "merchant_code"
-        ]
+        ],
+        "title": "Checkout Create Request"
       },
       "ProcessCheckout": {
         "description": "Details of the payment instrument for processing the checkout.",
@@ -6296,9 +6246,11 @@
         },
         "required": [
           "payment_type"
-        ]
+        ],
+        "title": "Process Checkout"
       },
       "CheckoutSuccess": {
+        "description": "Checkout response returned after a successful processing attempt.",
         "allOf": [
           {
             "$ref": "#/components/schemas/Checkout"
@@ -6341,7 +6293,8 @@
               }
             }
           }
-        ]
+        ],
+        "title": "Checkout Success"
       },
       "CheckoutAccepted": {
         "description": "3DS Response",
@@ -6394,9 +6347,11 @@
               }
             }
           }
-        }
+        },
+        "title": "Checkout Accepted"
       },
       "Customer": {
+        "description": "Saved customer details.",
         "type": "object",
         "properties": {
           "customer_id": {
@@ -6425,9 +6380,48 @@
             "description": "Platform code for the error.",
             "type": "string"
           }
-        }
+        },
+        "title": "Error"
+      },
+      "Problem": {
+        "description": "A RFC 9457 problem details object.\n\nAdditional properties specific to the problem type may be present.\n",
+        "type": "object",
+        "properties": {
+          "type": {
+            "description": "A URI reference that identifies the problem type.",
+            "type": "string",
+            "format": "uri",
+            "example": "https://developer.sumup.com/problem/not-found"
+          },
+          "title": {
+            "description": "A short, human-readable summary of the problem type.",
+            "type": "string",
+            "example": "Requested resource couldn't be found."
+          },
+          "status": {
+            "description": "The HTTP status code generated by the origin server for this occurrence of the problem.",
+            "type": "integer",
+            "example": 404
+          },
+          "detail": {
+            "description": "A human-readable explanation specific to this occurrence of the problem.",
+            "type": "string",
+            "example": "The requested resource doesn't exist or does not belong to you."
+          },
+          "instance": {
+            "description": "A URI reference that identifies the specific occurrence of the problem.",
+            "type": "string",
+            "format": "uri"
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "type"
+        ],
+        "title": "Problem"
       },
       "ErrorExtended": {
+        "description": "Error payload with the invalid parameter reference.",
         "allOf": [
           {
             "$ref": "#/components/schemas/Error"
@@ -6441,7 +6435,8 @@
               }
             }
           }
-        ]
+        ],
+        "title": "Error Extended"
       },
       "ErrorForbidden": {
         "description": "Error message for forbidden requests.",
@@ -6459,7 +6454,8 @@
             "description": "HTTP status code for the error.",
             "type": "string"
           }
-        }
+        },
+        "title": "Error Forbidden"
       },
       "DetailsError": {
         "description": "Error message structure.",
@@ -6478,6 +6474,7 @@
             "type": "number"
           },
           "failed_constraints": {
+            "description": "List of violated validation constraints.",
             "type": "array",
             "items": {
               "type": "object",
@@ -6491,9 +6488,11 @@
               }
             }
           }
-        }
+        },
+        "title": "Details Error"
       },
       "Event": {
+        "description": "Transaction event details.",
         "type": "object",
         "properties": {
           "id": {
@@ -6537,9 +6536,11 @@
             "type": "number",
             "format": "float"
           }
-        }
+        },
+        "title": "Event"
       },
       "FinancialPayouts": {
+        "description": "List of payout summaries.",
         "type": "array",
         "items": {
           "type": "object",
@@ -6606,9 +6607,11 @@
             "description": "Specifies the media type of the related resource.",
             "type": "string"
           }
-        }
+        },
+        "title": "Link"
       },
       "TransactionsHistoryLink": {
+        "description": "Hypermedia link used for transaction history pagination.",
         "type": "object",
         "properties": {
           "rel": {
@@ -6625,7 +6628,8 @@
         "required": [
           "rel",
           "href"
-        ]
+        ],
+        "title": "Transactions History Link"
       },
       "MandatePayload": {
         "description": "Mandate is passed when a card is to be tokenized",
@@ -6655,7 +6659,8 @@
         "required": [
           "type",
           "user_agent"
-        ]
+        ],
+        "title": "Mandate Payload"
       },
       "MandateResponse": {
         "description": "Created mandate",
@@ -6679,7 +6684,8 @@
           "type": "recurrent",
           "status": "active",
           "merchant_code": "MH4H92C7"
-        }
+        },
+        "title": "Mandate Response"
       },
       "PaymentInstrumentResponse": {
         "description": "Payment Instrument Response",
@@ -6743,7 +6749,8 @@
             "type": "VISA"
           },
           "created_at": "2021-03-30T10:06:07.000+00:00"
-        }
+        },
+        "title": "Payment Instrument Response"
       },
       "PersonalDetails": {
         "description": "Personal details for the customer.",
@@ -6784,7 +6791,8 @@
           "address": {
             "$ref": "#/components/schemas/AddressLegacy"
           }
-        }
+        },
+        "title": "Personal Details"
       },
       "Product": {
         "description": "Purchase product.",
@@ -6841,9 +6849,11 @@
             "type": "number",
             "format": "decimal"
           }
-        }
+        },
+        "title": "Product"
       },
       "Receipt": {
+        "description": "Receipt details for a transaction.",
         "type": "object",
         "properties": {
           "transaction_data": {
@@ -6853,9 +6863,11 @@
             "$ref": "#/components/schemas/ReceiptMerchantData"
           },
           "emv_data": {
+            "description": "EMV-specific metadata returned for card-present payments.",
             "type": "object"
           },
           "acquirer_data": {
+            "description": "Acquirer-specific metadata related to the card authorization.",
             "type": "object",
             "properties": {
               "tid": {
@@ -6876,6 +6888,7 @@
         "title": "Receipt"
       },
       "ReceiptEvent": {
+        "description": "Transaction event details as rendered on the receipt.",
         "type": "object",
         "properties": {
           "id": {
@@ -6901,11 +6914,14 @@
             "format": "date-time"
           },
           "receipt_no": {
+            "description": "Receipt number associated with the event.",
             "type": "string"
           }
-        }
+        },
+        "title": "Receipt Event"
       },
       "ReceiptCard": {
+        "description": "Payment card details displayed on the receipt.",
         "type": "object",
         "properties": {
           "last_4_digits": {
@@ -6916,13 +6932,15 @@
             "description": "Card Scheme.",
             "type": "string"
           }
-        }
+        },
+        "title": "Receipt Card"
       },
       "ReceiptMerchantData": {
         "description": "Receipt merchant data",
         "type": "object",
         "properties": {
           "merchant_profile": {
+            "description": "Merchant profile details displayed on the receipt.",
             "type": "object",
             "properties": {
               "merchant_code": {
@@ -6964,9 +6982,11 @@
             }
           },
           "locale": {
+            "description": "Locale used for rendering localized receipt fields.",
             "type": "string"
           }
-        }
+        },
+        "title": "Receipt Merchant Data"
       },
       "ReceiptTransaction": {
         "description": "Transaction information.",
@@ -7122,7 +7142,8 @@
             "description": "Receipt number",
             "type": "string"
           }
-        }
+        },
+        "title": "Receipt Transaction"
       },
       "TransactionEvent": {
         "description": "Details of a transaction event.",
@@ -7166,7 +7187,8 @@
             "format": "date-time",
             "example": "2020-05-25T10:49:42.784Z"
           }
-        }
+        },
+        "title": "Transaction Event"
       },
       "TransactionBase": {
         "description": "Details of the transaction.",
@@ -7215,9 +7237,11 @@
             "type": "integer",
             "minimum": 1
           }
-        }
+        },
+        "title": "Transaction Base"
       },
       "TransactionCheckoutInfo": {
+        "description": "Checkout-specific fields associated with a transaction.",
         "type": "object",
         "properties": {
           "merchant_code": {
@@ -7251,9 +7275,11 @@
             "format": "int64",
             "example": 1763892018
           }
-        }
+        },
+        "title": "Transaction Checkout Info"
       },
       "TransactionMixinHistory": {
+        "description": "Additional transaction fields used by history and detailed views.",
         "type": "object",
         "properties": {
           "product_summary": {
@@ -7277,9 +7303,11 @@
               "ACCELERATED_INSTALLMENT"
             ]
           }
-        }
+        },
+        "title": "Transaction Mixin History"
       },
       "TransactionHistory": {
+        "description": "Transaction entry returned in history listing responses.",
         "allOf": [
           {
             "$ref": "#/components/schemas/TransactionBase"
@@ -7337,7 +7365,8 @@
               }
             }
           }
-        ]
+        ],
+        "title": "Transaction History"
       },
       "PaymentType": {
         "description": "Payment type used for the transaction.",
@@ -7354,7 +7383,8 @@
           "DIRECT_DEBIT",
           "APM",
           "UNKNOWN"
-        ]
+        ],
+        "title": "Payment Type"
       },
       "EntryMode": {
         "description": "Entry mode of the payment details.",
@@ -7386,7 +7416,8 @@
           "google pay",
           "paypal",
           "na"
-        ]
+        ],
+        "title": "Entry Mode"
       },
       "CardType": {
         "description": "Issuing card network of the payment card used for the transaction.",
@@ -7416,9 +7447,11 @@
           "VPAY",
           "VR",
           "UNKNOWN"
-        ]
+        ],
+        "title": "Card Type"
       },
       "TransactionFull": {
+        "description": "Full transaction resource with checkout, payout, and event details.",
         "allOf": [
           {
             "$ref": "#/components/schemas/TransactionBase"
@@ -7635,7 +7668,8 @@
               }
             }
           }
-        ]
+        ],
+        "title": "Transaction Full"
       },
       "Currency": {
         "description": "Three-letter [ISO4217](https://en.wikipedia.org/wiki/ISO_4217) code of the currency for the amount. Currently supported currency values are enumerated above.",
@@ -7658,7 +7692,8 @@
           "RON",
           "SEK",
           "USD"
-        ]
+        ],
+        "title": "Currency"
       },
       "EventType": {
         "description": "Type of the transaction event.",
@@ -7668,7 +7703,8 @@
           "CHARGE_BACK",
           "REFUND",
           "PAYOUT_DEDUCTION"
-        ]
+        ],
+        "title": "Event Type"
       },
       "EventStatus": {
         "description": "Status of the transaction event.",
@@ -7680,35 +7716,41 @@
           "REFUNDED",
           "SUCCESSFUL",
           "PAID_OUT"
-        ]
+        ],
+        "title": "Event Status"
       },
       "EventID": {
         "description": "Unique ID of the transaction event.",
         "type": "integer",
-        "format": "int64"
+        "format": "int64",
+        "title": "Event ID"
       },
       "HorizontalAccuracy": {
         "description": "Indication of the precision of the geographical position received from the payment terminal.",
         "type": "number",
-        "format": "float"
+        "format": "float",
+        "title": "Horizontal Accuracy"
       },
       "Lat": {
         "description": "Latitude value from the coordinates of the payment location (as received from the payment terminal reader).",
         "type": "number",
         "format": "float",
         "maximum": 90,
-        "minimum": 0
+        "minimum": 0,
+        "title": "Latitude"
       },
       "Lon": {
         "description": "Longitude value from the coordinates of the payment location (as received from the payment terminal reader).",
         "type": "number",
         "format": "float",
         "maximum": 180,
-        "minimum": 0
+        "minimum": 0,
+        "title": "Longitude"
       },
       "TransactionID": {
         "description": "Unique ID of the transaction.",
-        "type": "string"
+        "type": "string",
+        "title": "Transaction ID"
       },
       "Permissions": {
         "description": "Permissions assigned to an operator or user.",
@@ -7795,42 +7837,6 @@
         "type": "object",
         "example": {},
         "additionalProperties": true
-      },
-      "Problem": {
-        "description": "A RFC 9457 problem details object.\n\nAdditional properties specific to the problem type may be present.\n",
-        "type": "object",
-        "properties": {
-          "type": {
-            "description": "A URI reference that identifies the problem type.",
-            "type": "string",
-            "format": "uri",
-            "example": "https://developer.sumup.com/problem/not-found"
-          },
-          "title": {
-            "description": "A short, human-readable summary of the problem type.",
-            "type": "string",
-            "example": "Requested resource couldn't be found."
-          },
-          "status": {
-            "description": "The HTTP status code generated by the origin server for this occurrence of the problem.",
-            "type": "integer",
-            "example": 404
-          },
-          "detail": {
-            "description": "A human-readable explanation specific to this occurrence of the problem.",
-            "type": "string",
-            "example": "The requested resource doesn't exist or does not belong to you."
-          },
-          "instance": {
-            "description": "A URI reference that identifies the specific occurrence of the problem.",
-            "type": "string",
-            "format": "uri"
-          }
-        },
-        "additionalProperties": true,
-        "required": [
-          "type"
-        ]
       },
       "Address": {
         "description": "An address somewhere in the world. The address fields used depend on the country conventions. For example, in Great Britain, `city` is `post_town`. In the United States, the top-level administrative unit used in addresses is `state`, whereas in Chile it's `region`.\nWhether an address is valid or not depends on whether the locally required fields are present. Fields not supported in a country will be ignored.",
@@ -9228,33 +9234,6 @@
         ],
         "title": "CreateReaderTerminateUnprocessableEntity"
       },
-      "BadGateway": {
-        "description": "502 Bad Gateway",
-        "type": "object",
-        "properties": {
-          "errors": {
-            "type": "object",
-            "properties": {
-              "detail": {
-                "description": "Fuller message giving context to error",
-                "type": "string"
-              }
-            },
-            "required": [
-              "detail"
-            ]
-          }
-        },
-        "example": {
-          "errors": {
-            "detail": "Bad Gateway"
-          }
-        },
-        "required": [
-          "errors"
-        ],
-        "title": "BadGateway"
-      },
       "CreateReaderTerminateError": {
         "description": "Error description",
         "type": "object",
@@ -9346,33 +9325,6 @@
         ],
         "title": "CreateReaderCheckoutResponse"
       },
-      "GatewayTimeout": {
-        "description": "504 Gateway Timeout",
-        "type": "object",
-        "properties": {
-          "errors": {
-            "type": "object",
-            "properties": {
-              "detail": {
-                "description": "Fuller message giving context to error",
-                "type": "string"
-              }
-            },
-            "required": [
-              "detail"
-            ]
-          }
-        },
-        "example": {
-          "errors": {
-            "detail": "Gateway Timeout"
-          }
-        },
-        "required": [
-          "errors"
-        ],
-        "title": "GatewayTimeout"
-      },
       "Unauthorized": {
         "description": "401 Unauthorized",
         "type": "object",
@@ -9385,40 +9337,12 @@
                 "type": "string"
               },
               "type": {
-                "description": "Key indicating type of error",
+                "description": "Key indicating type of error. Present only for typed 401 responses (e.g. invalid token, invalid password). Absent for generic unauthorized responses.",
                 "type": "string",
                 "enum": [
                   "INVALID_ACCESS_TOKEN",
                   "INVALID_PASSWORD"
                 ]
-              }
-            },
-            "required": [
-              "type"
-            ]
-          }
-        },
-        "example": {
-          "errors": {
-            "detail": "Invalid or expired access token",
-            "type": "INVALID_ACCESS_TOKEN"
-          }
-        },
-        "required": [
-          "errors"
-        ],
-        "title": "Unauthorized"
-      },
-      "InternalServerError": {
-        "description": "500 Internal Server Error",
-        "type": "object",
-        "properties": {
-          "errors": {
-            "type": "object",
-            "properties": {
-              "detail": {
-                "description": "Fuller message giving context to error",
-                "type": "string"
               }
             },
             "required": [
@@ -9428,13 +9352,13 @@
         },
         "example": {
           "errors": {
-            "detail": "Internal Server Error"
+            "detail": "Unauthorized"
           }
         },
         "required": [
           "errors"
         ],
-        "title": "InternalServerError"
+        "title": "Unauthorized"
       },
       "CreateReaderCheckoutRequest": {
         "description": "Reader Checkout",
@@ -9698,7 +9622,8 @@
             "description": "Country native name",
             "type": "string"
           }
-        }
+        },
+        "title": "Country Details"
       },
       "TimeoffsetDetails": {
         "description": "TimeOffset Details",
@@ -9716,7 +9641,8 @@
             "description": "Daylight Saving Time",
             "type": "boolean"
           }
-        }
+        },
+        "title": "Time Offset Details"
       },
       "AddressPayloadLegacy": {
         "description": "Personal address",
@@ -9772,7 +9698,8 @@
           "city",
           "country",
           "post_code"
-        ]
+        ],
+        "title": "Address Payload Legacy"
       },
       "BusinessOwners": {
         "description": "Business owners information.",
@@ -9805,7 +9732,8 @@
               "type": "number"
             }
           }
-        }
+        },
+        "title": "Business Owners"
       },
       "AddressWithDetails": {
         "description": "Details of the registered address.",
@@ -9869,9 +9797,11 @@
             "description": "undefined",
             "type": "string"
           }
-        }
+        },
+        "title": "Address With Details"
       },
       "BankAccountPayload": {
+        "description": "Bank account details used when creating or updating a payout account.",
         "type": "object",
         "properties": {
           "bank_code": {
@@ -9934,7 +9864,8 @@
           "account_holder_name",
           "iban",
           "swift"
-        ]
+        ],
+        "title": "Bank Account Payload"
       },
       "DoingBusinessAsPayloadLegacy": {
         "description": "Doing Business As information",
@@ -9963,7 +9894,8 @@
           "address": {
             "$ref": "#/components/schemas/AddressPayloadLegacy"
           }
-        }
+        },
+        "title": "Doing Business As Payload Legacy"
       },
       "MerchantProfilePayload": {
         "description": "Account's merchant profile",
@@ -10009,6 +9941,7 @@
             "$ref": "#/components/schemas/AddressPayloadLegacy"
           },
           "doing_business_as": {
+            "description": "Doing-business-as details associated with the merchant profile.",
             "type": "object",
             "properties": {
               "business_name": {
@@ -10050,9 +9983,11 @@
           "merchant_category_code",
           "company_name",
           "address"
-        ]
+        ],
+        "title": "Merchant Profile Payload"
       },
       "MerchantSettingsPayload": {
+        "description": "Merchant payout and settlement configuration.",
         "type": "object",
         "properties": {
           "payout_period": {
@@ -10091,7 +10026,8 @@
             "description": "Gross settlement",
             "type": "boolean"
           }
-        }
+        },
+        "title": "Merchant Settings Payload"
       },
       "PaymentInstrumentCard": {
         "description": "Details of the payment card that is saved as a payment instrument.",
@@ -10124,7 +10060,8 @@
           "active",
           "type",
           "card"
-        ]
+        ],
+        "title": "Payment Instrument Card"
       },
       "PersonalProfilePayloadLegacy": {
         "description": "Account's personal profile.",
@@ -10160,9 +10097,11 @@
           "last_name",
           "date_of_birth",
           "address"
-        ]
+        ],
+        "title": "Personal Profile Payload Legacy"
       },
       "BankAccount": {
+        "description": "Bank account details used for merchant payouts.",
         "type": "object",
         "properties": {
           "bank_code": {
@@ -10194,6 +10133,7 @@
             "type": "string"
           },
           "account_holder_name": {
+            "description": "Name of the bank account holder.",
             "type": "string"
           },
           "status": {
@@ -10212,7 +10152,8 @@
             "description": "Bank name",
             "type": "string"
           }
-        }
+        },
+        "title": "Bank Account"
       },
       "PersonalProfileLegacy": {
         "description": "Account's personal profile.",
@@ -10238,9 +10179,11 @@
             "$ref": "#/components/schemas/AddressWithDetails"
           },
           "complete": {
+            "description": "Indicates whether the profile data is complete.",
             "type": "boolean"
           }
-        }
+        },
+        "title": "Personal Profile Legacy"
       },
       "EntryModeFilter": {
         "description": "Entry mode value accepted by the `entry_modes[]` filter.",
@@ -10272,7 +10215,8 @@
           "MOTO",
           "CONTACTLESS_MAGSTRIPE",
           "N/A"
-        ]
+        ],
+        "title": "Entry Mode Filter"
       }
     },
     "examples": {
@@ -10309,7 +10253,7 @@
     },
     "requestBodies": {
       "BankAccounts": {
-        "description": "",
+        "description": "Bank account details to be created or updated.",
         "content": {
           "application/json": {
             "schema": {
@@ -10320,7 +10264,7 @@
       },
       "CheckoutCreate": {
         "required": true,
-        "description": "",
+        "description": "Details for creating a checkout resource.",
         "content": {
           "application/json": {
             "schema": {
@@ -10473,7 +10417,7 @@
       },
       "CustomerUpdate": {
         "required": true,
-        "description": "",
+        "description": "Customer fields to update.",
         "content": {
           "application/json": {
             "schema": {
@@ -10488,7 +10432,7 @@
         }
       },
       "DoingBusinessAsLegacy": {
-        "description": "",
+        "description": "Doing-business-as details for merchant profile updates.",
         "content": {
           "application/json": {
             "schema": {
@@ -10498,7 +10442,7 @@
         }
       },
       "MerchantProfile": {
-        "description": "",
+        "description": "Merchant profile fields to create or update.",
         "content": {
           "application/json": {
             "schema": {
@@ -10508,7 +10452,7 @@
         }
       },
       "MerchantSettings": {
-        "description": "",
+        "description": "Merchant settings fields to create or update.",
         "content": {
           "application/json": {
             "schema": {
@@ -10518,7 +10462,7 @@
         }
       },
       "PaymentInstrument": {
-        "description": "",
+        "description": "Payment instrument details.",
         "content": {
           "application/json": {
             "schema": {
@@ -10528,7 +10472,7 @@
         }
       },
       "PersonalProfile": {
-        "description": "",
+        "description": "Personal profile details to create or update.",
         "content": {
           "application/json": {
             "schema": {
@@ -10538,7 +10482,7 @@
         }
       },
       "Refund": {
-        "description": "",
+        "description": "Optional amount for partial refunds.",
         "content": {
           "application/json": {
             "schema": {
@@ -10558,7 +10502,7 @@
     },
     "responses": {
       "Checkout": {
-        "description": "Created",
+        "description": "Returns the created checkout resource.",
         "content": {
           "application/json": {
             "schema": {
@@ -10680,7 +10624,7 @@
         }
       },
       "CheckoutList": {
-        "description": "OK",
+        "description": "Returns a list of checkout resources.",
         "content": {
           "application/json": {
             "schema": {
@@ -10693,7 +10637,7 @@
         }
       },
       "CheckoutRetrieve": {
-        "description": "OK",
+        "description": "Returns the requested checkout resource.",
         "content": {
           "application/json": {
             "schema": {
@@ -10703,7 +10647,7 @@
         }
       },
       "CheckoutProcess": {
-        "description": "OK",
+        "description": "Returns the checkout resource after a processing attempt.",
         "content": {
           "application/json": {
             "schema": {
@@ -10868,7 +10812,7 @@
         }
       },
       "CheckoutProcessAccepted": {
-        "description": "Accepted",
+        "description": "Returns the next required action for asynchronous checkout processing.",
         "content": {
           "application/json": {
             "schema": {
@@ -10878,7 +10822,7 @@
         }
       },
       "Customer": {
-        "description": "Created",
+        "description": "Returns the customer resource.",
         "content": {
           "application/json": {
             "schema": {
@@ -10888,7 +10832,7 @@
         }
       },
       "PaymentInstrumentList": {
-        "description": "OK",
+        "description": "Returns the list of saved payment instruments for the customer.",
         "content": {
           "application/json": {
             "schema": {
@@ -10901,7 +10845,7 @@
         }
       },
       "Transaction": {
-        "description": "OK",
+        "description": "Returns the requested transaction resource.",
         "content": {
           "application/json": {
             "schema": {
@@ -10911,35 +10855,24 @@
         }
       },
       "NoBodyResponse": {
-        "description": "No Content"
+        "description": "Returns an empty response body when the operation succeeds."
       },
       "ErrorNotAuthorized": {
-        "description": "Unauthorized",
+        "description": "The request is not authorized.",
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/Error"
+              "$ref": "#/components/schemas/Problem"
             },
             "examples": {
-              "Invalid_Token": {
-                "description": "The access token is invalid or has expired.",
+              "Problem_Details": {
+                "description": "Unauthorized response returned by API gateway.",
                 "value": {
-                  "error_message": "invalid access token",
-                  "error_code": "NOT_AUTHORIZED"
-                }
-              },
-              "Not_Authorized_Token": {
-                "description": "The access token is valid but the application is not authorized.",
-                "value": {
-                  "error_message": "NOT_AUTHORIZED",
-                  "error_code": "NOT_AUTHORIZED"
-                }
-              },
-              "Missing_Token": {
-                "description": "No access token is provided.",
-                "value": {
-                  "message": "access token required",
-                  "error_code": "NOT_AUTHORIZED"
+                  "detail": "Unauthorized.",
+                  "status": 401,
+                  "title": "Unauthorized",
+                  "trace_id": "3c77294349d3b5647ea2d990f0d8f017",
+                  "type": "https://developer.sumup.com/problem/unauthorized"
                 }
               }
             }
@@ -10947,7 +10880,7 @@
         }
       },
       "ErrorForbidden": {
-        "description": "Forbidden",
+        "description": "The request is authenticated but not permitted for this operation.",
         "content": {
           "application/json": {
             "schema": {
@@ -10967,7 +10900,7 @@
         }
       },
       "ErrorNotFound": {
-        "description": "Not Found",
+        "description": "The requested resource does not exist.",
         "content": {
           "application/json": {
             "schema": {
@@ -10986,7 +10919,7 @@
         }
       },
       "ErrorConflict": {
-        "description": "Conflict",
+        "description": "The request conflicts with the current state of the resource.",
         "content": {
           "application/json": {
             "schema": {
