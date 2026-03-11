@@ -13,10 +13,8 @@ const getJsonMediaType = (content?: OpenAPIV3_1.ContentObject) => {
 
   const mediaTypes = Object.keys(content);
   const selectedMediaType =
-    mediaTypes.find((mediaType) => mediaType === "application/json") ||
-    mediaTypes.find(
-      (mediaType) => mediaType.endsWith("+json") || mediaType.includes("/json"),
-    );
+    mediaTypes.find((mediaType) => mediaType === "application/problem+json") ||
+    mediaTypes.find((mediaType) => mediaType === "application/json");
 
   if (!selectedMediaType) {
     return null;
