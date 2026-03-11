@@ -1,4 +1,5 @@
-import { existsSync, mkdirSync, writeFile } from "node:fs";
+import { existsSync, mkdirSync } from "node:fs";
+import { writeFile } from "node:fs/promises";
 import { dirname } from "node:path";
 import { Biome, Distribution } from "@biomejs/js-api";
 
@@ -43,21 +44,31 @@ export class FileWriter {
       },
     });
 
+    // Keep formatter parity with `biome check --write`: initial format,
+    // apply safe lint fixes (including import organization), then format again.
     const formatted = biome.formatContent(projectKey, this.buf, {
+      filePath: this.filePath,
+    });
+    const linted = biome.lintContent(projectKey, formatted.content, {
+      filePath: this.filePath,
+      fixFileMode: "safeFixes",
+    });
+    const reformatted = biome.formatContent(projectKey, linted.content, {
       filePath: this.filePath,
     });
 
     if (formatted.diagnostics.length > 0) {
       console.error(`formatting ${this.filePath} failed`);
     }
+    if (linted.diagnostics.length > 0) {
+      console.error(`linting ${this.filePath} failed`);
+    }
+    if (reformatted.diagnostics.length > 0) {
+      console.error(`re-formatting ${this.filePath} failed`);
+    }
 
-    writeFile(this.filePath, formatted.content, { flag: "w+" }, (err) => {
-      if (err) {
-        console.error(err);
-      } else {
-        console.info("formatted!");
-      }
-    });
+    await writeFile(this.filePath, reformatted.content, { flag: "w+" });
+    console.info("formatted and lint-fixed!");
   }
 }
 
