@@ -6,19 +6,23 @@ import { VERSION } from "./version";
 
 export type APIConfig = {
   apiKey?: string;
-  baseParams?: Core.FetchParams;
   host?: string;
+  baseParams?: Core.RequestOptions;
+  maxRetries?: number;
+  timeout?: number;
 };
 
 export class HTTPClient {
   host: string;
   apiKey?: string;
-  baseParams: Core.FetchParams;
+  baseParams: Core.RequestOptions;
 
   constructor({
     apiKey,
     host = "https://api.sumup.com",
     baseParams = {},
+    maxRetries = 0,
+    timeout,
   }: APIConfig = {}) {
     this.host = host;
     this.apiKey = apiKey;
@@ -32,12 +36,12 @@ export class HTTPClient {
     if (apiKey) {
       headers.append("Authorization", `Bearer ${apiKey}`);
     }
-    this.baseParams = mergeParams({ headers }, baseParams);
+    this.baseParams = mergeParams({ headers, maxRetries, timeout }, baseParams);
   }
 
   public get<R, E = Core.APIError<unknown>>({
     ...params
-  }: Omit<Core.FullParams, "method">): Core.APIPromise<R, E> {
+  }: Omit<Core.FullRequestOptions, "method">): Core.APIPromise<R, E> {
     return this.request<R, E>({
       method: "GET",
       ...params,
@@ -46,7 +50,7 @@ export class HTTPClient {
 
   public post<R, E = Core.APIError<unknown>>({
     ...params
-  }: Omit<Core.FullParams, "method">): Core.APIPromise<R, E> {
+  }: Omit<Core.FullRequestOptions, "method">): Core.APIPromise<R, E> {
     return this.request<R, E>({
       method: "POST",
       ...params,
@@ -55,16 +59,16 @@ export class HTTPClient {
 
   public put<R, E = Core.APIError<unknown>>({
     ...params
-  }: Omit<Core.FullParams, "method">): Core.APIPromise<R, E> {
+  }: Omit<Core.FullRequestOptions, "method">): Core.APIPromise<R, E> {
     return this.request<R, E>({
-      method: "put",
+      method: "PUT",
       ...params,
     });
   }
 
   public patch<R, E = Core.APIError<unknown>>({
     ...params
-  }: Omit<Core.FullParams, "method">): Core.APIPromise<R, E> {
+  }: Omit<Core.FullRequestOptions, "method">): Core.APIPromise<R, E> {
     return this.request<R, E>({
       method: "PATCH",
       ...params,
@@ -73,7 +77,7 @@ export class HTTPClient {
 
   public delete<R, E = Core.APIError<unknown>>({
     ...params
-  }: Omit<Core.FullParams, "method">): Core.APIPromise<R, E> {
+  }: Omit<Core.FullRequestOptions, "method">): Core.APIPromise<R, E> {
     return this.request<R, E>({
       method: "DELETE",
       ...params,
@@ -85,8 +89,8 @@ export class HTTPClient {
     path,
     query,
     host: hostOverride,
-    ...fetchParams
-  }: Core.FullParams): Core.APIPromise<T, E> {
+    ...requestOptions
+  }: Core.FullRequestOptions): Core.APIPromise<T, E> {
     const host = hostOverride || this.host;
     const url = new URL(
       host +
@@ -95,27 +99,70 @@ export class HTTPClient {
     if (typeof query === "object" && query && !Array.isArray(query)) {
       url.search = this.stringifyQuery(query as Record<string, unknown>);
     }
+    const mergedOptions = mergeParams(this.baseParams, requestOptions);
+    const { maxRetries, timeout, ...fetchParams } = mergedOptions;
     const init = {
-      ...mergeParams(this.baseParams, fetchParams),
+      ...fetchParams,
       body: JSON.stringify(body),
     };
-    return new Core.APIPromise<T, E>(this.do<E>(url, init));
+    return new Core.APIPromise<T, E>(
+      this.do<E>(url, init, {
+        maxRetries,
+        signal: fetchParams.signal,
+        timeout,
+      }),
+    );
   }
 
-  protected async do<E>(input: URL, init: RequestInit): Promise<Response> {
-    const res = await fetch(input, init);
+  protected async do<E>(
+    input: URL,
+    init: RequestInit,
+    options: {
+      maxRetries?: number;
+      signal?: AbortSignal | null;
+      timeout?: number;
+    },
+  ): Promise<Response> {
+    const maxRetries = options.maxRetries ?? 0;
 
-    if (!res.ok) {
-      const contentType = res.headers.get("content-type");
-      const isJSON = contentType?.includes("json");
-      throw new Core.APIError(
-        res.status,
-        isJSON ? ((await res.json()) as E) : await res.text(),
-        res,
+    for (let attempt = 0; ; attempt++) {
+      const { cleanup, didTimeout, signal } = withTimeoutSignal(
+        options.signal,
+        options.timeout,
       );
-    }
 
-    return res;
+      try {
+        const res = await fetch(input, { ...init, signal });
+
+        if (!res.ok) {
+          if (attempt < maxRetries && isRetryableStatus(res.status)) {
+            continue;
+          }
+
+          const contentType = res.headers.get("content-type");
+          const isJSON = contentType?.includes("json");
+          throw new Core.APIError(
+            res.status,
+            isJSON ? ((await res.json()) as E) : await res.text(),
+            res,
+          );
+        }
+
+        return res;
+      } catch (error) {
+        if (attempt < maxRetries && isRetryableError(error, options.signal)) {
+          continue;
+        }
+        if (didTimeout()) {
+          throw new Core.SumUpError(
+            `Request timed out after ${options.timeout}ms.`,
+          );
+        }
+        throw error;
+      } finally {
+        cleanup();
+      }
+    }
   }
 
   protected stringifyQuery(query: Record<string, unknown>): string {
@@ -146,14 +193,102 @@ export class HTTPClient {
 }
 
 export function mergeParams(
-  a: Core.FetchParams,
-  b: Core.FetchParams,
-): Core.FetchParams {
+  a: Core.RequestOptions,
+  b: Core.RequestOptions,
+): Core.RequestOptions {
+  const {
+    authorization: defaultAuthorization,
+    headers: defaultHeaders,
+    ...defaultParams
+  } = a;
+  const {
+    authorization: overrideAuthorization,
+    headers: overrideHeaders,
+    ...overrideParams
+  } = b;
   // calling `new Headers()` normalizes `HeadersInit`, which could be a Headers
   // object, a plain object, or an array of tuples
-  const headers = new Headers(a.headers);
-  for (const [key, value] of new Headers(b.headers).entries()) {
+  const headers = new Headers(defaultHeaders);
+  for (const [key, value] of new Headers(overrideHeaders).entries()) {
     headers.set(key, value);
   }
-  return { ...a, ...b, headers };
+  const authorization = overrideAuthorization ?? defaultAuthorization;
+  if (authorization) {
+    headers.set("Authorization", authorization);
+  }
+
+  return { ...defaultParams, ...overrideParams, headers };
+}
+
+function isRetryableStatus(status: number): boolean {
+  return status === 408 || status === 409 || status === 429 || status >= 500;
+}
+
+function isRetryableError(
+  error: unknown,
+  signal?: AbortSignal | null,
+): boolean {
+  if (signal?.aborted) {
+    return false;
+  }
+  return error instanceof TypeError || isAbortError(error);
+}
+
+function isAbortError(error: unknown): boolean {
+  return error instanceof DOMException
+    ? error.name === "AbortError"
+    : error instanceof Error && error.name === "AbortError";
+}
+
+function withTimeoutSignal(
+  signal?: AbortSignal | null,
+  timeout?: number,
+): {
+  cleanup: () => void;
+  didTimeout: () => boolean;
+  signal: AbortSignal | undefined;
+} {
+  if (!signal && typeof timeout === "undefined") {
+    return {
+      cleanup: () => {},
+      didTimeout: () => false,
+      signal: undefined,
+    };
+  }
+
+  const controller = new AbortController();
+  let timedOut = false;
+
+  const onAbort = () => {
+    controller.abort(signal?.reason);
+  };
+
+  if (signal) {
+    if (signal.aborted) {
+      onAbort();
+    } else {
+      signal.addEventListener("abort", onAbort, { once: true });
+    }
+  }
+
+  const timeoutId =
+    typeof timeout === "number"
+      ? setTimeout(() => {
+          timedOut = true;
+          controller.abort(
+            new Core.SumUpError(`Request timed out after ${timeout}ms.`),
+          );
+        }, timeout)
+      : undefined;
+
+  return {
+    cleanup: () => {
+      if (typeof timeoutId !== "undefined") {
+        clearTimeout(timeoutId);
+      }
+      signal?.removeEventListener("abort", onAbort);
+    },
+    didTimeout: () => timedOut,
+    signal: controller.signal,
+  };
 }

@@ -1,7 +1,8 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { SumUp } from "../src";
 import { API_VERSION } from "../src/api-version";
+import { mergeParams } from "../src/client";
 import { buildRuntimeHeaders } from "../src/runtime";
 import { VERSION } from "../src/version";
 
@@ -41,5 +42,97 @@ describe("query string", () => {
         "include": ["1", "2"],
       }),
     ).toEqual("a=b&foo=false&x=&include=1&include=2");
+  });
+});
+
+describe("merge params", () => {
+  it("allows per-request authorization to override the default client header", () => {
+    const params = mergeParams(
+      {
+        headers: {
+          Authorization: "Bearer default-token",
+        },
+      },
+      {
+        authorization: "Bearer request-token",
+      },
+    );
+
+    const headers = new Headers(params.headers);
+    expect(headers.get("authorization")).toBe("Bearer request-token");
+  });
+});
+
+afterEach(() => {
+  vi.restoreAllMocks();
+  vi.useRealTimers();
+});
+
+describe("request options", () => {
+  it("retries a request when the per-call override allows it", async () => {
+    const fetchMock = vi
+      .fn()
+      .mockRejectedValueOnce(new TypeError("network"))
+      .mockResolvedValueOnce(
+        new Response(JSON.stringify({ id: "checkout-id" }), {
+          headers: {
+            "content-type": "application/json",
+          },
+          status: 200,
+        }),
+      );
+    vi.stubGlobal("fetch", fetchMock);
+
+    const client = new SumUp({ maxRetries: 0 });
+    const data = await client.checkouts.get("checkout-id", { maxRetries: 1 });
+
+    expect(data).toEqual({ id: "checkout-id" });
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+  });
+
+  it("aborts a request when the per-call timeout is exceeded", async () => {
+    vi.useFakeTimers();
+
+    const fetchMock = vi.fn((_input: URL | RequestInfo, init?: RequestInit) => {
+      return new Promise<Response>((_resolve, reject) => {
+        const signal = init?.signal;
+        signal?.addEventListener(
+          "abort",
+          () => {
+            reject(signal.reason ?? new DOMException("Aborted", "AbortError"));
+          },
+          { once: true },
+        );
+      });
+    });
+    vi.stubGlobal("fetch", fetchMock);
+
+    const client = new SumUp();
+    const request = client.checkouts.get("checkout-id", { timeout: 10 });
+    const assertion = expect(request).rejects.toThrow(
+      "Request timed out after 10ms.",
+    );
+
+    await vi.advanceTimersByTimeAsync(10);
+
+    await assertion;
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe("generated signatures", () => {
+  it("keeps request options in the final argument position", () => {
+    const client = new SumUp();
+    const getSpy = vi
+      .spyOn(client, "get")
+      .mockReturnValue({} as ReturnType<typeof client.get>);
+
+    client.checkouts.list(undefined, { timeout: 25 });
+
+    expect(getSpy).toHaveBeenCalledWith({
+      path: "/v0.1/checkouts",
+      query: undefined,
+      timeout: 25,
+    });
   });
 });

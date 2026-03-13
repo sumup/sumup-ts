@@ -5,12 +5,6 @@ const client = new SumUp({
 });
 
 async function main() {
-  const merchant = await client.merchant.get();
-  console.info({ merchant });
-
-  const merchant2 = await client.merchant.get().withResponse();
-  console.info({ merchant2 });
-
   const merchantCode = process.env.SUMUP_MERCHANT_CODE;
   if (!merchantCode) {
     console.warn(
@@ -18,6 +12,12 @@ async function main() {
     );
     return;
   }
+
+  const merchant = await client.merchants.get(merchantCode);
+  console.info({ merchant });
+
+  const merchant2 = await client.merchants.get(merchantCode).withResponse();
+  console.info({ merchant2 });
 
   const request: CheckoutCreateRequest = {
     amount: 19,
