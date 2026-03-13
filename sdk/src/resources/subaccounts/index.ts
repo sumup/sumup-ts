@@ -41,8 +41,8 @@ export class Subaccounts extends APIResource {
   listSubAccounts(
     query?: ListSubAccountsQueryParams,
     options?: RequestOptions,
-  ): APIPromise<Operator[], unknown> {
-    return this._client.get<Operator[], unknown>({
+  ): APIPromise<Operator[], Problem> {
+    return this._client.get<Operator[], Problem>({
       path: `/v0.1/me/accounts`,
       query,
       ...options,
@@ -69,8 +69,8 @@ export class Subaccounts extends APIResource {
   compatGetOperator(
     operatorId: number,
     options?: RequestOptions,
-  ): APIPromise<Operator, unknown> {
-    return this._client.get<Operator, unknown>({
+  ): APIPromise<Operator, Problem> {
+    return this._client.get<Operator, Problem>({
       path: `/v0.1/me/accounts/${operatorId}`,
       ...options,
     });
