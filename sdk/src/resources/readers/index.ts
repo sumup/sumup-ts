@@ -31,8 +31,8 @@ export class Readers extends APIResource {
   list(
     merchantCode: string,
     options?: RequestOptions,
-  ): APIPromise<ListReadersResponse, unknown> {
-    return this._client.get<ListReadersResponse, unknown>({
+  ): APIPromise<ListReadersResponse, Problem> {
+    return this._client.get<ListReadersResponse, Problem>({
       path: `/v0.1/merchants/${merchantCode}/readers`,
       ...options,
     });
