@@ -70,7 +70,7 @@ example, you can override authorization, timeout, retries, or headers for a
 single request:
 
 ```ts
-await client.checkouts.list({
+await client.checkouts.list(undefined, {
   timeout: 5_000,
 });
 

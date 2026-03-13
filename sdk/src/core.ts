@@ -41,26 +41,6 @@ export type FullRequestOptions = RequestOptions & {
   method?: HTTPMethod;
 };
 
-const requestOptionKeys = new Set<keyof RequestOptions>([
-  "authorization",
-  "headers",
-  "host",
-  "maxRetries",
-  "signal",
-  "timeout",
-]);
-
-export function isRequestOptions(value: unknown): value is RequestOptions {
-  return (
-    typeof value === "object" &&
-    value !== null &&
-    !Array.isArray(value) &&
-    Object.keys(value).every((key) =>
-      requestOptionKeys.has(key as keyof RequestOptions),
-    )
-  );
-}
-
 export class SumUpError extends Error {}
 
 export class APIError<T> extends SumUpError {

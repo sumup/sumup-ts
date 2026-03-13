@@ -120,14 +120,14 @@ describe("request options", () => {
   });
 });
 
-describe("generated overloads", () => {
-  it("allows optional-query methods to accept request options as the second argument", () => {
+describe("generated signatures", () => {
+  it("keeps request options in the final argument position", () => {
     const client = new SumUp();
     const getSpy = vi
       .spyOn(client, "get")
       .mockReturnValue({} as ReturnType<typeof client.get>);
 
-    client.checkouts.list({ timeout: 25 });
+    client.checkouts.list(undefined, { timeout: 25 });
 
     expect(getSpy).toHaveBeenCalledWith({
       path: "/v0.1/checkouts",
