@@ -46,8 +46,8 @@ const sumup = require('@sumup/sdk')({
   apiKey: 'sup_sk_MvxmLOl0...'
 });
 
-sumup.merchant.get()
-  .then(merchant => console.info(merchant))
+sumup.checkouts.list()
+  .then(checkouts => console.info(checkouts))
   .catch(error => console.error(error));
 ```
 
@@ -60,8 +60,27 @@ const client = new SumUp({
   apiKey: 'sup_sk_MvxmLOl0...',
 });
 
-const merchant = await client.merchant.get();
+const merchantCode = process.env.SUMUP_MERCHANT_CODE!;
+const merchant = await client.merchants.get(merchantCode);
 console.info(merchant);
+```
+
+Per-request options are available as the last argument to any SDK call. For
+example, you can override authorization, timeout, retries, or headers for a
+single request:
+
+```ts
+await client.checkouts.list({
+  timeout: 5_000,
+});
+
+await client.merchants.get(merchantCode, {
+  authorization: `Bearer ${accessToken}`,
+  headers: {
+    "x-request-id": "req_123",
+  },
+  maxRetries: 1,
+});
 ```
 
 ## Examples

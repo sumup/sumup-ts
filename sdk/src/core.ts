@@ -14,21 +14,52 @@ export class APIResource {
 // biome-ignore lint/suspicious/noExplicitAny: any, but only for tests
 type QueryParams = Record<string, any>;
 
+type HTTPMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
+
 /**
- * Params that get passed to `fetch`. This ends up as an optional second
- * argument to each generated request method. Properties are a subset of
- * `RequestInit`.
+ * SDK-specific options that can be passed to any generated request method.
  */
-export type FetchParams = Omit<RequestInit, "body" | "method">;
+export type RequestOptions = {
+  /**
+   * Optional bearer authorization value to apply to the request, for example
+   * `Bearer <access-token>`. When provided, it overrides any default
+   * Authorization header configured on the client.
+   */
+  authorization?: string;
+  headers?: HeadersInit;
+  host?: string;
+  maxRetries?: number;
+  signal?: AbortSignal | null;
+  timeout?: number;
+};
 
 /** All arguments to `request()` */
-export type FullParams = FetchParams & {
+export type FullRequestOptions = RequestOptions & {
   path: string;
   query?: QueryParams;
   body?: unknown;
-  host?: string;
-  method?: string;
+  method?: HTTPMethod;
 };
+
+const requestOptionKeys = new Set<keyof RequestOptions>([
+  "authorization",
+  "headers",
+  "host",
+  "maxRetries",
+  "signal",
+  "timeout",
+]);
+
+export function isRequestOptions(value: unknown): value is RequestOptions {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    !Array.isArray(value) &&
+    Object.keys(value).every((key) =>
+      requestOptionKeys.has(key as keyof RequestOptions),
+    )
+  );
+}
 
 export class SumUpError extends Error {}
 
