@@ -3006,6 +3006,22 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Authentication failed or missing required scope.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                },
+                "example": {
+                  "type": "https://developer.sumup.com/problem/unauthorized",
+                  "title": "Unauthorized",
+                  "status": 401,
+                  "detail": "Authentication credentials are missing or invalid."
+                }
+              }
+            }
           }
         },
         "deprecated": true,
@@ -3094,6 +3110,12 @@
               "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
+                },
+                "example": {
+                  "type": "https://developer.sumup.com/problem/forbidden",
+                  "title": "Forbidden",
+                  "status": 403,
+                  "detail": "You do not have permission to perform this action."
                 }
               }
             }
@@ -3142,6 +3164,22 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Operator"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication failed or missing required scope.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                },
+                "example": {
+                  "type": "https://developer.sumup.com/problem/unauthorized",
+                  "title": "Unauthorized",
+                  "status": 401,
+                  "detail": "Authentication credentials are missing or invalid."
                 }
               }
             }
@@ -3244,6 +3282,12 @@
               "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
+                },
+                "example": {
+                  "type": "https://developer.sumup.com/problem/bad-request",
+                  "title": "Bad Request",
+                  "status": 400,
+                  "detail": "Request validation failed."
                 }
               }
             }
@@ -3403,6 +3447,38 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "Invalid query parameter combination.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                },
+                "example": {
+                  "type": "https://developer.sumup.com/problem/bad-request",
+                  "title": "Bad Request",
+                  "status": 400,
+                  "detail": "Request validation failed."
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication failed or missing required scope.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                },
+                "example": {
+                  "type": "https://developer.sumup.com/problem/unauthorized",
+                  "title": "Unauthorized",
+                  "status": 401,
+                  "detail": "Authentication credentials are missing or invalid."
+                }
+              }
+            }
           }
         },
         "security": [
@@ -3549,6 +3625,12 @@
               "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
+                },
+                "example": {
+                  "type": "https://developer.sumup.com/problem/not-found",
+                  "title": "Requested resource couldn't be found.",
+                  "status": 404,
+                  "detail": "The requested resource doesn't exist or does not belong to you."
                 }
               }
             }
@@ -3665,6 +3747,12 @@
               "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
+                },
+                "example": {
+                  "type": "https://developer.sumup.com/problem/bad-request",
+                  "title": "Bad Request",
+                  "status": 400,
+                  "detail": "Request validation failed."
                 }
               }
             }
@@ -3675,6 +3763,12 @@
               "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
+                },
+                "example": {
+                  "type": "https://developer.sumup.com/problem/not-found",
+                  "title": "Requested resource couldn't be found.",
+                  "status": 404,
+                  "detail": "The requested resource doesn't exist or does not belong to you."
                 }
               }
             }
@@ -3685,6 +3779,12 @@
               "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
+                },
+                "example": {
+                  "type": "https://developer.sumup.com/problem/too-many-requests",
+                  "title": "Too Many Requests",
+                  "status": 429,
+                  "detail": "Too many requests were sent. Please try again later."
                 }
               }
             }
@@ -3758,6 +3858,12 @@
               "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
+                },
+                "example": {
+                  "type": "https://developer.sumup.com/problem/not-found",
+                  "title": "Requested resource couldn't be found.",
+                  "status": 404,
+                  "detail": "The requested resource doesn't exist or does not belong to you."
                 }
               }
             }
@@ -3882,6 +3988,12 @@
               "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
+                },
+                "example": {
+                  "type": "https://developer.sumup.com/problem/bad-request",
+                  "title": "Bad Request",
+                  "status": 400,
+                  "detail": "Request validation failed."
                 }
               }
             }
@@ -3892,6 +4004,12 @@
               "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
+                },
+                "example": {
+                  "type": "https://developer.sumup.com/problem/forbidden",
+                  "title": "Forbidden",
+                  "status": 403,
+                  "detail": "You do not have permission to perform this action."
                 }
               }
             }
@@ -3902,6 +4020,12 @@
               "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
+                },
+                "example": {
+                  "type": "https://developer.sumup.com/problem/not-found",
+                  "title": "Requested resource couldn't be found.",
+                  "status": 404,
+                  "detail": "The requested resource doesn't exist or does not belong to you."
                 }
               }
             }
@@ -3912,6 +4036,12 @@
               "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
+                },
+                "example": {
+                  "type": "https://developer.sumup.com/problem/conflict",
+                  "title": "Conflict",
+                  "status": 409,
+                  "detail": "The request conflicts with the current state of the resource."
                 }
               }
             }
@@ -3976,6 +4106,12 @@
               "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
+                },
+                "example": {
+                  "type": "https://developer.sumup.com/problem/not-found",
+                  "title": "Requested resource couldn't be found.",
+                  "status": 404,
+                  "detail": "The requested resource doesn't exist or does not belong to you."
                 }
               }
             }
@@ -4050,6 +4186,12 @@
               "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
+                },
+                "example": {
+                  "type": "https://developer.sumup.com/problem/not-found",
+                  "title": "Requested resource couldn't be found.",
+                  "status": 404,
+                  "detail": "The requested resource doesn't exist or does not belong to you."
                 }
               }
             }
@@ -4153,6 +4295,12 @@
               "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
+                },
+                "example": {
+                  "type": "https://developer.sumup.com/problem/bad-request",
+                  "title": "Bad Request",
+                  "status": 400,
+                  "detail": "Request validation failed."
                 }
               }
             }
@@ -4163,6 +4311,12 @@
               "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
+                },
+                "example": {
+                  "type": "https://developer.sumup.com/problem/not-found",
+                  "title": "Requested resource couldn't be found.",
+                  "status": 404,
+                  "detail": "The requested resource doesn't exist or does not belong to you."
                 }
               }
             }
@@ -4236,6 +4390,12 @@
               "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
+                },
+                "example": {
+                  "type": "https://developer.sumup.com/problem/not-found",
+                  "title": "Requested resource couldn't be found.",
+                  "status": 404,
+                  "detail": "The requested resource doesn't exist or does not belong to you."
                 }
               }
             }
@@ -4300,6 +4460,12 @@
               "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
+                },
+                "example": {
+                  "type": "https://developer.sumup.com/problem/bad-request",
+                  "title": "Bad Request",
+                  "status": 400,
+                  "detail": "Request validation failed."
                 }
               }
             }
@@ -4310,6 +4476,12 @@
               "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
+                },
+                "example": {
+                  "type": "https://developer.sumup.com/problem/not-found",
+                  "title": "Requested resource couldn't be found.",
+                  "status": 404,
+                  "detail": "The requested resource doesn't exist or does not belong to you."
                 }
               }
             }
@@ -4424,6 +4596,12 @@
               "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
+                },
+                "example": {
+                  "type": "https://developer.sumup.com/problem/bad-request",
+                  "title": "Bad Request",
+                  "status": 400,
+                  "detail": "Request validation failed."
                 }
               }
             }
@@ -4434,6 +4612,12 @@
               "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
+                },
+                "example": {
+                  "type": "https://developer.sumup.com/problem/not-found",
+                  "title": "Requested resource couldn't be found.",
+                  "status": 404,
+                  "detail": "The requested resource doesn't exist or does not belong to you."
                 }
               }
             }
@@ -4775,6 +4959,22 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Authentication failed or missing required scope.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                },
+                "example": {
+                  "type": "https://developer.sumup.com/problem/unauthorized",
+                  "title": "Unauthorized",
+                  "status": 401,
+                  "detail": "Authentication credentials are missing or invalid."
+                }
+              }
+            }
           }
         },
         "security": [
@@ -4894,6 +5094,12 @@
               "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
+                },
+                "example": {
+                  "type": "https://developer.sumup.com/problem/bad-request",
+                  "title": "Bad Request",
+                  "status": 400,
+                  "detail": "Request validation failed."
                 }
               }
             }
@@ -4904,6 +5110,12 @@
               "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
+                },
+                "example": {
+                  "type": "https://developer.sumup.com/problem/not-found",
+                  "title": "Requested resource couldn't be found.",
+                  "status": 404,
+                  "detail": "The requested resource doesn't exist or does not belong to you."
                 }
               }
             }
@@ -4914,6 +5126,12 @@
               "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
+                },
+                "example": {
+                  "type": "https://developer.sumup.com/problem/conflict",
+                  "title": "Conflict",
+                  "status": 409,
+                  "detail": "The request conflicts with the current state of the resource."
                 }
               }
             }
@@ -5011,6 +5229,12 @@
               "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
+                },
+                "example": {
+                  "type": "https://developer.sumup.com/problem/not-found",
+                  "title": "Requested resource couldn't be found.",
+                  "status": 404,
+                  "detail": "The requested resource doesn't exist or does not belong to you."
                 }
               }
             }
@@ -5078,6 +5302,12 @@
               "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
+                },
+                "example": {
+                  "type": "https://developer.sumup.com/problem/not-found",
+                  "title": "Requested resource couldn't be found.",
+                  "status": 404,
+                  "detail": "The requested resource doesn't exist or does not belong to you."
                 }
               }
             }
@@ -5170,6 +5400,12 @@
               "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
+                },
+                "example": {
+                  "type": "https://developer.sumup.com/problem/forbidden",
+                  "title": "Forbidden",
+                  "status": 403,
+                  "detail": "You do not have permission to perform this action."
                 }
               }
             }
@@ -5180,6 +5416,12 @@
               "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
+                },
+                "example": {
+                  "type": "https://developer.sumup.com/problem/not-found",
+                  "title": "Requested resource couldn't be found.",
+                  "status": 404,
+                  "detail": "The requested resource doesn't exist or does not belong to you."
                 }
               }
             }
