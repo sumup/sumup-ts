@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.1.3](https://github.com/sumup/sumup-ts/compare/v0.1.2...v0.1.3) (2026-03-13)
+
+
+### Features
+
+* **sdk:** update README ([#283](https://github.com/sumup/sumup-ts/issues/283)) ([6a9d5f6](https://github.com/sumup/sumup-ts/commit/6a9d5f6a4d1fc3a86559dd4622364932c349ae42))
+
+
+### Chores
+
+* synced file(s) with sumup/apis ([#284](https://github.com/sumup/sumup-ts/issues/284)) ([647f191](https://github.com/sumup/sumup-ts/commit/647f19169a59a3ef6bc0b6be94eeaf0050847ea2))
+
 ## [0.1.2](https://github.com/sumup/sumup-ts/compare/v0.1.1...v0.1.2) (2026-03-13)
 
 
