@@ -1,5 +1,24 @@
 # Changelog
 
+## [0.1.2](https://github.com/sumup/sumup-ts/compare/v0.1.1...v0.1.2) (2026-03-13)
+
+
+### Features
+
+* **codegen:** cleanup unused models ([#279](https://github.com/sumup/sumup-ts/issues/279)) ([34fdf93](https://github.com/sumup/sumup-ts/commit/34fdf931d34dab4e41c8eb67cbd2fc45e84b41c7))
+* **sdk:** typed request options and per-call transport overrides ([#281](https://github.com/sumup/sumup-ts/issues/281)) ([a9d0f97](https://github.com/sumup/sumup-ts/commit/a9d0f973683eecaec0638486188f8bb91597549a))
+
+
+### Bug Fixes
+
+* **sdk:** send problem+json accept header ([#277](https://github.com/sumup/sumup-ts/issues/277)) ([6f2ce60](https://github.com/sumup/sumup-ts/commit/6f2ce60c9bc5ef537c0e8b581d0ea95c99301dfa))
+
+
+### Chores
+
+* **deps-dev:** bump @biomejs/biome from 2.4.4 to 2.4.5 in /sdk ([#274](https://github.com/sumup/sumup-ts/issues/274)) ([679e934](https://github.com/sumup/sumup-ts/commit/679e934ecd2ffe094c45b604b7d754ee7c39d3b0))
+* synced file(s) with sumup/apis ([#276](https://github.com/sumup/sumup-ts/issues/276)) ([e49d6c0](https://github.com/sumup/sumup-ts/commit/e49d6c026f74805640f0e30e9f4c60295661995e))
+
 ## [0.1.1](https://github.com/sumup/sumup-ts/compare/v0.1.0...v0.1.1) (2026-03-03)
 
 
