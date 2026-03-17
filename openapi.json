@@ -3774,7 +3774,7 @@
             }
           },
           "429": {
-            "description": "Too many invitations sent to that user. The limit is 10 requests per 5 minutes and the Retry-After header is set to the number of minutes until the reset of the limit.",
+            "description": "Too many invitations were sent to that user and the rate limit was exceeded. The Retry-After header indicates when the client can retry.",
             "content": {
               "application/problem+json": {
                 "schema": {
