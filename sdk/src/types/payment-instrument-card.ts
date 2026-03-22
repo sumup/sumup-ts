@@ -9,14 +9,6 @@ import type { Card } from "./card";
  */
 export type PaymentInstrumentCard = {
   /**
-   * Unique token identifying the saved payment card for a customer.
-   */
-  readonly token: string;
-  /**
-   * Indicates whether the payment instrument is active and can be used for payments. To deactivate it, send a `DELETE` request to the resource endpoint.
-   */
-  readonly active: boolean;
-  /**
    * Type of the payment instrument.
    */
   type: "card";
