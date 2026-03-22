@@ -44,9 +44,5 @@ export type Card = {
    * Required five-digit ZIP code. Applicable only to merchant users in the USA.
    */
   zip_code?: string;
-  /**
-   * Last 4 digits of the payment card number.
-   */
-  readonly last_4_digits: string;
   type: CardType;
 };
