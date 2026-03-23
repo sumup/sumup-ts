@@ -7,6 +7,7 @@ import type { Event } from "./event";
 import type { HorizontalAccuracy } from "./horizontal-accuracy";
 import type { Lat } from "./lat";
 import type { Link } from "./link";
+import type { LinkRefund } from "./link-refund";
 import type { Lon } from "./lon";
 import type { Product } from "./product";
 import type { TransactionBase } from "./transaction-base";
@@ -138,7 +139,7 @@ export type TransactionFull = TransactionBase &
     /**
      * List of hyperlinks for accessing related resources.
      */
-    links?: Link[];
+    links?: (Link | LinkRefund)[];
     /**
      * List of events related to the transaction.
      */

@@ -31,4 +31,5 @@ export type EntryMode =
   | "apple pay"
   | "google pay"
   | "paypal"
+  | "twint"
   | "na";
