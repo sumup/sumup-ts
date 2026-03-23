@@ -21,6 +21,7 @@ export type EntryModeFilter =
   | "APPLE_PAY"
   | "GOOGLE_PAY"
   | "PAYPAL"
+  | "TWINT"
   | "NONE"
   | "CHIP"
   | "MANUAL_ENTRY"
