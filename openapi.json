@@ -7606,6 +7606,7 @@
           "apple pay",
           "google pay",
           "paypal",
+          "twint",
           "na"
         ],
         "title": "Entry Mode"
@@ -7828,7 +7829,14 @@
                 "description": "List of hyperlinks for accessing related resources.",
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/Link"
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Link"
+                    },
+                    {
+                      "$ref": "#/components/schemas/LinkRefund"
+                    }
+                  ]
                 }
               },
               "events": {
@@ -7929,6 +7937,30 @@
         "maximum": 90,
         "minimum": 0,
         "title": "Latitude"
+      },
+      "LinkRefund": {
+        "description": "Hypermedia link including allowed minimum and maximum refund amounts.",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Link"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "min_amount": {
+                "description": "Minimum allowed amount for the refund.",
+                "type": "number",
+                "format": "float"
+              },
+              "max_amount": {
+                "description": "Maximum allowed amount for the refund.",
+                "type": "number",
+                "format": "float"
+              }
+            }
+          }
+        ],
+        "title": "Link Refund"
       },
       "Lon": {
         "description": "Longitude value from the coordinates of the payment location (as received from the payment terminal reader).",
@@ -10382,6 +10414,7 @@
           "APPLE_PAY",
           "GOOGLE_PAY",
           "PAYPAL",
+          "TWINT",
           "NONE",
           "CHIP",
           "MANUAL_ENTRY",
