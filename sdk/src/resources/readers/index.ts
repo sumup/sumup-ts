@@ -100,7 +100,7 @@ export class Readers extends APIResource {
   /**
    * Creates a Checkout for a Reader.
    *
-   * This process is asynchronous and the actual transaction may take some time to be stared on the device.
+   * This process is asynchronous and the actual transaction may take some time to be started on the device.
    *
    *
    * There are some caveats when using this endpoint:
