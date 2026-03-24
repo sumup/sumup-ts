@@ -53,7 +53,6 @@ export type { Invite } from "./invite";
 export type { Lat } from "./lat";
 export type { LegalType } from "./legal-type";
 export type { Link } from "./link";
-export type { LinkRefund } from "./link-refund";
 export type { ListPersonsResponseBody } from "./list-persons-response-body";
 export type { Lon } from "./lon";
 export type { MandatePayload } from "./mandate-payload";
