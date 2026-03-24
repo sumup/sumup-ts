@@ -18,4 +18,12 @@ export type Link = {
    * Specifies the media type of the related resource.
    */
   type?: string;
+  /**
+   * Minimum allowed amount for the refund.
+   */
+  min_amount?: number;
+  /**
+   * Maximum allowed amount for the refund.
+   */
+  max_amount?: number;
 };
