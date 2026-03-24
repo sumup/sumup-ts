@@ -5455,7 +5455,7 @@
       "post": {
         "operationId": "CreateReaderCheckout",
         "summary": "Create a Reader Checkout",
-        "description": "Creates a Checkout for a Reader.\n\nThis process is asynchronous and the actual transaction may take some time to be stared on the device.\n\n\nThere are some caveats when using this endpoint:\n* The target device must be online, otherwise checkout won't be accepted\n* After the checkout is accepted, the system has 60 seconds to start the payment on the target device. During this time, any other checkout for the same device will be rejected.\n\n\n**Note**: If the target device is a Solo, it must be in version 3.3.24.3 or higher.\n",
+        "description": "Creates a Checkout for a Reader.\n\nThis process is asynchronous and the actual transaction may take some time to be started on the device.\n\n\nThere are some caveats when using this endpoint:\n* The target device must be online, otherwise checkout won't be accepted\n* After the checkout is accepted, the system has 60 seconds to start the payment on the target device. During this time, any other checkout for the same device will be rejected.\n\n\n**Note**: If the target device is a Solo, it must be in version 3.3.24.3 or higher.\n",
         "parameters": [
           {
             "name": "merchant_code",
@@ -5509,6 +5509,12 @@
                 }
               },
               "application/problem+json": {
+                "example": {
+                  "detail": "Bad Request",
+                  "status": 400,
+                  "title": "Bad Request",
+                  "type": "https://developer.sumup.com/problem/bad-request"
+                },
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
@@ -5524,6 +5530,12 @@
                 }
               },
               "application/problem+json": {
+                "example": {
+                  "detail": "Unauthorized",
+                  "status": 401,
+                  "title": "Unauthorized",
+                  "type": "https://developer.sumup.com/problem/unauthorized"
+                },
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
@@ -5539,6 +5551,12 @@
                 }
               },
               "application/problem+json": {
+                "example": {
+                  "detail": "The requested resource doesn't exist or does not belong to you.",
+                  "status": 404,
+                  "title": "Requested resource couldn't be found.",
+                  "type": "https://developer.sumup.com/problem/not-found"
+                },
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
@@ -5554,6 +5572,12 @@
                 }
               },
               "application/problem+json": {
+                "example": {
+                  "detail": "Validation failed",
+                  "status": 422,
+                  "title": "Unprocessable Entity",
+                  "type": "https://developer.sumup.com/problem/validation-error"
+                },
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
@@ -5656,6 +5680,12 @@
                 }
               },
               "application/problem+json": {
+                "example": {
+                  "detail": "Bad Request",
+                  "status": 400,
+                  "title": "Bad Request",
+                  "type": "https://developer.sumup.com/problem/bad-request"
+                },
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
@@ -5671,6 +5701,12 @@
                 }
               },
               "application/problem+json": {
+                "example": {
+                  "detail": "Unauthorized",
+                  "status": 401,
+                  "title": "Unauthorized",
+                  "type": "https://developer.sumup.com/problem/unauthorized"
+                },
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
@@ -5686,6 +5722,12 @@
                 }
               },
               "application/problem+json": {
+                "example": {
+                  "detail": "The requested resource doesn't exist or does not belong to you.",
+                  "status": 404,
+                  "title": "Requested resource couldn't be found.",
+                  "type": "https://developer.sumup.com/problem/not-found"
+                },
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
@@ -5768,6 +5810,12 @@
                 }
               },
               "application/problem+json": {
+                "example": {
+                  "detail": "Bad Request",
+                  "status": 400,
+                  "title": "Bad Request",
+                  "type": "https://developer.sumup.com/problem/bad-request"
+                },
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
@@ -5783,6 +5831,12 @@
                 }
               },
               "application/problem+json": {
+                "example": {
+                  "detail": "Unauthorized",
+                  "status": 401,
+                  "title": "Unauthorized",
+                  "type": "https://developer.sumup.com/problem/unauthorized"
+                },
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
@@ -5798,6 +5852,12 @@
                 }
               },
               "application/problem+json": {
+                "example": {
+                  "detail": "The requested resource doesn't exist or does not belong to you.",
+                  "status": 404,
+                  "title": "Requested resource couldn't be found.",
+                  "type": "https://developer.sumup.com/problem/not-found"
+                },
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
@@ -5813,6 +5873,12 @@
                 }
               },
               "application/problem+json": {
+                "example": {
+                  "detail": "The device is offline.",
+                  "status": 422,
+                  "title": "Reader Offline",
+                  "type": "https://developer.sumup.com/problem/reader-offline"
+                },
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
