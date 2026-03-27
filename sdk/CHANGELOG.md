@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.1.3](https://github.com/sumup/sumup-ts/compare/v0.1.2...v0.1.3) (2026-03-24)
+
+
+### Features
+
+* **sdk:** update README ([#283](https://github.com/sumup/sumup-ts/issues/283)) ([6a9d5f6](https://github.com/sumup/sumup-ts/commit/6a9d5f6a4d1fc3a86559dd4622364932c349ae42))
+
+
+### Chores
+
+* **deps-dev:** bump @biomejs/biome from 2.4.5 to 2.4.6 in /sdk ([#288](https://github.com/sumup/sumup-ts/issues/288)) ([1bdcc4e](https://github.com/sumup/sumup-ts/commit/1bdcc4e6e7a1ff162d558c71c4eaa2dcfcef596a))
+* **deps-dev:** bump @biomejs/biome from 2.4.6 to 2.4.7 in /sdk ([#296](https://github.com/sumup/sumup-ts/issues/296)) ([3a299e2](https://github.com/sumup/sumup-ts/commit/3a299e22b6aebe321cd78057ae8dcc59daca93ee))
+* **deps-dev:** bump the rslib group in /sdk with 2 updates ([#287](https://github.com/sumup/sumup-ts/issues/287)) ([090b8c4](https://github.com/sumup/sumup-ts/commit/090b8c4407bb1a6192f085b7d1140cef01026a53))
+* **deps-dev:** bump vitest from 4.0.18 to 4.1.0 in /sdk ([#295](https://github.com/sumup/sumup-ts/issues/295)) ([c725f34](https://github.com/sumup/sumup-ts/commit/c725f343d587640e7e1995e2090c9c36a88e694d))
+* synced file(s) with sumup/apis ([#284](https://github.com/sumup/sumup-ts/issues/284)) ([647f191](https://github.com/sumup/sumup-ts/commit/647f19169a59a3ef6bc0b6be94eeaf0050847ea2))
+* synced file(s) with sumup/apis ([#290](https://github.com/sumup/sumup-ts/issues/290)) ([1dfb96b](https://github.com/sumup/sumup-ts/commit/1dfb96bc0fd8981ef7d16b68d17c443dc64f10dd))
+* synced file(s) with sumup/apis ([#291](https://github.com/sumup/sumup-ts/issues/291)) ([f88fcc8](https://github.com/sumup/sumup-ts/commit/f88fcc8d82778d9815e8b54b4a16c17778c67a81))
+* synced file(s) with sumup/apis ([#292](https://github.com/sumup/sumup-ts/issues/292)) ([f6906b8](https://github.com/sumup/sumup-ts/commit/f6906b81b8f796732dfc9bb6418fe0669424783b))
+* synced file(s) with sumup/apis ([#298](https://github.com/sumup/sumup-ts/issues/298)) ([a1d2837](https://github.com/sumup/sumup-ts/commit/a1d2837619ab052b667fa7a6eda724909d6768d1))
+
 ## [0.1.2](https://github.com/sumup/sumup-ts/compare/v0.1.1...v0.1.2) (2026-03-13)
 
 
