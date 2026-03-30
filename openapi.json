@@ -8790,7 +8790,7 @@
               "avatar": {
                 "description": "A user-facing small-format logo for use in dashboards and other user-facing applications. For customer-facing branding see `merchant.business_profile.branding`.\n",
                 "type": "string",
-                "format": "url"
+                "format": "uri"
               },
               "alias": {
                 "description": "A user-facing name of the merchant account for use in dashboards and other user-facing applications. For customer-facing business name see `merchant.business_profile`.\n",
@@ -8848,7 +8848,8 @@
             "description": "The company's legal name.",
             "type": "string",
             "example": "Gin & Doughnuts Bar GmbH",
-            "maxLength": 512
+            "maxLength": 512,
+            "minLength": 1
           },
           "merchant_category_code": {
             "description": "The merchant category code for the account as specified by [ISO18245](https://www.iso.org/standard/33365.html). MCCs are used to classify businesses based on the goods or services they provide.\n",
@@ -8874,6 +8875,7 @@
           "website": {
             "description": "HTTP(S) URL of the company's website.\n",
             "type": "string",
+            "format": "uri",
             "examples": [
               "https://www.sumup.com"
             ],
@@ -8906,18 +8908,21 @@
             "description": "The customer-facing business name.",
             "type": "string",
             "example": "Example Coffee",
-            "maxLength": 512
+            "maxLength": 512,
+            "minLength": 1
           },
           "dynamic_descriptor": {
             "description": "The descriptor is the text that your customer sees on their bank account statement.\nThe more recognisable your descriptor is, the less risk you have of receiving disputes (e.g. chargebacks).\n",
             "type": "string",
             "example": "Example Coffee",
             "maxLength": 30,
+            "minLength": 1,
             "pattern": "^[a-zA-Z0-9 \\-+\\'_.]{0,30}$"
           },
           "website": {
             "description": "The business's publicly available website.",
             "type": "string",
+            "format": "uri",
             "example": "https://example.com",
             "maxLength": 512
           },
