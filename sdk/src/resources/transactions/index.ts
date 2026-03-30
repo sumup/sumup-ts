@@ -2,7 +2,7 @@
 
 import { type APIPromise, APIResource, type RequestOptions } from "../../core";
 import type {
-  EntryModeFilter,
+  EntryMode,
   ErrorBody,
   PaymentType,
   Problem,
@@ -44,7 +44,7 @@ export type ListTransactionsV2_1QueryParams = {
     | "CHARGE_BACK"
   )[];
   payment_types?: PaymentType[];
-  "entry_modes[]"?: EntryModeFilter[];
+  "entry_modes[]"?: EntryMode[];
   types?: ("PAYMENT" | "REFUND" | "CHARGE_BACK")[];
   changes_since?: string;
   newest_time?: string;
