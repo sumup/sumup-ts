@@ -2148,7 +2148,7 @@
             "schema": {
               "type": "array",
               "items": {
-                "$ref": "#/components/schemas/EntryModeFilter"
+                "$ref": "#/components/schemas/EntryMode"
               }
             }
           },
@@ -5959,7 +5959,7 @@
         "schema": {
           "type": "array",
           "items": {
-            "$ref": "#/components/schemas/EntryModeFilter"
+            "$ref": "#/components/schemas/EntryMode"
           }
         }
       },
@@ -7202,6 +7202,21 @@
         },
         "title": "Receipt Card"
       },
+      "ReceiptReader": {
+        "description": "Card reader details displayed on the receipt.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "description": "Reader serial number.",
+            "type": "string"
+          },
+          "type": {
+            "description": "Reader type.",
+            "type": "string"
+          }
+        },
+        "title": "Receipt Reader"
+      },
       "ReceiptMerchantData": {
         "description": "Receipt merchant data",
         "type": "object",
@@ -7217,13 +7232,28 @@
               "business_name": {
                 "type": "string"
               },
+              "company_registration_number": {
+                "type": "string"
+              },
+              "vat_id": {
+                "type": "string"
+              },
+              "website": {
+                "type": "string"
+              },
               "email": {
+                "type": "string"
+              },
+              "language": {
                 "type": "string"
               },
               "address": {
                 "type": "object",
                 "properties": {
                   "address_line1": {
+                    "type": "string"
+                  },
+                  "address_line2": {
                     "type": "string"
                   },
                   "city": {
@@ -7236,6 +7266,9 @@
                     "type": "string"
                   },
                   "country_native_name": {
+                    "type": "string"
+                  },
+                  "region_name": {
                     "type": "string"
                   },
                   "post_code": {
@@ -7261,6 +7294,13 @@
         "properties": {
           "transaction_code": {
             "description": "Transaction code.",
+            "type": "string"
+          },
+          "transaction_id": {
+            "$ref": "#/components/schemas/TransactionID"
+          },
+          "merchant_code": {
+            "description": "Merchant code.",
             "type": "string"
           },
           "amount": {
@@ -7300,12 +7340,24 @@
             "description": "Cardholder verification method.",
             "type": "string"
           },
+          "card_reader": {
+            "$ref": "#/components/schemas/ReceiptReader"
+          },
           "card": {
             "$ref": "#/components/schemas/ReceiptCard"
           },
           "installments_count": {
             "description": "Number of installments.",
             "type": "integer"
+          },
+          "process_as": {
+            "description": "Debit/Credit.",
+            "type": "string",
+            "example": "CREDIT",
+            "enum": [
+              "CREDIT",
+              "DEBIT"
+            ]
           },
           "products": {
             "description": "Products",
@@ -7317,6 +7369,10 @@
                   "description": "Product name",
                   "type": "string",
                   "example": "Coffee"
+                },
+                "description": {
+                  "description": "Product description",
+                  "type": "string"
                 },
                 "price": {
                   "description": "Product price",
@@ -7657,33 +7713,33 @@
         "description": "Entry mode of the payment details.",
         "type": "string",
         "enum": [
-          "none",
-          "magstripe",
-          "chip",
-          "manual entry",
-          "customer entry",
-          "magstripe fallback",
-          "contactless",
-          "moto",
-          "contactless magstripe",
-          "boleto",
-          "direct debit",
-          "sofort",
-          "ideal",
-          "bancontact",
-          "eps",
-          "mybank",
-          "satispay",
-          "blik",
-          "p24",
-          "giropay",
-          "pix",
-          "qr code pix",
-          "apple pay",
-          "google pay",
-          "paypal",
-          "twint",
-          "na"
+          "BOLETO",
+          "SOFORT",
+          "IDEAL",
+          "BANCONTACT",
+          "EPS",
+          "MYBANK",
+          "SATISPAY",
+          "BLIK",
+          "P24",
+          "GIROPAY",
+          "PIX",
+          "QR_CODE_PIX",
+          "APPLE_PAY",
+          "GOOGLE_PAY",
+          "PAYPAL",
+          "TWINT",
+          "NONE",
+          "CHIP",
+          "MANUAL_ENTRY",
+          "CUSTOMER_ENTRY",
+          "MAGSTRIPE_FALLBACK",
+          "MAGSTRIPE",
+          "DIRECT_DEBIT",
+          "CONTACTLESS",
+          "MOTO",
+          "CONTACTLESS_MAGSTRIPE",
+          "N/A"
         ],
         "title": "Entry Mode"
       },
@@ -9932,10 +9988,6 @@
             "description": "Country ISO 3166-1 code",
             "type": "string"
           },
-          "region_id": {
-            "description": "Country region id",
-            "type": "number"
-          },
           "region_name": {
             "description": "Country region name",
             "type": "string"
@@ -10022,10 +10074,6 @@
           "country": {
             "description": "Country ISO 3166-1 code",
             "type": "string"
-          },
-          "region_id": {
-            "description": "Country region id",
-            "type": "number"
           },
           "region_name": {
             "description": "Region name",
@@ -10439,40 +10487,6 @@
           }
         },
         "title": "Personal Profile Legacy"
-      },
-      "EntryModeFilter": {
-        "description": "Entry mode value accepted by the `entry_modes[]` filter.",
-        "type": "string",
-        "enum": [
-          "BOLETO",
-          "SOFORT",
-          "IDEAL",
-          "BANCONTACT",
-          "EPS",
-          "MYBANK",
-          "SATISPAY",
-          "BLIK",
-          "P24",
-          "GIROPAY",
-          "PIX",
-          "QR_CODE_PIX",
-          "APPLE_PAY",
-          "GOOGLE_PAY",
-          "PAYPAL",
-          "TWINT",
-          "NONE",
-          "CHIP",
-          "MANUAL_ENTRY",
-          "CUSTOMER_ENTRY",
-          "MAGSTRIPE_FALLBACK",
-          "MAGSTRIPE",
-          "DIRECT_DEBIT",
-          "CONTACTLESS",
-          "MOTO",
-          "CONTACTLESS_MAGSTRIPE",
-          "N/A"
-        ],
-        "title": "Entry Mode Filter"
       }
     },
     "examples": {
