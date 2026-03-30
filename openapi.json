@@ -8848,7 +8848,7 @@
             "description": "The company's legal name.",
             "type": "string",
             "example": "Gin & Doughnuts Bar GmbH",
-            "maxLength": 512,
+            "maxLength": 150,
             "minLength": 1
           },
           "merchant_category_code": {
@@ -8908,7 +8908,7 @@
             "description": "The customer-facing business name.",
             "type": "string",
             "example": "Example Coffee",
-            "maxLength": 512,
+            "maxLength": 150,
             "minLength": 1
           },
           "dynamic_descriptor": {
@@ -8924,13 +8924,13 @@
             "type": "string",
             "format": "uri",
             "example": "https://example.com",
-            "maxLength": 512
+            "maxLength": 255
           },
           "email": {
             "description": "A publicly available email address.",
             "type": "string",
             "example": "contact@example.com",
-            "maxLength": 256
+            "maxLength": 255
           },
           "phone_number": {
             "$ref": "#/components/schemas/PhoneNumber"
@@ -8954,7 +8954,7 @@
         "description": "A publicly available phone number in [E.164](https://en.wikipedia.org/wiki/E.164) format.\n",
         "type": "string",
         "example": "+420123456789",
-        "maxLength": 64
+        "maxLength": 16
       },
       "Branding": {
         "description": "Settings used to apply the Merchant's branding to email receipts, invoices, checkouts, and other products.",
