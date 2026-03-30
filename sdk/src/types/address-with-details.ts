@@ -26,10 +26,6 @@ export type AddressWithDetails = {
    */
   country?: string;
   /**
-   * Country region id
-   */
-  region_id?: number;
-  /**
    * Region name
    */
   region_name?: string;

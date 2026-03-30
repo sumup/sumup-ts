@@ -23,10 +23,6 @@ export type AddressPayloadLegacy = {
    */
   country: string;
   /**
-   * Country region id
-   */
-  region_id?: number;
-  /**
    * Country region name
    */
   region_name?: string;

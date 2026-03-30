@@ -2,6 +2,8 @@
 
 import type { ReceiptCard } from "./receipt-card";
 import type { ReceiptEvent } from "./receipt-event";
+import type { ReceiptReader } from "./receipt-reader";
+import type { TransactionID } from "./transaction-id";
 
 /**
  * Receipt Transaction
@@ -13,6 +15,11 @@ export type ReceiptTransaction = {
    * Transaction code.
    */
   transaction_code?: string;
+  transaction_id?: TransactionID;
+  /**
+   * Merchant code.
+   */
+  merchant_code?: string;
   /**
    * Transaction amount.
    */
@@ -49,11 +56,16 @@ export type ReceiptTransaction = {
    * Cardholder verification method.
    */
   verification_method?: string;
+  card_reader?: ReceiptReader;
   card?: ReceiptCard;
   /**
    * Number of installments.
    */
   installments_count?: number;
+  /**
+   * Debit/Credit.
+   */
+  process_as?: "CREDIT" | "DEBIT";
   /**
    * Products
    */
@@ -62,6 +74,10 @@ export type ReceiptTransaction = {
      * Product name
      */
     name?: string;
+    /**
+     * Product description
+     */
+    description?: string;
     /**
      * Product price
      */

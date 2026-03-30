@@ -12,13 +12,19 @@ export type ReceiptMerchantData = {
   merchant_profile?: {
     merchant_code?: string;
     business_name?: string;
+    company_registration_number?: string;
+    vat_id?: string;
+    website?: string;
     email?: string;
+    language?: string;
     address?: {
       address_line1?: string;
+      address_line2?: string;
       city?: string;
       country?: string;
       country_en_name?: string;
       country_native_name?: string;
+      region_name?: string;
       post_code?: string;
       landline?: string;
     };
