@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.4](https://github.com/sumup/sumup-ts/compare/v0.1.3...v0.1.4) (2026-03-31)
+
+
+### Chores
+
+* synced file(s) with sumup/apis ([#303](https://github.com/sumup/sumup-ts/issues/303)) ([ec913ab](https://github.com/sumup/sumup-ts/commit/ec913abe43efe887520d417e4bffc34d198f324e))
+* synced file(s) with sumup/apis ([#307](https://github.com/sumup/sumup-ts/issues/307)) ([1625d38](https://github.com/sumup/sumup-ts/commit/1625d3898068de19422157b726c9ae0942e56403))
+
 ## [0.1.3](https://github.com/sumup/sumup-ts/compare/v0.1.2...v0.1.3) (2026-03-24)
 
 
