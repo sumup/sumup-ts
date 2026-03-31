@@ -13,13 +13,28 @@ export type ProcessCheckout = {
   /**
    * Describes the payment method used to attempt processing
    */
-  payment_type: "card" | "boleto" | "ideal" | "blik" | "bancontact";
+  payment_type:
+    | "card"
+    | "boleto"
+    | "ideal"
+    | "blik"
+    | "bancontact"
+    | "google_pay"
+    | "apple_pay";
   /**
    * Number of installments for deferred payments. Available only to merchant users in Brazil.
    */
   installments?: number;
   mandate?: MandatePayload;
   card?: Card;
+  /**
+   * Raw `PaymentData` object received from Google Pay. Send the Google Pay response payload as-is.
+   */
+  google_pay?: Record<string, unknown>;
+  /**
+   * Raw payment token object received from Apple Pay. Send the Apple Pay response payload as-is.
+   */
+  apple_pay?: Record<string, unknown>;
   /**
    * __Required when using a tokenized card to process a checkout.__ Unique token identifying the saved payment card for a customer.
    */
