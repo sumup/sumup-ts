@@ -6474,7 +6474,9 @@
               "boleto",
               "ideal",
               "blik",
-              "bancontact"
+              "bancontact",
+              "google_pay",
+              "apple_pay"
             ]
           },
           "installments": {
@@ -6488,6 +6490,50 @@
           },
           "card": {
             "$ref": "#/components/schemas/Card"
+          },
+          "google_pay": {
+            "description": "Raw `PaymentData` object received from Google Pay. Send the Google Pay response payload as-is.",
+            "type": "object",
+            "example": {
+              "apiVersionMinor": 0,
+              "apiVersion": 2,
+              "paymentMethodData": {
+                "description": "Visa •••• 1111",
+                "tokenizationData": {
+                  "type": "PAYMENT_GATEWAY",
+                  "token": "token-data"
+                },
+                "type": "CARD",
+                "info": {
+                  "cardNetwork": "VISA",
+                  "cardDetails": "1111"
+                }
+              }
+            }
+          },
+          "apple_pay": {
+            "description": "Raw payment token object received from Apple Pay. Send the Apple Pay response payload as-is.",
+            "type": "object",
+            "example": {
+              "token": {
+                "paymentData": {
+                  "data": "si2xuT2ArQo689SfE-long-token",
+                  "signature": "MIAGCSqGSIb3DQEHA-long-signature",
+                  "header": {
+                    "publicKeyHash": "PWfjDi3TSwgZ20TY/A7f3V6J/1rhHyRDCspbeljM0io=",
+                    "ephemeralPublicKey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEaBtz7UN2MNV0qInJVEEhXy10PU0KfO6KxFjXm93oKWL6lCsxZZGDl/EKioUHVSlKgpsKGin0xvgldfxeJVgy0g==",
+                    "transactionId": "62e0568bc9258e9d0e059d745650fc8211d05ef7a7a1589a6411bf9b12cdfd04"
+                  },
+                  "version": "EC_v1"
+                },
+                "paymentMethod": {
+                  "displayName": "MasterCard 8837",
+                  "network": "MasterCard",
+                  "type": "debit"
+                },
+                "transactionIdentifier": "62E0568BC9258E9D0E059D745650FC8211D05EF7A7A1589A6411BF9B12CDFD04"
+              }
+            }
           },
           "token": {
             "description": "__Required when using a tokenized card to process a checkout.__ Unique token identifying the saved payment card for a customer.",
