@@ -3,7 +3,7 @@
   "info": {
     "title": "SumUp REST API",
     "version": "1.0.0",
-    "description": "SumUp’s REST API operates with [JSON](https://www.json.org/json-en.html) HTTP requests and responses. The request bodies are sent through resource-oriented URLs and use the standard [HTTP response codes](https://developer.mozilla.org/docs/Web/HTTP/Status).\n\nYou can experiment and work on your integration in a sandbox that doesn't affect your regular data and doesn't process real transactions. To create a sandbox merchant account visit the [dashboard](https://me.sumup.com/settings/developer). To use the sandbox when interacting with SumUp APIs [create an API](https://me.sumup.com/settings/api-keys) key and use it for [authentication](https://developer.sumup.com/api/authentication).\n",
+    "description": "SumUp’s REST API operates with [JSON](https://www.json.org/json-en.html) HTTP requests and responses. The request bodies are sent through resource-oriented URLs and use the standard [HTTP response codes](https://developer.mozilla.org/docs/Web/HTTP/Status).\n\nYou can experiment and work on your integration in a sandbox that doesn't affect your regular data and doesn't process real transactions. To create a sandbox merchant account visit the [dashboard](https://me.sumup.com/settings/developer). To use the sandbox when interacting with SumUp APIs [create an API](https://me.sumup.com/settings/api-keys) key and use it for [authentication](https://developer.sumup.com/api/authentication).",
     "license": {
       "name": "Apache 2.0",
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
@@ -144,7 +144,7 @@
       "post": {
         "operationId": "CreateCheckout",
         "summary": "Create a checkout",
-        "description": "Creates a new payment checkout resource. The unique `checkout_reference` created by this request, is used for further manipulation of the checkout.\n\nFor 3DS checkouts, add the `redirect_url` parameter to your request body schema.\n\nFollow by processing a checkout to charge the provided payment instrument.\n",
+        "description": "Creates a new payment checkout resource. The unique `checkout_reference` created by this request, is used for further manipulation of the checkout.\n\nFor 3DS checkouts, add the `redirect_url` parameter to your request body schema.\n\nFollow by processing a checkout to charge the provided payment instrument.",
         "requestBody": {
           "description": "Details for creating a checkout resource.",
           "required": true,
@@ -583,7 +583,7 @@
       "put": {
         "operationId": "ProcessCheckout",
         "summary": "Process a checkout",
-        "description": "Processing a checkout will attempt to charge the provided payment instrument for the amount of the specified checkout resource initiated in the `Create a checkout` endpoint.\n\nFollow this request with `Retrieve a checkout` to confirm its status.\n",
+        "description": "Processing a checkout will attempt to charge the provided payment instrument for the amount of the specified checkout resource initiated in the `Create a checkout` endpoint.\n\nFollow this request with `Retrieve a checkout` to confirm its status.",
         "requestBody": {
           "description": "Details of the payment instrument for processing the checkout.",
           "required": true,
@@ -1349,7 +1349,7 @@
       "put": {
         "operationId": "UpdateCustomer",
         "summary": "Update a customer",
-        "description": "Updates an identified saved customer resource's personal details.\n\nThe request only overwrites the parameters included in the request, all other parameters will remain with their initially assigned values.\n",
+        "description": "Updates an identified saved customer resource's personal details.\n\nThe request only overwrites the parameters included in the request, all other parameters will remain with their initially assigned values.",
         "requestBody": {
           "description": "Customer fields to update.",
           "required": true,
@@ -1813,7 +1813,7 @@
       "get": {
         "operationId": "GetTransactionV2.1",
         "summary": "Retrieve a transaction",
-        "description": "Retrieves the full details of an identified transaction. The transaction resource is identified by a query parameter and *one* of following parameters is required:\n\n *  `id`\n *  `internal_id`\n *  `transaction_code`\n *  `foreign_transaction_id`\n *  `client_transaction_id`\n",
+        "description": "Retrieves the full details of an identified transaction. The transaction resource is identified by a query parameter and *one* of following parameters is required:\n- `id`\n- `internal_id`\n- `transaction_code`\n- `foreign_transaction_id`\n- `client_transaction_id`",
         "parameters": [
           {
             "name": "merchant_code",
@@ -1946,7 +1946,7 @@
       "get": {
         "operationId": "GetTransaction",
         "summary": "Retrieve a transaction",
-        "description": "Retrieves the full details of an identified transaction. The transaction resource is identified by a query parameter and *one* of following parameters is required:\n\n *  `id`\n *  `internal_id`\n *  `transaction_code`\n *  `foreign_transaction_id`\n *  `client_transaction_id`\n",
+        "description": "Retrieves the full details of an identified transaction. The transaction resource is identified by a query parameter and *one* of following parameters is required:\n- `id`\n- `internal_id`\n- `transaction_code`\n- `foreign_transaction_id`\n- `client_transaction_id`",
         "parameters": [
           {
             "name": "id",
@@ -2545,7 +2545,7 @@
       "get": {
         "operationId": "ListPayoutsV1",
         "summary": "List payouts",
-        "description": "Lists ordered payouts for the merchant profile.",
+        "description": "Lists ordered payouts for the merchant account.",
         "parameters": [
           {
             "name": "merchant_code",
@@ -2700,7 +2700,7 @@
       "get": {
         "operationId": "ListPayouts",
         "summary": "List payouts",
-        "description": "Lists ordered payouts for the merchant profile.",
+        "description": "Lists ordered payouts for the merchant account.",
         "parameters": [
           {
             "name": "start_date",
@@ -5966,7 +5966,7 @@
       "GeoCoordinatesFilter": {
         "name": "geo_coordinates",
         "in": "query",
-        "description": "Filters the results by the geographical coordinates of the location where the transaction is made (as retrieved from the terminal device) and returns only results that fall within the specified rectangular area. The accepted format is a comma-separated list of coordinate points that form a rectangle defined by the following parameters:\n\n  * `southwest_lng` (for the longitude value of the southwestern edge of the rectangle)\n  * `southwest_lat` (for the latitude value of the southwestern edge of the rectangle)\n  * `northeast_lng` (for the longitude value of the northeastern edge of the rectangle)\n  * `northeast_lat` (for the latitude value of the northeastern edge of the rectangle)\n",
+        "description": "Filters the results by the geographical coordinates of the location where the transaction is made (as retrieved from the terminal device) and returns only results that fall within the specified rectangular area. The accepted format is a comma-separated list of coordinate points that form a rectangle defined by the following parameters:\n- `southwest_lng` (for the longitude value of the southwestern edge of the rectangle)\n- `southwest_lat` (for the latitude value of the southwestern edge of the rectangle)\n- `northeast_lng` (for the longitude value of the northeastern edge of the rectangle)\n- `northeast_lat` (for the latitude value of the northeastern edge of the rectangle)",
         "required": false,
         "schema": {
           "type": "string"
@@ -6311,16 +6311,16 @@
         "title": "ELV Card Account"
       },
       "Checkout": {
-        "description": "Details of the payment checkout.",
+        "description": "Core checkout resource returned by the Checkouts API. A checkout is created before payment processing and then updated as payment attempts, redirects, and resulting transactions are attached to it.",
         "type": "object",
         "properties": {
           "checkout_reference": {
-            "description": "Unique ID of the payment checkout specified by the client application when creating the checkout resource.",
+            "description": "Merchant-defined reference for the checkout. Use it to correlate the SumUp checkout with your own order, cart, subscription, or payment attempt in your systems.",
             "type": "string",
             "maxLength": 90
           },
           "amount": {
-            "description": "Amount of the payment.",
+            "description": "Amount to be charged to the payer, expressed in major units.",
             "type": "number",
             "format": "float",
             "example": 10.1
@@ -6329,27 +6329,27 @@
             "$ref": "#/components/schemas/Currency"
           },
           "merchant_code": {
-            "description": "Unique identifying code of the merchant profile.",
+            "description": "Merchant account that receives the payment.",
             "type": "string",
             "example": "MH4H92C7"
           },
           "description": {
-            "description": "Short description of the checkout visible in the SumUp dashboard. The description can contribute to reporting, allowing easier identification of a checkout.",
+            "description": "Short merchant-defined description shown in SumUp tools and reporting. Use it to make the checkout easier to recognize in dashboards, support workflows, and reconciliation.",
             "type": "string"
           },
           "return_url": {
-            "description": "URL to which the SumUp platform sends the processing status of the payment checkout.",
+            "description": "Optional backend callback URL used by SumUp to notify your platform about processing updates for the checkout.",
             "type": "string",
             "format": "uri"
           },
           "id": {
-            "description": "Unique ID of the checkout resource.",
+            "description": "Unique SumUp identifier of the checkout resource.",
             "type": "string",
             "example": "4e425463-3e1b-431d-83fa-1e51c2925e99",
             "readOnly": true
           },
           "status": {
-            "description": "Current status of the checkout.",
+            "description": "Current high-level state of the checkout. `PENDING` means the checkout exists but is not yet completed, `PAID` means a payment succeeded, `FAILED` means the latest processing attempt failed, and `EXPIRED` means the checkout can no longer be processed.",
             "type": "string",
             "enum": [
               "PENDING",
@@ -6365,14 +6365,14 @@
             "example": "2020-02-29T10:56:56+00:00"
           },
           "valid_until": {
-            "description": "Date and time of the checkout expiration before which the client application needs to send a processing request. If no value is present, the checkout does not have an expiration time.",
+            "description": "Optional expiration timestamp. The checkout must be processed before this moment, otherwise it becomes unusable. If omitted, the checkout does not have an explicit expiry time.",
             "type": "string",
             "format": "date-time",
             "example": "2020-02-29T10:56:56+00:00",
             "nullable": true
           },
           "customer_id": {
-            "description": "Unique identification of a customer. If specified, the checkout session and payment instrument are associated with the referenced customer.",
+            "description": "Merchant-scoped identifier of the customer associated with the checkout. Use it when storing payment instruments or reusing saved customer context for recurring and returning-payer flows.",
             "type": "string",
             "example": "831ff8d4cd5958ab5670"
           },
@@ -6380,7 +6380,7 @@
             "$ref": "#/components/schemas/MandateResponse"
           },
           "transactions": {
-            "description": "List of transactions related to the payment.",
+            "description": "Payment attempts and resulting transaction records linked to this checkout. Use the Transactions endpoints when you need the authoritative payment result and event history.",
             "type": "array",
             "items": {
               "allOf": [
@@ -6398,16 +6398,16 @@
         "title": "Checkout"
       },
       "CheckoutCreateRequest": {
-        "description": "Details of the payment checkout.",
+        "description": "Request body for creating a checkout before processing payment. Define the payment amount, currency, merchant, and optional customer or redirect behavior here.",
         "type": "object",
         "properties": {
           "checkout_reference": {
-            "description": "Unique ID of the payment checkout specified by the client application when creating the checkout resource.",
+            "description": "Merchant-defined reference for the new checkout. It should be unique enough for you to identify the payment attempt in your own systems.",
             "type": "string",
             "maxLength": 90
           },
           "amount": {
-            "description": "Amount of the payment.",
+            "description": "Amount to be charged to the payer, expressed in major units.",
             "type": "number",
             "format": "float"
           },
@@ -6415,25 +6415,25 @@
             "$ref": "#/components/schemas/Currency"
           },
           "merchant_code": {
-            "description": "Unique identifying code of the merchant profile.",
+            "description": "Merchant account that should receive the payment.",
             "type": "string",
             "example": "MH4H92C7"
           },
           "description": {
-            "description": "Short description of the checkout visible in the SumUp dashboard. The description can contribute to reporting, allowing easier identification of a checkout.",
+            "description": "Short merchant-defined description shown in SumUp tools and reporting for easier identification of the checkout.",
             "type": "string"
           },
           "return_url": {
-            "description": "URL to which the SumUp platform sends the processing status of the payment checkout.",
+            "description": "Optional backend callback URL used by SumUp to notify your platform about processing updates for the checkout.",
             "type": "string",
             "format": "uri"
           },
           "customer_id": {
-            "description": "Unique identification of a customer. If specified, the checkout session and payment instrument are associated with the referenced customer.",
+            "description": "Merchant-scoped customer identifier. Required when setting up recurring payments and useful when the checkout should be linked to a returning payer.",
             "type": "string"
           },
           "purpose": {
-            "description": "Purpose of the checkout.",
+            "description": "Business purpose of the checkout. Use `CHECKOUT` for a standard payment and `SETUP_RECURRING_PAYMENT` when collecting consent and payment details for future recurring charges.",
             "type": "string",
             "default": "CHECKOUT",
             "enum": [
@@ -6442,14 +6442,14 @@
             ]
           },
           "valid_until": {
-            "description": "Date and time of the checkout expiration before which the client application needs to send a processing request. If no value is present, the checkout does not have an expiration time.",
+            "description": "Optional expiration timestamp. The checkout must be processed before this moment, otherwise it becomes unusable. If omitted, the checkout does not have an explicit expiry time.",
             "type": "string",
             "format": "date-time",
             "example": "2020-02-29T10:56:56+00:00",
             "nullable": true
           },
           "redirect_url": {
-            "description": "__Required__ for [APMs](https://developer.sumup.com/online-payments/apm/introduction) and __recommended__ for card payments. Refers to a url where the end user is redirected once the payment processing completes. If not specified, the [Payment Widget](https://developer.sumup.com/online-payments/tools/card-widget) renders [3DS challenge](https://developer.sumup.com/online-payments/features/3ds) within an iframe instead of performing a full-page redirect.",
+            "description": "URL where the payer should be sent after a redirect-based payment or SCA flow completes. This is required for [APMs](https://developer.sumup.com/online-payments/apm/introduction) and recommended for card checkouts that may require [3DS](https://developer.sumup.com/online-payments/features/3ds). If it is omitted, the [Payment Widget](https://developer.sumup.com/online-payments/checkouts) can render the challenge in an iframe instead of using a full-page redirect.",
             "type": "string",
             "example": "https://mysite.com/completed_purchase"
           }
@@ -6463,11 +6463,11 @@
         "title": "Checkout Create Request"
       },
       "ProcessCheckout": {
-        "description": "Details of the payment instrument for processing the checkout.",
+        "description": "Request body for attempting payment on an existing checkout. The required companion fields depend on the selected `payment_type`, for example card details, saved-card data, or payer information required by a specific payment method.",
         "type": "object",
         "properties": {
           "payment_type": {
-            "description": "Describes the payment method used to attempt processing",
+            "description": "Payment method used for this processing attempt. It determines which additional request fields are required.",
             "type": "string",
             "enum": [
               "card",
@@ -6536,11 +6536,11 @@
             }
           },
           "token": {
-            "description": "__Required when using a tokenized card to process a checkout.__ Unique token identifying the saved payment card for a customer.",
+            "description": "Saved-card token to use instead of raw card details when processing with a previously stored payment instrument.",
             "type": "string"
           },
           "customer_id": {
-            "description": "__Required when `token` is provided.__ Unique ID of the customer.",
+            "description": "Customer identifier associated with the saved payment instrument. Required when `token` is provided.",
             "type": "string"
           },
           "personal_details": {
@@ -6553,7 +6553,7 @@
         "title": "Process Checkout"
       },
       "CheckoutSuccess": {
-        "description": "Checkout response returned after a successful processing attempt.",
+        "description": "Checkout resource returned after a synchronous processing attempt. In addition to the base checkout fields, it can include the resulting transaction identifiers and any newly created payment instrument token.",
         "allOf": [
           {
             "$ref": "#/components/schemas/Checkout"
@@ -6579,12 +6579,12 @@
                 "example": "Sample Merchant"
               },
               "redirect_url": {
-                "description": "Refers to a url where the end user is redirected once the payment processing completes.",
+                "description": "URL where the payer is redirected after a redirect-based payment or SCA flow completes.",
                 "type": "string",
                 "example": "https://mysite.com/completed_purchase"
               },
               "payment_instrument": {
-                "description": "Object containing token information for the specified payment instrument",
+                "description": "Details of the saved payment instrument created or reused during checkout processing.",
                 "type": "object",
                 "properties": {
                   "token": {
@@ -6600,30 +6600,30 @@
         "title": "Checkout Success"
       },
       "CheckoutAccepted": {
-        "description": "3DS Response",
+        "description": "Response returned when checkout processing requires an additional payer action, such as a 3DS challenge or a redirect to an external payment method page.",
         "type": "object",
         "properties": {
           "next_step": {
-            "description": "Required action processing 3D Secure payments.",
+            "description": "Instructions for the next action the payer or client must take.",
             "type": "object",
             "properties": {
               "url": {
-                "description": "Where the end user is redirected.",
+                "description": "URL to open or submit in order to continue processing.",
                 "type": "string",
                 "example": "https://dummy-3ds-gateway.com/cap?RID=1233&VAA=A"
               },
               "method": {
-                "description": "Method used to complete the redirect.",
+                "description": "HTTP method to use when following the next step.",
                 "type": "string",
                 "example": "POST"
               },
               "redirect_url": {
-                "description": "Refers to a url where the end user is redirected once the payment processing completes.",
+                "description": "Merchant URL where the payer returns after the external flow finishes.",
                 "type": "string",
                 "example": "https://mysite.com/completed_purchase"
               },
               "mechanism": {
-                "description": "Indicates allowed mechanisms for redirecting an end user. If both values are provided to ensure a redirect takes place in either.",
+                "description": "Allowed presentation mechanisms for the next step. `iframe` means the flow can be embedded, while `browser` means it can be completed through a full-page redirect.",
                 "type": "array",
                 "items": {
                   "type": "string",
@@ -6634,7 +6634,7 @@
                 }
               },
               "payload": {
-                "description": "Contains parameters essential for form redirection. Number of object keys and their content can vary.",
+                "description": "Parameters required to complete the next step. The exact keys depend on the payment provider and flow type.",
                 "type": "object",
                 "properties": {
                   "PaReq": {
@@ -6687,7 +6687,7 @@
         "title": "Error"
       },
       "Problem": {
-        "description": "A RFC 9457 problem details object.\n\nAdditional properties specific to the problem type may be present.\n",
+        "description": "A RFC 9457 problem details object.\n\nAdditional properties specific to the problem type may be present.",
         "type": "object",
         "properties": {
           "type": {
@@ -6795,7 +6795,7 @@
         "title": "Details Error"
       },
       "Event": {
-        "description": "Transaction event details.",
+        "description": "High-level transaction event details.",
         "type": "object",
         "properties": {
           "id": {
@@ -6945,23 +6945,26 @@
         "title": "Transactions History Link"
       },
       "MandatePayload": {
-        "description": "Mandate is passed when a card is to be tokenized",
+        "description": "Mandate details used when a checkout should create a reusable card token for future recurring or merchant-initiated payments.",
         "type": "object",
         "properties": {
           "type": {
-            "description": "Indicates the mandate type",
+            "description": "Type of mandate to create for the saved payment instrument.",
             "type": "string",
+            "example": "recurrent",
             "enum": [
               "recurrent"
             ]
           },
           "user_agent": {
-            "description": "Operating system and web client used by the end-user",
-            "type": "string"
+            "description": "Browser or client user agent observed when consent was collected.",
+            "type": "string",
+            "example": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.104 Safari/537.36"
           },
           "user_ip": {
-            "description": "IP address of the end user. Supports IPv4 and IPv6",
-            "type": "string"
+            "description": "IP address of the payer when the mandate was accepted.",
+            "type": "string",
+            "example": "172.217.169.174"
           }
         },
         "example": {
@@ -6976,19 +6979,24 @@
         "title": "Mandate Payload"
       },
       "MandateResponse": {
-        "description": "Created mandate",
+        "description": "Details of the mandate linked to the saved payment instrument.",
         "type": "object",
         "properties": {
           "type": {
-            "description": "Indicates the mandate type",
+            "description": "Type of mandate stored for the checkout or payment instrument.",
             "type": "string"
           },
           "status": {
-            "description": "Mandate status",
-            "type": "string"
+            "description": "Current lifecycle status of the mandate.",
+            "type": "string",
+            "example": "active",
+            "enum": [
+              "active",
+              "inactive"
+            ]
           },
           "merchant_code": {
-            "description": "Merchant code which has the mandate",
+            "description": "Merchant account for which the mandate is valid.",
             "type": "string",
             "example": "MH4H92C7"
           }
@@ -7515,7 +7523,7 @@
         "title": "Receipt Transaction"
       },
       "TransactionEvent": {
-        "description": "Details of a transaction event.",
+        "description": "Detailed information about a transaction event.",
         "type": "object",
         "properties": {
           "id": {
@@ -7981,14 +7989,14 @@
                 }
               },
               "transaction_events": {
-                "description": "List of transaction events related to the transaction.",
+                "description": "Detailed list of events related to the transaction.",
                 "type": "array",
                 "items": {
                   "$ref": "#/components/schemas/TransactionEvent"
                 }
               },
               "simple_status": {
-                "description": "Status generated from the processing status and the latest transaction state.",
+                "description": "High-level status of the transaction from the merchant's perspective.\n\n- `PENDING`: The payment has been initiated and is still being processed. A final outcome is not available yet.\n- `SUCCESSFUL`: The payment was completed successfully.\n- `PAID_OUT`: The payment was completed successfully and the funds have already been included in a payout to the merchant.\n- `FAILED`: The payment did not complete successfully.\n- `CANCELLED`: The payment was cancelled or reversed and is no longer payable or payable to the merchant.\n- `CANCEL_FAILED`: An attempt to cancel or reverse the payment was not completed successfully.\n- `REFUNDED`: The payment was refunded in full or in part.\n- `REFUND_FAILED`: An attempt to refund the payment was not completed successfully.\n- `CHARGEBACK`: The payment was subject to a chargeback.\n- `NON_COLLECTION`: The amount could not be collected from the merchant after a chargeback or related adjustment.",
                 "type": "string",
                 "enum": [
                   "SUCCESSFUL",
@@ -8011,7 +8019,7 @@
                 }
               },
               "events": {
-                "description": "List of events related to the transaction.",
+                "description": "Compact list of events related to the transaction.",
                 "type": "array",
                 "items": {
                   "$ref": "#/components/schemas/Event"
@@ -8077,7 +8085,7 @@
         "title": "Event Type"
       },
       "EventStatus": {
-        "description": "Status of the transaction event.",
+        "description": "Status of the transaction event.\n\nNot every value is used for every event type.\n\n- `PENDING`: The event has been created but is not final yet. Used for events that are still being processed and whose final outcome is not known yet.\n- `SCHEDULED`: The event is planned for a future payout cycle but has not been executed yet. This applies to payout events before money is actually sent out.\n- `RECONCILED`: The underlying payment has been matched with settlement data and is ready to continue through payout processing, but the funds have not been paid out yet. This applies to payout events.\n- `PAID_OUT`: The payout event has been completed and the funds were included in a merchant payout.\n- `REFUNDED`: A refund event has been accepted and recorded in the refund flow. This is the status returned for refund events once the transaction amount is being or has been returned to the payer.\n- `SUCCESSFUL`: The event completed successfully. Use this as the generic terminal success status for event types that do not expose a more specific business outcome such as `PAID_OUT` or `REFUNDED`.\n- `FAILED`: The event could not be completed. Typical examples are a payout that could not be executed or an event that was rejected during processing.",
         "type": "string",
         "enum": [
           "FAILED",
@@ -11361,13 +11369,13 @@
     },
     "securitySchemes": {
       "apiKey": {
-        "description": "API keys allow you easily interact with SumUp APIs. API keys are static tokens. You can create API keys from the [Dashboard](https://me.sumup.com/settings/api-keys)\n",
+        "description": "API keys allow you easily interact with SumUp APIs. API keys are static tokens. You can create API keys from the [Dashboard](https://me.sumup.com/settings/api-keys)",
         "type": "http",
         "scheme": "Bearer"
       },
       "oauth2": {
         "type": "oauth2",
-        "description": "SumUp supports [OAuth 2.0](https://tools.ietf.org/html/rfc6749) authentication for platforms that want to offer their services to SumUp users.\n\nTo integrate via OAuth 2.0 you will need a client credentials that you can create in the [SumUp Dashboard](https://me.sumup.com/settings/oauth2-applications).\n\nTo maintain security of our users, we highly recommend that you use one of the [recommended OAuth 2.0 libraries](https://oauth.net/code/) for authentication.\n",
+        "description": "SumUp supports [OAuth 2.0](https://tools.ietf.org/html/rfc6749) authentication for platforms that want to offer their services to SumUp users.\n\nTo integrate via OAuth 2.0 you will need a client credentials that you can create in the [SumUp Dashboard](https://me.sumup.com/settings/oauth2-applications).\n\nTo maintain security of our users, we highly recommend that you use one of the [recommended OAuth 2.0 libraries](https://oauth.net/code/) for authentication.",
         "flows": {
           "authorizationCode": {
             "authorizationUrl": "https://api.sumup.com/authorize",
@@ -11404,7 +11412,7 @@
   "tags": [
     {
       "name": "Checkouts",
-      "description": "Accept payments from your end users by adding the Checkouts model to your platform.\nSumUp supports standard and single payment 3DS checkout flows.\n\nThe Checkout model allows creating, listing, retrieving, processing and deactivating checkouts.\nA payment is completed by creating a checkout and then processing the checkout.\n",
+      "description": "Checkouts represent online payment sessions that you create before attempting to charge a payer. A checkout captures the payment intent, such as the amount, currency, merchant, and optional customer or redirect settings, and then moves through its lifecycle as you process it.\n\nUse this tag to:\n- create a checkout before collecting or confirming payment details\n- process the checkout with a card, saved card, wallet, or supported alternative payment method\n- retrieve or list checkouts to inspect their current state and associated payment attempts\n- deactivate a checkout that should no longer be used\n\nTypical workflow:\n- create a checkout with the order amount, currency, and merchant information\n- process the checkout through SumUp client tools such as the [Payment Widget and Swift Checkout SDK](https://developer.sumup.com/online-payments/checkouts)\n- retrieve the checkout or use the Transactions endpoints to inspect the resulting payment record\n\nCheckouts are used to initiate and orchestrate online payments. Transactions remain the authoritative record of the resulting payment outcome.",
       "x-core-objects": [
         {
           "$ref": "#/components/schemas/Checkout"
@@ -11413,7 +11421,7 @@
     },
     {
       "name": "Customers",
-      "description": "Allow your regular customers to save their information with the Customers model.\nThis will prevent re-entering payment instrument information for recurring payments on your platform.\n\nDepending on the needs you can allow, creating, listing or deactivating payment instruments & creating, retrieving and updating customers.\n",
+      "description": "Allow your regular customers to save their information with the Customers model.\n\nThis will prevent re-entering payment instrument information for recurring payments on your platform.\n\nDepending on the needs you can allow, creating, listing or deactivating payment instruments & creating, retrieving and updating customers.",
       "x-core-objects": [
         {
           "$ref": "#/components/schemas/Customer"
@@ -11422,11 +11430,11 @@
     },
     {
       "name": "Transactions",
-      "description": "Retrieve details for a specific transaction by it’s `id`\nor any other required query parameter, or list all transactions related to the merchant account.\n"
+      "description": "Transactions represent completed or attempted payment operations processed for a merchant account. A transaction contains the core payment result, such as the amount, currency, payment method, creation time, and current high-level status.\n\nIn addition to the main payment outcome, a transaction can contain related events that describe what happened after the original payment attempt. These events provide visibility into the financial lifecycle of the transaction, for example:\n- `PAYOUT`: the payment being prepared for payout or included in a payout to the merchant\n- `REFUND`: money returned to the payer\n- `CHARGE_BACK`: money reversed after the original payment\n- `PAYOUT_DEDUCTION`: an amount deducted from a payout to cover a refund or chargeback\n\nFrom an integrator's perspective, transactions are the authoritative record of payment outcomes. Use this tag to:\n- list transactions for reporting, reconciliation, and customer support workflows\n- retrieve a single transaction when you need the latest payment details\n- inspect `simple_status` for the current merchant-facing outcome of the payment\n- inspect `events` or `transaction_events` when you need refund, payout, or chargeback history\n\nTypical workflow:\n- create and process payments through the Checkouts endpoints\n- use the Transactions endpoints to read the resulting payment records\n- use the returned statuses and events to update your own order, accounting, or support systems"
     },
     {
       "name": "Payouts",
-      "description": "The Payouts model will allow you to track funds you’ve received from SumUp.\nYou can receive a detailed payouts list with information like dates, fees, references and statuses, using the `List payouts` endpoint.\n",
+      "description": "The Payouts model will allow you to track funds you’ve received from SumUp.\n\nYou can receive a detailed payouts list with information like dates, fees, references and statuses, using the `List payouts` endpoint.",
       "x-core-objects": [
         {
           "$ref": "#/components/schemas/FinancialPayouts"
