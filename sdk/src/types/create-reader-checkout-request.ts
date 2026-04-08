@@ -7,6 +7,25 @@
  */
 export type CreateReaderCheckoutRequest = {
   /**
+   * Optional object containing data for transactions from ERP integrators in Greece that comply with the AADE 1155 protocol.
+   * When such regulatory/business requirements apply, this object must be provided and contains the data needed to validate the transaction with the AADE signature provider.
+   *
+   */
+  aade?: {
+    /**
+     * The identifier of the AADE signature provider.
+     */
+    provider_id: string;
+    /**
+     * The base64 encoded signature of the transaction data.
+     */
+    signature: string;
+    /**
+     * The string containing the signed transaction data.
+     */
+    signature_data: string;
+  };
+  /**
    * Affiliate
    *
    * Affiliate metadata for the transaction.

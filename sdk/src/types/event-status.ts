@@ -6,9 +6,10 @@
  * Status of the transaction event.
  */
 export type EventStatus =
-  | "PENDING"
-  | "SCHEDULED"
   | "FAILED"
+  | "PAID_OUT"
+  | "PENDING"
+  | "RECONCILED"
   | "REFUNDED"
-  | "SUCCESSFUL"
-  | "PAID_OUT";
+  | "SCHEDULED"
+  | "SUCCESSFUL";
