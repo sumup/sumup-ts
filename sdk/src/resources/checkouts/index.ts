@@ -42,12 +42,20 @@ export type ProcessCheckoutError =
 /**
  * API resource for the Checkouts endpoints.
  *
- * Accept payments from your end users by adding the Checkouts model to your platform.
- * SumUp supports standard and single payment 3DS checkout flows.
+ * Checkouts represent online payment sessions that you create before attempting to charge a payer. A checkout captures the payment intent, such as the amount, currency, merchant, and optional customer or redirect settings, and then moves through its lifecycle as you process it.
  *
- * The Checkout model allows creating, listing, retrieving, processing and deactivating checkouts.
- * A payment is completed by creating a checkout and then processing the checkout.
+ * Use this tag to:
+ * - create a checkout before collecting or confirming payment details
+ * - process the checkout with a card, saved card, wallet, or supported alternative payment method
+ * - retrieve or list checkouts to inspect their current state and associated payment attempts
+ * - deactivate a checkout that should no longer be used
  *
+ * Typical workflow:
+ * - create a checkout with the order amount, currency, and merchant information
+ * - process the checkout through SumUp client tools such as the [Payment Widget and Swift Checkout SDK](https://developer.sumup.com/online-payments/checkouts)
+ * - retrieve the checkout or use the Transactions endpoints to inspect the resulting payment record
+ *
+ * Checkouts are used to initiate and orchestrate online payments. Transactions remain the authoritative record of the resulting payment outcome.
  */
 export class Checkouts extends APIResource {
   /**
@@ -85,7 +93,6 @@ export class Checkouts extends APIResource {
    * For 3DS checkouts, add the `redirect_url` parameter to your request body schema.
    *
    * Follow by processing a checkout to charge the provided payment instrument.
-   *
    */
   create(
     body: CheckoutCreateRequest,
@@ -121,7 +128,6 @@ export class Checkouts extends APIResource {
    * Processing a checkout will attempt to charge the provided payment instrument for the amount of the specified checkout resource initiated in the `Create a checkout` endpoint.
    *
    * Follow this request with `Retrieve a checkout` to confirm its status.
-   *
    */
   process(
     id: string,

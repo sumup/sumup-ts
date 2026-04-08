@@ -5,7 +5,7 @@ import type { Checkout } from "./checkout";
 /**
  * Checkout Success
  *
- * Checkout response returned after a successful processing attempt.
+ * Checkout resource returned after a synchronous processing attempt. In addition to the base checkout fields, it can include the resulting transaction identifiers and any newly created payment instrument token.
  */
 export type CheckoutSuccess = Checkout & {
   /**
@@ -21,11 +21,11 @@ export type CheckoutSuccess = Checkout & {
    */
   merchant_name?: string;
   /**
-   * Refers to a url where the end user is redirected once the payment processing completes.
+   * URL where the payer is redirected after a redirect-based payment or SCA flow completes.
    */
   redirect_url?: string;
   /**
-   * Object containing token information for the specified payment instrument
+   * Details of the saved payment instrument created or reused during checkout processing.
    */
   payment_instrument?: {
     /**

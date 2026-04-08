@@ -7,11 +7,11 @@ import type { PersonalDetails } from "./personal-details";
 /**
  * Process Checkout
  *
- * Details of the payment instrument for processing the checkout.
+ * Request body for attempting payment on an existing checkout. The required companion fields depend on the selected `payment_type`, for example card details, saved-card data, or payer information required by a specific payment method.
  */
 export type ProcessCheckout = {
   /**
-   * Describes the payment method used to attempt processing
+   * Payment method used for this processing attempt. It determines which additional request fields are required.
    */
   payment_type:
     | "card"
@@ -36,11 +36,11 @@ export type ProcessCheckout = {
    */
   apple_pay?: Record<string, unknown>;
   /**
-   * __Required when using a tokenized card to process a checkout.__ Unique token identifying the saved payment card for a customer.
+   * Saved-card token to use instead of raw card details when processing with a previously stored payment instrument.
    */
   token?: string;
   /**
-   * __Required when `token` is provided.__ Unique ID of the customer.
+   * Customer identifier associated with the saved payment instrument. Required when `token` is provided.
    */
   customer_id?: string;
   personal_details?: PersonalDetails;

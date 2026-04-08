@@ -3,19 +3,19 @@
 /**
  * Mandate Payload
  *
- * Mandate is passed when a card is to be tokenized
+ * Mandate details used when a checkout should create a reusable card token for future recurring or merchant-initiated payments.
  */
 export type MandatePayload = {
   /**
-   * Indicates the mandate type
+   * Type of mandate to create for the saved payment instrument.
    */
   type: "recurrent";
   /**
-   * Operating system and web client used by the end-user
+   * Browser or client user agent observed when consent was collected.
    */
   user_agent: string;
   /**
-   * IP address of the end user. Supports IPv4 and IPv6
+   * IP address of the payer when the mandate was accepted.
    */
   user_ip?: string;
 };

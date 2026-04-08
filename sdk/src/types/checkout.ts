@@ -8,36 +8,36 @@ import type { TransactionCheckoutInfo } from "./transaction-checkout-info";
 /**
  * Checkout
  *
- * Details of the payment checkout.
+ * Core checkout resource returned by the Checkouts API. A checkout is created before payment processing and then updated as payment attempts, redirects, and resulting transactions are attached to it.
  */
 export type Checkout = {
   /**
-   * Unique ID of the payment checkout specified by the client application when creating the checkout resource.
+   * Merchant-defined reference for the checkout. Use it to correlate the SumUp checkout with your own order, cart, subscription, or payment attempt in your systems.
    */
   checkout_reference?: string;
   /**
-   * Amount of the payment.
+   * Amount to be charged to the payer, expressed in major units.
    */
   amount?: number;
   currency?: Currency;
   /**
-   * Unique identifying code of the merchant profile.
+   * Merchant account that receives the payment.
    */
   merchant_code?: string;
   /**
-   * Short description of the checkout visible in the SumUp dashboard. The description can contribute to reporting, allowing easier identification of a checkout.
+   * Short merchant-defined description shown in SumUp tools and reporting. Use it to make the checkout easier to recognize in dashboards, support workflows, and reconciliation.
    */
   description?: string;
   /**
-   * URL to which the SumUp platform sends the processing status of the payment checkout.
+   * Optional backend callback URL used by SumUp to notify your platform about processing updates for the checkout.
    */
   return_url?: string;
   /**
-   * Unique ID of the checkout resource.
+   * Unique SumUp identifier of the checkout resource.
    */
   readonly id?: string;
   /**
-   * Current status of the checkout.
+   * Current high-level state of the checkout. `PENDING` means the checkout exists but is not yet completed, `PAID` means a payment succeeded, `FAILED` means the latest processing attempt failed, and `EXPIRED` means the checkout can no longer be processed.
    */
   status?: "PENDING" | "FAILED" | "PAID" | "EXPIRED";
   /**
@@ -45,16 +45,16 @@ export type Checkout = {
    */
   date?: string;
   /**
-   * Date and time of the checkout expiration before which the client application needs to send a processing request. If no value is present, the checkout does not have an expiration time.
+   * Optional expiration timestamp. The checkout must be processed before this moment, otherwise it becomes unusable. If omitted, the checkout does not have an explicit expiry time.
    */
   valid_until?: string | null;
   /**
-   * Unique identification of a customer. If specified, the checkout session and payment instrument are associated with the referenced customer.
+   * Merchant-scoped identifier of the customer associated with the checkout. Use it when storing payment instruments or reusing saved customer context for recurring and returning-payer flows.
    */
   customer_id?: string;
   mandate?: MandateResponse;
   /**
-   * List of transactions related to the payment.
+   * Payment attempts and resulting transaction records linked to this checkout. Use the Transactions endpoints when you need the authoritative payment result and event history.
    */
   transactions?: (TransactionBase & TransactionCheckoutInfo)[];
 };

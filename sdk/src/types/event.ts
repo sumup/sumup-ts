@@ -8,7 +8,7 @@ import type { TransactionID } from "./transaction-id";
 /**
  * Event
  *
- * Transaction event details.
+ * High-level transaction event details.
  */
 export type Event = {
   id?: EventID;
