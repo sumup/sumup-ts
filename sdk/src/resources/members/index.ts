@@ -67,6 +67,11 @@ export type UpdateMerchantMemberParams = {
   };
 };
 
+/**
+ * API resource for the Members endpoints.
+ *
+ * Endpoints to manage account members. Members are users that have membership within merchant accounts.
+ */
 export class Members extends APIResource {
   /**
    * Lists merchant members.

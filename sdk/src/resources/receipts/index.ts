@@ -7,6 +7,11 @@ export type GetReceiptQueryParams = {
   tx_event_id?: number;
 };
 
+/**
+ * API resource for the Receipts endpoints.
+ *
+ * The Receipts model obtains receipt-like details for specific transactions.
+ */
 export class Receipts extends APIResource {
   /**
    * Retrieves receipt specific data for a transaction.

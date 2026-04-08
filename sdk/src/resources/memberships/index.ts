@@ -25,6 +25,11 @@ export type ListMembershipsResponse = {
   total_count: number;
 };
 
+/**
+ * API resource for the Memberships endpoints.
+ *
+ * Endpoints to manage user's memberships. Memberships are used to connect the user to merchant accounts and to grant them access to the merchant's resources via roles.
+ */
 export class Memberships extends APIResource {
   /**
    * List memberships of the current user.

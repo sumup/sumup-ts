@@ -264,8 +264,19 @@ export async function generateResource(
     }
   }
 
-  writer.w(`
+  const classComment = docComment(
+    [`API resource for the ${tag.name} endpoints.`, tag.description]
+      .filter(Boolean)
+      .join("\n\n"),
+  );
+  if (classComment) {
+    writer.w(`${classComment}
 export class ${resourceClassName} extends APIResource {`);
+  }
+  if (!classComment) {
+    writer.w(`
+export class ${resourceClassName} extends APIResource {`);
+  }
   for (const { methodSpec, pathSpec, opId, method, path } of iterPathConfig(
     spec.paths,
   )) {

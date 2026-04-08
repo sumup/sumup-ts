@@ -34,6 +34,11 @@ export type UpdateSubAccountParams = {
   };
 };
 
+/**
+ * API resource for the Subaccounts endpoints.
+ *
+ * Endpoints for managing merchant sub-accounts (operators).
+ */
 export class Subaccounts extends APIResource {
   /**
    * Returns list of operators for currently authorized user's merchant.
