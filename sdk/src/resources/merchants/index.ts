@@ -19,6 +19,11 @@ export type GetPersonQueryParams = {
   version?: string;
 };
 
+/**
+ * API resource for the Merchants endpoints.
+ *
+ * Merchant account represents a single business entity at SumUp.
+ */
 export class Merchants extends APIResource {
   /**
    * Retrieve a merchant.

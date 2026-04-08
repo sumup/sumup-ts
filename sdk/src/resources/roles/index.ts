@@ -35,6 +35,11 @@ export type UpdateMerchantRoleParams = {
   description?: string;
 };
 
+/**
+ * API resource for the Roles endpoints.
+ *
+ * Endpoints to manage custom roles. Custom roles allow you to tailor roles from individual permissions to match your needs. Once created, you can assign your custom roles to your merchant account members using the memberships.
+ */
 export class Roles extends APIResource {
   /**
    * List merchant's custom roles.

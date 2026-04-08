@@ -18,6 +18,15 @@ export type UpdateCustomerParams = { personal_details?: PersonalDetails };
 
 export type ListPaymentInstrumentsResponse = PaymentInstrumentResponse[];
 
+/**
+ * API resource for the Customers endpoints.
+ *
+ * Allow your regular customers to save their information with the Customers model.
+ * This will prevent re-entering payment instrument information for recurring payments on your platform.
+ *
+ * Depending on the needs you can allow, creating, listing or deactivating payment instruments & creating, retrieving and updating customers.
+ *
+ */
 export class Customers extends APIResource {
   /**
    * Creates a new saved customer resource which you can later manipulate and save payment instruments to.

@@ -84,6 +84,13 @@ export type ListTransactionsResponse = {
   links?: TransactionsHistoryLink[];
 };
 
+/**
+ * API resource for the Transactions endpoints.
+ *
+ * Retrieve details for a specific transaction by it’s `id`
+ * or any other required query parameter, or list all transactions related to the merchant account.
+ *
+ */
 export class Transactions extends APIResource {
   /**
    * Refunds an identified transaction either in full or partially.

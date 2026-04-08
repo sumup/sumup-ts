@@ -60,7 +60,8 @@ export async function generateIndex(
   for (const tag of tags) {
     const resourceClassName = resourceClassByTag.get(tag.name)!;
     writer.w(
-      `${Case.camel(tag.name)}: ${resourceClassName} = new ${resourceClassName}(this);`,
+      `  /** Access the ${tag.name} API endpoints. */
+  ${Case.camel(tag.name)}: ${resourceClassName} = new ${resourceClassName}(this);`,
     );
   }
   writer.w("}");

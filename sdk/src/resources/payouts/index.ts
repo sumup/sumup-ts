@@ -22,6 +22,13 @@ export type ListPayoutsQueryParams = {
 
 export type ListPayoutsError = ErrorExtended[];
 
+/**
+ * API resource for the Payouts endpoints.
+ *
+ * The Payouts model will allow you to track funds you’ve received from SumUp.
+ * You can receive a detailed payouts list with information like dates, fees, references and statuses, using the `List payouts` endpoint.
+ *
+ */
 export class Payouts extends APIResource {
   /**
    * Lists ordered payouts for the merchant profile.
