@@ -3,19 +3,19 @@
 /**
  * Mandate Response
  *
- * Created mandate
+ * Details of the mandate linked to the saved payment instrument.
  */
 export type MandateResponse = {
   /**
-   * Indicates the mandate type
+   * Type of mandate stored for the checkout or payment instrument.
    */
   type?: string;
   /**
-   * Mandate status
+   * Current lifecycle status of the mandate.
    */
-  status?: string;
+  status?: "active" | "inactive";
   /**
-   * Merchant code which has the mandate
+   * Merchant account for which the mandate is valid.
    */
   merchant_code?: string;
 };

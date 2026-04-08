@@ -6,7 +6,6 @@
  * A RFC 9457 problem details object.
  *
  * Additional properties specific to the problem type may be present.
- *
  */
 export type Problem = {
   /**
