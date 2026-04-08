@@ -8080,12 +8080,13 @@
         "description": "Status of the transaction event.",
         "type": "string",
         "enum": [
-          "PENDING",
-          "SCHEDULED",
           "FAILED",
+          "PAID_OUT",
+          "PENDING",
+          "RECONCILED",
           "REFUNDED",
-          "SUCCESSFUL",
-          "PAID_OUT"
+          "SCHEDULED",
+          "SUCCESSFUL"
         ],
         "title": "Event Status"
       },
@@ -9739,6 +9740,32 @@
         "description": "Reader Checkout",
         "type": "object",
         "properties": {
+          "aade": {
+            "description": "Optional object containing data for transactions from ERP integrators in Greece that comply with the AADE 1155 protocol.\nWhen such regulatory/business requirements apply, this object must be provided and contains the data needed to validate the transaction with the AADE signature provider.\n",
+            "type": "object",
+            "properties": {
+              "provider_id": {
+                "description": "The identifier of the AADE signature provider.",
+                "type": "string",
+                "example": "123"
+              },
+              "signature": {
+                "description": "The base64 encoded signature of the transaction data.",
+                "type": "string",
+                "example": "QjcxRDdBNTU1MDcyRTNFRTREMkZEM0Y0NTdBMjkxMTU4MzBFNkNCQTs7MjAyNTExMTIyMTQ3MTM7Nzk2OzEwNDs5MDA7OTAwOzU0ODg5MDM5"
+              },
+              "signature_data": {
+                "description": "The string containing the signed transaction data.",
+                "type": "string",
+                "example": "B71D7A555072E3EE4D2FD3F457A29115830E6CBA;;20251112214713;796;104;900;900;54889039"
+              }
+            },
+            "required": [
+              "provider_id",
+              "signature",
+              "signature_data"
+            ]
+          },
           "affiliate": {
             "description": "Affiliate metadata for the transaction.\nIt is a field that allow for integrators to track the source of the transaction.\n",
             "type": "object",
@@ -9855,6 +9882,11 @@
           }
         },
         "example": {
+          "aade": {
+            "provider_id": "123",
+            "signature": "QjcxRDdBNTU1MDcyRTNFRTREMkZEM0Y0NTdBMjkxMTU4MzBFNkNCQTs7MjAyNTExMTIyMTQ3MTM7Nzk2OzEwNDs5MDA7OTAwOzU0ODg5MDM5",
+            "signature_data": "B71D7A555072E3EE4D2FD3F457A29115830E6CBA;;20251112214713;796;104;900;900;54889039"
+          },
           "affiliate": {
             "app_id": "com.example.app",
             "foreign_transaction_id": "123456",
