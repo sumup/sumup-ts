@@ -10,7 +10,7 @@ import type { PhoneNumber } from "./phone-number";
  * Information about the company or business. This is legal information that is used for verification.
  *
  *
- * Company documentation: https://developer.sumup.com/tools/models/merchant#company
+ * Company documentation: https://developer.sumup.com/tools/glossary/merchant#company
  */
 export type Company = {
   /**

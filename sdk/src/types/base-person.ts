@@ -12,7 +12,7 @@ import type { Version } from "./version";
  * Base schema for a person associated with a merchant. This can be a legal representative, business owner (ultimate beneficial owner), or an officer. A legal representative is the person who registered the merchant with SumUp. They should always have a `user_id`.
  *
  *
- * Person documentation: https://developer.sumup.com/tools/models/merchant#persons
+ * Person documentation: https://developer.sumup.com/tools/glossary/merchant#persons
  */
 export type BasePerson = {
   /**
