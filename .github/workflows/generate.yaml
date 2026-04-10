@@ -16,6 +16,9 @@ concurrency:
   group: generate-${{ github.ref }}
   cancel-in-progress: true
 
+permissions:
+  contents: write
+
 jobs:
   ci:
     name: Generated SDK

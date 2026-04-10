@@ -11,8 +11,7 @@ defaults:
     working-directory: ./sdk
 
 permissions:
-  contents: write
-  pull-requests: write
+  contents: read
 
 jobs:
   lint:
@@ -68,6 +67,9 @@ jobs:
     name: Prepare release
     runs-on: ubuntu-latest
     if: (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/next')
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
       - name: Checkout code
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
