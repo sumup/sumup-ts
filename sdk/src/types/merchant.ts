@@ -12,7 +12,7 @@ import type { Version } from "./version";
 /**
  * Merchant
  *
- * Merchant documentation: https://developer.sumup.com/tools/models/merchant
+ * Merchant documentation: https://developer.sumup.com/tools/glossary/merchant
  */
 export type Merchant = {
   /**
