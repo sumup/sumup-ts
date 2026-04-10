@@ -8891,7 +8891,7 @@
         ],
         "externalDocs": {
           "description": "Merchant documentation",
-          "url": "https://developer.sumup.com/tools/models/merchant"
+          "url": "https://developer.sumup.com/tools/glossary/merchant"
         },
         "title": "Merchant"
       },
@@ -8943,7 +8943,7 @@
         },
         "externalDocs": {
           "description": "Company documentation",
-          "url": "https://developer.sumup.com/tools/models/merchant#company"
+          "url": "https://developer.sumup.com/tools/glossary/merchant#company"
         }
       },
       "Meta": {
@@ -9088,7 +9088,7 @@
         ],
         "externalDocs": {
           "description": "The country SDK documentation for legal types.",
-          "url": "https://developer.sumup.com/tools/models/merchant#legal-types"
+          "url": "https://developer.sumup.com/tools/glossary/merchant#legal-types"
         },
         "maxLength": 64,
         "minLength": 4
@@ -9127,7 +9127,7 @@
         ],
         "externalDocs": {
           "description": "Company identifier documentation",
-          "url": "https://developer.sumup.com/tools/models/merchant#company-identifiers"
+          "url": "https://developer.sumup.com/tools/glossary/merchant#company-identifiers"
         },
         "required": [
           "ref",
@@ -9261,7 +9261,7 @@
         },
         "externalDocs": {
           "description": "Person documentation",
-          "url": "https://developer.sumup.com/tools/models/merchant#persons"
+          "url": "https://developer.sumup.com/tools/glossary/merchant#persons"
         },
         "required": [
           "id"
