@@ -3,6 +3,7 @@
 import * as Core from "./core";
 import { buildRuntimeHeaders } from "./runtime";
 import { VERSION } from "./version";
+import { WebhookHandler } from "./webhooks";
 
 const DEFAULT_HOST = "https://api.sumup.com";
 
@@ -129,6 +130,10 @@ export class HTTPClient {
       method: "DELETE",
       ...params,
     });
+  }
+
+  public webhookHandler(secret: string, toleranceMs?: number): WebhookHandler {
+    return new WebhookHandler(this, secret, toleranceMs);
   }
 
   public request<T>({ ...params }: Core.FullRequestOptions): Promise<T> {
