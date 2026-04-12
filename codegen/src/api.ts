@@ -28,6 +28,7 @@ export async function generateIndex(
   export type { APIConfig } from './client'
   export { APIError, SumUpError } from './core'
   export type { RequestOptions } from './core'
+  export * from './webhooks'
   export * from './types'
   `);
 

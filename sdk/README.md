@@ -124,6 +124,38 @@ const { data, response } = await client.merchants
 console.info(response.status, data);
 ```
 
+## Webhooks
+
+The SDK includes helpers to verify and parse SumUp webhooks using the same
+signature model as the other SDKs:
+
+- `X-SumUp-Webhook-Signature`
+- `X-SumUp-Webhook-Timestamp`
+- signed payload format `v1:<unix_timestamp>:<raw_body>`
+
+```ts
+import SumUp, {
+  CheckoutCreatedEvent,
+  SIGNATURE_HEADER,
+  TIMESTAMP_HEADER,
+} from "@sumup/sdk";
+
+const client = new SumUp({ apiKey: process.env.SUMUP_API_KEY });
+const webhooks = client.webhookHandler(process.env.SUMUP_WEBHOOK_SECRET!);
+
+const body = await request.text();
+const event = await webhooks.verifyAndParse(
+  body,
+  request.headers.get(SIGNATURE_HEADER) ?? "",
+  request.headers.get(TIMESTAMP_HEADER) ?? "",
+);
+
+if (event instanceof CheckoutCreatedEvent) {
+  const checkout = await event.fetchObject();
+  console.info(checkout.status);
+}
+```
+
 ## Examples
 
 Install dependencies inside an example directory before running it:
@@ -193,6 +225,31 @@ npx tsx index.ts
 ```
 
 Then open `http://localhost:8080/login` in your browser to start the flow.
+
+### `examples/webhooks`
+
+Runs a minimal Express server that verifies SumUp webhook signatures, parses the
+event payload, and optionally fetches the referenced resource.
+
+Required environment variables:
+
+```bash
+export SUMUP_WEBHOOK_SECRET="whsec_..."
+```
+
+Optional environment variables:
+
+```bash
+export SUMUP_API_KEY="sup_sk_..."
+export PORT="3000"
+```
+
+Run it with:
+
+```bash
+cd examples/webhooks
+npx tsx index.ts
+```
 
 ## Support
 
