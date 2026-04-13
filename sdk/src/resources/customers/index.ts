@@ -12,7 +12,7 @@ import type {
 } from "../../types";
 export type CreateCustomerError =
   | ErrorExtended
-  | { instance?: string; error_code?: string; error_message?: string };
+  | { instance: string; error_code: string; error_message: string };
 
 export type UpdateCustomerParams = { personal_details?: PersonalDetails };
 

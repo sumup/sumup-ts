@@ -29,10 +29,6 @@ export type CheckoutAccepted = {
     /**
      * Parameters required to complete the next step. The exact keys depend on the payment provider and flow type.
      */
-    payload?: {
-      PaReq?: Record<string, unknown>;
-      MD?: Record<string, unknown>;
-      TermUrl?: Record<string, unknown>;
-    };
+    payload?: Record<string, string>;
   };
 };

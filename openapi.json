@@ -75,7 +75,15 @@
                             "example": "qr_code_pix"
                           }
                         }
-                      }
+                      },
+                      "example": [
+                        {
+                          "id": "apple_pay"
+                        },
+                        {
+                          "id": "blik"
+                        }
+                      ]
                     }
                   }
                 },
@@ -443,7 +451,19 @@
                   "items": {
                     "$ref": "#/components/schemas/CheckoutSuccess"
                   }
-                }
+                },
+                "example": [
+                  {
+                    "checkout_reference": "f00a8f74-b05d-4605-bd73-2a901bae5802",
+                    "amount": 10.1,
+                    "currency": "EUR",
+                    "merchant_code": "MH4H92C7",
+                    "description": "Purchase",
+                    "id": "4e425463-3e1b-431d-83fa-1e51c2925e99",
+                    "status": "PENDING",
+                    "date": "2020-02-29T10:56:56+00:00"
+                  }
+                ]
               }
             }
           },
@@ -514,6 +534,18 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/CheckoutSuccess"
+                },
+                "example": {
+                  "checkout_reference": "f00a8f74-b05d-4605-bd73-2a901bae5802",
+                  "amount": 10.1,
+                  "currency": "EUR",
+                  "merchant_code": "MH4H92C7",
+                  "description": "Purchase",
+                  "id": "4e425463-3e1b-431d-83fa-1e51c2925e99",
+                  "status": "PENDING",
+                  "date": "2020-02-29T10:56:56+00:00",
+                  "transaction_code": "TEENSK4W2K",
+                  "transaction_id": "410fc44a-5956-44e1-b5cc-19c6f8d727a4"
                 }
               }
             }
@@ -1092,7 +1124,7 @@
     "/v0.2/checkouts/{id}/apple-pay-session": {
       "put": {
         "operationId": "CreateApplePaySession",
-        "summary": "Create an apple pay session.",
+        "summary": "Create an Apple Pay session",
         "description": "Creates an Apple Pay merchant session for the specified checkout.\n\nUse this endpoint after the customer selects Apple Pay and before calling\n`ApplePaySession.completeMerchantValidation(...)` in the browser.\nSumUp validates the merchant session request and returns the Apple Pay\nsession object that your frontend should pass to Apple's JavaScript API.\n",
         "parameters": [
           {
@@ -1174,6 +1206,10 @@
                       }
                     }
                   ]
+                },
+                "example": {
+                  "error_code": "INVALID",
+                  "message": "Bad Request"
                 }
               }
             }
@@ -1253,6 +1289,11 @@
                     },
                     {
                       "type": "object",
+                      "required": [
+                        "instance",
+                        "error_code",
+                        "error_message"
+                      ],
                       "properties": {
                         "instance": {
                           "type": "string"
@@ -1271,9 +1312,9 @@
                   "Missing_Customer_ID": {
                     "description": "The required customer identifier is missing.",
                     "value": {
-                      "instance": "32a44c6c-85d3-49e8-86bf-a5bba98c4621",
                       "error_code": "INVALID",
-                      "error_message": "customer_id"
+                      "message": "Validation error",
+                      "param": "customer_id"
                     }
                   }
                 }
@@ -1850,6 +1891,9 @@
           "description": "Optional amount for partial refunds.",
           "content": {
             "application/json": {
+              "example": {
+                "amount": 5
+              },
               "schema": {
                 "description": "Optional amount for partial refunds of transactions.",
                 "type": "object",
@@ -1857,7 +1901,8 @@
                   "amount": {
                     "description": "Amount to be refunded. Eligible amount can't exceed the amount of the transaction and varies based on country and currency. If you do not specify a value, the system performs a full refund of the transaction.",
                     "type": "number",
-                    "format": "float"
+                    "format": "float",
+                    "example": 5
                   }
                 }
               }
@@ -1944,6 +1989,7 @@
           {
             "name": "merchant_code",
             "in": "path",
+            "description": "Merchant code of the account whose transaction should be retrieved.",
             "required": true,
             "schema": {
               "type": "string",
@@ -2001,6 +2047,22 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/TransactionFull"
+                },
+                "example": {
+                  "id": "410fc44a-5956-44e1-b5cc-19c6f8d727a4",
+                  "transaction_code": "TEENSK4W2K",
+                  "amount": 10.1,
+                  "currency": "EUR",
+                  "timestamp": "2020-02-29T10:56:56.876Z",
+                  "status": "SUCCESSFUL",
+                  "payment_type": "ECOM",
+                  "installments_count": 1,
+                  "merchant_code": "MH4H92C7",
+                  "vat_amount": 6,
+                  "tip_amount": 3,
+                  "entry_mode": "CUSTOMER_ENTRY",
+                  "auth_code": "053201",
+                  "internal_id": 1763892018
                 }
               }
             }
@@ -2109,6 +2171,22 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/TransactionFull"
+                },
+                "example": {
+                  "id": "410fc44a-5956-44e1-b5cc-19c6f8d727a4",
+                  "transaction_code": "TEENSK4W2K",
+                  "amount": 10.1,
+                  "currency": "EUR",
+                  "timestamp": "2020-02-29T10:56:56.876Z",
+                  "status": "SUCCESSFUL",
+                  "payment_type": "ECOM",
+                  "installments_count": 1,
+                  "merchant_code": "MH4H92C7",
+                  "vat_amount": 6,
+                  "tip_amount": 3,
+                  "entry_mode": "CUSTOMER_ENTRY",
+                  "auth_code": "053201",
+                  "internal_id": 1763892018
                 }
               }
             }
@@ -2186,6 +2264,7 @@
           {
             "name": "merchant_code",
             "in": "path",
+            "description": "Merchant code of the account whose transaction history should be listed.",
             "required": true,
             "schema": {
               "type": "string",
@@ -2232,8 +2311,14 @@
               "items": {
                 "type": "string",
                 "format": "email"
-              }
-            }
+              },
+              "example": [
+                "merchant@example.com"
+              ]
+            },
+            "example": [
+              "merchant@example.com"
+            ]
           },
           {
             "name": "statuses[]",
@@ -2356,15 +2441,55 @@
                       "type": "array",
                       "items": {
                         "$ref": "#/components/schemas/TransactionHistory"
-                      }
+                      },
+                      "example": [
+                        {
+                          "transaction_code": "TEENSK4W2K",
+                          "amount": 10.1,
+                          "currency": "EUR",
+                          "timestamp": "2020-02-29T10:56:56.876Z",
+                          "status": "SUCCESSFUL",
+                          "payment_type": "ECOM",
+                          "installments_count": 1,
+                          "merchant_code": "MH4H92C7",
+                          "transaction_id": "410fc44a-5956-44e1-b5cc-19c6f8d727a4",
+                          "user": "merchant@example.com",
+                          "type": "PAYMENT",
+                          "payout_date": "2019-08-28",
+                          "payout_type": "BANK_ACCOUNT",
+                          "refunded_amount": 0
+                        }
+                      ]
                     },
                     "links": {
                       "type": "array",
                       "items": {
                         "$ref": "#/components/schemas/TransactionsHistoryLink"
-                      }
+                      },
+                      "example": []
                     }
                   }
+                },
+                "example": {
+                  "items": [
+                    {
+                      "transaction_code": "TEENSK4W2K",
+                      "amount": 10.1,
+                      "currency": "EUR",
+                      "timestamp": "2020-02-29T10:56:56.876Z",
+                      "status": "SUCCESSFUL",
+                      "payment_type": "ECOM",
+                      "installments_count": 1,
+                      "merchant_code": "MH4H92C7",
+                      "transaction_id": "410fc44a-5956-44e1-b5cc-19c6f8d727a4",
+                      "user": "merchant@example.com",
+                      "type": "PAYMENT",
+                      "payout_date": "2019-08-28",
+                      "payout_type": "BANK_ACCOUNT",
+                      "refunded_amount": 0
+                    }
+                  ],
+                  "links": []
                 }
               }
             }
@@ -2478,8 +2603,14 @@
               "items": {
                 "type": "string",
                 "format": "email"
-              }
-            }
+              },
+              "example": [
+                "merchant@example.com"
+              ]
+            },
+            "example": [
+              "merchant@example.com"
+            ]
           },
           {
             "name": "statuses[]",
@@ -2590,15 +2721,55 @@
                       "type": "array",
                       "items": {
                         "$ref": "#/components/schemas/TransactionHistory"
-                      }
+                      },
+                      "example": [
+                        {
+                          "transaction_code": "TEENSK4W2K",
+                          "amount": 10.1,
+                          "currency": "EUR",
+                          "timestamp": "2020-02-29T10:56:56.876Z",
+                          "status": "SUCCESSFUL",
+                          "payment_type": "ECOM",
+                          "installments_count": 1,
+                          "merchant_code": "MH4H92C7",
+                          "transaction_id": "410fc44a-5956-44e1-b5cc-19c6f8d727a4",
+                          "user": "merchant@example.com",
+                          "type": "PAYMENT",
+                          "payout_date": "2019-08-28",
+                          "payout_type": "BANK_ACCOUNT",
+                          "refunded_amount": 0
+                        }
+                      ]
                     },
                     "links": {
                       "type": "array",
                       "items": {
                         "$ref": "#/components/schemas/TransactionsHistoryLink"
-                      }
+                      },
+                      "example": []
                     }
                   }
+                },
+                "example": {
+                  "items": [
+                    {
+                      "transaction_code": "TEENSK4W2K",
+                      "amount": 10.1,
+                      "currency": "EUR",
+                      "timestamp": "2020-02-29T10:56:56.876Z",
+                      "status": "SUCCESSFUL",
+                      "payment_type": "ECOM",
+                      "installments_count": 1,
+                      "merchant_code": "MH4H92C7",
+                      "transaction_id": "410fc44a-5956-44e1-b5cc-19c6f8d727a4",
+                      "user": "merchant@example.com",
+                      "type": "PAYMENT",
+                      "payout_date": "2019-08-28",
+                      "payout_type": "BANK_ACCOUNT",
+                      "refunded_amount": 0
+                    }
+                  ],
+                  "links": []
                 }
               }
             }
@@ -2676,6 +2847,7 @@
           {
             "name": "merchant_code",
             "in": "path",
+            "description": "Merchant code of the account whose payouts should be listed.",
             "required": true,
             "schema": {
               "type": "string",
@@ -2705,9 +2877,11 @@
           {
             "name": "format",
             "in": "query",
+            "description": "Response format for the payout list.",
             "required": false,
             "schema": {
               "type": "string",
+              "example": "json",
               "enum": [
                 "json",
                 "csv"
@@ -2717,17 +2891,21 @@
           {
             "name": "limit",
             "in": "query",
+            "description": "Maximum number of payout records to return.",
             "required": false,
             "schema": {
-              "type": "integer"
+              "type": "integer",
+              "example": 10
             }
           },
           {
             "name": "order",
             "in": "query",
+            "description": "Sort direction for the returned payouts.",
             "required": false,
             "schema": {
               "type": "string",
+              "example": "desc",
               "enum": [
                 "desc",
                 "asc"
@@ -2742,7 +2920,20 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/FinancialPayouts"
-                }
+                },
+                "example": [
+                  {
+                    "amount": 132.45,
+                    "currency": "EUR",
+                    "date": "2024-02-29",
+                    "fee": 3.12,
+                    "id": 123456789,
+                    "reference": "payout-2024-02-29",
+                    "status": "SUCCESSFUL",
+                    "transaction_code": "TEENSK4W2K",
+                    "type": "PAYOUT"
+                  }
+                ]
               }
             }
           },
@@ -2851,9 +3042,11 @@
           {
             "name": "format",
             "in": "query",
+            "description": "Response format for the payout list.",
             "required": false,
             "schema": {
               "type": "string",
+              "example": "json",
               "enum": [
                 "json",
                 "csv"
@@ -2863,17 +3056,21 @@
           {
             "name": "limit",
             "in": "query",
+            "description": "Maximum number of payout records to return.",
             "required": false,
             "schema": {
-              "type": "integer"
+              "type": "integer",
+              "example": 10
             }
           },
           {
             "name": "order",
             "in": "query",
+            "description": "Sort direction for the returned payouts.",
             "required": false,
             "schema": {
               "type": "string",
+              "example": "desc",
               "enum": [
                 "desc",
                 "asc"
@@ -2888,7 +3085,20 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/FinancialPayouts"
-                }
+                },
+                "example": [
+                  {
+                    "amount": 132.45,
+                    "currency": "EUR",
+                    "date": "2024-02-29",
+                    "fee": 3.12,
+                    "id": 123456789,
+                    "reference": "payout-2024-02-29",
+                    "status": "SUCCESSFUL",
+                    "transaction_code": "TEENSK4W2K",
+                    "type": "PAYOUT"
+                  }
+                ]
               }
             }
           },
@@ -3010,6 +3220,31 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Receipt"
+                },
+                "example": {
+                  "transaction_data": {
+                    "transaction_code": "TEENSK4W2K",
+                    "transaction_id": "410fc44a-5956-44e1-b5cc-19c6f8d727a4",
+                    "merchant_code": "MH4H92C7",
+                    "amount": "10.10",
+                    "vat_amount": "6.00",
+                    "tip_amount": "3.00",
+                    "currency": "EUR",
+                    "timestamp": "2020-02-29T10:56:56.876Z",
+                    "status": "SUCCESSFUL",
+                    "payment_type": "ECOM",
+                    "entry_mode": "CUSTOMER_ENTRY",
+                    "installments_count": 1,
+                    "process_as": "CREDIT"
+                  },
+                  "merchant_data": {
+                    "merchant_profile": {
+                      "merchant_code": "MH4H92C7"
+                    }
+                  },
+                  "acquirer_data": {
+                    "authorization_code": "053201"
+                  }
                 }
               }
             }
@@ -6069,15 +6304,6 @@
           }
         }
       },
-      "GeoCoordinatesFilter": {
-        "name": "geo_coordinates",
-        "in": "query",
-        "description": "Filters the results by the geographical coordinates of the location where the transaction is made (as retrieved from the terminal device) and returns only results that fall within the specified rectangular area. The accepted format is a comma-separated list of coordinate points that form a rectangle defined by the following parameters:\n- `southwest_lng` (for the longitude value of the southwestern edge of the rectangle)\n- `southwest_lat` (for the latitude value of the southwestern edge of the rectangle)\n- `northeast_lng` (for the longitude value of the northeastern edge of the rectangle)\n- `northeast_lat` (for the latitude value of the northeastern edge of the rectangle)",
-        "required": false,
-        "schema": {
-          "type": "string"
-        }
-      },
       "LimitFilter": {
         "name": "limit",
         "in": "query",
@@ -6127,18 +6353,6 @@
           "type": "array",
           "items": {
             "$ref": "#/components/schemas/PaymentType"
-          }
-        }
-      },
-      "ReadersFilter": {
-        "name": "readers",
-        "in": "query",
-        "description": "Filters the returned results by the specified list of serial numbers of the terminal readers used for the transactions.",
-        "required": false,
-        "schema": {
-          "type": "array",
-          "items": {
-            "type": "string"
           }
         }
       },
@@ -6219,12 +6433,18 @@
         "in": "query",
         "description": "Filters the returned results by user email.",
         "required": false,
+        "example": [
+          "merchant@example.com"
+        ],
         "schema": {
           "type": "array",
           "items": {
             "type": "string",
             "format": "email"
-          }
+          },
+          "example": [
+            "merchant@example.com"
+          ]
         }
       }
     },
@@ -6423,6 +6643,7 @@
           "checkout_reference": {
             "description": "Merchant-defined reference for the checkout. Use it to correlate the SumUp checkout with your own order, cart, subscription, or payment attempt in your systems.",
             "type": "string",
+            "example": "f00a8f74-b05d-4605-bd73-2a901bae5802",
             "maxLength": 90
           },
           "amount": {
@@ -6441,12 +6662,14 @@
           },
           "description": {
             "description": "Short merchant-defined description shown in SumUp tools and reporting. Use it to make the checkout easier to recognize in dashboards, support workflows, and reconciliation.",
-            "type": "string"
+            "type": "string",
+            "example": "Purchase"
           },
           "return_url": {
             "description": "Optional backend callback URL used by SumUp to notify your platform about processing updates for the checkout.",
             "type": "string",
-            "format": "uri"
+            "format": "uri",
+            "example": "http://example.com"
           },
           "id": {
             "description": "Unique SumUp identifier of the checkout resource.",
@@ -6457,6 +6680,7 @@
           "status": {
             "description": "Current high-level state of the checkout. `PENDING` means the checkout exists but is not yet completed, `PAID` means a payment succeeded, `FAILED` means the latest processing attempt failed, and `EXPIRED` means the checkout can no longer be processed.",
             "type": "string",
+            "example": "PENDING",
             "enum": [
               "PENDING",
               "FAILED",
@@ -6498,6 +6722,24 @@
                 }
               ]
             },
+            "example": [
+              {
+                "id": "410fc44a-5956-44e1-b5cc-19c6f8d727a4",
+                "transaction_code": "TEENSK4W2K",
+                "amount": 10.1,
+                "currency": "EUR",
+                "timestamp": "2020-02-29T10:56:56.876Z",
+                "status": "SUCCESSFUL",
+                "payment_type": "ECOM",
+                "installments_count": 1,
+                "merchant_code": "MH4H92C7",
+                "vat_amount": 6,
+                "tip_amount": 3,
+                "entry_mode": "CUSTOMER_ENTRY",
+                "auth_code": "012345",
+                "internal_id": 0
+              }
+            ],
             "uniqueItems": true
           }
         },
@@ -6510,12 +6752,14 @@
           "checkout_reference": {
             "description": "Merchant-defined reference for the new checkout. It should be unique enough for you to identify the payment attempt in your own systems.",
             "type": "string",
+            "example": "f00a8f74-b05d-4605-bd73-2a901bae5802",
             "maxLength": 90
           },
           "amount": {
             "description": "Amount to be charged to the payer, expressed in major units.",
             "type": "number",
-            "format": "float"
+            "format": "float",
+            "example": 10.1
           },
           "currency": {
             "$ref": "#/components/schemas/Currency"
@@ -6527,16 +6771,19 @@
           },
           "description": {
             "description": "Short merchant-defined description shown in SumUp tools and reporting for easier identification of the checkout.",
-            "type": "string"
+            "type": "string",
+            "example": "Purchase"
           },
           "return_url": {
             "description": "Optional backend callback URL used by SumUp to notify your platform about processing updates for the checkout.",
             "type": "string",
-            "format": "uri"
+            "format": "uri",
+            "example": "http://example.com/"
           },
           "customer_id": {
             "description": "Merchant-scoped customer identifier. Required when setting up recurring payments and useful when the checkout should be linked to a returning payer.",
-            "type": "string"
+            "type": "string",
+            "example": "831ff8d4cd5958ab5670"
           },
           "purpose": {
             "description": "Business purpose of the checkout. Use `CHECKOUT` for a standard payment and `SETUP_RECURRING_PAYMENT` when collecting consent and payment details for future recurring charges.",
@@ -6575,6 +6822,7 @@
           "payment_type": {
             "description": "Payment method used for this processing attempt. It determines which additional request fields are required.",
             "type": "string",
+            "example": "card",
             "enum": [
               "card",
               "boleto",
@@ -6588,6 +6836,7 @@
           "installments": {
             "description": "Number of installments for deferred payments. Available only to merchant users in Brazil.",
             "type": "integer",
+            "example": 1,
             "maximum": 12,
             "minimum": 1
           },
@@ -6643,11 +6892,13 @@
           },
           "token": {
             "description": "Saved-card token to use instead of raw card details when processing with a previously stored payment instrument.",
-            "type": "string"
+            "type": "string",
+            "example": "ba85dfee-c3cf-48a6-84f5-d7d761fbba50"
           },
           "customer_id": {
             "description": "Customer identifier associated with the saved payment instrument. Required when `token` is provided.",
-            "type": "string"
+            "type": "string",
+            "example": "MEDKHDTI"
           },
           "personal_details": {
             "$ref": "#/components/schemas/PersonalDetails"
@@ -6742,16 +6993,13 @@
               "payload": {
                 "description": "Parameters required to complete the next step. The exact keys depend on the payment provider and flow type.",
                 "type": "object",
-                "properties": {
-                  "PaReq": {
-                    "example": "eJxVUttu2zAM/RXDr4MjyY5dO6BVuE27FZuDZHGG9VGRmMSFb/Wljff1k9KkF0APPCR1eHQouD6WhfWCbZfXVWyzCbUtrGSt8mof25vs3gltq+tFpURRVxjbI3b2NYfs0CLO1yiHFjmk2HVij1auYrsRW1+F0U4qZxfKwJlur4QTYcQcJoIdc+XO2/poc1gmv/GZw3k216MnLpAL1JytPIiq5yDk883Dgk+DwPV9IGcIJbYPc84o1Ye6lHqu5wVA3tJQiRL5eiiHxlqKscSq76xfeZn3qICciiDroerbkYeuvnYBMLQFP/R9MyOkM9cnCoGYJJAPScvBRJ0mOeaKr/6l08XT6jXN7tx0vvHSbOMtsj1dzB9jIKYDlOiRu1omYyy0WDCj0YxFQE55EKWZzj2f6ee9xdCYEcmnwucEaN9bvaeRR1ehFn9BgMdGr0l3aCvfYyAfem9/GENlrz36ufpTBPTv07r8lm3qpPiOo1y/7u+SJImNzacmw5hrX1wt/kRpABBDQ84bJOf16+jLt/gPhUvGGw=="
-                  },
-                  "MD": {
-                    "example": "b1a536c0-29b9-11eb-adc1-0242ac120002"
-                  },
-                  "TermUrl": {
-                    "example": "https://api.sumup.com/v0.1/checkouts/e552de3b-1777-4c91-bdb8-756967678572/complete_payment"
-                  }
+                "example": {
+                  "PaReq": "eJxVUttu2zAM/RXDr4MjyY5dO6BVuE27FZuDZHGG9VGRmMSFb/Wljff1k9KkF0APPCR1eHQouD6WhfWCbZfXVWyzCbUtrGSt8mof25vs3gltq+tFpURRVxjbI3b2NYfs0CLO1yiHFjmk2HVij1auYrsRW1+F0U4qZxfKwJlur4QTYcQcJoIdc+XO2/poc1gmv/GZw3k216MnLpAL1JytPIiq5yDk883Dgk+DwPV9IGcIJbYPc84o1Ye6lHqu5wVA3tJQiRL5eiiHxlqKscSq76xfeZn3qICciiDroerbkYeuvnYBMLQFP/R9MyOkM9cnCoGYJJAPScvBRJ0mOeaKr/6l08XT6jXN7tx0vvHSbOMtsj1dzB9jIKYDlOiRu1omYyy0WDCj0YxFQE55EKWZzj2f6ee9xdCYEcmnwucEaN9bvaeRR1ehFn9BgMdGr0l3aCvfYyAfem9/GENlrz36ufpTBPTv07r8lm3qpPiOo1y/7u+SJImNzacmw5hrX1wt/kRpABBDQ84bJOf16+jLt/gPhUvGGw==",
+                  "MD": "b1a536c0-29b9-11eb-adc1-0242ac120002",
+                  "TermUrl": "https://api.sumup.com/v0.1/checkouts/e552de3b-1777-4c91-bdb8-756967678572/complete_payment"
+                },
+                "additionalProperties": {
+                  "type": "string"
                 }
               }
             }
@@ -6783,11 +7031,13 @@
         "properties": {
           "message": {
             "description": "Short description of the error.",
-            "type": "string"
+            "type": "string",
+            "example": "Resource not found"
           },
           "error_code": {
             "description": "Platform code for the error.",
-            "type": "string"
+            "type": "string",
+            "example": "NOT_FOUND"
           }
         },
         "title": "Error"
@@ -6853,15 +7103,18 @@
         "properties": {
           "error_message": {
             "description": "Short description of the error.",
-            "type": "string"
+            "type": "string",
+            "example": "request_not_allowed"
           },
           "error_code": {
             "description": "Platform code for the error.",
-            "type": "string"
+            "type": "string",
+            "example": "FORBIDDEN"
           },
           "status_code": {
             "description": "HTTP status code for the error.",
-            "type": "string"
+            "type": "string",
+            "example": "403"
           }
         },
         "title": "Error Forbidden"
@@ -6872,15 +7125,18 @@
         "properties": {
           "title": {
             "description": "Short title of the error.",
-            "type": "string"
+            "type": "string",
+            "example": "Bad Request"
           },
           "details": {
             "description": "Details of the error.",
-            "type": "string"
+            "type": "string",
+            "example": "One or more of the parameters are invalid."
           },
           "status": {
             "description": "The status code.",
-            "type": "number"
+            "type": "number",
+            "example": 400
           },
           "failed_constraints": {
             "description": "List of violated validation constraints.",
@@ -6895,7 +7151,13 @@
                   "type": "string"
                 }
               }
-            }
+            },
+            "example": [
+              {
+                "message": "Currency must also be specified when filtering by amount",
+                "reference": "currency"
+              }
+            ]
           }
         },
         "title": "Details Error"
@@ -7291,11 +7553,16 @@
           },
           "emv_data": {
             "description": "EMV-specific metadata returned for card-present payments.",
-            "type": "object"
+            "type": "object",
+            "example": {}
           },
           "acquirer_data": {
             "description": "Acquirer-specific metadata related to the card authorization.",
             "type": "object",
+            "example": {
+              "authorization_code": "053201",
+              "return_code": "00"
+            },
             "properties": {
               "tid": {
                 "type": "string"
@@ -7625,6 +7892,21 @@
             "description": "Receipt number",
             "type": "string"
           }
+        },
+        "example": {
+          "transaction_code": "TEENSK4W2K",
+          "transaction_id": "410fc44a-5956-44e1-b5cc-19c6f8d727a4",
+          "merchant_code": "MH4H92C7",
+          "amount": "10.10",
+          "vat_amount": "6.00",
+          "tip_amount": "3.00",
+          "currency": "EUR",
+          "timestamp": "2020-02-29T10:56:56.876Z",
+          "status": "SUCCESSFUL",
+          "payment_type": "ECOM",
+          "entry_mode": "CUSTOMER_ENTRY",
+          "installments_count": 1,
+          "process_as": "CREDIT"
         },
         "title": "Receipt Transaction"
       },
@@ -10122,568 +10404,6 @@
           "errors"
         ],
         "title": "NotFound"
-      },
-      "CountryDetails": {
-        "description": "Country Details",
-        "type": "object",
-        "properties": {
-          "currency": {
-            "description": "Currency ISO 4217 code",
-            "type": "string"
-          },
-          "iso_code": {
-            "description": "Country ISO code",
-            "type": "string"
-          },
-          "en_name": {
-            "description": "Country EN name",
-            "type": "string"
-          },
-          "native_name": {
-            "description": "Country native name",
-            "type": "string"
-          }
-        },
-        "title": "Country Details"
-      },
-      "TimeoffsetDetails": {
-        "description": "TimeOffset Details",
-        "type": "object",
-        "properties": {
-          "post_code": {
-            "description": "Postal code",
-            "type": "string"
-          },
-          "offset": {
-            "description": "UTC offset",
-            "type": "number"
-          },
-          "dst": {
-            "description": "Daylight Saving Time",
-            "type": "boolean"
-          }
-        },
-        "title": "Time Offset Details"
-      },
-      "AddressPayloadLegacy": {
-        "description": "Personal address",
-        "type": "object",
-        "properties": {
-          "address_line1": {
-            "description": "Address line 1",
-            "type": "string"
-          },
-          "address_line2": {
-            "description": "Address line 2",
-            "type": "string"
-          },
-          "city": {
-            "description": "City",
-            "type": "string"
-          },
-          "country": {
-            "description": "Country ISO 3166-1 code",
-            "type": "string"
-          },
-          "region_name": {
-            "description": "Country region name",
-            "type": "string"
-          },
-          "post_code": {
-            "description": "Postal code",
-            "type": "string"
-          },
-          "landline": {
-            "description": "Landline number",
-            "type": "string"
-          },
-          "first_name": {
-            "description": "First name",
-            "type": "string"
-          },
-          "last_name": {
-            "description": "Last name",
-            "type": "string"
-          },
-          "company": {
-            "description": "Company name",
-            "type": "string"
-          }
-        },
-        "required": [
-          "address_line1",
-          "city",
-          "country",
-          "post_code"
-        ],
-        "title": "Address Payload Legacy"
-      },
-      "BusinessOwners": {
-        "description": "Business owners information.",
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "first_name": {
-              "description": "BO's first name",
-              "type": "string"
-            },
-            "last_name": {
-              "description": "BO's last name of the user",
-              "type": "string"
-            },
-            "date_of_birth": {
-              "description": "Date of birth",
-              "type": "string"
-            },
-            "mobile_phone": {
-              "description": "Mobile phone number",
-              "type": "string"
-            },
-            "landline": {
-              "description": "BO's Landline",
-              "type": "string"
-            },
-            "ownership": {
-              "description": "Ownership percentage",
-              "type": "number"
-            }
-          }
-        },
-        "title": "Business Owners"
-      },
-      "AddressWithDetails": {
-        "description": "Details of the registered address.",
-        "type": "object",
-        "properties": {
-          "address_line1": {
-            "description": "Address line 1",
-            "type": "string"
-          },
-          "address_line2": {
-            "description": "Address line 2",
-            "type": "string"
-          },
-          "city": {
-            "description": "City",
-            "type": "string"
-          },
-          "country": {
-            "description": "Country ISO 3166-1 code",
-            "type": "string"
-          },
-          "region_name": {
-            "description": "Region name",
-            "type": "string"
-          },
-          "region_code": {
-            "description": "Region code",
-            "type": "string"
-          },
-          "post_code": {
-            "description": "Postal code",
-            "type": "string"
-          },
-          "landline": {
-            "description": "Landline number",
-            "type": "string"
-          },
-          "first_name": {
-            "description": "undefined",
-            "type": "string"
-          },
-          "last_name": {
-            "description": "undefined",
-            "type": "string"
-          },
-          "company": {
-            "description": "undefined",
-            "type": "string"
-          },
-          "country_details": {
-            "$ref": "#/components/schemas/CountryDetails"
-          },
-          "timeoffset_details": {
-            "$ref": "#/components/schemas/TimeoffsetDetails"
-          },
-          "state_id": {
-            "description": "undefined",
-            "type": "string"
-          }
-        },
-        "title": "Address With Details"
-      },
-      "BankAccountPayload": {
-        "description": "Bank account details used when creating or updating a payout account.",
-        "type": "object",
-        "properties": {
-          "bank_code": {
-            "description": "Bank code",
-            "type": "string"
-          },
-          "branch_code": {
-            "description": "Branch code",
-            "type": "string"
-          },
-          "account_number": {
-            "description": "Account number",
-            "type": "string"
-          },
-          "iban": {
-            "description": "IBAN",
-            "type": "string"
-          },
-          "swift": {
-            "description": "SWIFT code",
-            "type": "string"
-          },
-          "account_type": {
-            "description": "Type of the account.",
-            "type": "string",
-            "enum": [
-              "CURRENT",
-              "SAVINGS"
-            ]
-          },
-          "account_holder_name": {
-            "description": "Account holder name",
-            "type": "string"
-          },
-          "check_digit": {
-            "description": "Check digit",
-            "type": "string"
-          },
-          "primary": {
-            "description": "Determines if this bank account will be primary. Default is false",
-            "type": "boolean"
-          },
-          "status": {
-            "description": "Determines the bank account status.",
-            "type": "string",
-            "enum": [
-              "OPEN"
-            ]
-          },
-          "account_category": {
-            "description": "Determines if this bank account is business or personal.",
-            "type": "string",
-            "enum": [
-              "PERSONAL",
-              "BUSINESS"
-            ]
-          }
-        },
-        "required": [
-          "account_holder_name",
-          "iban",
-          "swift"
-        ],
-        "title": "Bank Account Payload"
-      },
-      "DoingBusinessAsPayloadLegacy": {
-        "description": "Doing Business As information",
-        "type": "object",
-        "properties": {
-          "business_name": {
-            "description": "Doing business as name",
-            "type": "string"
-          },
-          "tax_id": {
-            "description": "Doing business as Tax ID",
-            "type": "string"
-          },
-          "vat_id": {
-            "description": "Doing business as VAT ID",
-            "type": "string"
-          },
-          "website": {
-            "description": "Doing business as website",
-            "type": "string"
-          },
-          "email": {
-            "description": "Doing business as email",
-            "type": "string"
-          },
-          "address": {
-            "$ref": "#/components/schemas/AddressPayloadLegacy"
-          }
-        },
-        "title": "Doing Business As Payload Legacy"
-      },
-      "MerchantProfilePayload": {
-        "description": "Account's merchant profile",
-        "type": "object",
-        "properties": {
-          "legal_type_id": {
-            "description": "Id of the legal type of the merchant",
-            "type": "number"
-          },
-          "merchant_category_code": {
-            "description": "Merchant category code",
-            "type": "string"
-          },
-          "company_name": {
-            "description": "Company name",
-            "type": "string"
-          },
-          "company_registration_number": {
-            "description": "Company registration number",
-            "type": "string"
-          },
-          "vat_id": {
-            "description": "Vat ID",
-            "type": "string"
-          },
-          "permanent_certificate_access_code": {
-            "description": "Payment certificate access code",
-            "type": "string"
-          },
-          "website": {
-            "description": "Company website",
-            "type": "string"
-          },
-          "nature_and_purpose": {
-            "description": "Nature and purpose of the business. Required for the following merchant category codes: 5999, 7392, 8999, 5694, 5969, 7299, 7399",
-            "type": "string"
-          },
-          "mobile_phone": {
-            "description": "Mobile number",
-            "type": "string"
-          },
-          "address": {
-            "$ref": "#/components/schemas/AddressPayloadLegacy"
-          },
-          "doing_business_as": {
-            "description": "Doing-business-as details associated with the merchant profile.",
-            "type": "object",
-            "properties": {
-              "business_name": {
-                "description": "Doing business as name",
-                "type": "string"
-              },
-              "tax_id": {
-                "description": "Doing business as Tax ID",
-                "type": "string"
-              },
-              "vat_id": {
-                "description": "Doing business as Vat ID",
-                "type": "string"
-              },
-              "website": {
-                "description": "Doing business as website",
-                "type": "string"
-              },
-              "email": {
-                "description": "Doing business as email",
-                "type": "string"
-              },
-              "address": {
-                "$ref": "#/components/schemas/AddressPayloadLegacy"
-              }
-            }
-          },
-          "business_owners": {
-            "$ref": "#/components/schemas/BusinessOwners"
-          },
-          "is_test_account": {
-            "description": "Defines if the profile nature is for testing",
-            "type": "boolean"
-          }
-        },
-        "required": [
-          "legal_type_id",
-          "company_registration_number",
-          "merchant_category_code",
-          "company_name",
-          "address"
-        ],
-        "title": "Merchant Profile Payload"
-      },
-      "MerchantSettingsPayload": {
-        "description": "Merchant payout and settlement configuration.",
-        "type": "object",
-        "properties": {
-          "payout_period": {
-            "description": "Payout period.",
-            "type": "string",
-            "enum": [
-              "daily",
-              "weekly",
-              "monthly"
-            ]
-          },
-          "payout_type": {
-            "description": "Payout type.",
-            "type": "string",
-            "enum": [
-              "SINGLE_PAYMENT"
-            ]
-          },
-          "payout_on_demand": {
-            "description": "If true, the merchant will not receive automatic payouts.",
-            "type": "boolean"
-          },
-          "payout_on_demand_available": {
-            "description": "If true, the merchant will be able to manage  payout_on_demand settings",
-            "type": "string"
-          },
-          "expected_max_transaction_amount": {
-            "description": "Expected maximum amount of a single purchase",
-            "type": "number"
-          },
-          "printers_enabled": {
-            "description": "Printers enabled.",
-            "type": "boolean"
-          },
-          "gross_settlement": {
-            "description": "Gross settlement",
-            "type": "boolean"
-          }
-        },
-        "title": "Merchant Settings Payload"
-      },
-      "PaymentInstrumentCard": {
-        "description": "Details of the payment card that is saved as a payment instrument.",
-        "type": "object",
-        "properties": {
-          "type": {
-            "description": "Type of the payment instrument.",
-            "type": "string",
-            "enum": [
-              "card"
-            ]
-          },
-          "card": {
-            "$ref": "#/components/schemas/Card"
-          }
-        },
-        "required": [
-          "type",
-          "card"
-        ],
-        "title": "Payment Instrument Card"
-      },
-      "PersonalProfilePayloadLegacy": {
-        "description": "Account's personal profile.",
-        "type": "object",
-        "properties": {
-          "first_name": {
-            "description": "First name of the user",
-            "type": "string"
-          },
-          "last_name": {
-            "description": "Last name of the user",
-            "type": "string"
-          },
-          "date_of_birth": {
-            "description": "Date of birth",
-            "type": "string",
-            "format": "date"
-          },
-          "mobile_phone": {
-            "description": "Mobile phone number",
-            "type": "string"
-          },
-          "national_id": {
-            "description": "National identification id. Country specific. Ex CPF &#40;Brazil&#41;, DNI (Spain), PESEL (Poland)",
-            "type": "string"
-          },
-          "address": {
-            "$ref": "#/components/schemas/AddressPayloadLegacy"
-          }
-        },
-        "required": [
-          "first_name",
-          "last_name",
-          "date_of_birth",
-          "address"
-        ],
-        "title": "Personal Profile Payload Legacy"
-      },
-      "BankAccount": {
-        "description": "Bank account details used for merchant payouts.",
-        "type": "object",
-        "properties": {
-          "bank_code": {
-            "description": "Bank code",
-            "type": "string"
-          },
-          "branch_code": {
-            "description": "Branch code",
-            "type": "string"
-          },
-          "swift": {
-            "description": "SWIFT code",
-            "type": "string"
-          },
-          "account_number": {
-            "description": "Account number",
-            "type": "string"
-          },
-          "iban": {
-            "description": "IBAN",
-            "type": "string"
-          },
-          "account_type": {
-            "description": "Type of the account",
-            "type": "string"
-          },
-          "account_category": {
-            "description": "Account category - business or personal",
-            "type": "string"
-          },
-          "account_holder_name": {
-            "description": "Name of the bank account holder.",
-            "type": "string"
-          },
-          "status": {
-            "description": "Status in the verification process",
-            "type": "string"
-          },
-          "primary": {
-            "description": "The primary bank account is the one used for payouts",
-            "type": "boolean"
-          },
-          "created_at": {
-            "description": "Creation date of the bank account",
-            "type": "string"
-          },
-          "bank_name": {
-            "description": "Bank name",
-            "type": "string"
-          }
-        },
-        "title": "Bank Account"
-      },
-      "PersonalProfileLegacy": {
-        "description": "Account's personal profile.",
-        "type": "object",
-        "properties": {
-          "first_name": {
-            "description": "First name of the user",
-            "type": "string"
-          },
-          "last_name": {
-            "description": "Last name of the user",
-            "type": "string"
-          },
-          "date_of_birth": {
-            "description": "Date of birth",
-            "type": "string"
-          },
-          "mobile_phone": {
-            "description": "Mobile phone number",
-            "type": "string"
-          },
-          "address": {
-            "$ref": "#/components/schemas/AddressWithDetails"
-          },
-          "complete": {
-            "description": "Indicates whether the profile data is complete.",
-            "type": "boolean"
-          }
-        },
-        "title": "Personal Profile Legacy"
       }
     },
     "examples": {
@@ -10719,16 +10439,6 @@
       }
     },
     "requestBodies": {
-      "BankAccounts": {
-        "description": "Bank account details to be created or updated.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/BankAccountPayload"
-            }
-          }
-        }
-      },
       "CheckoutCreate": {
         "required": true,
         "description": "Details for creating a checkout resource.",
@@ -10894,60 +10604,13 @@
           }
         }
       },
-      "DoingBusinessAsLegacy": {
-        "description": "Doing-business-as details for merchant profile updates.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/DoingBusinessAsPayloadLegacy"
-            }
-          }
-        }
-      },
-      "MerchantProfile": {
-        "description": "Merchant profile fields to create or update.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/MerchantProfilePayload"
-            }
-          }
-        }
-      },
-      "MerchantSettings": {
-        "description": "Merchant settings fields to create or update.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/MerchantSettingsPayload"
-            }
-          }
-        }
-      },
-      "PaymentInstrument": {
-        "description": "Payment instrument details.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/PaymentInstrumentCard"
-            }
-          }
-        }
-      },
-      "PersonalProfile": {
-        "description": "Personal profile details to create or update.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/PersonalProfilePayloadLegacy"
-            }
-          }
-        }
-      },
       "Refund": {
         "description": "Optional amount for partial refunds.",
         "content": {
           "application/json": {
+            "example": {
+              "amount": 5
+            },
             "schema": {
               "description": "Optional amount for partial refunds of transactions.",
               "type": "object",
@@ -10955,7 +10618,8 @@
                 "amount": {
                   "description": "Amount to be refunded. Eligible amount can't exceed the amount of the transaction and varies based on country and currency. If you do not specify a value, the system performs a full refund of the transaction.",
                   "type": "number",
-                  "format": "float"
+                  "format": "float",
+                  "example": 5
                 }
               }
             }
@@ -11095,7 +10759,19 @@
               "items": {
                 "$ref": "#/components/schemas/CheckoutSuccess"
               }
-            }
+            },
+            "example": [
+              {
+                "checkout_reference": "f00a8f74-b05d-4605-bd73-2a901bae5802",
+                "amount": 10.1,
+                "currency": "EUR",
+                "merchant_code": "MH4H92C7",
+                "description": "Purchase",
+                "id": "4e425463-3e1b-431d-83fa-1e51c2925e99",
+                "status": "PENDING",
+                "date": "2020-02-29T10:56:56+00:00"
+              }
+            ]
           }
         }
       },
@@ -11105,6 +10781,18 @@
           "application/json": {
             "schema": {
               "$ref": "#/components/schemas/CheckoutSuccess"
+            },
+            "example": {
+              "checkout_reference": "f00a8f74-b05d-4605-bd73-2a901bae5802",
+              "amount": 10.1,
+              "currency": "EUR",
+              "merchant_code": "MH4H92C7",
+              "description": "Purchase",
+              "id": "4e425463-3e1b-431d-83fa-1e51c2925e99",
+              "status": "PENDING",
+              "date": "2020-02-29T10:56:56+00:00",
+              "transaction_code": "TEENSK4W2K",
+              "transaction_id": "410fc44a-5956-44e1-b5cc-19c6f8d727a4"
             }
           }
         }
@@ -11313,6 +11001,22 @@
           "application/json": {
             "schema": {
               "$ref": "#/components/schemas/TransactionFull"
+            },
+            "example": {
+              "id": "410fc44a-5956-44e1-b5cc-19c6f8d727a4",
+              "transaction_code": "TEENSK4W2K",
+              "amount": 10.1,
+              "currency": "EUR",
+              "timestamp": "2020-02-29T10:56:56.876Z",
+              "status": "SUCCESSFUL",
+              "payment_type": "ECOM",
+              "installments_count": 1,
+              "merchant_code": "MH4H92C7",
+              "vat_amount": 6,
+              "tip_amount": 3,
+              "entry_mode": "CUSTOMER_ENTRY",
+              "auth_code": "053201",
+              "internal_id": 1763892018
             }
           }
         }
