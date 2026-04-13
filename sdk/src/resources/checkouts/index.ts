@@ -39,6 +39,25 @@ export type ProcessCheckoutError =
    */
   | ErrorExtended[];
 
+export type CreateApplePaySessionParams = {
+  /**
+   * the context to create this apple pay session.
+   */
+  context: string;
+  /**
+   * The target url to create this apple pay session.
+   */
+  target: string;
+};
+
+export type CreateApplePaySessionResponse = Record<string, unknown>;
+
+export type CreateApplePaySessionError =
+  | ErrorBody /**
+   * List of error messages.
+   */
+  | ErrorBody[];
+
 /**
  * API resource for the Checkouts endpoints.
  *
@@ -156,6 +175,33 @@ export class Checkouts extends APIResource {
   ): APIPromise<Checkout, Problem | ErrorBody> {
     return this._client.delete<Checkout, Problem | ErrorBody>({
       path: `/v0.1/checkouts/${id}`,
+      ...options,
+    });
+  }
+
+  /**
+   * Creates an Apple Pay merchant session for the specified checkout.
+   *
+   * Use this endpoint after the customer selects Apple Pay and before calling
+   * `ApplePaySession.completeMerchantValidation(...)` in the browser.
+   * SumUp validates the merchant session request and returns the Apple Pay
+   * session object that your frontend should pass to Apple's JavaScript API.
+   *
+   */
+  createApplePaySession(
+    id: string,
+    body?: CreateApplePaySessionParams,
+    options?: RequestOptions,
+  ): APIPromise<
+    CreateApplePaySessionResponse,
+    CreateApplePaySessionError | ErrorBody
+  > {
+    return this._client.put<
+      CreateApplePaySessionResponse,
+      CreateApplePaySessionError | ErrorBody
+    >({
+      path: `/v0.2/checkouts/${id}/apple-pay-session`,
+      body,
       ...options,
     });
   }
