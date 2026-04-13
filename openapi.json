@@ -1089,6 +1089,132 @@
         ]
       }
     },
+    "/v0.2/checkouts/{id}/apple-pay-session": {
+      "put": {
+        "operationId": "CreateApplePaySession",
+        "summary": "Create an apple pay session.",
+        "description": "Creates an Apple Pay merchant session for the specified checkout.\n\nUse this endpoint after the customer selects Apple Pay and before calling\n`ApplePaySession.completeMerchantValidation(...)` in the browser.\nSumUp validates the merchant session request and returns the Apple Pay\nsession object that your frontend should pass to Apple's JavaScript API.\n",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Unique ID of the checkout resource.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "The data needed to create an apple pay session for a checkout.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "context": {
+                    "description": "the context to create this apple pay session.",
+                    "type": "string",
+                    "format": "hostname",
+                    "example": "example.com"
+                  },
+                  "target": {
+                    "description": "The target url to create this apple pay session.",
+                    "type": "string",
+                    "format": "uri",
+                    "example": "https://apple-pay-gateway-cert.apple.com/paymentservices/startSession"
+                  }
+                },
+                "required": [
+                  "context",
+                  "target"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful request. Returns the Apple Pay merchant session object\nthat should be forwarded to the Apple Pay JS SDK to complete merchant\nvalidation and continue the payment flow.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "displayName": "Test Account",
+                  "domainName": "pay.sumup.com",
+                  "epochTimestamp": 1775323532665,
+                  "expiresAt": 1775327132665,
+                  "merchantIdentifier": "7801D328E6637EFC1ADE6CE01C671D2CD318E32CA4ED1F9FC390D170D827D9AB",
+                  "merchantSessionIdentifier": "SSH92CC412E5FCF4FAB88684914C953C0D4_916523AAED1343F5BC5815E12BEE9250AFFDC1A17C46B0DE5A943F0F94927C24",
+                  "nonce": "a968a2bf",
+                  "operationalAnalyticsIdentifier": "Test Account:7801D328E6637EFC1ADE6CE01C671D2CD318E32CA4ED1F9FC390D170D827D9AB",
+                  "pspId": "7801D328E6637EFC1ADE6CE01C671D2CD318E32CA4ED1F9FC390D170D827D9AB",
+                  "retries": 0,
+                  "signature": "<apple-pay-signature>"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "type": "array",
+                      "description": "List of error messages.",
+                      "items": {
+                        "$ref": "#/components/schemas/Error"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested resource does not exist.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "Not_Found": {
+                    "description": "The identified resource is not found on the server.",
+                    "value": {
+                      "error_code": "NOT_FOUND",
+                      "message": "Resource not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": []
+          },
+          {
+            "oauth2": []
+          }
+        ],
+        "tags": [
+          "Checkouts"
+        ],
+        "x-codegen": {
+          "method_name": "create_apple_pay_session"
+        },
+        "x-scopes": []
+      }
+    },
     "/v0.1/customers": {
       "post": {
         "operationId": "CreateCustomer",
@@ -4771,16 +4897,6 @@
                 }
               }
             }
-          },
-          "500": {
-            "description": "An internal server error occurred.\n",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Problem"
-                }
-              }
-            }
           }
         },
         "externalDocs": {
@@ -4868,16 +4984,6 @@
           },
           "404": {
             "description": "The requested Person does not exist.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Problem"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "An internal server error occurred.\n",
             "content": {
               "application/problem+json": {
                 "schema": {
