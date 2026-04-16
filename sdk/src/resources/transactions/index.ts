@@ -19,7 +19,6 @@ export type RefundTransactionParams = {
 
 export type GetTransactionV2_1QueryParams = {
   id?: string;
-  internal_id?: string;
   transaction_code?: string;
   foreign_transaction_id?: string;
   client_transaction_id?: string;
@@ -27,7 +26,6 @@ export type GetTransactionV2_1QueryParams = {
 
 export type GetTransactionQueryParams = {
   id?: string;
-  internal_id?: string;
   transaction_code?: string;
 };
 
@@ -125,7 +123,6 @@ export class Transactions extends APIResource {
   /**
    * Retrieves the full details of an identified transaction. The transaction resource is identified by a query parameter and *one* of following parameters is required:
    * - `id`
-   * - `internal_id`
    * - `transaction_code`
    * - `foreign_transaction_id`
    * - `client_transaction_id`
@@ -145,7 +142,6 @@ export class Transactions extends APIResource {
   /**
    * Retrieves the full details of an identified transaction. The transaction resource is identified by a query parameter and *one* of following parameters is required:
    * - `id`
-   * - `internal_id`
    * - `transaction_code`
    * - `foreign_transaction_id`
    * - `client_transaction_id`
