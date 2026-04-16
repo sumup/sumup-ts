@@ -244,8 +244,7 @@
                           "vat_amount": 6,
                           "tip_amount": 3,
                           "entry_mode": "CUSTOMER_ENTRY",
-                          "auth_code": "012345",
-                          "internal_id": 0
+                          "auth_code": "012345"
                         }
                       ]
                     }
@@ -278,8 +277,7 @@
                           "vat_amount": 6,
                           "tip_amount": 3,
                           "entry_mode": "CUSTOMER_ENTRY",
-                          "auth_code": "012345",
-                          "internal_id": 0
+                          "auth_code": "012345"
                         }
                       ]
                     }
@@ -314,8 +312,7 @@
                           "vat_amount": 6,
                           "tip_amount": 3,
                           "entry_mode": "CUSTOMER_ENTRY",
-                          "auth_code": "012345",
-                          "internal_id": 0
+                          "auth_code": "012345"
                         }
                       ]
                     }
@@ -748,8 +745,7 @@
                           "vat_amount": 6,
                           "tip_amount": 3,
                           "entry_mode": "CUSTOMER_ENTRY",
-                          "auth_code": "053201",
-                          "internal_id": 1763892018
+                          "auth_code": "053201"
                         }
                       ],
                       "transaction_code": "TEENSK4W2K",
@@ -789,8 +785,7 @@
                           "vat_amount": 6,
                           "tip_amount": 3,
                           "entry_mode": "CUSTOMER_ENTRY",
-                          "auth_code": "053201",
-                          "internal_id": 1763892018
+                          "auth_code": "053201"
                         }
                       ]
                     }
@@ -826,8 +821,7 @@
                           "status": "PENDING",
                           "payment_type": "BOLETO",
                           "entry_mode": "BOLETO",
-                          "installments_count": 1,
-                          "internal_id": 1763892018
+                          "installments_count": 1
                         }
                       ]
                     }
@@ -1984,7 +1978,7 @@
       "get": {
         "operationId": "GetTransactionV2.1",
         "summary": "Retrieve a transaction",
-        "description": "Retrieves the full details of an identified transaction. The transaction resource is identified by a query parameter and *one* of following parameters is required:\n- `id`\n- `internal_id`\n- `transaction_code`\n- `foreign_transaction_id`\n- `client_transaction_id`",
+        "description": "Retrieves the full details of an identified transaction. The transaction resource is identified by a query parameter and *one* of following parameters is required:\n- `id`\n- `transaction_code`\n- `foreign_transaction_id`\n- `client_transaction_id`",
         "parameters": [
           {
             "name": "merchant_code",
@@ -2000,15 +1994,6 @@
             "name": "id",
             "in": "query",
             "description": "Retrieves the transaction resource with the specified transaction ID (the `id` parameter in the transaction resource).",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "internal_id",
-            "in": "query",
-            "description": "Retrieves the transaction resource with the specified internal transaction ID (the `internal_id` parameter in the transaction resource).",
             "required": false,
             "schema": {
               "type": "string"
@@ -2061,8 +2046,7 @@
                   "vat_amount": 6,
                   "tip_amount": 3,
                   "entry_mode": "CUSTOMER_ENTRY",
-                  "auth_code": "053201",
-                  "internal_id": 1763892018
+                  "auth_code": "053201"
                 }
               }
             }
@@ -2134,21 +2118,12 @@
       "get": {
         "operationId": "GetTransaction",
         "summary": "Retrieve a transaction",
-        "description": "Retrieves the full details of an identified transaction. The transaction resource is identified by a query parameter and *one* of following parameters is required:\n- `id`\n- `internal_id`\n- `transaction_code`\n- `foreign_transaction_id`\n- `client_transaction_id`",
+        "description": "Retrieves the full details of an identified transaction. The transaction resource is identified by a query parameter and *one* of following parameters is required:\n- `id`\n- `transaction_code`\n- `foreign_transaction_id`\n- `client_transaction_id`",
         "parameters": [
           {
             "name": "id",
             "in": "query",
             "description": "Retrieves the transaction resource with the specified transaction ID (the `id` parameter in the transaction resource).",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "internal_id",
-            "in": "query",
-            "description": "Retrieves the transaction resource with the specified internal transaction ID (the `internal_id` parameter in the transaction resource).",
             "required": false,
             "schema": {
               "type": "string"
@@ -2185,8 +2160,7 @@
                   "vat_amount": 6,
                   "tip_amount": 3,
                   "entry_mode": "CUSTOMER_ENTRY",
-                  "auth_code": "053201",
-                  "internal_id": 1763892018
+                  "auth_code": "053201"
                 }
               }
             }
@@ -6736,8 +6710,7 @@
                 "vat_amount": 6,
                 "tip_amount": 3,
                 "entry_mode": "CUSTOMER_ENTRY",
-                "auth_code": "012345",
-                "internal_id": 0
+                "auth_code": "012345"
               }
             ],
             "uniqueItems": true
@@ -8033,12 +8006,6 @@
             "description": "Authorization code for the transaction sent by the payment card issuer or bank. Applicable only to card payments.",
             "type": "string",
             "example": "053201"
-          },
-          "internal_id": {
-            "description": "Internal unique ID of the transaction on the SumUp platform.",
-            "type": "integer",
-            "format": "int64",
-            "example": 1763892018
           }
         },
         "title": "Transaction Checkout Info"
@@ -10670,8 +10637,7 @@
                       "vat_amount": 6,
                       "tip_amount": 3,
                       "entry_mode": "CUSTOMER_ENTRY",
-                      "auth_code": "012345",
-                      "internal_id": 0
+                      "auth_code": "012345"
                     }
                   ]
                 }
@@ -10704,8 +10670,7 @@
                       "vat_amount": 6,
                       "tip_amount": 3,
                       "entry_mode": "CUSTOMER_ENTRY",
-                      "auth_code": "012345",
-                      "internal_id": 0
+                      "auth_code": "012345"
                     }
                   ]
                 }
@@ -10740,8 +10705,7 @@
                       "vat_amount": 6,
                       "tip_amount": 3,
                       "entry_mode": "CUSTOMER_ENTRY",
-                      "auth_code": "012345",
-                      "internal_id": 0
+                      "auth_code": "012345"
                     }
                   ]
                 }
@@ -10838,8 +10802,7 @@
                       "vat_amount": 6,
                       "tip_amount": 3,
                       "entry_mode": "CUSTOMER_ENTRY",
-                      "auth_code": "053201",
-                      "internal_id": 1763892018
+                      "auth_code": "053201"
                     }
                   ],
                   "transaction_code": "TEENSK4W2K",
@@ -10879,8 +10842,7 @@
                       "vat_amount": 6,
                       "tip_amount": 3,
                       "entry_mode": "CUSTOMER_ENTRY",
-                      "auth_code": "053201",
-                      "internal_id": 1763892018
+                      "auth_code": "053201"
                     }
                   ]
                 }
@@ -10916,8 +10878,7 @@
                       "status": "PENDING",
                       "payment_type": "BOLETO",
                       "entry_mode": "BOLETO",
-                      "installments_count": 1,
-                      "internal_id": 1763892018
+                      "installments_count": 1
                     }
                   ]
                 }
@@ -11015,8 +10976,7 @@
               "vat_amount": 6,
               "tip_amount": 3,
               "entry_mode": "CUSTOMER_ENTRY",
-              "auth_code": "053201",
-              "internal_id": 1763892018
+              "auth_code": "053201"
             }
           }
         }
