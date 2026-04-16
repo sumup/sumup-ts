@@ -25,8 +25,4 @@ export type TransactionCheckoutInfo = {
    * Authorization code for the transaction sent by the payment card issuer or bank. Applicable only to card payments.
    */
   auth_code?: string;
-  /**
-   * Internal unique ID of the transaction on the SumUp platform.
-   */
-  internal_id?: number;
 };
