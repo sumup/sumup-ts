@@ -7,6 +7,7 @@ export type { RequestOptions } from "./core";
 export { APIError, SumUpError } from "./core";
 export * from "./resources/checkouts";
 export * from "./types";
+export * from "./webhooks";
 
 import { Checkouts } from "./resources/checkouts";
 

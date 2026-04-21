@@ -3,6 +3,7 @@
 import * as Core from "./core";
 import { buildRuntimeHeaders } from "./runtime";
 import { VERSION } from "./version";
+import { WebhookHandler } from "./webhooks";
 
 export type APIConfig = {
   apiKey?: string;
@@ -82,6 +83,10 @@ export class HTTPClient {
       method: "DELETE",
       ...params,
     });
+  }
+
+  public webhookHandler(secret: string, toleranceMs?: number): WebhookHandler {
+    return new WebhookHandler(this, secret, toleranceMs);
   }
 
   public request<T, E = Core.APIError<unknown>>({
