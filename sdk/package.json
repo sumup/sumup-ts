@@ -60,8 +60,8 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.1.2",
-    "@rslib/core": "^0.20.0",
-    "rsbuild-plugin-dts": "^0.20.0",
+    "@rslib/core": "^0.21.0",
+    "rsbuild-plugin-dts": "^0.21.0",
     "rsbuild-plugin-publint": "^0.3.0",
     "ts-node": "^10.9.2",
     "typedoc": "^0.28.3",
