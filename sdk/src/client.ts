@@ -39,58 +39,109 @@ export class HTTPClient {
     this.baseParams = mergeParams({ headers, maxRetries, timeout }, baseParams);
   }
 
-  public get<R, E = Core.APIError<unknown>>({
+  public get<R>({
     ...params
-  }: Omit<Core.FullRequestOptions, "method">): Core.APIPromise<R, E> {
-    return this.request<R, E>({
+  }: Omit<Core.FullRequestOptions, "method">): Promise<R> {
+    return this.request<R>({
       method: "GET",
       ...params,
     });
   }
 
-  public post<R, E = Core.APIError<unknown>>({
+  public getWithResponse<R>({
     ...params
-  }: Omit<Core.FullRequestOptions, "method">): Core.APIPromise<R, E> {
-    return this.request<R, E>({
+  }: Omit<Core.FullRequestOptions, "method">): Promise<Core.WithResponse<R>> {
+    return this.requestWithResponse<R>({
+      method: "GET",
+      ...params,
+    });
+  }
+
+  public post<R>({
+    ...params
+  }: Omit<Core.FullRequestOptions, "method">): Promise<R> {
+    return this.request<R>({
       method: "POST",
       ...params,
     });
   }
 
-  public put<R, E = Core.APIError<unknown>>({
+  public postWithResponse<R>({
     ...params
-  }: Omit<Core.FullRequestOptions, "method">): Core.APIPromise<R, E> {
-    return this.request<R, E>({
+  }: Omit<Core.FullRequestOptions, "method">): Promise<Core.WithResponse<R>> {
+    return this.requestWithResponse<R>({
+      method: "POST",
+      ...params,
+    });
+  }
+
+  public put<R>({
+    ...params
+  }: Omit<Core.FullRequestOptions, "method">): Promise<R> {
+    return this.request<R>({
       method: "PUT",
       ...params,
     });
   }
 
-  public patch<R, E = Core.APIError<unknown>>({
+  public putWithResponse<R>({
     ...params
-  }: Omit<Core.FullRequestOptions, "method">): Core.APIPromise<R, E> {
-    return this.request<R, E>({
+  }: Omit<Core.FullRequestOptions, "method">): Promise<Core.WithResponse<R>> {
+    return this.requestWithResponse<R>({
+      method: "PUT",
+      ...params,
+    });
+  }
+
+  public patch<R>({
+    ...params
+  }: Omit<Core.FullRequestOptions, "method">): Promise<R> {
+    return this.request<R>({
       method: "PATCH",
       ...params,
     });
   }
 
-  public delete<R, E = Core.APIError<unknown>>({
+  public patchWithResponse<R>({
     ...params
-  }: Omit<Core.FullRequestOptions, "method">): Core.APIPromise<R, E> {
-    return this.request<R, E>({
+  }: Omit<Core.FullRequestOptions, "method">): Promise<Core.WithResponse<R>> {
+    return this.requestWithResponse<R>({
+      method: "PATCH",
+      ...params,
+    });
+  }
+
+  public delete<R>({
+    ...params
+  }: Omit<Core.FullRequestOptions, "method">): Promise<R> {
+    return this.request<R>({
       method: "DELETE",
       ...params,
     });
   }
 
-  public request<T, E = Core.APIError<unknown>>({
+  public deleteWithResponse<R>({
+    ...params
+  }: Omit<Core.FullRequestOptions, "method">): Promise<Core.WithResponse<R>> {
+    return this.requestWithResponse<R>({
+      method: "DELETE",
+      ...params,
+    });
+  }
+
+  public request<T>({
+    ...params
+  }: Core.FullRequestOptions): Promise<T> {
+    return this.requestWithResponse<T>(params).then(({ data }) => data);
+  }
+
+  public async requestWithResponse<T>({
     body,
     path,
     query,
     host: hostOverride,
     ...requestOptions
-  }: Core.FullRequestOptions): Core.APIPromise<T, E> {
+  }: Core.FullRequestOptions): Promise<Core.WithResponse<T>> {
     const host = hostOverride || this.host;
     const url = new URL(
       host +
@@ -105,16 +156,17 @@ export class HTTPClient {
       ...fetchParams,
       body: JSON.stringify(body),
     };
-    return new Core.APIPromise<T, E>(
-      this.do<E>(url, init, {
-        maxRetries,
-        signal: fetchParams.signal,
-        timeout,
-      }),
-    );
+    const response = await this.do(url, init, {
+      maxRetries,
+      signal: fetchParams.signal,
+      timeout,
+    });
+    const data = await Core.parseResponse<T>(response.clone());
+
+    return { data, response };
   }
 
-  protected async do<E>(
+  protected async do(
     input: URL,
     init: RequestInit,
     options: {
@@ -143,7 +195,7 @@ export class HTTPClient {
           const isJSON = contentType?.includes("json");
           throw new Core.APIError(
             res.status,
-            isJSON ? ((await res.json()) as E) : await res.text(),
+            isJSON ? await res.json() : await res.text(),
             res,
           );
         }
