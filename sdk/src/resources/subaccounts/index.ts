@@ -3,6 +3,7 @@
 import {
   APIResource,
   type RequestOptions,
+  splitOptionalQueryAndOptions,
   type WithResponse,
 } from "../../core";
 import type { Operator, Problem } from "../../types";
@@ -50,22 +51,44 @@ export class Subaccounts extends APIResource {
   listSubAccounts(
     query?: ListSubAccountsQueryParams,
     options?: RequestOptions,
+  ): Promise<Operator[]>;
+  listSubAccounts(options?: RequestOptions): Promise<Operator[]>;
+  listSubAccounts(
+    queryOrOptions?: ListSubAccountsQueryParams | RequestOptions,
+    options?: RequestOptions,
   ): Promise<Operator[]> {
+    const { query, options: requestOptions } =
+      splitOptionalQueryAndOptions<ListSubAccountsQueryParams>(
+        queryOrOptions,
+        options,
+      );
     return this._client.get<Operator[]>({
       path: `/v0.1/me/accounts`,
       query,
-      ...options,
+      ...requestOptions,
     });
   }
 
   listSubAccountsWithResponse(
     query?: ListSubAccountsQueryParams,
     options?: RequestOptions,
+  ): Promise<WithResponse<Operator[]>>;
+  listSubAccountsWithResponse(
+    options?: RequestOptions,
+  ): Promise<WithResponse<Operator[]>>;
+  listSubAccountsWithResponse(
+    queryOrOptions?: ListSubAccountsQueryParams | RequestOptions,
+    options?: RequestOptions,
   ): Promise<WithResponse<Operator[]>> {
+    const { query, options: requestOptions } =
+      splitOptionalQueryAndOptions<ListSubAccountsQueryParams>(
+        queryOrOptions,
+        options,
+      );
     return this._client.getWithResponse<Operator[]>({
       path: `/v0.1/me/accounts`,
       query,
-      ...options,
+      ...requestOptions,
     });
   }
 

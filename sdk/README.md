@@ -101,7 +101,7 @@ console.info(merchant);
 Per-request options are available as the last argument to any SDK call. For example, you can override authorization, timeout, retries, or headers for a single request:
 
 ```ts
-await client.checkouts.list(undefined, {
+await client.checkouts.list({
   timeout: 5_000,
 });
 

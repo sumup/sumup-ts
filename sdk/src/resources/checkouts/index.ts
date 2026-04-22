@@ -3,6 +3,7 @@
 import {
   APIResource,
   type RequestOptions,
+  splitOptionalQueryAndOptions,
   type WithResponse,
 } from "../../core";
 import type {
@@ -88,11 +89,25 @@ export class Checkouts extends APIResource {
     merchantCode: string,
     query?: GetPaymentMethodsQueryParams,
     options?: RequestOptions,
+  ): Promise<GetPaymentMethodsResponse>;
+  listAvailablePaymentMethods(
+    merchantCode: string,
+    options?: RequestOptions,
+  ): Promise<GetPaymentMethodsResponse>;
+  listAvailablePaymentMethods(
+    merchantCode: string,
+    queryOrOptions?: GetPaymentMethodsQueryParams | RequestOptions,
+    options?: RequestOptions,
   ): Promise<GetPaymentMethodsResponse> {
+    const { query, options: requestOptions } =
+      splitOptionalQueryAndOptions<GetPaymentMethodsQueryParams>(
+        queryOrOptions,
+        options,
+      );
     return this._client.get<GetPaymentMethodsResponse>({
       path: `/v0.1/merchants/${merchantCode}/payment-methods`,
       query,
-      ...options,
+      ...requestOptions,
     });
   }
 
@@ -100,11 +115,25 @@ export class Checkouts extends APIResource {
     merchantCode: string,
     query?: GetPaymentMethodsQueryParams,
     options?: RequestOptions,
+  ): Promise<WithResponse<GetPaymentMethodsResponse>>;
+  listAvailablePaymentMethodsWithResponse(
+    merchantCode: string,
+    options?: RequestOptions,
+  ): Promise<WithResponse<GetPaymentMethodsResponse>>;
+  listAvailablePaymentMethodsWithResponse(
+    merchantCode: string,
+    queryOrOptions?: GetPaymentMethodsQueryParams | RequestOptions,
+    options?: RequestOptions,
   ): Promise<WithResponse<GetPaymentMethodsResponse>> {
+    const { query, options: requestOptions } =
+      splitOptionalQueryAndOptions<GetPaymentMethodsQueryParams>(
+        queryOrOptions,
+        options,
+      );
     return this._client.getWithResponse<GetPaymentMethodsResponse>({
       path: `/v0.1/merchants/${merchantCode}/payment-methods`,
       query,
-      ...options,
+      ...requestOptions,
     });
   }
 
@@ -114,22 +143,44 @@ export class Checkouts extends APIResource {
   list(
     query?: ListCheckoutsQueryParams,
     options?: RequestOptions,
+  ): Promise<CheckoutSuccess[]>;
+  list(options?: RequestOptions): Promise<CheckoutSuccess[]>;
+  list(
+    queryOrOptions?: ListCheckoutsQueryParams | RequestOptions,
+    options?: RequestOptions,
   ): Promise<CheckoutSuccess[]> {
+    const { query, options: requestOptions } =
+      splitOptionalQueryAndOptions<ListCheckoutsQueryParams>(
+        queryOrOptions,
+        options,
+      );
     return this._client.get<CheckoutSuccess[]>({
       path: `/v0.1/checkouts`,
       query,
-      ...options,
+      ...requestOptions,
     });
   }
 
   listWithResponse(
     query?: ListCheckoutsQueryParams,
     options?: RequestOptions,
+  ): Promise<WithResponse<CheckoutSuccess[]>>;
+  listWithResponse(
+    options?: RequestOptions,
+  ): Promise<WithResponse<CheckoutSuccess[]>>;
+  listWithResponse(
+    queryOrOptions?: ListCheckoutsQueryParams | RequestOptions,
+    options?: RequestOptions,
   ): Promise<WithResponse<CheckoutSuccess[]>> {
+    const { query, options: requestOptions } =
+      splitOptionalQueryAndOptions<ListCheckoutsQueryParams>(
+        queryOrOptions,
+        options,
+      );
     return this._client.getWithResponse<CheckoutSuccess[]>({
       path: `/v0.1/checkouts`,
       query,
-      ...options,
+      ...requestOptions,
     });
   }
 

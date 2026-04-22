@@ -41,6 +41,47 @@ export type FullRequestOptions = RequestOptions & {
   method?: HTTPMethod;
 };
 
+const requestOptionKeys = new Set<keyof RequestOptions>([
+  "authorization",
+  "headers",
+  "host",
+  "maxRetries",
+  "signal",
+  "timeout",
+]);
+
+export function isRequestOptions(
+  value: RequestOptions | QueryParams | undefined,
+): value is RequestOptions {
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    return false;
+  }
+
+  return Object.keys(value).some((key) =>
+    requestOptionKeys.has(key as keyof RequestOptions),
+  );
+}
+
+export function splitOptionalQueryAndOptions<TQuery extends QueryParams>(
+  queryOrOptions: TQuery | RequestOptions | undefined,
+  options: RequestOptions | undefined,
+): {
+  query: TQuery | undefined;
+  options: RequestOptions | undefined;
+} {
+  if (isRequestOptions(queryOrOptions)) {
+    return {
+      query: undefined,
+      options: queryOrOptions,
+    };
+  }
+
+  return {
+    query: queryOrOptions,
+    options,
+  };
+}
+
 export class SumUpError extends Error {}
 
 export class APIError<T> extends SumUpError {
