@@ -53,7 +53,7 @@ The SDK provides:
 - API key authentication and OAuth access token usage through the same client.
 - ESM and CommonJS entry points.
 - Base and per-request overrides for headers, authorization, host, timeout, retries, and abort signals.
-- Access to both parsed data and the raw `Response` object via `.withResponse()`.
+- Access to both parsed data and the raw `Response` object via companion `*WithResponse()` methods.
 
 ## Setup
 
@@ -117,9 +117,7 @@ await client.merchants.get(merchantCode, {
 If you need the raw response metadata together with the parsed payload:
 
 ```ts
-const { data, response } = await client.merchants
-  .get(merchantCode)
-  .withResponse();
+const { data, response } = await client.merchants.getWithResponse(merchantCode);
 
 console.info(response.status, data);
 ```

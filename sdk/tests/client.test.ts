@@ -3,6 +3,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { SumUp } from "../src";
 import { API_VERSION } from "../src/api-version";
 import { mergeParams } from "../src/client";
+import { APIError } from "../src/core";
 import { buildRuntimeHeaders } from "../src/runtime";
 import { VERSION } from "../src/version";
 
@@ -118,6 +119,47 @@ describe("request options", () => {
     await assertion;
     expect(fetchMock).toHaveBeenCalledTimes(1);
   });
+
+  it("returns parsed data and an unread response from companion withResponse methods", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue(
+        new Response(JSON.stringify({ id: "merchant-id" }), {
+          headers: {
+            "content-type": "application/json",
+          },
+          status: 200,
+        }),
+      ),
+    );
+
+    const client = new SumUp();
+    const { data, response } = await client.merchants.getWithResponse("MC123");
+
+    expect(data).toEqual({ id: "merchant-id" });
+    expect(response.bodyUsed).toBe(false);
+    await expect(response.json()).resolves.toEqual({ id: "merchant-id" });
+  });
+
+  it("still throws APIError from plain Promise-returning methods", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue(
+        new Response(JSON.stringify({ message: "nope" }), {
+          headers: {
+            "content-type": "application/json",
+          },
+          status: 400,
+        }),
+      ),
+    );
+
+    const client = new SumUp();
+
+    await expect(client.merchants.get("MC123")).rejects.toBeInstanceOf(
+      APIError,
+    );
+  });
 });
 
 describe("generated signatures", () => {
@@ -130,6 +172,21 @@ describe("generated signatures", () => {
     client.checkouts.list(undefined, { timeout: 25 });
 
     expect(getSpy).toHaveBeenCalledWith({
+      path: "/v0.1/checkouts",
+      query: undefined,
+      timeout: 25,
+    });
+  });
+
+  it("generates companion response-aware methods", () => {
+    const client = new SumUp();
+    const getWithResponseSpy = vi
+      .spyOn(client, "getWithResponse")
+      .mockResolvedValue({ data: [], response: new Response() });
+
+    client.checkouts.listWithResponse(undefined, { timeout: 25 });
+
+    expect(getWithResponseSpy).toHaveBeenCalledWith({
       path: "/v0.1/checkouts",
       query: undefined,
       timeout: 25,

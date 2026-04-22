@@ -4,7 +4,7 @@ import { fileWriter } from "./io";
 
 /**
  * Generates the core.ts file containing base classes and types used by all resources.
- * This includes APIResource base class, error handling, and the custom APIPromise wrapper.
+ * This includes APIResource base class, error handling, and shared response helpers.
  */
 export async function generateCore(
   spec: OpenAPIV3_1.Document,
@@ -79,58 +79,28 @@ export class APIError<T> extends SumUpError {
   }
 }
 
-export class APIPromise<T, E = unknown> implements Promise<T> {
-  constructor(private resp: Promise<Response>) {}
+export type WithResponse<T> = {
+  data: T;
+  response: Response;
+};
 
-  async parse(): Promise<T> {
-    const res = await this.resp;
-
-    if (res.status === 204 || res.status === 205) {
-      return undefined as T;
-    }
-
-    const contentLength = res.headers.get("content-length");
-    if (contentLength === "0") {
-      return undefined as T;
-    }
-
-    const contentType = res.headers.get("content-type");
-    const isJSON = contentType?.includes("json");
-    if (!isJSON) {
-      throw new SumUpError("Unexpected non-json response.");
-    }
-
-    return await res.json();
+export async function parseResponse<T>(res: Response): Promise<T> {
+  if (res.status === 204 || res.status === 205) {
+    return undefined as T;
   }
 
-  async withResponse(): Promise<{ data: T; response: Response }> {
-    const [data, response] = await Promise.all([this.parse(), await this.resp]);
-    return { data, response };
+  const contentLength = res.headers.get("content-length");
+  if (contentLength === "0") {
+    return undefined as T;
   }
 
-  // biome-ignore lint/suspicious/noThenProperty: custom promise to enable \`withResponse\`
-  then<TResult1 = T, TResult2 = never>(
-    onFulfilled?: (value: T) => TResult1 | PromiseLike<TResult1>,
-    onRejected?: (
-      reason: APIError<E> | SumUpError | Error
-    ) => TResult2 | PromiseLike<TResult2>,
-  ): Promise<TResult1 | TResult2> {
-    return this.parse().then(onFulfilled, onRejected);
+  const contentType = res.headers.get("content-type");
+  const isJSON = contentType?.includes("json");
+  if (!isJSON) {
+    throw new SumUpError("Unexpected non-json response.");
   }
 
-  catch<TResult = never>(
-    onRejected?: (
-      reason: APIError<E> | SumUpError | Error
-    ) => TResult | PromiseLike<TResult>,
-  ): Promise<T | TResult> {
-    return this.parse().catch(onRejected);
-  }
-
-  finally(onFinally?: () => void): Promise<T> {
-    return this.parse().finally(onFinally);
-  }
-
-  [Symbol.toStringTag] = "APIPromise";
+  return await res.json();
 }
 `);
 

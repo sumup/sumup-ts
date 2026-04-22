@@ -3,7 +3,7 @@
 import { HTTPClient } from "./client";
 
 export type { APIConfig } from "./client";
-export type { RequestOptions } from "./core";
+export type { RequestOptions, WithResponse } from "./core";
 export { APIError, SumUpError } from "./core";
 export * from "./resources/checkouts";
 export * from "./types";
