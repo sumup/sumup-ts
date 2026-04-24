@@ -9,12 +9,11 @@
     "outDir": "./dist",
     "rootDir": "./src",
     "strict": true,
-    "moduleResolution": "Node",
+    "moduleResolution": "Bundler",
     "esModuleInterop": true,
     "skipLibCheck": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "baseUrl": ".",
     "types": ["node"],
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true
