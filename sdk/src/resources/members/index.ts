@@ -3,6 +3,7 @@
 import {
   APIResource,
   type RequestOptions,
+  splitOptionalQueryAndOptions,
   type WithResponse,
 } from "../../core";
 import type {
@@ -84,11 +85,25 @@ export class Members extends APIResource {
     merchantCode: string,
     query?: ListMerchantMembersQueryParams,
     options?: RequestOptions,
+  ): Promise<ListMerchantMembersResponse>;
+  list(
+    merchantCode: string,
+    options?: RequestOptions,
+  ): Promise<ListMerchantMembersResponse>;
+  list(
+    merchantCode: string,
+    queryOrOptions?: ListMerchantMembersQueryParams | RequestOptions,
+    options?: RequestOptions,
   ): Promise<ListMerchantMembersResponse> {
+    const { query, options: requestOptions } =
+      splitOptionalQueryAndOptions<ListMerchantMembersQueryParams>(
+        queryOrOptions,
+        options,
+      );
     return this._client.get<ListMerchantMembersResponse>({
       path: `/v0.1/merchants/${merchantCode}/members`,
       query,
-      ...options,
+      ...requestOptions,
     });
   }
 
@@ -96,11 +111,25 @@ export class Members extends APIResource {
     merchantCode: string,
     query?: ListMerchantMembersQueryParams,
     options?: RequestOptions,
+  ): Promise<WithResponse<ListMerchantMembersResponse>>;
+  listWithResponse(
+    merchantCode: string,
+    options?: RequestOptions,
+  ): Promise<WithResponse<ListMerchantMembersResponse>>;
+  listWithResponse(
+    merchantCode: string,
+    queryOrOptions?: ListMerchantMembersQueryParams | RequestOptions,
+    options?: RequestOptions,
   ): Promise<WithResponse<ListMerchantMembersResponse>> {
+    const { query, options: requestOptions } =
+      splitOptionalQueryAndOptions<ListMerchantMembersQueryParams>(
+        queryOrOptions,
+        options,
+      );
     return this._client.getWithResponse<ListMerchantMembersResponse>({
       path: `/v0.1/merchants/${merchantCode}/members`,
       query,
-      ...options,
+      ...requestOptions,
     });
   }
 

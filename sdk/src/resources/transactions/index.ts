@@ -3,6 +3,7 @@
 import {
   APIResource,
   type RequestOptions,
+  splitOptionalQueryAndOptions,
   type WithResponse,
 } from "../../core";
 import type {
@@ -147,11 +148,22 @@ export class Transactions extends APIResource {
     merchantCode: string,
     query?: GetTransactionV2_1QueryParams,
     options?: RequestOptions,
+  ): Promise<TransactionFull>;
+  get(merchantCode: string, options?: RequestOptions): Promise<TransactionFull>;
+  get(
+    merchantCode: string,
+    queryOrOptions?: GetTransactionV2_1QueryParams | RequestOptions,
+    options?: RequestOptions,
   ): Promise<TransactionFull> {
+    const { query, options: requestOptions } =
+      splitOptionalQueryAndOptions<GetTransactionV2_1QueryParams>(
+        queryOrOptions,
+        options,
+      );
     return this._client.get<TransactionFull>({
       path: `/v2.1/merchants/${merchantCode}/transactions`,
       query,
-      ...options,
+      ...requestOptions,
     });
   }
 
@@ -159,11 +171,25 @@ export class Transactions extends APIResource {
     merchantCode: string,
     query?: GetTransactionV2_1QueryParams,
     options?: RequestOptions,
+  ): Promise<WithResponse<TransactionFull>>;
+  getWithResponse(
+    merchantCode: string,
+    options?: RequestOptions,
+  ): Promise<WithResponse<TransactionFull>>;
+  getWithResponse(
+    merchantCode: string,
+    queryOrOptions?: GetTransactionV2_1QueryParams | RequestOptions,
+    options?: RequestOptions,
   ): Promise<WithResponse<TransactionFull>> {
+    const { query, options: requestOptions } =
+      splitOptionalQueryAndOptions<GetTransactionV2_1QueryParams>(
+        queryOrOptions,
+        options,
+      );
     return this._client.getWithResponse<TransactionFull>({
       path: `/v2.1/merchants/${merchantCode}/transactions`,
       query,
-      ...options,
+      ...requestOptions,
     });
   }
 
@@ -177,22 +203,44 @@ export class Transactions extends APIResource {
   getDeprecated(
     query?: GetTransactionQueryParams,
     options?: RequestOptions,
+  ): Promise<TransactionFull>;
+  getDeprecated(options?: RequestOptions): Promise<TransactionFull>;
+  getDeprecated(
+    queryOrOptions?: GetTransactionQueryParams | RequestOptions,
+    options?: RequestOptions,
   ): Promise<TransactionFull> {
+    const { query, options: requestOptions } =
+      splitOptionalQueryAndOptions<GetTransactionQueryParams>(
+        queryOrOptions,
+        options,
+      );
     return this._client.get<TransactionFull>({
       path: `/v0.1/me/transactions`,
       query,
-      ...options,
+      ...requestOptions,
     });
   }
 
   getDeprecatedWithResponse(
     query?: GetTransactionQueryParams,
     options?: RequestOptions,
+  ): Promise<WithResponse<TransactionFull>>;
+  getDeprecatedWithResponse(
+    options?: RequestOptions,
+  ): Promise<WithResponse<TransactionFull>>;
+  getDeprecatedWithResponse(
+    queryOrOptions?: GetTransactionQueryParams | RequestOptions,
+    options?: RequestOptions,
   ): Promise<WithResponse<TransactionFull>> {
+    const { query, options: requestOptions } =
+      splitOptionalQueryAndOptions<GetTransactionQueryParams>(
+        queryOrOptions,
+        options,
+      );
     return this._client.getWithResponse<TransactionFull>({
       path: `/v0.1/me/transactions`,
       query,
-      ...options,
+      ...requestOptions,
     });
   }
 
@@ -203,11 +251,25 @@ export class Transactions extends APIResource {
     merchantCode: string,
     query?: ListTransactionsV2_1QueryParams,
     options?: RequestOptions,
+  ): Promise<ListTransactionsV2_1Response>;
+  list(
+    merchantCode: string,
+    options?: RequestOptions,
+  ): Promise<ListTransactionsV2_1Response>;
+  list(
+    merchantCode: string,
+    queryOrOptions?: ListTransactionsV2_1QueryParams | RequestOptions,
+    options?: RequestOptions,
   ): Promise<ListTransactionsV2_1Response> {
+    const { query, options: requestOptions } =
+      splitOptionalQueryAndOptions<ListTransactionsV2_1QueryParams>(
+        queryOrOptions,
+        options,
+      );
     return this._client.get<ListTransactionsV2_1Response>({
       path: `/v2.1/merchants/${merchantCode}/transactions/history`,
       query,
-      ...options,
+      ...requestOptions,
     });
   }
 
@@ -215,11 +277,25 @@ export class Transactions extends APIResource {
     merchantCode: string,
     query?: ListTransactionsV2_1QueryParams,
     options?: RequestOptions,
+  ): Promise<WithResponse<ListTransactionsV2_1Response>>;
+  listWithResponse(
+    merchantCode: string,
+    options?: RequestOptions,
+  ): Promise<WithResponse<ListTransactionsV2_1Response>>;
+  listWithResponse(
+    merchantCode: string,
+    queryOrOptions?: ListTransactionsV2_1QueryParams | RequestOptions,
+    options?: RequestOptions,
   ): Promise<WithResponse<ListTransactionsV2_1Response>> {
+    const { query, options: requestOptions } =
+      splitOptionalQueryAndOptions<ListTransactionsV2_1QueryParams>(
+        queryOrOptions,
+        options,
+      );
     return this._client.getWithResponse<ListTransactionsV2_1Response>({
       path: `/v2.1/merchants/${merchantCode}/transactions/history`,
       query,
-      ...options,
+      ...requestOptions,
     });
   }
 
@@ -229,22 +305,44 @@ export class Transactions extends APIResource {
   listDeprecated(
     query?: ListTransactionsQueryParams,
     options?: RequestOptions,
+  ): Promise<ListTransactionsResponse>;
+  listDeprecated(options?: RequestOptions): Promise<ListTransactionsResponse>;
+  listDeprecated(
+    queryOrOptions?: ListTransactionsQueryParams | RequestOptions,
+    options?: RequestOptions,
   ): Promise<ListTransactionsResponse> {
+    const { query, options: requestOptions } =
+      splitOptionalQueryAndOptions<ListTransactionsQueryParams>(
+        queryOrOptions,
+        options,
+      );
     return this._client.get<ListTransactionsResponse>({
       path: `/v0.1/me/transactions/history`,
       query,
-      ...options,
+      ...requestOptions,
     });
   }
 
   listDeprecatedWithResponse(
     query?: ListTransactionsQueryParams,
     options?: RequestOptions,
+  ): Promise<WithResponse<ListTransactionsResponse>>;
+  listDeprecatedWithResponse(
+    options?: RequestOptions,
+  ): Promise<WithResponse<ListTransactionsResponse>>;
+  listDeprecatedWithResponse(
+    queryOrOptions?: ListTransactionsQueryParams | RequestOptions,
+    options?: RequestOptions,
   ): Promise<WithResponse<ListTransactionsResponse>> {
+    const { query, options: requestOptions } =
+      splitOptionalQueryAndOptions<ListTransactionsQueryParams>(
+        queryOrOptions,
+        options,
+      );
     return this._client.getWithResponse<ListTransactionsResponse>({
       path: `/v0.1/me/transactions/history`,
       query,
-      ...options,
+      ...requestOptions,
     });
   }
 }

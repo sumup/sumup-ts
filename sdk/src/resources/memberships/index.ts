@@ -3,6 +3,7 @@
 import {
   APIResource,
   type RequestOptions,
+  splitOptionalQueryAndOptions,
   type WithResponse,
 } from "../../core";
 import type {
@@ -41,22 +42,44 @@ export class Memberships extends APIResource {
   list(
     query?: ListMembershipsQueryParams,
     options?: RequestOptions,
+  ): Promise<ListMembershipsResponse>;
+  list(options?: RequestOptions): Promise<ListMembershipsResponse>;
+  list(
+    queryOrOptions?: ListMembershipsQueryParams | RequestOptions,
+    options?: RequestOptions,
   ): Promise<ListMembershipsResponse> {
+    const { query, options: requestOptions } =
+      splitOptionalQueryAndOptions<ListMembershipsQueryParams>(
+        queryOrOptions,
+        options,
+      );
     return this._client.get<ListMembershipsResponse>({
       path: `/v0.1/memberships`,
       query,
-      ...options,
+      ...requestOptions,
     });
   }
 
   listWithResponse(
     query?: ListMembershipsQueryParams,
     options?: RequestOptions,
+  ): Promise<WithResponse<ListMembershipsResponse>>;
+  listWithResponse(
+    options?: RequestOptions,
+  ): Promise<WithResponse<ListMembershipsResponse>>;
+  listWithResponse(
+    queryOrOptions?: ListMembershipsQueryParams | RequestOptions,
+    options?: RequestOptions,
   ): Promise<WithResponse<ListMembershipsResponse>> {
+    const { query, options: requestOptions } =
+      splitOptionalQueryAndOptions<ListMembershipsQueryParams>(
+        queryOrOptions,
+        options,
+      );
     return this._client.getWithResponse<ListMembershipsResponse>({
       path: `/v0.1/memberships`,
       query,
-      ...options,
+      ...requestOptions,
     });
   }
 }

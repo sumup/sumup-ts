@@ -163,17 +163,32 @@ describe("request options", () => {
 });
 
 describe("generated signatures", () => {
-  it("keeps request options in the final argument position", () => {
+  it("accepts request options without an undefined query placeholder", () => {
     const client = new SumUp();
     const getSpy = vi
       .spyOn(client, "get")
       .mockReturnValue({} as ReturnType<typeof client.get>);
 
-    client.checkouts.list(undefined, { timeout: 25 });
+    client.checkouts.list({ timeout: 25 });
 
     expect(getSpy).toHaveBeenCalledWith({
       path: "/v0.1/checkouts",
       query: undefined,
+      timeout: 25,
+    });
+  });
+
+  it("still accepts explicit query params plus request options", () => {
+    const client = new SumUp();
+    const getSpy = vi
+      .spyOn(client, "get")
+      .mockReturnValue({} as ReturnType<typeof client.get>);
+
+    client.checkouts.list({ checkout_reference: "ref-123" }, { timeout: 25 });
+
+    expect(getSpy).toHaveBeenCalledWith({
+      path: "/v0.1/checkouts",
+      query: { checkout_reference: "ref-123" },
       timeout: 25,
     });
   });
@@ -184,7 +199,7 @@ describe("generated signatures", () => {
       .spyOn(client, "getWithResponse")
       .mockResolvedValue({ data: [], response: new Response() });
 
-    client.checkouts.listWithResponse(undefined, { timeout: 25 });
+    client.checkouts.listWithResponse({ timeout: 25 });
 
     expect(getWithResponseSpy).toHaveBeenCalledWith({
       path: "/v0.1/checkouts",
