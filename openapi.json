@@ -152,7 +152,7 @@
       "post": {
         "operationId": "CreateCheckout",
         "summary": "Create a checkout",
-        "description": "Creates a new payment checkout resource. The unique `checkout_reference` created by this request, is used for further manipulation of the checkout.\n\nFor 3DS checkouts, add the `redirect_url` parameter to your request body schema.\n\nFollow by processing a checkout to charge the provided payment instrument.",
+        "description": "Creates a new payment checkout resource. The unique `checkout_reference` created by this request, is used for further manipulation of the checkout.\n\nFor 3DS checkouts, add the `redirect_url` parameter to your request body schema.\nTo use the [Hosted Checkout](https://developer.sumup.com/online-payments/checkouts/hosted-checkout/) page, set the `hosted_checkout.enabled` to `true`.\n\nFollow by processing a checkout to charge the provided payment instrument.",
         "requestBody": {
           "description": "Details for creating a checkout resource.",
           "required": true,
@@ -195,6 +195,20 @@
                     "currency": "EUR",
                     "merchant_code": "MH4H92C7",
                     "redirect_url": "https://mysite.com/completed_purchase"
+                  }
+                },
+                "HostedCheckout": {
+                  "description": "Create a checkout with a SumUp-hosted payment page",
+                  "x-beta": true,
+                  "value": {
+                    "checkout_reference": "b50pr914-6k0e-3091-a592-890010285b3d",
+                    "amount": 12,
+                    "currency": "EUR",
+                    "merchant_code": "MCXXXXXX",
+                    "description": "A sample checkout",
+                    "hosted_checkout": {
+                      "enabled": true
+                    }
                   }
                 }
               }
@@ -315,6 +329,27 @@
                           "auth_code": "012345"
                         }
                       ]
+                    }
+                  },
+                  "HostedCheckout": {
+                    "description": "Response body for a checkout with a SumUp-hosted payment page",
+                    "value": {
+                      "checkout_reference": "b50pr914-6k0e-3091-a592-890010285b3d",
+                      "amount": 12,
+                      "currency": "EUR",
+                      "merchant_code": "MCXXXXXX",
+                      "merchant_country": "DE",
+                      "merchant_name": "Sample Shop",
+                      "description": "A sample checkout",
+                      "id": "64553e20-3f0e-49e4-8af3-fd0eca86ce91",
+                      "status": "PENDING",
+                      "date": "2000-01-01T12:49:24.899+00:00",
+                      "purpose": "CHECKOUT",
+                      "hosted_checkout": {
+                        "enabled": true
+                      },
+                      "hosted_checkout_url": "https://checkout.sumup.com/pay/8f9316a3-cda9-42a9-9771-54d534315676",
+                      "transactions": []
                     }
                   }
                 }
@@ -6610,6 +6645,21 @@
         },
         "title": "ELV Card Account"
       },
+      "HostedCheckout": {
+        "description": "Hosted Checkout configuration. Enable it to receive a SumUp-hosted payment page URL in the checkout response.",
+        "type": "object",
+        "properties": {
+          "enabled": {
+            "description": "Whether the checkout should include a SumUp-hosted payment page.",
+            "type": "boolean",
+            "example": true
+          }
+        },
+        "required": [
+          "enabled"
+        ],
+        "title": "Hosted Checkout"
+      },
       "Checkout": {
         "description": "Core checkout resource returned by the Checkouts API. A checkout is created before payment processing and then updated as payment attempts, redirects, and resulting transactions are attached to it.",
         "type": "object",
@@ -6682,6 +6732,13 @@
           },
           "mandate": {
             "$ref": "#/components/schemas/MandateResponse"
+          },
+          "hosted_checkout_url": {
+            "description": "URL of the SumUp-hosted payment page that handles the payment flow. Returned when Hosted Checkout is enabled for the checkout.",
+            "type": "string",
+            "format": "uri",
+            "example": "https://checkout.sumup.com/pay/8f9316a3-cda9-42a9-9771-54d534315676",
+            "readOnly": true
           },
           "transactions": {
             "description": "Payment attempts and resulting transaction records linked to this checkout. Use the Transactions endpoints when you need the authoritative payment result and event history.",
@@ -6778,6 +6835,9 @@
             "description": "URL where the payer should be sent after a redirect-based payment or SCA flow completes. This is required for [APMs](https://developer.sumup.com/online-payments/apm/introduction) and recommended for card checkouts that may require [3DS](https://developer.sumup.com/online-payments/features/3ds). If it is omitted, the [Payment Widget](https://developer.sumup.com/online-payments/checkouts) can render the challenge in an iframe instead of using a full-page redirect.",
             "type": "string",
             "example": "https://mysite.com/completed_purchase"
+          },
+          "hosted_checkout": {
+            "$ref": "#/components/schemas/HostedCheckout"
           }
         },
         "required": [
@@ -10449,6 +10509,20 @@
                   "merchant_code": "MH4H92C7",
                   "redirect_url": "https://mysite.com/completed_purchase"
                 }
+              },
+              "HostedCheckout": {
+                "description": "Create a checkout with a SumUp-hosted payment page",
+                "x-beta": true,
+                "value": {
+                  "checkout_reference": "b50pr914-6k0e-3091-a592-890010285b3d",
+                  "amount": 12,
+                  "currency": "EUR",
+                  "merchant_code": "MCXXXXXX",
+                  "description": "A sample checkout",
+                  "hosted_checkout": {
+                    "enabled": true
+                  }
+                }
               }
             }
           }
@@ -10708,6 +10782,27 @@
                       "auth_code": "012345"
                     }
                   ]
+                }
+              },
+              "HostedCheckout": {
+                "description": "Response body for a checkout with a SumUp-hosted payment page",
+                "value": {
+                  "checkout_reference": "b50pr914-6k0e-3091-a592-890010285b3d",
+                  "amount": 12,
+                  "currency": "EUR",
+                  "merchant_code": "MCXXXXXX",
+                  "merchant_country": "DE",
+                  "merchant_name": "Sample Shop",
+                  "description": "A sample checkout",
+                  "id": "64553e20-3f0e-49e4-8af3-fd0eca86ce91",
+                  "status": "PENDING",
+                  "date": "2000-01-01T12:49:24.899+00:00",
+                  "purpose": "CHECKOUT",
+                  "hosted_checkout": {
+                    "enabled": true
+                  },
+                  "hosted_checkout_url": "https://checkout.sumup.com/pay/8f9316a3-cda9-42a9-9771-54d534315676",
+                  "transactions": []
                 }
               }
             }
