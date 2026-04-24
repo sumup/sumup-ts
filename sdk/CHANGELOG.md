@@ -1,5 +1,38 @@
 # Changelog
 
+## [0.1.5](https://github.com/sumup/sumup-ts/compare/v0.1.4...v0.1.5) (2026-04-24)
+
+
+### Features
+
+* resource docs ([#325](https://github.com/sumup/sumup-ts/issues/325)) ([f38f21a](https://github.com/sumup/sumup-ts/commit/f38f21a617f2da2c4eef38d7620067c0ebcec951))
+* **sdk:** return plain promises and add explicit `WithResponse` methods ([#343](https://github.com/sumup/sumup-ts/issues/343)) ([28d5da2](https://github.com/sumup/sumup-ts/commit/28d5da242481199d9797abf9d23c312e4a6adeb5))
+
+
+### Chores
+
+* **deps-dev:** bump @biomejs/biome from 2.4.10 to 2.4.11 in /sdk ([#341](https://github.com/sumup/sumup-ts/issues/341)) ([3a68db4](https://github.com/sumup/sumup-ts/commit/3a68db4990b8c86e55d9422c7131201c0780be8e))
+* **deps-dev:** bump @biomejs/biome from 2.4.7 to 2.4.8 in /sdk ([#309](https://github.com/sumup/sumup-ts/issues/309)) ([8edfffa](https://github.com/sumup/sumup-ts/commit/8edfffac275279684e44a30dabaabdf1f062dc11))
+* **deps-dev:** bump @biomejs/biome from 2.4.8 to 2.4.10 in /sdk ([#321](https://github.com/sumup/sumup-ts/issues/321)) ([ace1dd4](https://github.com/sumup/sumup-ts/commit/ace1dd49eee6bd32e03701c24decd7a9b435d1f6))
+* **deps-dev:** bump the rslib group in /sdk with 2 updates ([#319](https://github.com/sumup/sumup-ts/issues/319)) ([39b167b](https://github.com/sumup/sumup-ts/commit/39b167b3b9613416e971364a1ad8679a53d13330))
+* **deps-dev:** bump the rslib group in /sdk with 2 updates ([#331](https://github.com/sumup/sumup-ts/issues/331)) ([aaf6e74](https://github.com/sumup/sumup-ts/commit/aaf6e74ff961d4200ff14a033e44284bcf4d7743))
+* **deps-dev:** bump the rslib group in /sdk with 2 updates ([#338](https://github.com/sumup/sumup-ts/issues/338)) ([004e3a4](https://github.com/sumup/sumup-ts/commit/004e3a469b89d410d1e4837cd7b24a0daaf4ffcd))
+* **deps-dev:** bump typedoc from 0.28.17 to 0.28.18 in /sdk ([#310](https://github.com/sumup/sumup-ts/issues/310)) ([fe240a8](https://github.com/sumup/sumup-ts/commit/fe240a8e0468d2aab442162245493e8d7763ea42))
+* **deps-dev:** bump typedoc from 0.28.18 to 0.28.19 in /sdk ([#340](https://github.com/sumup/sumup-ts/issues/340)) ([d413e58](https://github.com/sumup/sumup-ts/commit/d413e5845222abd3c67adae73a24e9780ee6d56d))
+* **deps-dev:** bump typescript from 5.9.3 to 6.0.2 in /sdk ([#312](https://github.com/sumup/sumup-ts/issues/312)) ([8e82454](https://github.com/sumup/sumup-ts/commit/8e82454807af254568d8dd3f6dd6c4e16e28b108))
+* **deps-dev:** bump vite from 8.0.3 to 8.0.5 in /sdk ([#316](https://github.com/sumup/sumup-ts/issues/316)) ([f02da23](https://github.com/sumup/sumup-ts/commit/f02da23f10040f25853d16c5cbb8bf1cfd395f3e))
+* **deps-dev:** bump vitest from 4.1.0 to 4.1.1 in /sdk ([#311](https://github.com/sumup/sumup-ts/issues/311)) ([50b5e17](https://github.com/sumup/sumup-ts/commit/50b5e171475164ae80422261d72afe272c99ddd0))
+* **deps-dev:** bump vitest from 4.1.1 to 4.1.2 in /sdk ([#320](https://github.com/sumup/sumup-ts/issues/320)) ([ff6319c](https://github.com/sumup/sumup-ts/commit/ff6319c5772d5d3fa134323f573a8506fa332c0a))
+* **deps-dev:** bump vitest from 4.1.2 to 4.1.3 in /sdk ([#332](https://github.com/sumup/sumup-ts/issues/332)) ([76f9cda](https://github.com/sumup/sumup-ts/commit/76f9cda54c91cdb4e9f2f113ae4af0c843e1535d))
+* **deps-dev:** bump vitest from 4.1.3 to 4.1.4 in /sdk ([#339](https://github.com/sumup/sumup-ts/issues/339)) ([66e2511](https://github.com/sumup/sumup-ts/commit/66e251138ebdfd7fd6937068a030dbaf3cde2b1a))
+* synced file(s) with sumup/apis ([#323](https://github.com/sumup/sumup-ts/issues/323)) ([0e0d61c](https://github.com/sumup/sumup-ts/commit/0e0d61c1512091a1d5dcc08559670c41339707e0))
+* synced file(s) with sumup/apis ([#324](https://github.com/sumup/sumup-ts/issues/324)) ([a73a408](https://github.com/sumup/sumup-ts/commit/a73a408613bdc85855eadadd257353e8f00d81a0))
+* synced file(s) with sumup/apis ([#326](https://github.com/sumup/sumup-ts/issues/326)) ([a871661](https://github.com/sumup/sumup-ts/commit/a8716614014922b2a58fa4248f64497afcd6b6a5))
+* synced file(s) with sumup/apis ([#328](https://github.com/sumup/sumup-ts/issues/328)) ([39e7c78](https://github.com/sumup/sumup-ts/commit/39e7c7883d6639ea7b2900611d333cb1c9dd0b1b))
+* synced file(s) with sumup/apis ([#329](https://github.com/sumup/sumup-ts/issues/329)) ([d2ae326](https://github.com/sumup/sumup-ts/commit/d2ae32688e81a44d000ef4e1e1296b62f86151d5))
+* synced file(s) with sumup/apis ([#334](https://github.com/sumup/sumup-ts/issues/334)) ([8a92352](https://github.com/sumup/sumup-ts/commit/8a92352cd6dd35b49b64209ef9f7b85880094958))
+* synced file(s) with sumup/apis ([#345](https://github.com/sumup/sumup-ts/issues/345)) ([97907cc](https://github.com/sumup/sumup-ts/commit/97907cc6aa8dd8e00a27e4b1308989e571cc2eb3))
+
 ## [0.1.4](https://github.com/sumup/sumup-ts/compare/v0.1.3...v0.1.4) (2026-03-31)
 
 
