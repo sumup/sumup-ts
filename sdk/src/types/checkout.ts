@@ -54,6 +54,10 @@ export type Checkout = {
   customer_id?: string;
   mandate?: MandateResponse;
   /**
+   * URL of the SumUp-hosted payment page that handles the payment flow. Returned when Hosted Checkout is enabled for the checkout.
+   */
+  readonly hosted_checkout_url?: string;
+  /**
    * Payment attempts and resulting transaction records linked to this checkout. Use the Transactions endpoints when you need the authoritative payment result and event history.
    */
   transactions?: (TransactionBase & TransactionCheckoutInfo)[];

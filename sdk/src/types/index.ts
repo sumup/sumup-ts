@@ -41,6 +41,7 @@ export type { EventStatus } from "./event-status";
 export type { EventType } from "./event-type";
 export type { FinancialPayouts } from "./financial-payouts";
 export type { HorizontalAccuracy } from "./horizontal-accuracy";
+export type { HostedCheckout } from "./hosted-checkout";
 export type { Invite } from "./invite";
 export type { Lat } from "./lat";
 export type { LegalType } from "./legal-type";
