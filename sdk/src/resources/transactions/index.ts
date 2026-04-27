@@ -7,9 +7,7 @@ import {
 } from "../../core";
 import type {
   EntryMode,
-  ErrorBody,
   PaymentType,
-  Problem,
   TransactionFull,
   TransactionHistory,
   TransactionsHistoryLink,

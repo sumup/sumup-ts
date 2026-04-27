@@ -7,12 +7,9 @@ import {
 } from "../../core";
 import type {
   Customer,
-  ErrorBody,
   ErrorExtended,
-  ErrorForbidden,
   PaymentInstrumentResponse,
   PersonalDetails,
-  Problem,
 } from "../../types";
 export type CreateCustomerError =
   | ErrorExtended

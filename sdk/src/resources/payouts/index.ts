@@ -5,7 +5,7 @@ import {
   type RequestOptions,
   type WithResponse,
 } from "../../core";
-import type { ErrorExtended, FinancialPayouts, Problem } from "../../types";
+import type { ErrorExtended, FinancialPayouts } from "../../types";
 export type ListPayoutsV1QueryParams = {
   start_date: string;
   end_date: string;

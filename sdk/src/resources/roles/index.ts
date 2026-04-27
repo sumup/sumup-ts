@@ -5,7 +5,7 @@ import {
   type RequestOptions,
   type WithResponse,
 } from "../../core";
-import type { Metadata, Problem, Role } from "../../types";
+import type { Metadata, Role } from "../../types";
 export type ListMerchantRolesResponse = { items: Role[] };
 
 export type CreateMerchantRoleParams = {

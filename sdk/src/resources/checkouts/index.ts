@@ -10,11 +10,8 @@ import type {
   CheckoutAccepted,
   CheckoutCreateRequest,
   CheckoutSuccess,
-  DetailsError,
   ErrorBody,
   ErrorExtended,
-  ErrorForbidden,
-  Problem,
   ProcessCheckout,
 } from "../../types";
 export type GetPaymentMethodsQueryParams = {

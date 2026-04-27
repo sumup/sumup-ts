@@ -5,12 +5,7 @@ import {
   type RequestOptions,
   type WithResponse,
 } from "../../core";
-import type {
-  ListPersonsResponseBody,
-  Merchant,
-  Person,
-  Problem,
-} from "../../types";
+import type { ListPersonsResponseBody, Merchant, Person } from "../../types";
 export type GetMerchantQueryParams = {
   version?: string;
 };

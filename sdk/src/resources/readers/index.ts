@@ -9,7 +9,6 @@ import type {
   CreateReaderCheckoutRequest,
   CreateReaderCheckoutResponse,
   Metadata,
-  Problem,
   Reader,
   ReaderID,
   ReaderName,

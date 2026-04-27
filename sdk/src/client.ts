@@ -129,9 +129,7 @@ export class HTTPClient {
     });
   }
 
-  public request<T>({
-    ...params
-  }: Core.FullRequestOptions): Promise<T> {
+  public request<T>({ ...params }: Core.FullRequestOptions): Promise<T> {
     return this.requestWithResponse<T>(params).then(({ data }) => data);
   }
 

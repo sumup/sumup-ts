@@ -10,7 +10,6 @@ import type {
   Member,
   MembershipStatus,
   Metadata,
-  Problem,
 } from "../../types";
 export type ListMerchantMembersQueryParams = {
   offset?: number;

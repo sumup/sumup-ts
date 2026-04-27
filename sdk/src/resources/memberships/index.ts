@@ -5,12 +5,7 @@ import {
   type RequestOptions,
   type WithResponse,
 } from "../../core";
-import type {
-  Membership,
-  MembershipStatus,
-  Problem,
-  ResourceType,
-} from "../../types";
+import type { Membership, MembershipStatus, ResourceType } from "../../types";
 export type ListMembershipsQueryParams = {
   offset?: number;
   limit?: number;
