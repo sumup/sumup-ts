@@ -1900,10 +1900,20 @@
         ]
       }
     },
-    "/v0.1/me/refund/{txn_id}": {
+    "/v1.0/merchants/{merchant_code}/payments/{id}/refunds": {
       "parameters": [
         {
-          "name": "txn_id",
+          "name": "merchant_code",
+          "in": "path",
+          "description": "Merchant code of the account that owns the payment to refund.",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "example": "MH4H92C7"
+          }
+        },
+        {
+          "name": "id",
           "in": "path",
           "description": "Unique ID of the transaction.",
           "required": true,
@@ -2143,121 +2153,6 @@
         ],
         "x-codegen": {
           "method_name": "get"
-        },
-        "x-scopes": [
-          "transactions.history"
-        ]
-      }
-    },
-    "/v0.1/me/transactions": {
-      "get": {
-        "operationId": "GetTransaction",
-        "summary": "Retrieve a transaction",
-        "description": "Retrieves the full details of an identified transaction. The transaction resource is identified by a query parameter and *one* of following parameters is required:\n- `id`\n- `transaction_code`\n- `foreign_transaction_id`\n- `client_transaction_id`",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "query",
-            "description": "Retrieves the transaction resource with the specified transaction ID (the `id` parameter in the transaction resource).",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "transaction_code",
-            "in": "query",
-            "description": "Retrieves the transaction resource with the specified transaction code.",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Returns the requested transaction resource.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/TransactionFull"
-                },
-                "example": {
-                  "id": "410fc44a-5956-44e1-b5cc-19c6f8d727a4",
-                  "transaction_code": "TEENSK4W2K",
-                  "amount": 10.1,
-                  "currency": "EUR",
-                  "timestamp": "2020-02-29T10:56:56.876Z",
-                  "status": "SUCCESSFUL",
-                  "payment_type": "ECOM",
-                  "installments_count": 1,
-                  "merchant_code": "MH4H92C7",
-                  "vat_amount": 6,
-                  "tip_amount": 3,
-                  "entry_mode": "CUSTOMER_ENTRY",
-                  "auth_code": "053201"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "The request is not authorized.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Problem"
-                },
-                "examples": {
-                  "Problem_Details": {
-                    "description": "Unauthorized response returned by API gateway.",
-                    "value": {
-                      "detail": "Unauthorized.",
-                      "status": 401,
-                      "title": "Unauthorized",
-                      "trace_id": "3c77294349d3b5647ea2d990f0d8f017",
-                      "type": "https://developer.sumup.com/problem/unauthorized"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "The requested resource does not exist.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                },
-                "examples": {
-                  "Not_Found": {
-                    "description": "The identified resource is not found on the server.",
-                    "value": {
-                      "error_code": "NOT_FOUND",
-                      "message": "Resource not found"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "deprecated": true,
-        "security": [
-          {
-            "apiKey": []
-          },
-          {
-            "oauth2": [
-              "transactions.history"
-            ]
-          }
-        ],
-        "tags": [
-          "Transactions"
-        ],
-        "x-codegen": {
-          "method_name": "get_deprecated"
         },
         "x-scopes": [
           "transactions.history"
@@ -2566,292 +2461,11 @@
         ]
       }
     },
-    "/v0.1/me/transactions/history": {
-      "get": {
-        "operationId": "ListTransactions",
-        "summary": "List transactions",
-        "description": "Lists detailed history of all transactions associated with the merchant profile.",
-        "parameters": [
-          {
-            "name": "transaction_code",
-            "in": "query",
-            "description": "Retrieves the transaction resource with the specified transaction code.",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "order",
-            "in": "query",
-            "description": "Specifies the order in which the returned results are displayed.",
-            "schema": {
-              "type": "string",
-              "default": "ascending",
-              "enum": [
-                "ascending",
-                "descending"
-              ]
-            }
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "description": "Specifies the maximum number of results per page. Value must be a positive integer and if not specified, will return 10 results.",
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "users",
-            "in": "query",
-            "description": "Filters the returned results by user email.",
-            "required": false,
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string",
-                "format": "email"
-              },
-              "example": [
-                "merchant@example.com"
-              ]
-            },
-            "example": [
-              "merchant@example.com"
-            ]
-          },
-          {
-            "name": "statuses[]",
-            "in": "query",
-            "description": "Filters the returned results by the specified list of final statuses of the transactions.",
-            "required": false,
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string",
-                "enum": [
-                  "SUCCESSFUL",
-                  "CANCELLED",
-                  "FAILED",
-                  "REFUNDED",
-                  "CHARGE_BACK"
-                ]
-              }
-            }
-          },
-          {
-            "name": "payment_types",
-            "in": "query",
-            "description": "Filters the returned results by the specified list of payment types used for the transactions.",
-            "required": false,
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/components/schemas/PaymentType"
-              }
-            }
-          },
-          {
-            "name": "types",
-            "in": "query",
-            "description": "Filters the returned results by the specified list of transaction types.",
-            "required": false,
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string",
-                "enum": [
-                  "PAYMENT",
-                  "REFUND",
-                  "CHARGE_BACK"
-                ]
-              }
-            }
-          },
-          {
-            "name": "changes_since",
-            "in": "query",
-            "description": "Filters the results by the latest modification time of resources and returns only transactions that are modified *at or after* the specified timestamp (in [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) format).",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "format": "date-time"
-            }
-          },
-          {
-            "name": "newest_time",
-            "in": "query",
-            "description": "Filters the results by the creation time of resources and returns only transactions that are created *before* the specified timestamp (in [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) format).",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "format": "date-time"
-            }
-          },
-          {
-            "name": "newest_ref",
-            "in": "query",
-            "description": "Filters the results by the reference ID of transaction events and returns only transactions with events whose IDs are *smaller* than the specified value. This parameters supersedes the `newest_time` parameter (if both are provided in the request).",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "oldest_time",
-            "in": "query",
-            "description": "Filters the results by the creation time of resources and returns only transactions that are created *at or after* the specified timestamp (in [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) format).",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "format": "date-time"
-            }
-          },
-          {
-            "name": "oldest_ref",
-            "in": "query",
-            "description": "Filters the results by the reference ID of transaction events and returns only transactions with events whose IDs are *greater* than the specified value. This parameters supersedes the `oldest_time` parameter (if both are provided in the request).",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Returns a page of transaction history items.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "items": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/TransactionHistory"
-                      },
-                      "example": [
-                        {
-                          "transaction_code": "TEENSK4W2K",
-                          "amount": 10.1,
-                          "currency": "EUR",
-                          "timestamp": "2020-02-29T10:56:56.876Z",
-                          "status": "SUCCESSFUL",
-                          "payment_type": "ECOM",
-                          "installments_count": 1,
-                          "merchant_code": "MH4H92C7",
-                          "transaction_id": "410fc44a-5956-44e1-b5cc-19c6f8d727a4",
-                          "user": "merchant@example.com",
-                          "type": "PAYMENT",
-                          "payout_date": "2019-08-28",
-                          "payout_type": "BANK_ACCOUNT",
-                          "refunded_amount": 0
-                        }
-                      ]
-                    },
-                    "links": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/TransactionsHistoryLink"
-                      },
-                      "example": []
-                    }
-                  }
-                },
-                "example": {
-                  "items": [
-                    {
-                      "transaction_code": "TEENSK4W2K",
-                      "amount": 10.1,
-                      "currency": "EUR",
-                      "timestamp": "2020-02-29T10:56:56.876Z",
-                      "status": "SUCCESSFUL",
-                      "payment_type": "ECOM",
-                      "installments_count": 1,
-                      "merchant_code": "MH4H92C7",
-                      "transaction_id": "410fc44a-5956-44e1-b5cc-19c6f8d727a4",
-                      "user": "merchant@example.com",
-                      "type": "PAYMENT",
-                      "payout_date": "2019-08-28",
-                      "payout_type": "BANK_ACCOUNT",
-                      "refunded_amount": 0
-                    }
-                  ],
-                  "links": []
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "The request is invalid for the submitted query parameters.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                },
-                "examples": {
-                  "Invalid_Parameter": {
-                    "description": "A request parameter has an invalid value.",
-                    "value": {
-                      "message": "Validation error",
-                      "error_code": "INVALID"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "The request is not authorized.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Problem"
-                },
-                "examples": {
-                  "Problem_Details": {
-                    "description": "Unauthorized response returned by API gateway.",
-                    "value": {
-                      "detail": "Unauthorized.",
-                      "status": 401,
-                      "title": "Unauthorized",
-                      "trace_id": "3c77294349d3b5647ea2d990f0d8f017",
-                      "type": "https://developer.sumup.com/problem/unauthorized"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "deprecated": true,
-        "security": [
-          {
-            "apiKey": []
-          },
-          {
-            "oauth2": [
-              "transactions.history"
-            ]
-          }
-        ],
-        "tags": [
-          "Transactions"
-        ],
-        "x-codegen": {
-          "method_name": "list_deprecated"
-        },
-        "x-scopes": [
-          "transactions.history"
-        ]
-      }
-    },
     "/v1.0/merchants/{merchant_code}/payouts": {
       "get": {
         "operationId": "ListPayoutsV1",
         "summary": "List payouts",
-        "description": "Lists ordered payouts for the merchant account.",
+        "description": "Lists payout and payout-deduction records for the specified merchant account within the requested date range.\n\nThe response can include:\n- regular payouts (`type = PAYOUT`)\n- deduction records for refunds, chargebacks, direct debit returns, or balance adjustments\n\nResults are sorted by payout date in the requested `order`.",
         "parameters": [
           {
             "name": "merchant_code",
@@ -2866,21 +2480,23 @@
           {
             "name": "start_date",
             "in": "query",
-            "description": "Start date (in [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) format).",
+            "description": "Start date of the payout period filter, inclusive, in [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) `date` format (`YYYY-MM-DD`).",
             "required": true,
             "schema": {
               "type": "string",
-              "format": "date"
+              "format": "date",
+              "example": "2024-02-01"
             }
           },
           {
             "name": "end_date",
             "in": "query",
-            "description": "End date (in [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) format).",
+            "description": "End date of the payout period filter, inclusive, in [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) `date` format (`YYYY-MM-DD`). Must be greater than or equal to `start_date`.",
             "required": true,
             "schema": {
               "type": "string",
-              "format": "date"
+              "format": "date",
+              "example": "2024-02-29"
             }
           },
           {
@@ -2891,6 +2507,7 @@
             "schema": {
               "type": "string",
               "example": "json",
+              "default": "json",
               "enum": [
                 "json",
                 "csv"
@@ -2904,7 +2521,9 @@
             "required": false,
             "schema": {
               "type": "integer",
-              "example": 10
+              "example": 10,
+              "maximum": 9999,
+              "minimum": 1
             }
           },
           {
@@ -2915,16 +2534,17 @@
             "schema": {
               "type": "string",
               "example": "desc",
+              "default": "asc",
               "enum": [
-                "desc",
-                "asc"
+                "asc",
+                "desc"
               ]
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Returns the list of payouts for the requested period.",
+            "description": "Returns the list of payout and deduction records for the requested period.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2943,6 +2563,13 @@
                     "type": "PAYOUT"
                   }
                 ]
+              },
+              "text/plain": {
+                "schema": {
+                  "description": "CSV-formatted payout export returned when `format=csv`.",
+                  "type": "string"
+                },
+                "example": "id,type,amount,date,currency,fee,status,reference,transaction_code\n123456789,PAYOUT,132.45,2024-02-29,EUR,3.12,SUCCESSFUL,payout-2024-02-29,TEENSK4W2K"
               }
             }
           },
@@ -2957,7 +2584,7 @@
                   }
                 },
                 "examples": {
-                  "Missing_Required_Dates": {
+                  "Missing required dates": {
                     "description": "Required date filters are missing.",
                     "value": [
                       {
@@ -2969,6 +2596,15 @@
                         "error_code": "MISSING",
                         "message": "Validation error: required",
                         "param": "end_date"
+                      }
+                    ]
+                  },
+                  "Invalid date range": {
+                    "description": "`start_date` cannot be later than `end_date`.",
+                    "value": [
+                      {
+                        "error_code": "INVALID",
+                        "message": "negative date range"
                       }
                     ]
                   }
@@ -3015,172 +2651,6 @@
         ],
         "x-codegen": {
           "method_name": "list"
-        },
-        "x-scopes": [
-          "user.profile",
-          "user.profile_readonly"
-        ]
-      }
-    },
-    "/v0.1/me/financials/payouts": {
-      "get": {
-        "operationId": "ListPayouts",
-        "summary": "List payouts",
-        "description": "Lists ordered payouts for the merchant account.",
-        "parameters": [
-          {
-            "name": "start_date",
-            "in": "query",
-            "description": "Start date (in [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) format).",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "date"
-            }
-          },
-          {
-            "name": "end_date",
-            "in": "query",
-            "description": "End date (in [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) format).",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "date"
-            }
-          },
-          {
-            "name": "format",
-            "in": "query",
-            "description": "Response format for the payout list.",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "example": "json",
-              "enum": [
-                "json",
-                "csv"
-              ]
-            }
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "description": "Maximum number of payout records to return.",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "example": 10
-            }
-          },
-          {
-            "name": "order",
-            "in": "query",
-            "description": "Sort direction for the returned payouts.",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "example": "desc",
-              "enum": [
-                "desc",
-                "asc"
-              ]
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Returns the list of payouts for the requested period.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/FinancialPayouts"
-                },
-                "example": [
-                  {
-                    "amount": 132.45,
-                    "currency": "EUR",
-                    "date": "2024-02-29",
-                    "fee": 3.12,
-                    "id": 123456789,
-                    "reference": "payout-2024-02-29",
-                    "status": "SUCCESSFUL",
-                    "transaction_code": "TEENSK4W2K",
-                    "type": "PAYOUT"
-                  }
-                ]
-              }
-            }
-          },
-          "400": {
-            "description": "The request is invalid for the submitted query parameters.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/ErrorExtended"
-                  }
-                },
-                "examples": {
-                  "Missing_Required_Dates": {
-                    "description": "Required date filters are missing.",
-                    "value": [
-                      {
-                        "error_code": "MISSING",
-                        "message": "Validation error: required",
-                        "param": "start_date"
-                      },
-                      {
-                        "error_code": "MISSING",
-                        "message": "Validation error: required",
-                        "param": "end_date"
-                      }
-                    ]
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "The request is not authorized.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Problem"
-                },
-                "examples": {
-                  "Problem_Details": {
-                    "description": "Unauthorized response returned by API gateway.",
-                    "value": {
-                      "detail": "Unauthorized.",
-                      "status": 401,
-                      "title": "Unauthorized",
-                      "trace_id": "3c77294349d3b5647ea2d990f0d8f017",
-                      "type": "https://developer.sumup.com/problem/unauthorized"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "deprecated": true,
-        "security": [
-          {
-            "apiKey": []
-          },
-          {
-            "oauth2": [
-              "user.profile",
-              "user.profile_readonly"
-            ]
-          }
-        ],
-        "tags": [
-          "Payouts"
-        ],
-        "x-codegen": {
-          "method_name": "list_deprecated"
         },
         "x-scopes": [
           "user.profile",
@@ -3333,348 +2803,6 @@
         "x-codegen": {
           "method_name": "get"
         },
-        "x-scopes": []
-      }
-    },
-    "/v0.1/me/accounts": {
-      "get": {
-        "operationId": "ListSubAccounts",
-        "summary": "List operators",
-        "description": "Returns list of operators for currently authorized user's merchant.",
-        "parameters": [
-          {
-            "name": "query",
-            "in": "query",
-            "description": "Search query used to filter users that match given query term.\n\nCurrent implementation allow querying only over the email address.\nAll operators whos email address contains the query string are returned.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "include_primary",
-            "in": "query",
-            "description": "If true the list of operators will include also the primary user.",
-            "schema": {
-              "type": "boolean"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "List of operators.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Operator"
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Authentication failed or missing required scope.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Problem"
-                },
-                "example": {
-                  "type": "https://developer.sumup.com/problem/unauthorized",
-                  "title": "Unauthorized",
-                  "status": 401,
-                  "detail": "Authentication credentials are missing or invalid."
-                }
-              }
-            }
-          }
-        },
-        "deprecated": true,
-        "security": [
-          {
-            "apiKey": []
-          },
-          {
-            "oauth2": []
-          }
-        ],
-        "tags": [
-          "Subaccounts"
-        ],
-        "x-deprecation-notice": "Subaccounts API is deprecated, to list users in your merchant account please use [List members](https://developer.sumup.com/api/members/list) instead.",
-        "x-permissions": [
-          "members_list"
-        ],
-        "x-scopes": []
-      },
-      "post": {
-        "operationId": "CreateSubAccount",
-        "summary": "Create an operator",
-        "description": "Creates new operator for currently authorized users' merchant.",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "username": {
-                    "type": "string",
-                    "format": "email",
-                    "example": "operator1@mydomain.com"
-                  },
-                  "password": {
-                    "type": "string",
-                    "example": "correct horse batter staple",
-                    "minLength": 8
-                  },
-                  "nickname": {
-                    "type": "string",
-                    "example": "Operator 1"
-                  },
-                  "permissions": {
-                    "type": "object",
-                    "properties": {
-                      "create_moto_payments": {
-                        "type": "boolean"
-                      },
-                      "create_referral": {
-                        "type": "boolean"
-                      },
-                      "full_transaction_history_view": {
-                        "type": "boolean"
-                      },
-                      "refund_transactions": {
-                        "type": "boolean"
-                      }
-                    }
-                  }
-                },
-                "required": [
-                  "username",
-                  "password"
-                ]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Newly created operator.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Operator"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Operator creation was forbidden.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Problem"
-                },
-                "example": {
-                  "type": "https://developer.sumup.com/problem/forbidden",
-                  "title": "Forbidden",
-                  "status": 403,
-                  "detail": "You do not have permission to perform this action."
-                }
-              }
-            }
-          }
-        },
-        "deprecated": true,
-        "security": [
-          {
-            "apiKey": []
-          },
-          {
-            "oauth2": []
-          }
-        ],
-        "tags": [
-          "Subaccounts"
-        ],
-        "x-deprecation-notice": "Subaccounts API is deprecated, to create a user in your merchant account please use [Create member](https://developer.sumup.com/api/members/create) instead.",
-        "x-permissions": [
-          "members_update"
-        ],
-        "x-scopes": []
-      }
-    },
-    "/v0.1/me/accounts/{operator_id}": {
-      "get": {
-        "operationId": "CompatGetOperator",
-        "summary": "Retrieve an operator",
-        "description": "Returns specific operator.",
-        "parameters": [
-          {
-            "name": "operator_id",
-            "in": "path",
-            "description": "The unique identifier for the operator.",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Information about the requested operator.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Operator"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Authentication failed or missing required scope.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Problem"
-                },
-                "example": {
-                  "type": "https://developer.sumup.com/problem/unauthorized",
-                  "title": "Unauthorized",
-                  "status": 401,
-                  "detail": "Authentication credentials are missing or invalid."
-                }
-              }
-            }
-          }
-        },
-        "deprecated": true,
-        "security": [
-          {
-            "apiKey": []
-          },
-          {
-            "oauth2": []
-          }
-        ],
-        "tags": [
-          "Subaccounts"
-        ],
-        "x-deprecation-notice": "Subaccounts API is deprecated, to get a user that's a member of your merchant account please use [Get member](https://developer.sumup.com/api/members/get) instead.",
-        "x-permissions": [
-          "members_view"
-        ],
-        "x-scopes": []
-      },
-      "put": {
-        "operationId": "UpdateSubAccount",
-        "summary": "Update an operator",
-        "description": "Updates operator. If the operator was disabled and their password is updated they will be unblocked.",
-        "parameters": [
-          {
-            "name": "operator_id",
-            "in": "path",
-            "description": "The unique identifier for the operator.",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "password": {
-                    "type": "string",
-                    "example": "correct horse batter staple",
-                    "minLength": 8
-                  },
-                  "username": {
-                    "type": "string",
-                    "format": "email",
-                    "maxLength": 256
-                  },
-                  "disabled": {
-                    "type": "boolean"
-                  },
-                  "nickname": {
-                    "type": "string",
-                    "example": "Operator 1"
-                  },
-                  "permissions": {
-                    "type": "object",
-                    "properties": {
-                      "create_moto_payments": {
-                        "type": "boolean"
-                      },
-                      "create_referral": {
-                        "type": "boolean"
-                      },
-                      "full_transaction_history_view": {
-                        "type": "boolean"
-                      },
-                      "refund_transactions": {
-                        "type": "boolean"
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Updated operator.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Operator"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid Operators' email or password was already used.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Problem"
-                },
-                "example": {
-                  "type": "https://developer.sumup.com/problem/bad-request",
-                  "title": "Bad Request",
-                  "status": 400,
-                  "detail": "Request validation failed."
-                }
-              }
-            }
-          }
-        },
-        "deprecated": true,
-        "security": [
-          {
-            "apiKey": []
-          },
-          {
-            "oauth2": []
-          }
-        ],
-        "tags": [
-          "Subaccounts"
-        ],
-        "x-deprecation-notice": "Subaccounts API is deprecated, to update a user that's a member of your merchant account please use [Update member](https://developer.sumup.com/api/members/update) instead.",
-        "x-permissions": [
-          "members_update"
-        ],
         "x-scopes": []
       }
     },
@@ -7244,55 +6372,89 @@
         "title": "Event"
       },
       "FinancialPayouts": {
-        "description": "List of payout summaries.",
+        "description": "Ordered list of payout and payout-deduction records.",
         "type": "array",
         "items": {
-          "type": "object",
-          "properties": {
-            "amount": {
-              "type": "number",
-              "format": "float"
-            },
-            "currency": {
-              "type": "string"
-            },
-            "date": {
-              "type": "string",
-              "format": "date"
-            },
-            "fee": {
-              "type": "number",
-              "format": "float"
-            },
-            "id": {
-              "type": "integer"
-            },
-            "reference": {
-              "type": "string"
-            },
-            "status": {
-              "type": "string",
-              "enum": [
-                "SUCCESSFUL",
-                "FAILED"
-              ]
-            },
-            "transaction_code": {
-              "type": "string"
-            },
-            "type": {
-              "type": "string",
-              "enum": [
-                "PAYOUT",
-                "CHARGE_BACK_DEDUCTION",
-                "REFUND_DEDUCTION",
-                "DD_RETURN_DEDUCTION",
-                "BALANCE_DEDUCTION"
-              ]
-            }
-          }
+          "$ref": "#/components/schemas/FinancialPayout"
         },
         "title": "Financial Payouts"
+      },
+      "FinancialPayout": {
+        "description": "A single payout-related record.\n\nA record can represent either:\n- an actual payout sent to the merchant (`type = PAYOUT`)\n- a deduction applied against merchant funds for a refund, chargeback, direct debit return, or balance adjustment",
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "Unique identifier of the payout-related record.",
+            "type": "integer",
+            "example": 123456789
+          },
+          "type": {
+            "description": "High-level payout record category.",
+            "type": "string",
+            "example": "PAYOUT",
+            "enum": [
+              "PAYOUT",
+              "CHARGE_BACK_DEDUCTION",
+              "REFUND_DEDUCTION",
+              "DD_RETURN_DEDUCTION",
+              "BALANCE_DEDUCTION"
+            ]
+          },
+          "amount": {
+            "description": "Amount of the payout or deduction in major units.",
+            "type": "number",
+            "format": "float",
+            "example": 132.45
+          },
+          "date": {
+            "description": "Payout date associated with the record, in `YYYY-MM-DD` format.",
+            "type": "string",
+            "format": "date",
+            "example": "2024-02-29"
+          },
+          "currency": {
+            "description": "Three-letter ISO 4217 currency code of the payout.",
+            "type": "string",
+            "example": "EUR"
+          },
+          "fee": {
+            "description": "Fee amount associated with the payout record, in major units.",
+            "type": "number",
+            "format": "float",
+            "example": 3.12
+          },
+          "status": {
+            "description": "Merchant-facing outcome of the payout record.",
+            "type": "string",
+            "example": "SUCCESSFUL",
+            "enum": [
+              "SUCCESSFUL",
+              "FAILED"
+            ]
+          },
+          "reference": {
+            "description": "Processor or payout reference associated with the record.",
+            "type": "string",
+            "example": "payout-2024-02-29"
+          },
+          "transaction_code": {
+            "description": "Transaction code of the original sale associated with the payout or deduction.",
+            "type": "string",
+            "example": "TEENSK4W2K"
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "amount",
+          "date",
+          "currency",
+          "fee",
+          "status",
+          "reference",
+          "transaction_code"
+        ],
+        "title": "Financial Payout"
       },
       "Link": {
         "description": "Details of a link to a related resource.",
@@ -8546,253 +7708,6 @@
         "type": "string",
         "title": "Transaction ID"
       },
-      "Permissions": {
-        "description": "Permissions assigned to an operator or user.",
-        "type": "object",
-        "properties": {
-          "create_moto_payments": {
-            "type": "boolean"
-          },
-          "create_referral": {
-            "type": "boolean"
-          },
-          "full_transaction_history_view": {
-            "type": "boolean"
-          },
-          "refund_transactions": {
-            "type": "boolean"
-          },
-          "admin": {
-            "type": "boolean"
-          }
-        },
-        "required": [
-          "create_moto_payments",
-          "create_referral",
-          "full_transaction_history_view",
-          "refund_transactions",
-          "admin"
-        ]
-      },
-      "Operator": {
-        "description": "Operator account for a merchant.",
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "username": {
-            "type": "string",
-            "example": "operator1@mydomain.com"
-          },
-          "nickname": {
-            "type": "string",
-            "example": "Operator 1",
-            "nullable": true
-          },
-          "disabled": {
-            "type": "boolean",
-            "example": false
-          },
-          "created_at": {
-            "description": "The timestamp of when the operator was created.",
-            "type": "string",
-            "format": "date-time"
-          },
-          "updated_at": {
-            "description": "The timestamp of when the operator was last updated.",
-            "type": "string",
-            "format": "date-time"
-          },
-          "permissions": {
-            "$ref": "#/components/schemas/Permissions"
-          },
-          "account_type": {
-            "type": "string",
-            "enum": [
-              "operator",
-              "normal"
-            ]
-          }
-        },
-        "required": [
-          "id",
-          "username",
-          "disabled",
-          "created_at",
-          "updated_at",
-          "permissions",
-          "account_type"
-        ]
-      },
-      "Attributes": {
-        "description": "Object attributes that are modifiable only by SumUp applications.",
-        "type": "object",
-        "example": {},
-        "additionalProperties": true
-      },
-      "Address": {
-        "description": "An address somewhere in the world. The address fields used depend on the country conventions. For example, in Great Britain, `city` is `post_town`. In the United States, the top-level administrative unit used in addresses is `state`, whereas in Chile it's `region`.\nWhether an address is valid or not depends on whether the locally required fields are present. Fields not supported in a country will be ignored.",
-        "type": "object",
-        "properties": {
-          "street_address": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "description": "The first line of the address.",
-              "maxLength": 100
-            },
-            "example": [
-              "Paul-Linke-Ufer 39-40",
-              "2. Hinterhof"
-            ],
-            "maxItems": 2
-          },
-          "post_code": {
-            "description": "The postal code (aka. zip code) of the address.\n",
-            "type": "string",
-            "example": "10999",
-            "maxLength": 32
-          },
-          "country": {
-            "$ref": "#/components/schemas/CountryCode"
-          },
-          "city": {
-            "description": "The city of the address.\n",
-            "type": "string",
-            "example": "Berlin",
-            "maxLength": 512
-          },
-          "province": {
-            "description": "The province where the address is located. This may not be relevant in some countries.\n",
-            "type": "string",
-            "example": "Berlin",
-            "maxLength": 512
-          },
-          "region": {
-            "description": "The region where the address is located. This may not be relevant in some countries.\n",
-            "type": "string",
-            "example": "Baden Wuerttemberg",
-            "maxLength": 512
-          },
-          "county": {
-            "description": "A county is a geographic region of a country used for administrative or other purposes in some nations. Used in countries such as Ireland, Romania, etc.\n",
-            "type": "string",
-            "example": "Dublin County",
-            "maxLength": 512
-          },
-          "autonomous_community": {
-            "description": "In Spain, an autonomous community is the first sub-national level of political and administrative division.\n",
-            "type": "string",
-            "example": "Catalonia",
-            "maxLength": 512
-          },
-          "post_town": {
-            "description": "A post town is a required part of all postal addresses in the United Kingdom and Ireland, and a basic unit of the postal delivery system.\n",
-            "type": "string",
-            "example": "London",
-            "maxLength": 512
-          },
-          "state": {
-            "description": "Most often, a country has a single state, with various administrative divisions. The term \"state\" is sometimes used to refer to the federated polities that make up the federation. Used in countries such as the United States and Brazil.\n",
-            "type": "string",
-            "example": "California",
-            "maxLength": 512
-          },
-          "neighborhood": {
-            "description": "Locality level of the address. Used in countries such as Brazil or Chile.\n",
-            "type": "string",
-            "example": "Copacabana",
-            "maxLength": 512
-          },
-          "commune": {
-            "description": "In many countries, terms cognate with \"commune\" are used, referring to the community living in the area and the common interest. Used in countries such as Chile.\n",
-            "type": "string",
-            "example": "Providencia",
-            "maxLength": 512
-          },
-          "department": {
-            "description": "A department (French: département, Spanish: departamento) is an administrative or political division in several countries. Used in countries such as Colombia.\n",
-            "type": "string",
-            "example": "Antioquia",
-            "maxLength": 512
-          },
-          "municipality": {
-            "description": "A municipality is usually a single administrative division having corporate status and powers of self-government or jurisdiction as granted by national and regional laws to which it is subordinate. Used in countries such as Colombia.\n",
-            "type": "string",
-            "example": "Medellín",
-            "maxLength": 512
-          },
-          "district": {
-            "description": "A district is a type of administrative division that in some countries is managed by the local government. Used in countries such as Portugal.\n",
-            "type": "string",
-            "example": "Lisbon District",
-            "maxLength": 512
-          },
-          "zip_code": {
-            "description": "A US system of postal codes used by the United States Postal Service (USPS).\n",
-            "type": "string",
-            "example": "94103",
-            "maxLength": 512
-          },
-          "eircode": {
-            "description": "A postal address in Ireland.\n",
-            "type": "string",
-            "example": "D02 X285",
-            "maxLength": 512
-          }
-        },
-        "example": {
-          "street_address": [
-            "Paul-Linke-Ufer 39-40",
-            "2. Hinterhof"
-          ],
-          "post_code": "10999",
-          "city": "Berlin",
-          "country": "DE"
-        },
-        "externalDocs": {
-          "description": "Address documentation",
-          "url": "https://backstage.sumup.net/docs/default/Component/merchants/merchant/#addresses"
-        },
-        "required": [
-          "country"
-        ]
-      },
-      "CountryCode": {
-        "description": "An [ISO3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)\ncountry code. This definition users `oneOf` with a two-character string\ntype to allow for support of future countries in client code.",
-        "type": "string",
-        "example": "BR",
-        "maxLength": 2,
-        "minLength": 2,
-        "pattern": "^[A-Z]{2}$"
-      },
-      "PersonalIdentifier": {
-        "type": "object",
-        "properties": {
-          "ref": {
-            "description": "The unique reference for the personal identifier type.",
-            "type": "string",
-            "example": "br.cpf",
-            "maxLength": 32
-          },
-          "value": {
-            "description": "The company identifier value.",
-            "type": "string",
-            "example": "847.060.136-90",
-            "maxLength": 128
-          }
-        },
-        "example": {
-          "ref": "br.cpf",
-          "value": "847.060.136-90"
-        },
-        "required": [
-          "ref",
-          "value"
-        ]
-      },
       "MembershipStatus": {
         "description": "The status of the membership.",
         "type": "string",
@@ -9167,8 +8082,7 @@
               "type": "string"
             },
             "example": [],
-            "maxItems": 100,
-            "x-deprecation-notice": "Permissions include only legacy permissions, please use roles instead. Member access is based on their roles within a given resource and the permissions these roles grant."
+            "maxItems": 100
           },
           "is_predefined": {
             "description": "True if the role is provided by SumUp.",
@@ -9200,6 +8114,12 @@
           "updated_at"
         ],
         "title": "Role"
+      },
+      "Attributes": {
+        "description": "Object attributes that are modifiable only by SumUp applications.",
+        "type": "object",
+        "example": {},
+        "additionalProperties": true
       },
       "Metadata": {
         "description": "Set of user-defined key-value pairs attached to the object. Partial updates are not supported. When updating, always submit whole metadata. Maximum of 64 parameters are allowed in the object.",
@@ -9420,11 +8340,198 @@
           }
         ]
       },
+      "CountryCode": {
+        "description": "An [ISO3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) country code. This definition users `oneOf` with a two-character string type to allow for support of future countries in client code.\n",
+        "type": "string",
+        "examples": [
+          "AR",
+          "AT",
+          "AU",
+          "BE",
+          "BG",
+          "BR",
+          "CH",
+          "CL",
+          "CO",
+          "CY",
+          "CZ",
+          "DE",
+          "DK",
+          "EE",
+          "ES",
+          "FI",
+          "FR",
+          "GB",
+          "GR",
+          "HU",
+          "IE",
+          "IT",
+          "LT",
+          "LU",
+          "LV",
+          "MT",
+          "MX",
+          "NL",
+          "NO",
+          "PE",
+          "PL",
+          "PT",
+          "RO",
+          "SE",
+          "SI",
+          "SK",
+          "US"
+        ],
+        "maxLength": 2,
+        "minLength": 2
+      },
       "PhoneNumber": {
         "description": "A publicly available phone number in [E.164](https://en.wikipedia.org/wiki/E.164) format.\n",
         "type": "string",
         "example": "+420123456789",
         "maxLength": 16
+      },
+      "Address": {
+        "description": "An address somewhere in the world. The address fields used depend on the country conventions. For example, in Great Britain, `city` is `post_town`. In the United States, the top-level administrative unit used in addresses is `state`, whereas in Chile it's `region`.\nWhether an address is valid or not depends on whether the locally required fields are present. Fields not supported in a country will be ignored.",
+        "type": "object",
+        "properties": {
+          "street_address": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "description": "The first line of the address.",
+              "maxLength": 100
+            },
+            "example": [
+              "Paul-Linke-Ufer 39-40",
+              "2. Hinterhof"
+            ],
+            "maxItems": 2,
+            "minItems": 1
+          },
+          "post_code": {
+            "description": "The postal code (aka. zip code) of the address.\n",
+            "type": "string",
+            "example": "10999",
+            "maxLength": 10
+          },
+          "country": {
+            "$ref": "#/components/schemas/CountryCode"
+          },
+          "city": {
+            "description": "The city of the address.\n",
+            "type": "string",
+            "example": "Berlin",
+            "maxLength": 60
+          },
+          "province": {
+            "description": "The province where the address is located. This may not be relevant in some countries.\n",
+            "type": "string",
+            "example": "Ontario",
+            "maxLength": 60
+          },
+          "region": {
+            "description": "The region where the address is located. This may not be relevant in some countries.\n",
+            "type": "string",
+            "example": "Baden-Wuerttemberg",
+            "maxLength": 60
+          },
+          "county": {
+            "description": "A county is a geographic region of a country used for administrative or other purposes in some nations. Used in countries such as Ireland, Romania, etc.\n",
+            "type": "string",
+            "example": "Dublin",
+            "maxLength": 60
+          },
+          "autonomous_community": {
+            "description": "In Spain, an autonomous community is the first sub-national level of political and administrative division.\n",
+            "type": "string",
+            "example": "Catalonia",
+            "maxLength": 60
+          },
+          "post_town": {
+            "description": "A post town is a required part of all postal addresses in the United Kingdom and Ireland, and a basic unit of the postal delivery system.\n",
+            "type": "string",
+            "example": "London",
+            "maxLength": 60
+          },
+          "state": {
+            "description": "Most often, a country has a single state, with various administrative divisions. The term \"state\" is sometimes used to refer to the federated polities that make up the federation. Used in countries such as the United States and Brazil.\n",
+            "type": "string",
+            "example": "California",
+            "maxLength": 60
+          },
+          "neighborhood": {
+            "description": "Locality level of the address. Used in countries such as Brazil or Chile.\n",
+            "type": "string",
+            "example": "Copacabana",
+            "maxLength": 60
+          },
+          "commune": {
+            "description": "In many countries, terms cognate with \"commune\" are used, referring to the community living in the area and the common interest. Used in countries such as Chile.\n",
+            "type": "string",
+            "example": "Providencia",
+            "maxLength": 60
+          },
+          "department": {
+            "description": "A department (French: département, Spanish: departamento) is an administrative or political division in several countries. Used in countries such as Colombia.\n",
+            "type": "string",
+            "example": "Antioquia",
+            "maxLength": 60
+          },
+          "municipality": {
+            "description": "A municipality is usually a single administrative division having corporate status and powers of self-government or jurisdiction as granted by national and regional laws to which it is subordinate. Used in countries such as Colombia.\n",
+            "type": "string",
+            "example": "Medellin",
+            "maxLength": 60
+          },
+          "district": {
+            "description": "A district is a type of administrative division that in some countries is managed by the local government. Used in countries such as Portugal.\n",
+            "type": "string",
+            "example": "Lisbon",
+            "maxLength": 60
+          },
+          "zip_code": {
+            "description": "A US system of postal codes used by the United States Postal Service (USPS).\n",
+            "type": "string",
+            "example": "94103",
+            "maxLength": 10
+          },
+          "eircode": {
+            "description": "A postal address in Ireland.\n",
+            "type": "string",
+            "example": "D02 X285",
+            "maxLength": 10
+          }
+        },
+        "examples": [
+          {
+            "street_address": [
+              "Paul-Linke-Ufer 39-40",
+              "2. Hinterhof"
+            ],
+            "post_code": "10999",
+            "city": "Berlin",
+            "country": "DE"
+          },
+          {
+            "street_address": [
+              "156 Avenida Vida Nova",
+              "Apto 2"
+            ],
+            "city": "Taboão da Serra",
+            "post_code": "06764045",
+            "state": "SP",
+            "neighborhood": "Jardim Maria Rosa",
+            "country": "BR"
+          }
+        ],
+        "externalDocs": {
+          "description": "Address documentation",
+          "url": "https://developer.sumup.com/tools/glossary/merchant#addresses"
+        },
+        "required": [
+          "country"
+        ]
       },
       "Branding": {
         "description": "Settings used to apply the Merchant's branding to email receipts, invoices, checkouts, and other products.",
@@ -9563,6 +8670,36 @@
         },
         "required": [
           "share"
+        ]
+      },
+      "PersonalIdentifier": {
+        "type": "object",
+        "properties": {
+          "ref": {
+            "description": "The unique reference for the personal identifier type as defined in the country SDK.\n",
+            "type": "string",
+            "examples": [
+              "br.cpf"
+            ]
+          },
+          "value": {
+            "description": "The company identifier value.\n",
+            "type": "string",
+            "examples": [
+              "847.060.136-90"
+            ],
+            "maxLength": 30
+          }
+        },
+        "examples": [
+          {
+            "ref": "br.cpf",
+            "value": "847.060.136-90"
+          }
+        ],
+        "required": [
+          "ref",
+          "value"
         ]
       },
       "Version": {
@@ -11312,16 +10449,6 @@
       "x-core-objects": [
         {
           "$ref": "#/components/schemas/Receipt"
-        }
-      ]
-    },
-    {
-      "name": "Subaccounts",
-      "description": "Endpoints for managing merchant sub-accounts (operators).",
-      "x-deprecation-notice": "Subaccounts API is deprecated, please use [Members](https://developer.sumup.com/api/members) API instead to manage your account members.",
-      "x-core-objects": [
-        {
-          "$ref": "#/components/schemas/Operator"
         }
       ]
     },
