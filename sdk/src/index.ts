@@ -42,10 +42,6 @@ export * from "./resources/roles";
 
 import { Roles } from "./resources/roles";
 
-export * from "./resources/subaccounts";
-
-import { Subaccounts } from "./resources/subaccounts";
-
 export * from "./resources/transactions";
 
 import { Transactions } from "./resources/transactions";
@@ -69,8 +65,6 @@ export class SumUp extends HTTPClient {
   receipts: Receipts = new Receipts(this);
   /** Access the Roles API endpoints. */
   roles: Roles = new Roles(this);
-  /** Access the Subaccounts API endpoints. */
-  subaccounts: Subaccounts = new Subaccounts(this);
   /** Access the Transactions API endpoints. */
   transactions: Transactions = new Transactions(this);
 }
