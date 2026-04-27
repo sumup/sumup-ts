@@ -5,26 +5,16 @@ import {
   type RequestOptions,
   type WithResponse,
 } from "../../core";
-import type { ErrorExtended, FinancialPayouts, Problem } from "../../types";
+import type { ErrorExtended, FinancialPayouts } from "../../types";
 export type ListPayoutsV1QueryParams = {
   start_date: string;
   end_date: string;
   format?: "json" | "csv";
   limit?: number;
-  order?: "desc" | "asc";
+  order?: "asc" | "desc";
 };
 
 export type ListPayoutsV1Error = ErrorExtended[];
-
-export type ListPayoutsQueryParams = {
-  start_date: string;
-  end_date: string;
-  format?: "json" | "csv";
-  limit?: number;
-  order?: "desc" | "asc";
-};
-
-export type ListPayoutsError = ErrorExtended[];
 
 /**
  * API resource for the Payouts endpoints.
@@ -35,7 +25,13 @@ export type ListPayoutsError = ErrorExtended[];
  */
 export class Payouts extends APIResource {
   /**
-   * Lists ordered payouts for the merchant account.
+   * Lists payout and payout-deduction records for the specified merchant account within the requested date range.
+   *
+   * The response can include:
+   * - regular payouts (`type = PAYOUT`)
+   * - deduction records for refunds, chargebacks, direct debit returns, or balance adjustments
+   *
+   * Results are sorted by payout date in the requested `order`.
    */
   list(
     merchantCode: string,
@@ -56,31 +52,6 @@ export class Payouts extends APIResource {
   ): Promise<WithResponse<FinancialPayouts>> {
     return this._client.getWithResponse<FinancialPayouts>({
       path: `/v1.0/merchants/${merchantCode}/payouts`,
-      query,
-      ...options,
-    });
-  }
-
-  /**
-   * Lists ordered payouts for the merchant account.
-   */
-  listDeprecated(
-    query: ListPayoutsQueryParams,
-    options?: RequestOptions,
-  ): Promise<FinancialPayouts> {
-    return this._client.get<FinancialPayouts>({
-      path: `/v0.1/me/financials/payouts`,
-      query,
-      ...options,
-    });
-  }
-
-  listDeprecatedWithResponse(
-    query: ListPayoutsQueryParams,
-    options?: RequestOptions,
-  ): Promise<WithResponse<FinancialPayouts>> {
-    return this._client.getWithResponse<FinancialPayouts>({
-      path: `/v0.1/me/financials/payouts`,
       query,
       ...options,
     });

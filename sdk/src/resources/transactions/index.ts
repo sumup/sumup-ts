@@ -7,9 +7,7 @@ import {
 } from "../../core";
 import type {
   EntryMode,
-  ErrorBody,
   PaymentType,
-  Problem,
   TransactionFull,
   TransactionHistory,
   TransactionsHistoryLink,
@@ -26,11 +24,6 @@ export type GetTransactionV2_1QueryParams = {
   transaction_code?: string;
   foreign_transaction_id?: string;
   client_transaction_id?: string;
-};
-
-export type GetTransactionQueryParams = {
-  id?: string;
-  transaction_code?: string;
 };
 
 export type ListTransactionsV2_1QueryParams = {
@@ -56,32 +49,6 @@ export type ListTransactionsV2_1QueryParams = {
 };
 
 export type ListTransactionsV2_1Response = {
-  items?: TransactionHistory[];
-  links?: TransactionsHistoryLink[];
-};
-
-export type ListTransactionsQueryParams = {
-  transaction_code?: string;
-  order?: "ascending" | "descending";
-  limit?: number;
-  users?: string[];
-  "statuses[]"?: (
-    | "SUCCESSFUL"
-    | "CANCELLED"
-    | "FAILED"
-    | "REFUNDED"
-    | "CHARGE_BACK"
-  )[];
-  payment_types?: PaymentType[];
-  types?: ("PAYMENT" | "REFUND" | "CHARGE_BACK")[];
-  changes_since?: string;
-  newest_time?: string;
-  newest_ref?: string;
-  oldest_time?: string;
-  oldest_ref?: string;
-};
-
-export type ListTransactionsResponse = {
   items?: TransactionHistory[];
   links?: TransactionsHistoryLink[];
 };
@@ -113,24 +80,26 @@ export class Transactions extends APIResource {
    * Refunds an identified transaction either in full or partially.
    */
   refund(
-    txnId: string,
+    merchantCode: string,
+    id: string,
     body?: RefundTransactionParams,
     options?: RequestOptions,
   ): Promise<void> {
     return this._client.post<void>({
-      path: `/v0.1/me/refund/${txnId}`,
+      path: `/v1.0/merchants/${merchantCode}/payments/${id}/refunds`,
       body,
       ...options,
     });
   }
 
   refundWithResponse(
-    txnId: string,
+    merchantCode: string,
+    id: string,
     body?: RefundTransactionParams,
     options?: RequestOptions,
   ): Promise<WithResponse<void>> {
     return this._client.postWithResponse<void>({
-      path: `/v0.1/me/refund/${txnId}`,
+      path: `/v1.0/merchants/${merchantCode}/payments/${id}/refunds`,
       body,
       ...options,
     });
@@ -168,35 +137,6 @@ export class Transactions extends APIResource {
   }
 
   /**
-   * Retrieves the full details of an identified transaction. The transaction resource is identified by a query parameter and *one* of following parameters is required:
-   * - `id`
-   * - `transaction_code`
-   * - `foreign_transaction_id`
-   * - `client_transaction_id`
-   */
-  getDeprecated(
-    query?: GetTransactionQueryParams,
-    options?: RequestOptions,
-  ): Promise<TransactionFull> {
-    return this._client.get<TransactionFull>({
-      path: `/v0.1/me/transactions`,
-      query,
-      ...options,
-    });
-  }
-
-  getDeprecatedWithResponse(
-    query?: GetTransactionQueryParams,
-    options?: RequestOptions,
-  ): Promise<WithResponse<TransactionFull>> {
-    return this._client.getWithResponse<TransactionFull>({
-      path: `/v0.1/me/transactions`,
-      query,
-      ...options,
-    });
-  }
-
-  /**
    * Lists detailed history of all transactions associated with the merchant profile.
    */
   list(
@@ -218,31 +158,6 @@ export class Transactions extends APIResource {
   ): Promise<WithResponse<ListTransactionsV2_1Response>> {
     return this._client.getWithResponse<ListTransactionsV2_1Response>({
       path: `/v2.1/merchants/${merchantCode}/transactions/history`,
-      query,
-      ...options,
-    });
-  }
-
-  /**
-   * Lists detailed history of all transactions associated with the merchant profile.
-   */
-  listDeprecated(
-    query?: ListTransactionsQueryParams,
-    options?: RequestOptions,
-  ): Promise<ListTransactionsResponse> {
-    return this._client.get<ListTransactionsResponse>({
-      path: `/v0.1/me/transactions/history`,
-      query,
-      ...options,
-    });
-  }
-
-  listDeprecatedWithResponse(
-    query?: ListTransactionsQueryParams,
-    options?: RequestOptions,
-  ): Promise<WithResponse<ListTransactionsResponse>> {
-    return this._client.getWithResponse<ListTransactionsResponse>({
-      path: `/v0.1/me/transactions/history`,
       query,
       ...options,
     });

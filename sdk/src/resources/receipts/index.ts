@@ -5,7 +5,7 @@ import {
   type RequestOptions,
   type WithResponse,
 } from "../../core";
-import type { ErrorBody, Problem, Receipt } from "../../types";
+import type { Receipt } from "../../types";
 export type GetReceiptQueryParams = {
   mid: string;
   tx_event_id?: number;
