@@ -2,6 +2,7 @@
 
 import type { Currency } from "./currency";
 import type { PaymentType } from "./payment-type";
+import type { TransactionStatus } from "./transaction-status";
 
 /**
  * Transaction Base
@@ -26,10 +27,7 @@ export type TransactionBase = {
    * Date and time of the creation of the transaction. Response format expressed according to [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) code.
    */
   timestamp?: string;
-  /**
-   * Current status of the transaction.
-   */
-  status?: "SUCCESSFUL" | "CANCELLED" | "FAILED" | "PENDING";
+  status?: TransactionStatus;
   payment_type?: PaymentType;
   /**
    * Current number of the installment for deferred payments.
