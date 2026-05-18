@@ -7180,14 +7180,7 @@
             "example": "2020-02-29T10:56:56.876Z"
           },
           "status": {
-            "description": "Current status of the transaction.",
-            "type": "string",
-            "enum": [
-              "SUCCESSFUL",
-              "CANCELLED",
-              "FAILED",
-              "PENDING"
-            ]
+            "$ref": "#/components/schemas/TransactionStatus"
           },
           "payment_type": {
             "$ref": "#/components/schemas/PaymentType"
@@ -7649,6 +7642,18 @@
           "USD"
         ],
         "title": "Currency"
+      },
+      "TransactionStatus": {
+        "description": "Current status of the transaction.\n\n- `PENDING`: The transaction has been created but its final outcome is not known yet.\n- `SUCCESSFUL`: The transaction completed successfully.\n- `CANCELLED`: The transaction was cancelled or otherwise reversed before completion.\n- `FAILED`: The transaction attempt did not complete successfully.\n- `REFUNDED`: The transaction was refunded in full or in part.",
+        "type": "string",
+        "enum": [
+          "SUCCESSFUL",
+          "CANCELLED",
+          "FAILED",
+          "PENDING",
+          "REFUNDED"
+        ],
+        "title": "Transaction Status"
       },
       "EventType": {
         "description": "Type of the transaction event.",
