@@ -95,6 +95,7 @@ export type { TransactionFull } from "./transaction-full";
 export type { TransactionHistory } from "./transaction-history";
 export type { TransactionID } from "./transaction-id";
 export type { TransactionMixinHistory } from "./transaction-mixin-history";
+export type { TransactionStatus } from "./transaction-status";
 export type { TransactionsHistoryLink } from "./transactions-history-link";
 export type { Unauthorized } from "./unauthorized";
 export type { Version } from "./version";
