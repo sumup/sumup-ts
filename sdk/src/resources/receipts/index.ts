@@ -21,24 +21,24 @@ export class Receipts extends APIResource {
    * Retrieves receipt specific data for a transaction.
    */
   get(
-    id: string,
+    transactionId: string,
     query: GetReceiptQueryParams,
     options?: RequestOptions,
   ): Promise<Receipt> {
     return this._client.get<Receipt>({
-      path: `/v1.1/receipts/${id}`,
+      path: `/v1.1/receipts/${transactionId}`,
       query,
       ...options,
     });
   }
 
   getWithResponse(
-    id: string,
+    transactionId: string,
     query: GetReceiptQueryParams,
     options?: RequestOptions,
   ): Promise<WithResponse<Receipt>> {
     return this._client.getWithResponse<Receipt>({
-      path: `/v1.1/receipts/${id}`,
+      path: `/v1.1/receipts/${transactionId}`,
       query,
       ...options,
     });

@@ -88,22 +88,22 @@ export class Readers extends APIResource {
    */
   get(
     merchantCode: string,
-    id: ReaderID,
+    readerId: ReaderID,
     options?: RequestOptions,
   ): Promise<Reader> {
     return this._client.get<Reader>({
-      path: `/v0.1/merchants/${merchantCode}/readers/${id}`,
+      path: `/v0.1/merchants/${merchantCode}/readers/${readerId}`,
       ...options,
     });
   }
 
   getWithResponse(
     merchantCode: string,
-    id: ReaderID,
+    readerId: ReaderID,
     options?: RequestOptions,
   ): Promise<WithResponse<Reader>> {
     return this._client.getWithResponse<Reader>({
-      path: `/v0.1/merchants/${merchantCode}/readers/${id}`,
+      path: `/v0.1/merchants/${merchantCode}/readers/${readerId}`,
       ...options,
     });
   }
@@ -113,22 +113,22 @@ export class Readers extends APIResource {
    */
   delete(
     merchantCode: string,
-    id: ReaderID,
+    readerId: ReaderID,
     options?: RequestOptions,
   ): Promise<void> {
     return this._client.delete<void>({
-      path: `/v0.1/merchants/${merchantCode}/readers/${id}`,
+      path: `/v0.1/merchants/${merchantCode}/readers/${readerId}`,
       ...options,
     });
   }
 
   deleteWithResponse(
     merchantCode: string,
-    id: ReaderID,
+    readerId: ReaderID,
     options?: RequestOptions,
   ): Promise<WithResponse<void>> {
     return this._client.deleteWithResponse<void>({
-      path: `/v0.1/merchants/${merchantCode}/readers/${id}`,
+      path: `/v0.1/merchants/${merchantCode}/readers/${readerId}`,
       ...options,
     });
   }
@@ -138,12 +138,12 @@ export class Readers extends APIResource {
    */
   update(
     merchantCode: string,
-    id: ReaderID,
+    readerId: ReaderID,
     body: UpdateReaderParams,
     options?: RequestOptions,
   ): Promise<Reader> {
     return this._client.patch<Reader>({
-      path: `/v0.1/merchants/${merchantCode}/readers/${id}`,
+      path: `/v0.1/merchants/${merchantCode}/readers/${readerId}`,
       body,
       ...options,
     });
@@ -151,12 +151,12 @@ export class Readers extends APIResource {
 
   updateWithResponse(
     merchantCode: string,
-    id: ReaderID,
+    readerId: ReaderID,
     body: UpdateReaderParams,
     options?: RequestOptions,
   ): Promise<WithResponse<Reader>> {
     return this._client.patchWithResponse<Reader>({
-      path: `/v0.1/merchants/${merchantCode}/readers/${id}`,
+      path: `/v0.1/merchants/${merchantCode}/readers/${readerId}`,
       body,
       ...options,
     });
