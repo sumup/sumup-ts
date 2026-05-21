@@ -81,12 +81,12 @@ export class Transactions extends APIResource {
    */
   refund(
     merchantCode: string,
-    id: string,
+    transactionId: string,
     body?: RefundTransactionParams,
     options?: RequestOptions,
   ): Promise<void> {
     return this._client.post<void>({
-      path: `/v1.0/merchants/${merchantCode}/payments/${id}/refunds`,
+      path: `/v1.0/merchants/${merchantCode}/payments/${transactionId}/refunds`,
       body,
       ...options,
     });
@@ -94,12 +94,12 @@ export class Transactions extends APIResource {
 
   refundWithResponse(
     merchantCode: string,
-    id: string,
+    transactionId: string,
     body?: RefundTransactionParams,
     options?: RequestOptions,
   ): Promise<WithResponse<void>> {
     return this._client.postWithResponse<void>({
-      path: `/v1.0/merchants/${merchantCode}/payments/${id}/refunds`,
+      path: `/v1.0/merchants/${merchantCode}/payments/${transactionId}/refunds`,
       body,
       ...options,
     });

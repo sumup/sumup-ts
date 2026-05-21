@@ -163,19 +163,19 @@ export class Checkouts extends APIResource {
   /**
    * Retrieves an identified checkout resource. Use this request after processing a checkout to confirm its status and inform the end user respectively.
    */
-  get(id: string, options?: RequestOptions): Promise<CheckoutSuccess> {
+  get(checkoutId: string, options?: RequestOptions): Promise<CheckoutSuccess> {
     return this._client.get<CheckoutSuccess>({
-      path: `/v0.1/checkouts/${id}`,
+      path: `/v0.1/checkouts/${checkoutId}`,
       ...options,
     });
   }
 
   getWithResponse(
-    id: string,
+    checkoutId: string,
     options?: RequestOptions,
   ): Promise<WithResponse<CheckoutSuccess>> {
     return this._client.getWithResponse<CheckoutSuccess>({
-      path: `/v0.1/checkouts/${id}`,
+      path: `/v0.1/checkouts/${checkoutId}`,
       ...options,
     });
   }
@@ -186,24 +186,24 @@ export class Checkouts extends APIResource {
    * Follow this request with `Retrieve a checkout` to confirm its status.
    */
   process(
-    id: string,
+    checkoutId: string,
     body: ProcessCheckout,
     options?: RequestOptions,
   ): Promise<CheckoutSuccess | CheckoutAccepted> {
     return this._client.put<CheckoutSuccess | CheckoutAccepted>({
-      path: `/v0.1/checkouts/${id}`,
+      path: `/v0.1/checkouts/${checkoutId}`,
       body,
       ...options,
     });
   }
 
   processWithResponse(
-    id: string,
+    checkoutId: string,
     body: ProcessCheckout,
     options?: RequestOptions,
   ): Promise<WithResponse<CheckoutSuccess | CheckoutAccepted>> {
     return this._client.putWithResponse<CheckoutSuccess | CheckoutAccepted>({
-      path: `/v0.1/checkouts/${id}`,
+      path: `/v0.1/checkouts/${checkoutId}`,
       body,
       ...options,
     });
@@ -212,19 +212,19 @@ export class Checkouts extends APIResource {
   /**
    * Deactivates an identified checkout resource. If the checkout has already been processed it can not be deactivated.
    */
-  deactivate(id: string, options?: RequestOptions): Promise<Checkout> {
+  deactivate(checkoutId: string, options?: RequestOptions): Promise<Checkout> {
     return this._client.delete<Checkout>({
-      path: `/v0.1/checkouts/${id}`,
+      path: `/v0.1/checkouts/${checkoutId}`,
       ...options,
     });
   }
 
   deactivateWithResponse(
-    id: string,
+    checkoutId: string,
     options?: RequestOptions,
   ): Promise<WithResponse<Checkout>> {
     return this._client.deleteWithResponse<Checkout>({
-      path: `/v0.1/checkouts/${id}`,
+      path: `/v0.1/checkouts/${checkoutId}`,
       ...options,
     });
   }
@@ -239,24 +239,24 @@ export class Checkouts extends APIResource {
    *
    */
   createApplePaySession(
-    id: string,
+    checkoutId: string,
     body?: CreateApplePaySessionParams,
     options?: RequestOptions,
   ): Promise<CreateApplePaySessionResponse> {
     return this._client.put<CreateApplePaySessionResponse>({
-      path: `/v0.2/checkouts/${id}/apple-pay-session`,
+      path: `/v0.2/checkouts/${checkoutId}/apple-pay-session`,
       body,
       ...options,
     });
   }
 
   createApplePaySessionWithResponse(
-    id: string,
+    checkoutId: string,
     body?: CreateApplePaySessionParams,
     options?: RequestOptions,
   ): Promise<WithResponse<CreateApplePaySessionResponse>> {
     return this._client.putWithResponse<CreateApplePaySessionResponse>({
-      path: `/v0.2/checkouts/${id}/apple-pay-session`,
+      path: `/v0.2/checkouts/${checkoutId}/apple-pay-session`,
       body,
       ...options,
     });

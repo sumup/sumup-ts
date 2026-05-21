@@ -543,10 +543,10 @@
         ]
       }
     },
-    "/v0.1/checkouts/{id}": {
+    "/v0.1/checkouts/{checkout_id}": {
       "parameters": [
         {
-          "name": "id",
+          "name": "checkout_id",
           "in": "path",
           "description": "Unique ID of the checkout resource.",
           "required": true,
@@ -1150,14 +1150,14 @@
         ]
       }
     },
-    "/v0.2/checkouts/{id}/apple-pay-session": {
+    "/v0.2/checkouts/{checkout_id}/apple-pay-session": {
       "put": {
         "operationId": "CreateApplePaySession",
         "summary": "Create an Apple Pay session",
         "description": "Creates an Apple Pay merchant session for the specified checkout.\n\nUse this endpoint after the customer selects Apple Pay and before calling\n`ApplePaySession.completeMerchantValidation(...)` in the browser.\nSumUp validates the merchant session request and returns the Apple Pay\nsession object that your frontend should pass to Apple's JavaScript API.\n",
         "parameters": [
           {
-            "name": "id",
+            "name": "checkout_id",
             "in": "path",
             "description": "Unique ID of the checkout resource.",
             "required": true,
@@ -1900,7 +1900,7 @@
         ]
       }
     },
-    "/v1.0/merchants/{merchant_code}/payments/{id}/refunds": {
+    "/v1.0/merchants/{merchant_code}/payments/{transaction_id}/refunds": {
       "parameters": [
         {
           "name": "merchant_code",
@@ -1913,7 +1913,7 @@
           }
         },
         {
-          "name": "id",
+          "name": "transaction_id",
           "in": "path",
           "description": "Unique ID of the transaction.",
           "required": true,
@@ -2658,14 +2658,14 @@
         ]
       }
     },
-    "/v1.1/receipts/{id}": {
+    "/v1.1/receipts/{transaction_id}": {
       "get": {
         "operationId": "GetReceipt",
         "summary": "Retrieve receipt details",
         "description": "Retrieves receipt specific data for a transaction.",
         "parameters": [
           {
-            "name": "id",
+            "name": "transaction_id",
             "in": "path",
             "description": "SumUp unique transaction ID or transaction code, e.g. TS7HDYLSKD.",
             "required": true,
@@ -4549,14 +4549,14 @@
               "UpdateReaderByID": {
                 "operationId": "UpdateReader",
                 "parameters": {
-                  "id": "$response.body#/id"
+                  "reader_id": "$response.body#/id"
                 },
                 "description": "Update the reader object. This can be used to set a name after using this endpoint to verify the pairing code."
               },
               "DeleteReaderByID": {
                 "operationId": "DeleteReader",
                 "parameters": {
-                  "id": "$response.body#/id"
+                  "reader_id": "$response.body#/id"
                 },
                 "description": "Delete the reader."
               }
@@ -4639,7 +4639,7 @@
         ]
       }
     },
-    "/v0.1/merchants/{merchant_code}/readers/{id}": {
+    "/v0.1/merchants/{merchant_code}/readers/{reader_id}": {
       "get": {
         "operationId": "GetReader",
         "summary": "Retrieve a Reader",
@@ -4677,7 +4677,7 @@
             }
           },
           {
-            "name": "id",
+            "name": "reader_id",
             "in": "path",
             "description": "The unique identifier of the reader.",
             "required": true,
@@ -4757,7 +4757,7 @@
             }
           },
           {
-            "name": "id",
+            "name": "reader_id",
             "in": "path",
             "description": "The unique identifier of the reader.",
             "required": true,
@@ -4830,7 +4830,7 @@
             }
           },
           {
-            "name": "id",
+            "name": "reader_id",
             "in": "path",
             "description": "The unique identifier of the reader.",
             "required": true,
@@ -5403,7 +5403,7 @@
         }
       },
       "CheckoutID": {
-        "name": "id",
+        "name": "checkout_id",
         "in": "path",
         "required": true,
         "description": "Unique ID of the checkout resource.",
@@ -5535,15 +5535,6 @@
         "in": "query",
         "description": "Retrieves the transaction resource with the specified transaction ID (the `id` parameter in the transaction resource).",
         "required": false,
-        "schema": {
-          "type": "string"
-        }
-      },
-      "TxnID": {
-        "in": "path",
-        "name": "txn_id",
-        "required": true,
-        "description": "Unique ID of the transaction.",
         "schema": {
           "type": "string"
         }
@@ -9595,14 +9586,14 @@
       "UpdateReaderByID": {
         "operationId": "UpdateReader",
         "parameters": {
-          "id": "$response.body#/id"
+          "reader_id": "$response.body#/id"
         },
         "description": "Update the reader object. This can be used to set a name after using this endpoint to verify the pairing code."
       },
       "DeleteReaderByID": {
         "operationId": "DeleteReader",
         "parameters": {
-          "id": "$response.body#/id"
+          "reader_id": "$response.body#/id"
         },
         "description": "Delete the reader."
       }
