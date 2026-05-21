@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.1.6](https://github.com/sumup/sumup-ts/compare/v0.1.5...v0.1.6) (2026-05-21)
+
+
+### Chores
+
+* **deps-dev:** bump @biomejs/biome from 2.4.11 to 2.4.12 in /sdk ([#352](https://github.com/sumup/sumup-ts/issues/352)) ([86a9c28](https://github.com/sumup/sumup-ts/commit/86a9c2894416191303c620abfe87fb8ddfa406a8))
+* **deps-dev:** bump @biomejs/biome from 2.4.12 to 2.4.13 in /sdk ([#357](https://github.com/sumup/sumup-ts/issues/357)) ([f9cfe24](https://github.com/sumup/sumup-ts/commit/f9cfe24e99f8b6f353b25f8c42accffb8131fc9a))
+* **deps-dev:** bump @biomejs/biome from 2.4.13 to 2.4.14 in /sdk ([#361](https://github.com/sumup/sumup-ts/issues/361)) ([12d424e](https://github.com/sumup/sumup-ts/commit/12d424e7cf6fabda503304e77633785842178faf))
+* **deps-dev:** bump @biomejs/biome from 2.4.14 to 2.4.15 in /sdk ([#366](https://github.com/sumup/sumup-ts/issues/366)) ([6eda950](https://github.com/sumup/sumup-ts/commit/6eda950e67afb93b24094c284d9ef0fbf4e15151))
+* **deps-dev:** bump the rslib group in /sdk with 2 updates ([#349](https://github.com/sumup/sumup-ts/issues/349)) ([0a4c39d](https://github.com/sumup/sumup-ts/commit/0a4c39dafdc7767f8e0853e961e051697c8a85cf))
+* **deps-dev:** bump the rslib group in /sdk with 2 updates ([#356](https://github.com/sumup/sumup-ts/issues/356)) ([47061e7](https://github.com/sumup/sumup-ts/commit/47061e717a166ebfa9becbbba889c975eb78b1a3))
+* **deps-dev:** bump the rslib group in /sdk with 2 updates ([#365](https://github.com/sumup/sumup-ts/issues/365)) ([6a3190e](https://github.com/sumup/sumup-ts/commit/6a3190eede8e6ae16dccb697b7a97bdfd1169fbf))
+* **deps-dev:** bump typescript from 6.0.2 to 6.0.3 in /sdk ([#350](https://github.com/sumup/sumup-ts/issues/350)) ([bd05943](https://github.com/sumup/sumup-ts/commit/bd059438ddbe954036df3b0a96978e8dcbf7c174))
+* **deps-dev:** bump vitest from 4.1.4 to 4.1.5 in /sdk ([#351](https://github.com/sumup/sumup-ts/issues/351)) ([8865979](https://github.com/sumup/sumup-ts/commit/88659796ce388a945325a773c3b477d110faa53e))
+* **deps-dev:** bump vitest from 4.1.5 to 4.1.6 in /sdk ([#367](https://github.com/sumup/sumup-ts/issues/367)) ([982ae71](https://github.com/sumup/sumup-ts/commit/982ae71bc78f679b74d8861806d0c838e92bfab2))
+* synced file(s) with sumup/apis ([#347](https://github.com/sumup/sumup-ts/issues/347)) ([3e993f3](https://github.com/sumup/sumup-ts/commit/3e993f387c40a58d161b35d605f611ead9216ade))
+* synced file(s) with sumup/apis ([#363](https://github.com/sumup/sumup-ts/issues/363)) ([5a380f0](https://github.com/sumup/sumup-ts/commit/5a380f0f85b94efd0f676918ebf47c75630ba2c0))
+
 ## [0.1.5](https://github.com/sumup/sumup-ts/compare/v0.1.4...v0.1.5) (2026-04-24)
 
 
