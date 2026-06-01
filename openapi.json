@@ -3436,7 +3436,7 @@
                     "type": "object",
                     "properties": {
                       "nickname": {
-                        "description": "User's preferred name. Used for display purposes only.",
+                        "description": "User's nickname. Used for display purposes only.",
                         "type": "string",
                         "example": "Test User"
                       },
@@ -8016,7 +8016,7 @@
             "format": "date-time"
           },
           "nickname": {
-            "description": "User's preferred name. Used for display purposes only.",
+            "description": "User's nickname. Used for display purposes only.",
             "type": "string",
             "example": "Test User"
           },
@@ -8226,57 +8226,6 @@
         },
         "title": "Merchant"
       },
-      "Company": {
-        "description": "Information about the company or business. This is legal information that is used for verification.\n",
-        "type": "object",
-        "properties": {
-          "name": {
-            "description": "The company's legal name.",
-            "type": "string",
-            "example": "Gin & Doughnuts Bar GmbH",
-            "maxLength": 150,
-            "minLength": 1
-          },
-          "merchant_category_code": {
-            "description": "The merchant category code for the account as specified by [ISO18245](https://www.iso.org/standard/33365.html). MCCs are used to classify businesses based on the goods or services they provide.\n",
-            "type": "string",
-            "example": "1532",
-            "pattern": "^[0-9]{4}$"
-          },
-          "legal_type": {
-            "$ref": "#/components/schemas/LegalType"
-          },
-          "address": {
-            "$ref": "#/components/schemas/Address"
-          },
-          "trading_address": {
-            "$ref": "#/components/schemas/Address"
-          },
-          "identifiers": {
-            "$ref": "#/components/schemas/CompanyIdentifiers"
-          },
-          "phone_number": {
-            "$ref": "#/components/schemas/PhoneNumber"
-          },
-          "website": {
-            "description": "HTTP(S) URL of the company's website.\n",
-            "type": "string",
-            "format": "uri",
-            "examples": [
-              "https://www.sumup.com"
-            ],
-            "maxLength": 255,
-            "nullable": true
-          },
-          "attributes": {
-            "$ref": "#/components/schemas/Attributes"
-          }
-        },
-        "externalDocs": {
-          "description": "Company documentation",
-          "url": "https://developer.sumup.com/tools/glossary/merchant#company"
-        }
-      },
       "Meta": {
         "description": "A set of key-value pairs that you can attach to an object. This can be useful for storing additional information about the object in a structured format.\n\n**Warning**: Updating Meta will overwrite the existing data. Make sure to always include the complete JSON object.",
         "type": "object",
@@ -8308,7 +8257,6 @@
           "website": {
             "description": "The business's publicly available website.",
             "type": "string",
-            "format": "uri",
             "example": "https://example.com",
             "maxLength": 255
           },
@@ -8668,35 +8616,13 @@
           "share"
         ]
       },
-      "PersonalIdentifier": {
-        "type": "object",
-        "properties": {
-          "ref": {
-            "description": "The unique reference for the personal identifier type as defined in the country SDK.\n",
-            "type": "string",
-            "examples": [
-              "br.cpf"
-            ]
-          },
-          "value": {
-            "description": "The company identifier value.\n",
-            "type": "string",
-            "examples": [
-              "847.060.136-90"
-            ],
-            "maxLength": 30
-          }
+      "PersonalIdentifiers": {
+        "description": "A list of country-specific personal identifiers.\n",
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/PersonalIdentifier"
         },
-        "examples": [
-          {
-            "ref": "br.cpf",
-            "value": "847.060.136-90"
-          }
-        ],
-        "required": [
-          "ref",
-          "value"
-        ]
+        "maxItems": 5
       },
       "Version": {
         "description": "The version of the resource. The version reflects a specific change submitted to the API via one of the `PATCH` endpoints.\n",
@@ -8778,12 +8704,7 @@
             "$ref": "#/components/schemas/Address"
           },
           "identifiers": {
-            "description": "A list of country-specific personal identifiers.\n",
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/PersonalIdentifier"
-            },
-            "maxItems": 5
+            "$ref": "#/components/schemas/PersonalIdentifiers"
           },
           "citizenship": {
             "$ref": "#/components/schemas/CountryCode"
@@ -8814,6 +8735,85 @@
         "required": [
           "id"
         ]
+      },
+      "PersonalIdentifier": {
+        "type": "object",
+        "properties": {
+          "ref": {
+            "description": "The unique reference for the personal identifier type as defined in the country SDK.\n",
+            "type": "string",
+            "examples": [
+              "br.cpf"
+            ]
+          },
+          "value": {
+            "description": "The value of the personal identifier.\n",
+            "type": "string",
+            "examples": [
+              "847.060.136-90"
+            ],
+            "maxLength": 30
+          }
+        },
+        "examples": [
+          {
+            "ref": "br.cpf",
+            "value": "847.060.136-90"
+          }
+        ],
+        "required": [
+          "ref",
+          "value"
+        ]
+      },
+      "Company": {
+        "description": "Information about the company or business. This is legal information that is used for verification.\n",
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "The company's legal name.",
+            "type": "string",
+            "example": "Gin & Doughnuts Bar GmbH",
+            "maxLength": 150,
+            "minLength": 1
+          },
+          "merchant_category_code": {
+            "description": "The merchant category code for the account as specified by [ISO18245](https://www.iso.org/standard/33365.html). MCCs are used to classify businesses based on the goods or services they provide.\n",
+            "type": "string",
+            "example": "1532",
+            "pattern": "^[0-9]{4}$"
+          },
+          "legal_type": {
+            "$ref": "#/components/schemas/LegalType"
+          },
+          "address": {
+            "$ref": "#/components/schemas/Address"
+          },
+          "trading_address": {
+            "$ref": "#/components/schemas/Address"
+          },
+          "identifiers": {
+            "$ref": "#/components/schemas/CompanyIdentifiers"
+          },
+          "phone_number": {
+            "$ref": "#/components/schemas/PhoneNumber"
+          },
+          "website": {
+            "description": "HTTP(S) URL of the company's website.\n",
+            "type": "string",
+            "examples": [
+              "https://www.sumup.com"
+            ],
+            "maxLength": 255
+          },
+          "attributes": {
+            "$ref": "#/components/schemas/Attributes"
+          }
+        },
+        "externalDocs": {
+          "description": "Company documentation",
+          "url": "https://developer.sumup.com/tools/glossary/merchant#company"
+        }
       },
       "ClassicMerchantIdentifiers": {
         "type": "object",

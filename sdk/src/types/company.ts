@@ -31,6 +31,6 @@ export type Company = {
    * HTTP(S) URL of the company's website.
    *
    */
-  website?: string | null;
+  website?: string;
   attributes?: Attributes;
 };
