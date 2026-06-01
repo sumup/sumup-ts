@@ -60,7 +60,7 @@ export type UpdateMerchantMemberParams = {
    */
   user?: {
     /**
-     * User's preferred name. Used for display purposes only.
+     * User's nickname. Used for display purposes only.
      */
     nickname?: string;
     /**

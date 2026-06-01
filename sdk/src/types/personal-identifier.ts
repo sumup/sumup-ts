@@ -7,7 +7,7 @@ export type PersonalIdentifier = {
    */
   ref: string;
   /**
-   * The company identifier value.
+   * The value of the personal identifier.
    *
    */
   value: string;

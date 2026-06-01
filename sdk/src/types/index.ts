@@ -67,6 +67,7 @@ export type { PaymentType } from "./payment-type";
 export type { Person } from "./person";
 export type { PersonalDetails } from "./personal-details";
 export type { PersonalIdentifier } from "./personal-identifier";
+export type { PersonalIdentifiers } from "./personal-identifiers";
 export type { PhoneNumber } from "./phone-number";
 export type { Problem } from "./problem";
 export type { ProcessCheckout } from "./process-checkout";

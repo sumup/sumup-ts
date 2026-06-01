@@ -4,7 +4,7 @@ import type { Address } from "./address";
 import type { ChangeStatus } from "./change-status";
 import type { CountryCode } from "./country-code";
 import type { Ownership } from "./ownership";
-import type { PersonalIdentifier } from "./personal-identifier";
+import type { PersonalIdentifiers } from "./personal-identifiers";
 import type { PhoneNumber } from "./phone-number";
 import type { Version } from "./version";
 
@@ -51,11 +51,7 @@ export type BasePerson = {
   relationships?: string[];
   ownership?: Ownership;
   address?: Address;
-  /**
-   * A list of country-specific personal identifiers.
-   *
-   */
-  identifiers?: PersonalIdentifier[];
+  identifiers?: PersonalIdentifiers;
   citizenship?: CountryCode;
   /**
    * The persons nationality. May be an [ISO3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) country code, but legacy data may not conform to this standard.
