@@ -2206,7 +2206,7 @@
             }
           },
           {
-            "name": "users",
+            "name": "users[]",
             "in": "query",
             "description": "Filters the returned results by user email.",
             "required": false,
@@ -2244,7 +2244,7 @@
             }
           },
           {
-            "name": "payment_types",
+            "name": "payment_types[]",
             "in": "query",
             "description": "Filters the returned results by the specified list of payment types used for the transactions.",
             "required": false,
@@ -2268,7 +2268,7 @@
             }
           },
           {
-            "name": "types",
+            "name": "types[]",
             "in": "query",
             "description": "Filters the returned results by the specified list of transaction types.",
             "required": false,
@@ -3593,6 +3593,22 @@
         "responses": {
           "200": {
             "description": "Returns an empty response if the deletion succeeded."
+          },
+          "403": {
+            "description": "Member deletion was forbidden.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                },
+                "example": {
+                  "type": "https://developer.sumup.com/problem/forbidden",
+                  "title": "Forbidden",
+                  "status": 403,
+                  "detail": "You do not have permission to perform this action."
+                }
+              }
+            }
           },
           "404": {
             "description": "Merchant or member not found.",
@@ -5482,7 +5498,7 @@
         }
       },
       "PaymentTypesFilter": {
-        "name": "payment_types",
+        "name": "payment_types[]",
         "in": "query",
         "description": "Filters the returned results by the specified list of payment types used for the transactions.",
         "required": false,
@@ -5540,7 +5556,7 @@
         }
       },
       "TypesFilter": {
-        "name": "types",
+        "name": "types[]",
         "in": "query",
         "description": "Filters the returned results by the specified list of transaction types.",
         "required": false,
@@ -5557,7 +5573,7 @@
         }
       },
       "UsersFilter": {
-        "name": "users",
+        "name": "users[]",
         "in": "query",
         "description": "Filters the returned results by user email.",
         "required": false,
@@ -7990,6 +8006,9 @@
             "type": "string",
             "example": "44ca0f5b-813b-46e1-aee7-e6242010662e"
           },
+          "type": {
+            "$ref": "#/components/schemas/UserType"
+          },
           "email": {
             "description": "End-User's preferred e-mail address. Its value MUST conform to the RFC 5322 [RFC5322] addr-spec syntax. The RP MUST NOT rely upon this value being unique, for unique identification use ID instead.",
             "type": "string",
@@ -8003,12 +8022,16 @@
           "virtual_user": {
             "description": "True if the user is a virtual user (operator).",
             "type": "boolean",
-            "example": false
+            "example": false,
+            "deprecated": true,
+            "x-deprecation-notice": "Rely on `type` instead."
           },
           "service_account_user": {
             "description": "True if the user is a service account.",
             "type": "boolean",
-            "example": false
+            "example": false,
+            "deprecated": true,
+            "x-deprecation-notice": "Rely on `type` instead."
           },
           "disabled_at": {
             "description": "Time when the user has been disabled. Applies only to virtual users (`virtual_user: true`).",
@@ -8032,6 +8055,7 @@
         },
         "required": [
           "id",
+          "type",
           "email",
           "mfa_on_login_enabled",
           "virtual_user",
@@ -8044,7 +8068,8 @@
         "properties": {
           "user_id": {
             "type": "integer",
-            "format": "int32"
+            "maximum": 2147483647,
+            "minimum": 0
           }
         },
         "deprecated": true,
@@ -8111,18 +8136,204 @@
         ],
         "title": "Role"
       },
-      "Attributes": {
-        "description": "Object attributes that are modifiable only by SumUp applications.",
-        "type": "object",
-        "example": {},
-        "additionalProperties": true
-      },
       "Metadata": {
         "description": "Set of user-defined key-value pairs attached to the object. Partial updates are not supported. When updating, always submit whole metadata. Maximum of 64 parameters are allowed in the object.",
         "type": "object",
         "example": {},
         "additionalProperties": true,
         "maxProperties": 64
+      },
+      "Attributes": {
+        "description": "Object attributes that are modifiable only by SumUp applications.\n",
+        "type": "object",
+        "example": {},
+        "additionalProperties": true
+      },
+      "UserType": {
+        "description": "Type of the user account.",
+        "type": "string",
+        "example": "user",
+        "enum": [
+          "user",
+          "managed_user",
+          "service_account",
+          "system_account"
+        ]
+      },
+      "Address": {
+        "description": "An address somewhere in the world. The address fields used depend on the country conventions. For example, in Great Britain, `city` is `post_town`. In the United States, the top-level administrative unit used in addresses is `state`, whereas in Chile it's `region`.\nWhether an address is valid or not depends on whether the locally required fields are present. Fields not supported in a country will be ignored.",
+        "type": "object",
+        "properties": {
+          "street_address": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "description": "The first line of the address.",
+              "maxLength": 100
+            },
+            "example": [
+              "Paul-Linke-Ufer 39-40",
+              "2. Hinterhof"
+            ],
+            "maxItems": 2
+          },
+          "post_code": {
+            "description": "The postal code (aka. zip code) of the address.\n",
+            "type": "string",
+            "example": "10999",
+            "maxLength": 32
+          },
+          "country": {
+            "$ref": "#/components/schemas/CountryCode"
+          },
+          "city": {
+            "description": "The city of the address.\n",
+            "type": "string",
+            "example": "Berlin",
+            "maxLength": 512
+          },
+          "province": {
+            "description": "The province where the address is located. This may not be relevant in some countries.\n",
+            "type": "string",
+            "example": "Berlin",
+            "maxLength": 512
+          },
+          "region": {
+            "description": "The region where the address is located. This may not be relevant in some countries.\n",
+            "type": "string",
+            "example": "Baden Wuerttemberg",
+            "maxLength": 512
+          },
+          "county": {
+            "description": "A county is a geographic region of a country used for administrative or other purposes in some nations. Used in countries such as Ireland, Romania, etc.\n",
+            "type": "string",
+            "example": "Dublin County",
+            "maxLength": 512
+          },
+          "autonomous_community": {
+            "description": "In Spain, an autonomous community is the first sub-national level of political and administrative division.\n",
+            "type": "string",
+            "example": "Catalonia",
+            "maxLength": 512
+          },
+          "post_town": {
+            "description": "A post town is a required part of all postal addresses in the United Kingdom and Ireland, and a basic unit of the postal delivery system.\n",
+            "type": "string",
+            "example": "London",
+            "maxLength": 512
+          },
+          "state": {
+            "description": "Most often, a country has a single state, with various administrative divisions. The term \"state\" is sometimes used to refer to the federated polities that make up the federation. Used in countries such as the United States and Brazil.\n",
+            "type": "string",
+            "example": "California",
+            "maxLength": 512
+          },
+          "neighborhood": {
+            "description": "Locality level of the address. Used in countries such as Brazil or Chile.\n",
+            "type": "string",
+            "example": "Copacabana",
+            "maxLength": 512
+          },
+          "commune": {
+            "description": "In many countries, terms cognate with \"commune\" are used, referring to the community living in the area and the common interest. Used in countries such as Chile.\n",
+            "type": "string",
+            "example": "Providencia",
+            "maxLength": 512
+          },
+          "department": {
+            "description": "A department (French: département, Spanish: departamento) is an administrative or political division in several countries. Used in countries such as Colombia.\n",
+            "type": "string",
+            "example": "Antioquia",
+            "maxLength": 512
+          },
+          "municipality": {
+            "description": "A municipality is usually a single administrative division having corporate status and powers of self-government or jurisdiction as granted by national and regional laws to which it is subordinate. Used in countries such as Colombia.\n",
+            "type": "string",
+            "example": "Medellín",
+            "maxLength": 512
+          },
+          "district": {
+            "description": "A district is a type of administrative division that in some countries is managed by the local government. Used in countries such as Portugal.\n",
+            "type": "string",
+            "example": "Lisbon District",
+            "maxLength": 512
+          },
+          "zip_code": {
+            "description": "A US system of postal codes used by the United States Postal Service (USPS).\n",
+            "type": "string",
+            "example": "94103",
+            "maxLength": 512
+          },
+          "eircode": {
+            "description": "A postal address in Ireland.\n",
+            "type": "string",
+            "example": "D02 X285",
+            "maxLength": 512
+          }
+        },
+        "example": {
+          "street_address": [
+            "Paul-Linke-Ufer 39-40",
+            "2. Hinterhof"
+          ],
+          "post_code": "10999",
+          "city": "Berlin",
+          "country": "DE"
+        },
+        "externalDocs": {
+          "description": "Address documentation",
+          "url": "https://backstage.sumup.net/docs/default/Component/merchants/merchant/#addresses"
+        },
+        "required": [
+          "country"
+        ]
+      },
+      "CountryCode": {
+        "description": "An [ISO3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)\ncountry code. This definition users `oneOf` with a two-character string\ntype to allow for support of future countries in client code.",
+        "type": "string",
+        "example": "BR",
+        "maxLength": 2,
+        "minLength": 2,
+        "pattern": "^[A-Z]{2}$"
+      },
+      "PersonalIdentifiers": {
+        "description": "A list of country-specific personal identifiers.",
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/PersonalIdentifier"
+        },
+        "example": [
+          {
+            "ref": "br.cpf",
+            "value": "847.060.136-90"
+          }
+        ],
+        "maxItems": 32
+      },
+      "PersonalIdentifier": {
+        "type": "object",
+        "properties": {
+          "ref": {
+            "description": "The unique reference for the personal identifier type.",
+            "type": "string",
+            "example": "br.cpf",
+            "maxLength": 32
+          },
+          "value": {
+            "description": "The company identifier value.",
+            "type": "string",
+            "example": "847.060.136-90",
+            "maxLength": 128
+          }
+        },
+        "example": {
+          "ref": "br.cpf",
+          "value": "847.060.136-90"
+        },
+        "required": [
+          "ref",
+          "value"
+        ]
       },
       "ListPersonsResponseBody": {
         "type": "object",
@@ -8284,198 +8495,11 @@
           }
         ]
       },
-      "CountryCode": {
-        "description": "An [ISO3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) country code. This definition users `oneOf` with a two-character string type to allow for support of future countries in client code.\n",
-        "type": "string",
-        "examples": [
-          "AR",
-          "AT",
-          "AU",
-          "BE",
-          "BG",
-          "BR",
-          "CH",
-          "CL",
-          "CO",
-          "CY",
-          "CZ",
-          "DE",
-          "DK",
-          "EE",
-          "ES",
-          "FI",
-          "FR",
-          "GB",
-          "GR",
-          "HU",
-          "IE",
-          "IT",
-          "LT",
-          "LU",
-          "LV",
-          "MT",
-          "MX",
-          "NL",
-          "NO",
-          "PE",
-          "PL",
-          "PT",
-          "RO",
-          "SE",
-          "SI",
-          "SK",
-          "US"
-        ],
-        "maxLength": 2,
-        "minLength": 2
-      },
       "PhoneNumber": {
         "description": "A publicly available phone number in [E.164](https://en.wikipedia.org/wiki/E.164) format.\n",
         "type": "string",
         "example": "+420123456789",
         "maxLength": 16
-      },
-      "Address": {
-        "description": "An address somewhere in the world. The address fields used depend on the country conventions. For example, in Great Britain, `city` is `post_town`. In the United States, the top-level administrative unit used in addresses is `state`, whereas in Chile it's `region`.\nWhether an address is valid or not depends on whether the locally required fields are present. Fields not supported in a country will be ignored.",
-        "type": "object",
-        "properties": {
-          "street_address": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "description": "The first line of the address.",
-              "maxLength": 100
-            },
-            "example": [
-              "Paul-Linke-Ufer 39-40",
-              "2. Hinterhof"
-            ],
-            "maxItems": 2,
-            "minItems": 1
-          },
-          "post_code": {
-            "description": "The postal code (aka. zip code) of the address.\n",
-            "type": "string",
-            "example": "10999",
-            "maxLength": 10
-          },
-          "country": {
-            "$ref": "#/components/schemas/CountryCode"
-          },
-          "city": {
-            "description": "The city of the address.\n",
-            "type": "string",
-            "example": "Berlin",
-            "maxLength": 60
-          },
-          "province": {
-            "description": "The province where the address is located. This may not be relevant in some countries.\n",
-            "type": "string",
-            "example": "Ontario",
-            "maxLength": 60
-          },
-          "region": {
-            "description": "The region where the address is located. This may not be relevant in some countries.\n",
-            "type": "string",
-            "example": "Baden-Wuerttemberg",
-            "maxLength": 60
-          },
-          "county": {
-            "description": "A county is a geographic region of a country used for administrative or other purposes in some nations. Used in countries such as Ireland, Romania, etc.\n",
-            "type": "string",
-            "example": "Dublin",
-            "maxLength": 60
-          },
-          "autonomous_community": {
-            "description": "In Spain, an autonomous community is the first sub-national level of political and administrative division.\n",
-            "type": "string",
-            "example": "Catalonia",
-            "maxLength": 60
-          },
-          "post_town": {
-            "description": "A post town is a required part of all postal addresses in the United Kingdom and Ireland, and a basic unit of the postal delivery system.\n",
-            "type": "string",
-            "example": "London",
-            "maxLength": 60
-          },
-          "state": {
-            "description": "Most often, a country has a single state, with various administrative divisions. The term \"state\" is sometimes used to refer to the federated polities that make up the federation. Used in countries such as the United States and Brazil.\n",
-            "type": "string",
-            "example": "California",
-            "maxLength": 60
-          },
-          "neighborhood": {
-            "description": "Locality level of the address. Used in countries such as Brazil or Chile.\n",
-            "type": "string",
-            "example": "Copacabana",
-            "maxLength": 60
-          },
-          "commune": {
-            "description": "In many countries, terms cognate with \"commune\" are used, referring to the community living in the area and the common interest. Used in countries such as Chile.\n",
-            "type": "string",
-            "example": "Providencia",
-            "maxLength": 60
-          },
-          "department": {
-            "description": "A department (French: département, Spanish: departamento) is an administrative or political division in several countries. Used in countries such as Colombia.\n",
-            "type": "string",
-            "example": "Antioquia",
-            "maxLength": 60
-          },
-          "municipality": {
-            "description": "A municipality is usually a single administrative division having corporate status and powers of self-government or jurisdiction as granted by national and regional laws to which it is subordinate. Used in countries such as Colombia.\n",
-            "type": "string",
-            "example": "Medellin",
-            "maxLength": 60
-          },
-          "district": {
-            "description": "A district is a type of administrative division that in some countries is managed by the local government. Used in countries such as Portugal.\n",
-            "type": "string",
-            "example": "Lisbon",
-            "maxLength": 60
-          },
-          "zip_code": {
-            "description": "A US system of postal codes used by the United States Postal Service (USPS).\n",
-            "type": "string",
-            "example": "94103",
-            "maxLength": 10
-          },
-          "eircode": {
-            "description": "A postal address in Ireland.\n",
-            "type": "string",
-            "example": "D02 X285",
-            "maxLength": 10
-          }
-        },
-        "examples": [
-          {
-            "street_address": [
-              "Paul-Linke-Ufer 39-40",
-              "2. Hinterhof"
-            ],
-            "post_code": "10999",
-            "city": "Berlin",
-            "country": "DE"
-          },
-          {
-            "street_address": [
-              "156 Avenida Vida Nova",
-              "Apto 2"
-            ],
-            "city": "Taboão da Serra",
-            "post_code": "06764045",
-            "state": "SP",
-            "neighborhood": "Jardim Maria Rosa",
-            "country": "BR"
-          }
-        ],
-        "externalDocs": {
-          "description": "Address documentation",
-          "url": "https://developer.sumup.com/tools/glossary/merchant#addresses"
-        },
-        "required": [
-          "country"
-        ]
       },
       "Branding": {
         "description": "Settings used to apply the Merchant's branding to email receipts, invoices, checkouts, and other products.",
@@ -8616,14 +8640,6 @@
           "share"
         ]
       },
-      "PersonalIdentifiers": {
-        "description": "A list of country-specific personal identifiers.\n",
-        "type": "array",
-        "items": {
-          "$ref": "#/components/schemas/PersonalIdentifier"
-        },
-        "maxItems": 5
-      },
       "Version": {
         "description": "The version of the resource. The version reflects a specific change submitted to the API via one of the `PATCH` endpoints.\n",
         "type": "string",
@@ -8734,36 +8750,6 @@
         },
         "required": [
           "id"
-        ]
-      },
-      "PersonalIdentifier": {
-        "type": "object",
-        "properties": {
-          "ref": {
-            "description": "The unique reference for the personal identifier type as defined in the country SDK.\n",
-            "type": "string",
-            "examples": [
-              "br.cpf"
-            ]
-          },
-          "value": {
-            "description": "The value of the personal identifier.\n",
-            "type": "string",
-            "examples": [
-              "847.060.136-90"
-            ],
-            "maxLength": 30
-          }
-        },
-        "examples": [
-          {
-            "ref": "br.cpf",
-            "value": "847.060.136-90"
-          }
-        ],
-        "required": [
-          "ref",
-          "value"
         ]
       },
       "Company": {

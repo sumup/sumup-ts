@@ -2,13 +2,11 @@
 
 export type PersonalIdentifier = {
   /**
-   * The unique reference for the personal identifier type as defined in the country SDK.
-   *
+   * The unique reference for the personal identifier type.
    */
   ref: string;
   /**
-   * The value of the personal identifier.
-   *
+   * The company identifier value.
    */
   value: string;
 };

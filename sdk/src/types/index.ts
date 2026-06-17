@@ -99,4 +99,5 @@ export type { TransactionMixinHistory } from "./transaction-mixin-history";
 export type { TransactionStatus } from "./transaction-status";
 export type { TransactionsHistoryLink } from "./transactions-history-link";
 export type { Unauthorized } from "./unauthorized";
+export type { UserType } from "./user-type";
 export type { Version } from "./version";
