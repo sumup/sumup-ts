@@ -2,5 +2,6 @@
 
 /**
  * Object attributes that are modifiable only by SumUp applications.
+ *
  */
 export type Attributes = Record<string, unknown>;

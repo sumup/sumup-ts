@@ -4,6 +4,5 @@ import type { PersonalIdentifier } from "./personal-identifier";
 
 /**
  * A list of country-specific personal identifiers.
- *
  */
 export type PersonalIdentifiers = PersonalIdentifier[];

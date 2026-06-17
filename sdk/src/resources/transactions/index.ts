@@ -30,7 +30,7 @@ export type ListTransactionsV2_1QueryParams = {
   transaction_code?: string;
   order?: "ascending" | "descending";
   limit?: number;
-  users?: string[];
+  "users[]"?: string[];
   "statuses[]"?: (
     | "SUCCESSFUL"
     | "CANCELLED"
@@ -38,9 +38,9 @@ export type ListTransactionsV2_1QueryParams = {
     | "REFUNDED"
     | "CHARGE_BACK"
   )[];
-  payment_types?: PaymentType[];
+  "payment_types[]"?: PaymentType[];
   "entry_modes[]"?: EntryMode[];
-  types?: ("PAYMENT" | "REFUND" | "CHARGE_BACK")[];
+  "types[]"?: ("PAYMENT" | "REFUND" | "CHARGE_BACK")[];
   changes_since?: string;
   newest_time?: string;
   newest_ref?: string;
