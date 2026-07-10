@@ -5,6 +5,11 @@
  */
 export type Branding = {
   /**
+   * Footer text rendered on receipts and other customer-facing products.
+   *
+   */
+  footer_text?: string;
+  /**
    * An icon for the merchant. Must be square.
    *
    */

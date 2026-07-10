@@ -10,6 +10,7 @@ import type {
   CheckoutAccepted,
   CheckoutCreateRequest,
   CheckoutSuccess,
+  CheckoutUpdateRequest,
   ErrorBody,
   ErrorExtended,
   ProcessCheckout,
@@ -225,6 +226,33 @@ export class Checkouts extends APIResource {
   ): Promise<WithResponse<Checkout>> {
     return this._client.deleteWithResponse<Checkout>({
       path: `/v0.1/checkouts/${checkoutId}`,
+      ...options,
+    });
+  }
+
+  /**
+   * Updates an identified checkout resource.
+   */
+  update(
+    checkoutId: string,
+    body: CheckoutUpdateRequest,
+    options?: RequestOptions,
+  ): Promise<Checkout> {
+    return this._client.patch<Checkout>({
+      path: `/v0.1/checkouts/${checkoutId}`,
+      body,
+      ...options,
+    });
+  }
+
+  updateWithResponse(
+    checkoutId: string,
+    body: CheckoutUpdateRequest,
+    options?: RequestOptions,
+  ): Promise<WithResponse<Checkout>> {
+    return this._client.patchWithResponse<Checkout>({
+      path: `/v0.1/checkouts/${checkoutId}`,
+      body,
       ...options,
     });
   }
