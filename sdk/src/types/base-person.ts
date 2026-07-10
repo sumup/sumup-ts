@@ -9,19 +9,19 @@ import type { PhoneNumber } from "./phone-number";
 import type { Version } from "./version";
 
 /**
- * Base schema for a person associated with a merchant. This can be a legal representative, business owner (ultimate beneficial owner), or an officer. A legal representative is the person who registered the merchant with SumUp. They should always have a `user_id`.
+ * Base schema for a Person associated with a Merchant. This can be a legal representative, business owner (ultimate beneficial owner), or an officer. A legal representative is the Person who registered the Merchant with SumUp. They should always have a `user_id`.
  *
  *
  * Person documentation: https://developer.sumup.com/tools/glossary/merchant#persons
  */
 export type BasePerson = {
   /**
-   * The unique identifier for the person. This is a [typeid](https://github.com/sumup/typeid).
+   * The unique identifier for the Person. This is a [typeid](https://github.com/sumup/typeid).
    *
    */
   readonly id: string;
   /**
-   * A corresponding identity user ID for the person, if they have a user account.
+   * A corresponding identity user ID for the Person, if they have a user account.
    *
    */
   user_id?: string;
@@ -45,7 +45,7 @@ export type BasePerson = {
   middle_name?: string;
   phone_number?: PhoneNumber;
   /**
-   * A list of roles the person has in the merchant or towards SumUp. A merchant must have at least one person with the relationship `representative`.
+   * A list of roles the Person has in the Merchant or towards SumUp. A Merchant must have at least one Person with the relationship `representative`.
    *
    */
   relationships?: string[];
@@ -54,12 +54,12 @@ export type BasePerson = {
   identifiers?: PersonalIdentifiers;
   citizenship?: CountryCode;
   /**
-   * The persons nationality. May be an [ISO3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) country code, but legacy data may not conform to this standard.
+   * The Person's nationality. May be an [ISO3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) country code, but legacy data may not conform to this standard.
    *
    */
   nationality?: string | null;
   /**
-   * An [ISO3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) country code representing the country where the person resides.
+   * An [ISO3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) country code representing the country where the Person resides.
    *
    */
   country_of_residence?: string | null;
