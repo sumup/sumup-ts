@@ -56,3 +56,15 @@ jobs:
 
       - name: Publish to JSR
         run: npx jsr publish
+
+      - name: Install Ant
+        run: |
+          curl -fsSL https://antjs.org/install | ANT_INSTALL="${RUNNER_TEMP}/ant" bash
+          echo "${RUNNER_TEMP}/ant/bin" >> "$GITHUB_PATH"
+
+      - name: Publish to ant.land
+        env:
+          ANT_TOKEN: "${{ secrets.ANT_TOKEN }}"
+        run: |
+          printf '%s\n' "//npm.ants.land/:_authToken=${ANT_TOKEN}" >> ~/.npmrc
+          ant publish --land
