@@ -19,6 +19,8 @@ export type RefundTransactionParams = {
   amount?: number;
 };
 
+export type RefundTransactionResponse = Record<string, unknown>;
+
 export type GetTransactionV2_1QueryParams = {
   id?: string;
   transaction_code?: string;
@@ -84,8 +86,8 @@ export class Transactions extends APIResource {
     transactionId: string,
     body?: RefundTransactionParams,
     options?: RequestOptions,
-  ): Promise<void> {
-    return this._client.post<void>({
+  ): Promise<RefundTransactionResponse> {
+    return this._client.post<RefundTransactionResponse>({
       path: `/v1.0/merchants/${merchantCode}/payments/${transactionId}/refunds`,
       body,
       ...options,
@@ -97,8 +99,8 @@ export class Transactions extends APIResource {
     transactionId: string,
     body?: RefundTransactionParams,
     options?: RequestOptions,
-  ): Promise<WithResponse<void>> {
-    return this._client.postWithResponse<void>({
+  ): Promise<WithResponse<RefundTransactionResponse>> {
+    return this._client.postWithResponse<RefundTransactionResponse>({
       path: `/v1.0/merchants/${merchantCode}/payments/${transactionId}/refunds`,
       body,
       ...options,
