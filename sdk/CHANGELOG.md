@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.1.8](https://github.com/sumup/sumup-ts/compare/v0.1.7...v0.1.8) (2026-07-17)
+
+
+### Bug Fixes
+
+* **sdk:** refund response typing ([#408](https://github.com/sumup/sumup-ts/issues/408)) ([f96efd5](https://github.com/sumup/sumup-ts/commit/f96efd52c5af95bda11a9198f93125b87af8035a))
+
+
+### Chores
+
+* **deps-dev:** bump @biomejs/biome from 2.5.1 to 2.5.2 in /sdk ([#403](https://github.com/sumup/sumup-ts/issues/403)) ([b34e32d](https://github.com/sumup/sumup-ts/commit/b34e32dd93d2b96a8e23e10175070393ef720fbc))
+* **deps-dev:** bump the rslib group across 1 directory with 2 updates ([#402](https://github.com/sumup/sumup-ts/issues/402)) ([a886b4a](https://github.com/sumup/sumup-ts/commit/a886b4aabd5a40024106878368d16dfac417ff74))
+* **deps-dev:** bump typedoc from 0.28.19 to 0.28.20 in /sdk ([#404](https://github.com/sumup/sumup-ts/issues/404)) ([cbf2657](https://github.com/sumup/sumup-ts/commit/cbf26579756e950115982e32d5fff341c6bb063b))
+* **deps-dev:** bump vitest from 4.1.9 to 4.1.10 in /sdk ([#406](https://github.com/sumup/sumup-ts/issues/406)) ([0bbe8f2](https://github.com/sumup/sumup-ts/commit/0bbe8f2bed01f1a0f8b1051bee95e51959fd3f45))
+
 ## [0.1.7](https://github.com/sumup/sumup-ts/compare/v0.1.6...v0.1.7) (2026-07-11)
 
 
