@@ -8,11 +8,14 @@ import {
 import type {
   CreateReaderCheckoutRequest,
   CreateReaderCheckoutResponse,
+  GetReaderCheckoutResponse,
   Metadata,
   Reader,
   ReaderID,
   ReaderName,
   ReaderPairingCode,
+  ReaderPaymentRequestParams,
+  ReaderPaymentResponse,
   StatusResponse,
 } from "../../types";
 export type ListReadersResponse = { items: Reader[] };
@@ -29,10 +32,39 @@ export type CreateReaderTerminateParams = Record<string, unknown>;
 
 /**
  * API resource for the Readers endpoints.
- *
- * A reader represents a device that accepts payments. You can use the SumUp Solo to accept in-person payments.
  */
 export class Readers extends APIResource {
+  /**
+   * Initiates a payment on the SumUp Go terminal identified by the reader ID.
+   *
+   * Use `client_transaction_id` as an idempotency key: retrying the request with the same value returns the result of the original payment instead of creating a duplicate.
+   */
+  createGoCheckout(
+    merchantCode: string,
+    readerId: ReaderID,
+    body: ReaderPaymentRequestParams,
+    options?: RequestOptions,
+  ): Promise<ReaderPaymentResponse> {
+    return this._client.post<ReaderPaymentResponse>({
+      path: `/v0/merchants/${merchantCode}/readers/${readerId}/go-checkout`,
+      body,
+      ...options,
+    });
+  }
+
+  createGoCheckoutWithResponse(
+    merchantCode: string,
+    readerId: ReaderID,
+    body: ReaderPaymentRequestParams,
+    options?: RequestOptions,
+  ): Promise<WithResponse<ReaderPaymentResponse>> {
+    return this._client.postWithResponse<ReaderPaymentResponse>({
+      path: `/v0/merchants/${merchantCode}/readers/${readerId}/go-checkout`,
+      body,
+      ...options,
+    });
+  }
+
   /**
    * List all readers of the merchant.
    */
@@ -285,6 +317,34 @@ export class Readers extends APIResource {
     return this._client.postWithResponse<void>({
       path: `/v0.1/merchants/${merchantCode}/readers/${readerId}/terminate`,
       body,
+      ...options,
+    });
+  }
+
+  /**
+   * Get a Checkout for a Reader.
+   *
+   */
+  getCheckout(
+    merchantCode: string,
+    readerId: string,
+    checkoutId: string,
+    options?: RequestOptions,
+  ): Promise<GetReaderCheckoutResponse> {
+    return this._client.get<GetReaderCheckoutResponse>({
+      path: `/v0.1/merchants/${merchantCode}/readers/${readerId}/checkout/${checkoutId}`,
+      ...options,
+    });
+  }
+
+  getCheckoutWithResponse(
+    merchantCode: string,
+    readerId: string,
+    checkoutId: string,
+    options?: RequestOptions,
+  ): Promise<WithResponse<GetReaderCheckoutResponse>> {
+    return this._client.getWithResponse<GetReaderCheckoutResponse>({
+      path: `/v0.1/merchants/${merchantCode}/readers/${readerId}/checkout/${checkoutId}`,
       ...options,
     });
   }

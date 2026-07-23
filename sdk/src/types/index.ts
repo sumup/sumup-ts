@@ -2,6 +2,8 @@
 
 export type { Address } from "./address";
 export type { AddressLegacy } from "./address-legacy";
+export type { Affiliate } from "./affiliate";
+export type { Amount } from "./amount";
 export type { Attributes } from "./attributes";
 export type { BadRequest } from "./bad-request";
 export type { BasePerson } from "./base-person";
@@ -39,6 +41,7 @@ export type { ErrorForbidden } from "./error-forbidden";
 export type { Event } from "./event";
 export type { FinancialPayout } from "./financial-payout";
 export type { FinancialPayouts } from "./financial-payouts";
+export type { GetReaderCheckoutResponse } from "./get-reader-checkout-response";
 export type { HorizontalAccuracy } from "./horizontal-accuracy";
 export type { HostedCheckout } from "./hosted-checkout";
 export type { Invite } from "./invite";
@@ -76,6 +79,9 @@ export type { ReaderDevice } from "./reader-device";
 export type { ReaderID } from "./reader-id";
 export type { ReaderName } from "./reader-name";
 export type { ReaderPairingCode } from "./reader-pairing-code";
+export type { ReaderPaymentRequestParams } from "./reader-payment-request-params";
+export type { ReaderPaymentResponse } from "./reader-payment-response";
+export type { ReaderPaymentResponseData } from "./reader-payment-response-data";
 export type { ReaderStatus } from "./reader-status";
 export type { Receipt } from "./receipt";
 export type { ReceiptCard } from "./receipt-card";
