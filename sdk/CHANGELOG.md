@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.1.9](https://github.com/sumup/sumup-ts/compare/v0.1.8...v0.1.9) (2026-07-23)
+
+
+### Chores
+
+* **deps-dev:** bump @biomejs/biome from 2.5.2 to 2.5.3 in /sdk ([#411](https://github.com/sumup/sumup-ts/issues/411)) ([eaa5116](https://github.com/sumup/sumup-ts/commit/eaa5116af366d2147d8486830954d57b51339fbe))
+* **deps-dev:** bump brace-expansion from 5.0.5 to 5.0.7 in /sdk ([#414](https://github.com/sumup/sumup-ts/issues/414)) ([11f7544](https://github.com/sumup/sumup-ts/commit/11f7544eab40ae0b244890c1b02a0e994e4b5dad))
+* synced file(s) with sumup/apis ([#415](https://github.com/sumup/sumup-ts/issues/415)) ([2734331](https://github.com/sumup/sumup-ts/commit/27343318a69718f8601b63932fd70b3302314aed))
+
 ## [0.1.8](https://github.com/sumup/sumup-ts/compare/v0.1.7...v0.1.8) (2026-07-17)
 
 
