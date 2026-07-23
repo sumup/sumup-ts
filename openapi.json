@@ -3030,6 +3030,171 @@
         ]
       }
     },
+    "/v0/merchants/{merchant_code}/readers/{reader_id}/go-checkout": {
+      "post": {
+        "operationId": "CreateGoReaderCheckout",
+        "summary": "Create a Go Reader Payment",
+        "description": "Initiates a payment on the SumUp Go terminal identified by the reader ID.\n\nUse `client_transaction_id` as an idempotency key: retrying the request with the same value returns the result of the original payment instead of creating a duplicate.",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Access token in the format 'Bearer {token}'.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "merchant_code",
+            "in": "path",
+            "description": "Short unique identifier for the merchant.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "MK10CL2A"
+            }
+          },
+          {
+            "name": "reader_id",
+            "in": "path",
+            "description": "The unique identifier of the reader.",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/ReaderID"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Payment details to initiate on the reader.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReaderPaymentRequestParams"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns the result of the payment initiated on the reader.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReaderPaymentResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The request is invalid.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                },
+                "example": {
+                  "type": "https://developer.sumup.com/problem/bad-request",
+                  "title": "Bad Request",
+                  "status": 400,
+                  "detail": "Request validation failed."
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication failed or missing required scope.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                },
+                "example": {
+                  "type": "https://developer.sumup.com/problem/unauthorized",
+                  "title": "Unauthorized",
+                  "status": 401,
+                  "detail": "Authentication credentials are missing or invalid."
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested Reader resource does not exist.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                },
+                "example": {
+                  "type": "https://developer.sumup.com/problem/not-found",
+                  "title": "Requested resource couldn't be found.",
+                  "status": 404,
+                  "detail": "The requested resource doesn't exist or does not belong to you."
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "The request could not be processed as it violates a business rule.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                },
+                "example": {
+                  "type": "https://developer.sumup.com/problem/validation-error",
+                  "title": "Unprocessable Entity",
+                  "status": 422,
+                  "detail": "Validation failed."
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "An unexpected error occurred while processing the request.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                },
+                "example": {
+                  "type": "https://developer.sumup.com/problem/internal-server-error",
+                  "title": "Internal Server Error",
+                  "status": 500,
+                  "detail": "An unexpected error occurred while processing the request."
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": []
+          },
+          {
+            "oauth2": [
+              "payments",
+              "readers.write"
+            ]
+          }
+        ],
+        "tags": [
+          "Readers"
+        ],
+        "x-codegen": {
+          "method_name": "create_go_checkout",
+          "ignore": true
+        },
+        "x-permissions": [
+          "readers_checkout_create"
+        ],
+        "x-scopes": [
+          "payments",
+          "readers.write"
+        ]
+      }
+    },
     "/v0.1/memberships": {
       "get": {
         "operationId": "ListMemberships",
@@ -5711,6 +5876,122 @@
           "readers.write"
         ]
       }
+    },
+    "/v0.1/merchants/{merchant_code}/readers/{reader_id}/checkout/{checkout_id}": {
+      "get": {
+        "operationId": "GetReaderCheckout",
+        "summary": "Get a Reader Checkout",
+        "description": "Get a Checkout for a Reader.\n",
+        "parameters": [
+          {
+            "name": "merchant_code",
+            "in": "path",
+            "description": "Merchant Code",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "MC0X0ABC"
+          },
+          {
+            "name": "reader_id",
+            "in": "path",
+            "description": "The unique identifier of the Reader",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "rdr_3MSAFM23CK82VSTT4BN6RWSQ65"
+          },
+          {
+            "name": "checkout_id",
+            "in": "path",
+            "description": "The unique identifier of the Checkout",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "74ecff66-1655-43ed-8ce3-193f49fa602f"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The Checkout got successfully retrieved for the given reader.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetReaderCheckoutResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateReaderCheckoutError"
+                }
+              },
+              "application/problem+json": {
+                "example": {
+                  "detail": "Unauthorized",
+                  "status": 401,
+                  "title": "Unauthorized",
+                  "type": "https://developer.sumup.com/problem/unauthorized"
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Response when given reader or checkout is not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFound"
+                }
+              },
+              "application/problem+json": {
+                "example": {
+                  "detail": "The requested resource doesn't exist or does not belong to you.",
+                  "status": 404,
+                  "title": "Requested resource couldn't be found.",
+                  "type": "https://developer.sumup.com/problem/not-found"
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        },
+        "callbacks": {},
+        "security": [
+          {
+            "apiKey": []
+          },
+          {
+            "oauth2": [
+              "readers.read"
+            ]
+          }
+        ],
+        "tags": [
+          "Readers"
+        ],
+        "x-codegen": {
+          "method_name": "get_checkout"
+        },
+        "x-permissions": [
+          "readers_checkout_view"
+        ],
+        "x-scopes": [
+          "readers.read"
+        ]
+      }
     }
   },
   "components": {
@@ -8066,6 +8347,97 @@
         "type": "string",
         "title": "Transaction ID"
       },
+      "Affiliate": {
+        "type": "object",
+        "properties": {
+          "app_id": {
+            "type": "string",
+            "example": "com.example.app"
+          },
+          "key": {
+            "type": "string",
+            "example": "123e4567-e89b-12d3-a456-426614174000"
+          }
+        },
+        "required": [
+          "app_id",
+          "key"
+        ]
+      },
+      "Amount": {
+        "type": "object",
+        "properties": {
+          "currency": {
+            "description": "Currency ISO 4217 code",
+            "type": "string",
+            "example": "MXN"
+          },
+          "value": {
+            "description": "Amount in minor units (e.g. cents).",
+            "type": "integer",
+            "example": 1000
+          }
+        },
+        "required": [
+          "currency",
+          "value"
+        ]
+      },
+      "ReaderID": {
+        "description": "Unique identifier of the reader that the payment is initiated on.",
+        "type": "string",
+        "example": "rdr_3MSAFM23CK82VSTT4BN6RWSQ65",
+        "maxLength": 30,
+        "minLength": 30
+      },
+      "ReaderPaymentRequestParams": {
+        "type": "object",
+        "properties": {
+          "affiliate": {
+            "$ref": "#/components/schemas/Affiliate"
+          },
+          "client_transaction_id": {
+            "description": "Caller-supplied correlation identifier, used as the idempotency key.",
+            "type": "string",
+            "example": "19e12390-72cf-4f9f-80b5-b0c8a67fa43f"
+          },
+          "tip_amount": {
+            "description": "Optional tip amount in minor units, added on top of total_amount.",
+            "type": "integer",
+            "example": 100
+          },
+          "total_amount": {
+            "$ref": "#/components/schemas/Amount"
+          }
+        },
+        "required": [
+          "total_amount",
+          "client_transaction_id"
+        ]
+      },
+      "ReaderPaymentResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/ReaderPaymentResponseData"
+          }
+        }
+      },
+      "ReaderPaymentResponseData": {
+        "type": "object",
+        "properties": {
+          "client_transaction_id": {
+            "description": "Caller-supplied correlation identifier that was provided in the request.",
+            "type": "string",
+            "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+          },
+          "transaction_code": {
+            "description": "Transaction code returned by the acquirer/processing entity after processing the transaction.",
+            "type": "string",
+            "example": "TEENSK4W2K"
+          }
+        }
+      },
       "MembershipStatus": {
         "description": "The status of the membership.",
         "type": "string",
@@ -9246,13 +9618,6 @@
         ],
         "title": "Reader"
       },
-      "ReaderID": {
-        "description": "Unique identifier of the object.\n\nNote that this identifies the instance of the physical devices pairing with your SumUp account. If you [delete](https://developer.sumup.com/api/readers/delete-reader) a reader, and pair the device again, the ID will be different. Do not use this ID to refer to a physical device.",
-        "type": "string",
-        "example": "rdr_3MSAFM23CK82VSTT4BN6RWSQ65",
-        "maxLength": 30,
-        "minLength": 30
-      },
       "ReaderName": {
         "description": "Custom human-readable, user-defined name for easier identification of the reader.",
         "type": "string",
@@ -9392,6 +9757,165 @@
           "errors"
         ],
         "title": "CreateReaderCheckoutError"
+      },
+      "GetReaderCheckoutResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "card_type": {
+                "description": "Type of the card. Required for some countries",
+                "type": "string",
+                "enum": [
+                  "credit",
+                  "debit"
+                ],
+                "nullable": true
+              },
+              "checkout_id": {
+                "description": "Unique identifier for the checkout",
+                "type": "string",
+                "format": "uuid"
+              },
+              "client_transaction_id": {
+                "description": "Client transaction identifier associated with the checkout",
+                "type": "string"
+              },
+              "created_at": {
+                "description": "Checkout creation timestamp",
+                "type": "string",
+                "format": "date-time"
+              },
+              "installments": {
+                "description": "Number of installments for the transaction. Required for some countries.",
+                "type": "integer",
+                "nullable": true
+              },
+              "payment_failure_reason": {
+                "description": "Payment failure reason",
+                "type": "string",
+                "nullable": true
+              },
+              "payment_status": {
+                "description": "Payment status from payments v2 event",
+                "type": "string",
+                "nullable": true
+              },
+              "payment_type": {
+                "description": "Type of the payment. Required for some countries",
+                "type": "string",
+                "enum": [
+                  "card",
+                  "pix"
+                ]
+              },
+              "reader_firmware_version": {
+                "description": "Reader firmware version",
+                "type": "string"
+              },
+              "reader_serial_number": {
+                "description": "Device serial number",
+                "type": "string"
+              },
+              "status": {
+                "description": "Current status of the checkout",
+                "type": "string",
+                "enum": [
+                  "pending",
+                  "successful",
+                  "failed",
+                  "cancelled"
+                ]
+              },
+              "total_amount": {
+                "description": "Amount structure.\n\nThe amount is represented as an integer value altogether with the currency and the minor unit.\n\nFor example, EUR 1.00 is represented as value 100 with minor unit of 2.\n",
+                "type": "object",
+                "example": {
+                  "currency": "EUR",
+                  "minor_unit": 2,
+                  "value": 1000
+                },
+                "properties": {
+                  "currency": {
+                    "description": "Currency ISO 4217 code",
+                    "type": "string",
+                    "example": "EUR"
+                  },
+                  "minor_unit": {
+                    "description": "The minor units of the currency.\nIt represents the number of decimals of the currency. For the currencies CLP, COP and HUF, the minor unit is 0.\n",
+                    "type": "integer",
+                    "example": 2,
+                    "minimum": 0
+                  },
+                  "value": {
+                    "description": "Integer value of the amount.",
+                    "type": "integer",
+                    "example": 1000,
+                    "minimum": 0
+                  }
+                },
+                "required": [
+                  "currency",
+                  "minor_unit",
+                  "value"
+                ],
+                "title": "Money"
+              },
+              "updated_at": {
+                "description": "Checkout last update timestamp",
+                "type": "string",
+                "format": "date-time"
+              },
+              "valid_until": {
+                "description": "Checkout expiration timestamp. After this time, the checkout will be automatically cancelled.",
+                "type": "string",
+                "format": "date-time",
+                "nullable": true
+              }
+            },
+            "required": [
+              "checkout_id",
+              "client_transaction_id",
+              "reader_serial_number",
+              "payment_type",
+              "card_type",
+              "reader_firmware_version",
+              "installments",
+              "payment_status",
+              "valid_until",
+              "created_at",
+              "updated_at",
+              "status",
+              "total_amount"
+            ]
+          }
+        },
+        "example": {
+          "data": {
+            "card_type": "credit",
+            "checkout_id": "00e33a36-c99b-4cb2-b635-b90c1455c9c8",
+            "client_transaction_id": "00e33a36-c99b-4cb2-b635-b90c1455c9c8",
+            "created_at": "2026-07-07T20:41:16.315434Z",
+            "installments": 1,
+            "payment_status": "pending",
+            "payment_type": "card",
+            "reader_firmware_version": "3.3.3.21",
+            "reader_serial_number": "1234567890",
+            "status": "pending",
+            "total_amount": {
+              "currency": "EUR",
+              "minor_unit": 2,
+              "value": 10000
+            },
+            "updated_at": "2026-07-07T20:42:18.117244Z",
+            "valid_until": "2026-07-07T20:41:16.315434Z"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "title": "GetReaderCheckoutResponse"
       },
       "StatusResponse": {
         "description": "Status of a device",
@@ -9577,6 +10101,11 @@
           "data": {
             "type": "object",
             "properties": {
+              "checkout_id": {
+                "description": "The checkout ID is a unique identifier for the checkout.\n",
+                "type": "string",
+                "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+              },
               "client_transaction_id": {
                 "description": "The client transaction ID is a unique identifier for the transaction that is generated for the client.\n\nIt can be used later to fetch the transaction details via the [Transactions API](https://developer.sumup.com/api/transactions/get).\n",
                 "type": "string",
@@ -9590,6 +10119,7 @@
         },
         "example": {
           "data": {
+            "checkout_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
             "client_transaction_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
           }
         },
@@ -10676,6 +11206,70 @@
           }
         }
       },
+      "BadRequest": {
+        "description": "The request is invalid.",
+        "content": {
+          "application/problem+json": {
+            "schema": {
+              "$ref": "#/components/schemas/Problem"
+            },
+            "example": {
+              "type": "https://developer.sumup.com/problem/bad-request",
+              "title": "Bad Request",
+              "status": 400,
+              "detail": "Request validation failed."
+            }
+          }
+        }
+      },
+      "Unauthorized": {
+        "description": "Authentication failed or missing required scope.",
+        "content": {
+          "application/problem+json": {
+            "schema": {
+              "$ref": "#/components/schemas/Problem"
+            },
+            "example": {
+              "type": "https://developer.sumup.com/problem/unauthorized",
+              "title": "Unauthorized",
+              "status": 401,
+              "detail": "Authentication credentials are missing or invalid."
+            }
+          }
+        }
+      },
+      "NotFound": {
+        "description": "The requested Reader resource does not exist.",
+        "content": {
+          "application/problem+json": {
+            "schema": {
+              "$ref": "#/components/schemas/Problem"
+            },
+            "example": {
+              "type": "https://developer.sumup.com/problem/not-found",
+              "title": "Requested resource couldn't be found.",
+              "status": 404,
+              "detail": "The requested resource doesn't exist or does not belong to you."
+            }
+          }
+        }
+      },
+      "InternalError": {
+        "description": "An unexpected error occurred while processing the request.",
+        "content": {
+          "application/problem+json": {
+            "schema": {
+              "$ref": "#/components/schemas/Problem"
+            },
+            "example": {
+              "type": "https://developer.sumup.com/problem/internal-server-error",
+              "title": "Internal Server Error",
+              "status": 500,
+              "detail": "An unexpected error occurred while processing the request."
+            }
+          }
+        }
+      },
       "ListMemberships": {
         "description": "Returns a list of Membership objects.",
         "content": {
@@ -10849,6 +11443,9 @@
       ]
     },
     {
+      "name": "Readers"
+    },
+    {
       "name": "Members",
       "description": "Endpoints to manage account members. Members are users that have membership within merchant accounts.",
       "x-core-objects": [
@@ -10884,15 +11481,6 @@
       "x-core-objects": [
         {
           "$ref": "#/components/schemas/Merchant"
-        }
-      ]
-    },
-    {
-      "name": "Readers",
-      "description": "A reader represents a device that accepts payments. You can use the SumUp Solo to accept in-person payments.",
-      "x-core-objects": [
-        {
-          "$ref": "#/components/schemas/Reader"
         }
       ]
     }

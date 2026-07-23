@@ -6,6 +6,11 @@
 export type CreateReaderCheckoutResponse = {
   data: {
     /**
+     * The checkout ID is a unique identifier for the checkout.
+     *
+     */
+    checkout_id?: string;
+    /**
      * The client transaction ID is a unique identifier for the transaction that is generated for the client.
      *
      * It can be used later to fetch the transaction details via the [Transactions API](https://developer.sumup.com/api/transactions/get).
