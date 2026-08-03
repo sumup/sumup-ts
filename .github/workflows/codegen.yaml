@@ -37,5 +37,8 @@ jobs:
       - name: Build packages
         run: npm run build
 
+      - name: Test code generator and code samples
+        run: npm test
+
       - name: Lint code
         run: biome ci --diagnostic-level=error --reporter=github
