@@ -45,9 +45,11 @@
   },
   "scripts": {
     "build": "tsup-node",
+    "generate-codesamples": "npm run build && node dist/index.cjs samples ../openapi.json --sdk-version-file ../sdk/package.json --out ../code-samples.json",
     "lint": "biome check",
     "lint:fix": "biome check --write",
     "prepublishOnly": "npm run build",
+    "test": "vitest run",
     "tsc": "tsc"
   },
   "dependencies": {

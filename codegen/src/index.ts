@@ -9,7 +9,20 @@ import { generateIndex } from "./api";
 import { generateApiVersion } from "./api-version";
 import { generateCore } from "./core";
 import { generateResource } from "./resource";
+import {
+  buildSampleCatalog,
+  readSDKVersion,
+  writeSampleCatalog,
+} from "./samples";
 import { generateTypes } from "./types";
+
+async function loadSpec(specFile: string): Promise<OpenAPIV3_1.Document> {
+  const rawSpec = await SwaggerParser.parse(specFile);
+  if (!("openapi" in rawSpec) || !rawSpec.openapi.startsWith("3.0")) {
+    throw new Error("Only OpenAPI 3.0 is currently supported");
+  }
+  return rawSpec as OpenAPIV3_1.Document;
+}
 
 /**
  * Main code generation function.
@@ -26,14 +39,7 @@ async function generate(specFile: string, destDir: string) {
 `);
   }
 
-  const rawSpec = await SwaggerParser.parse(specFile);
-  if (!("openapi" in rawSpec) || !rawSpec.openapi.startsWith("3.0")) {
-    throw new Error("Only OpenAPI 3.0 is currently supported");
-  }
-
-  // we're not actually changing anything from rawSpec to spec, we've
-  // just ruled out v2 and v3.1
-  const spec = rawSpec as OpenAPIV3_1.Document;
+  const spec = await loadSpec(specFile);
 
   rmSync(resolve(destDirAbs, "resources"), { recursive: true, force: true });
   mkdirSync(resolve(destDirAbs, "resources"), { recursive: true });
@@ -55,5 +61,32 @@ program
   .action(async (specs, dir) => {
     await generate(specs, dir);
   });
+
+program
+  .command("samples")
+  .description("generate TypeScript code samples as a JSON catalog")
+  .argument("<specs>")
+  .option("-o, --out <file>", "output JSON file (defaults to stdout)")
+  .option("--sdk-version <version>", "SDK version represented by the samples")
+  .option(
+    "--sdk-version-file <file>",
+    "package.json containing the SDK version",
+    "../sdk/package.json",
+  )
+  .action(
+    async (
+      specs: string,
+      options: {
+        out?: string;
+        sdkVersion?: string;
+        sdkVersionFile: string;
+      },
+    ) => {
+      const spec = await loadSpec(specs);
+      const sdkVersion =
+        options.sdkVersion || readSDKVersion(options.sdkVersionFile);
+      writeSampleCatalog(buildSampleCatalog(spec, sdkVersion), options.out);
+    },
+  );
 
 program.parse();
