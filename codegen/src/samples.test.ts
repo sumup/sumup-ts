@@ -24,6 +24,46 @@ async function catalog() {
 }
 
 describe("code sample catalog", () => {
+  it("prefers a whole-request example over property examples", () => {
+    const spec: OpenAPIV3_1.Document = {
+      openapi: "3.1.0",
+      info: { title: "Samples", version: "1.0.0" },
+      paths: {
+        "/samples": {
+          post: {
+            operationId: "CreateSample",
+            tags: ["Samples"],
+            requestBody: {
+              required: true,
+              content: {
+                "application/json": {
+                  schema: {
+                    type: "object",
+                    required: ["selected", "missing"],
+                    properties: {
+                      selected: {
+                        type: "string",
+                        example: "property-selected",
+                      },
+                      missing: { type: "string", example: "property-missing" },
+                    },
+                  },
+                  example: { selected: "request-selected" },
+                },
+              },
+            },
+            responses: { "204": { description: "Created" } },
+          },
+        },
+      },
+    };
+
+    const generated = buildSampleCatalog(spec, "test").samples[0]?.sample;
+    expect(generated).toContain('"selected": "request-selected"');
+    expect(generated).toContain('"missing": "example"');
+    expect(generated).not.toContain("property-");
+  });
+
   it("is deterministic and follows the portal contract", async () => {
     const first = await catalog();
     const second = await catalog();

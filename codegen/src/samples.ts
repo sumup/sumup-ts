@@ -237,37 +237,58 @@ function sampleSchema(
   schema: Schema | undefined,
   hint: string,
   depth = 0,
+  allowSchemaExamples = true,
 ): unknown {
   if (!schema || depth > 10) {
     return null;
   }
   if ("$ref" in schema) {
     const resolved = resolveReference<Schema>(spec, schema.$ref);
-    return resolved ? sampleSchema(spec, resolved, hint, depth + 1) : null;
+    return resolved
+      ? sampleSchema(spec, resolved, hint, depth + 1, allowSchemaExamples)
+      : null;
   }
-  if (schema.example !== undefined) {
+  if (allowSchemaExamples && schema.example !== undefined) {
     return coerceValue(spec, schema, schema.example, hint, depth + 1);
   }
-  if (schema.default !== undefined) {
+  if (allowSchemaExamples && schema.default !== undefined) {
     return schema.default;
   }
-  if (schema.enum && schema.enum.length > 0) {
+  if (allowSchemaExamples && schema.enum && schema.enum.length > 0) {
     return schema.enum[0];
   }
   if (schema.allOf) {
     return Object.assign(
       {},
       ...schema.allOf.map((part) => {
-        const value = sampleSchema(spec, part, hint, depth + 1);
+        const value = sampleSchema(
+          spec,
+          part,
+          hint,
+          depth + 1,
+          allowSchemaExamples,
+        );
         return isObject(value) ? value : {};
       }),
     );
   }
   if (schema.oneOf?.length) {
-    return sampleSchema(spec, schema.oneOf[0], hint, depth + 1);
+    return sampleSchema(
+      spec,
+      schema.oneOf[0],
+      hint,
+      depth + 1,
+      allowSchemaExamples,
+    );
   }
   if (schema.anyOf?.length) {
-    return sampleSchema(spec, schema.anyOf[0], hint, depth + 1);
+    return sampleSchema(
+      spec,
+      schema.anyOf[0],
+      hint,
+      depth + 1,
+      allowSchemaExamples,
+    );
   }
 
   const type = schema.type || (schema.properties ? "object" : undefined);
@@ -282,12 +303,14 @@ function sampleSchema(
           )
           .map(([name, property]) => [
             name,
-            sampleSchema(spec, property, name, depth + 1),
+            sampleSchema(spec, property, name, depth + 1, allowSchemaExamples),
           ]),
       );
     }
     case "array":
-      return [sampleSchema(spec, schema.items, hint, depth + 1)];
+      return [
+        sampleSchema(spec, schema.items, hint, depth + 1, allowSchemaExamples),
+      ];
     case "boolean":
       return true;
     case "integer":
@@ -352,28 +375,19 @@ function coerceValue(
         if (property) {
           entries.push([
             required,
-            sampleSchema(spec, property, required, depth + 1),
+            sampleSchema(spec, property, required, depth + 1, false),
           ]);
         }
       }
-    }
-    if (entries.length === 0 && properties.length > 0) {
-      const [name, property] =
-        properties.find(([, candidate]) =>
-          schemaHasNestedExample(spec, candidate),
-        ) || properties[0];
-      entries.push([name, sampleSchema(spec, property, name, depth + 1)]);
     }
     return Object.fromEntries(entries);
   }
   if (type === "array") {
     const items = "items" in schema ? schema.items : undefined;
     const values = Array.isArray(value) ? value : [];
-    return values.length > 0
-      ? values.map((item) =>
-          items ? coerceValue(spec, items, item, hint, depth + 1) : item,
-        )
-      : [sampleSchema(spec, items, hint, depth + 1)];
+    return values.map((item) =>
+      items ? coerceValue(spec, items, item, hint, depth + 1) : item,
+    );
   }
   if (type === "boolean") return typeof value === "boolean" ? value : true;
   if (type === "integer" || type === "number") {
@@ -396,24 +410,6 @@ function schemaMatchesValue(
     );
   }
   return true;
-}
-
-function schemaHasNestedExample(
-  spec: OpenAPIV3_1.Document,
-  schema: Schema,
-  depth = 0,
-): boolean {
-  if (depth > 8) return false;
-  if ("$ref" in schema) {
-    const resolved = resolveReference<Schema>(spec, schema.$ref);
-    return !!resolved && schemaHasNestedExample(spec, resolved, depth + 1);
-  }
-  return (
-    schemaHasExample(schema) ||
-    Object.values(schema.properties || {}).some((property) =>
-      schemaHasNestedExample(spec, property, depth + 1),
-    )
-  );
 }
 
 function schemaHasExample(schema: Schema): boolean {

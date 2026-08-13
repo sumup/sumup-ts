@@ -67,8 +67,7 @@ export function getRequestBody(
   schema: OpenAPIV3_1.SchemaObject | OpenAPIV3_1.ReferenceObject;
 } | null {
   if (
-    !o ||
-    !o.requestBody ||
+    !o?.requestBody ||
     !("content" in o.requestBody) ||
     !getJsonMediaType(o.requestBody.content)
   ) {
@@ -148,7 +147,7 @@ export function iterPathConfig(paths: OpenAPIV3_1.Document["paths"]) {
 
     return Object.values(HttpMethods).flatMap((method) => {
       const methodSpec = handlers[method];
-      if (!methodSpec || !methodSpec.operationId) return [];
+      if (!methodSpec?.operationId) return [];
       return {
         path,
         pathSpec: handlers,
