@@ -7,11 +7,11 @@
  */
 export type ReceiptReader = {
   /**
-   * Reader serial number.
+   * Unique identifier of the physical card reader.
    */
   code?: string;
   /**
-   * Reader type.
+   * Model of the physical card reader.
    */
   type?: string;
 };

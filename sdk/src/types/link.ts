@@ -7,7 +7,7 @@
  */
 export type Link = {
   /**
-   * Specifies the relation to the current resource.
+   * Relation of the linked resource to the current resource.
    */
   rel?: string;
   /**
@@ -15,15 +15,15 @@ export type Link = {
    */
   href?: string;
   /**
-   * Specifies the media type of the related resource.
+   * Media type of the linked resource.
    */
   type?: string;
   /**
-   * Minimum allowed amount for the refund.
+   * Minimum amount allowed for a refund, in major units.
    */
   min_amount?: number;
   /**
-   * Maximum allowed amount for the refund.
+   * Maximum amount allowed for a refund, in major units.
    */
   max_amount?: number;
 };

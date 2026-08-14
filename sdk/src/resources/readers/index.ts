@@ -32,6 +32,8 @@ export type CreateReaderTerminateParams = Record<string, unknown>;
 
 /**
  * API resource for the Readers endpoints.
+ *
+ * A reader represents a device that accepts payments. You can use the SumUp Solo to accept in-person payments.
  */
 export class Readers extends APIResource {
   /**

@@ -14,7 +14,7 @@ export type TransactionHistory = TransactionBase &
   TransactionMixinHistory & {
     transaction_id?: TransactionID;
     /**
-     * Client-specific ID of the transaction.
+     * Client-supplied identifier of the transaction.
      */
     client_transaction_id?: string;
     /**

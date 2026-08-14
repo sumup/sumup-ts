@@ -9,7 +9,7 @@ import type { PersonalDetails } from "./personal-details";
  */
 export type Customer = {
   /**
-   * Unique ID of the customer.
+   * Unique identifier of the customer.
    */
   customer_id: string;
   personal_details?: PersonalDetails;

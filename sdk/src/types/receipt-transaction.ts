@@ -8,48 +8,48 @@ import type { TransactionID } from "./transaction-id";
 /**
  * Receipt Transaction
  *
- * Transaction information.
+ * Transaction details displayed on a receipt.
  */
 export type ReceiptTransaction = {
   /**
-   * Transaction code.
+   * Transaction code returned after processing the transaction.
    */
   transaction_code?: string;
   transaction_id?: TransactionID;
   /**
-   * Merchant code.
+   * Short unique identifier for the merchant.
    */
   merchant_code?: string;
   /**
-   * Transaction amount.
+   * Total transaction amount, in major units.
    */
   amount?: string;
   /**
-   * Transaction VAT amount.
+   * VAT included in the transaction amount, in major units.
    */
   vat_amount?: string;
   /**
-   * Tip amount (included in transaction amount).
+   * Tip included in the transaction amount, in major units.
    */
   tip_amount?: string;
   /**
-   * Transaction currency.
+   * Three-letter ISO 4217 currency code of the transaction.
    */
   currency?: string;
   /**
-   * Time created at.
+   * The timestamp of when the transaction was created.
    */
   timestamp?: string;
   /**
-   * Transaction processing status.
+   * Current processing status of the transaction.
    */
   status?: string;
   /**
-   * Transaction type.
+   * Payment type used for the transaction.
    */
   payment_type?: string;
   /**
-   * Transaction entry mode.
+   * Entry mode of the payment details.
    */
   entry_mode?: string;
   /**
@@ -63,81 +63,81 @@ export type ReceiptTransaction = {
    */
   installments_count?: number;
   /**
-   * Debit/Credit.
+   * Whether the transaction was processed as credit or debit.
    */
   process_as?: "CREDIT" | "DEBIT";
   /**
-   * Products
+   * Products associated with the transaction.
    */
   products?: {
     /**
-     * Product name
+     * Product name.
      */
     name?: string;
     /**
-     * Product description
+     * Product description.
      */
     description?: string;
     /**
-     * Product price
+     * Product price.
      */
     price?: string;
     /**
-     * VAT rate
+     * VAT rate.
      */
     vat_rate?: string;
     /**
-     * VAT amount for a single product
+     * VAT amount for a single product.
      */
     single_vat_amount?: string;
     /**
-     * Product price including VAT
+     * Product price including VAT.
      */
     price_with_vat?: string;
     /**
-     * VAT amount
+     * Total VAT amount for the product quantity.
      */
     vat_amount?: string;
     /**
-     * Product quantity
+     * Product quantity.
      */
     quantity?: number;
     /**
-     * Quantity x product price
+     * Total price calculated as the product price multiplied by the quantity.
      */
     total_price?: string;
     /**
-     * Total price including VAT
+     * Total product price including VAT.
      */
     total_with_vat?: string;
   }[];
   /**
-   * Vat rates.
+   * VAT breakdown for the transaction.
    */
   vat_rates?: {
     /**
-     * Gross
+     * Gross amount to which the VAT rate applies.
      */
     gross?: number;
     /**
-     * Net
+     * Net amount to which the VAT rate applies.
      */
     net?: number;
     /**
-     * Rate
+     * VAT rate applied to the transaction amount.
      */
     rate?: number;
     /**
-     * Vat
+     * VAT amount included in the gross amount.
      */
     vat?: number;
   }[];
   /**
-   * Events
+   * Transaction events displayed on the receipt.
    */
   events?: ReceiptEvent[];
   /**
-   * Receipt number
+   * Receipt number associated with the transaction.
    */
   receipt_no?: string;
 };

@@ -29,7 +29,7 @@ export type PersonalDetails = {
    */
   birth_date?: string;
   /**
-   * An identification number user for tax purposes (e.g. CPF)
+   * Identification number used for tax purposes, such as a CPF in Brazil.
    */
   tax_id?: string;
   address?: AddressLegacy;

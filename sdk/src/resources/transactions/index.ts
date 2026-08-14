@@ -51,7 +51,13 @@ export type ListTransactionsV2_1QueryParams = {
 };
 
 export type ListTransactionsV2_1Response = {
+  /**
+   * Transactions in the current result page.
+   */
   items?: TransactionHistory[];
+  /**
+   * Pagination links for navigating the transaction history.
+   */
   links?: TransactionsHistoryLink[];
 };
 

@@ -21,9 +21,12 @@ export type GetPaymentMethodsQueryParams = {
 };
 
 export type GetPaymentMethodsResponse = {
+  /**
+   * Payment methods available to the merchant for the checkout.
+   */
   available_payment_methods?: {
     /**
-     * The ID of the payment method.
+     * Unique identifier of the payment method.
      */
     id: string;
   }[];

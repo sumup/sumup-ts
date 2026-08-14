@@ -3,7 +3,7 @@
 /**
  * Product
  *
- * Purchase product.
+ * Product details associated with a transaction.
  */
 export type Product = {
   /**
@@ -11,7 +11,7 @@ export type Product = {
    */
   name?: string;
   /**
-   * Product description.
+   * Human-readable label for the product price.
    */
   price_label?: string;
   /**
@@ -19,7 +19,7 @@ export type Product = {
    */
   price?: number;
   /**
-   * VAT percentage.
+   * VAT rate applied to the product price.
    */
   vat_rate?: number;
   /**
@@ -27,11 +27,11 @@ export type Product = {
    */
   single_vat_amount?: number;
   /**
-   * Product price incl. VAT.
+   * Product price including VAT.
    */
   price_with_vat?: number;
   /**
-   * VAT amount.
+   * Total VAT amount for the product quantity.
    */
   vat_amount?: number;
   /**
@@ -39,11 +39,11 @@ export type Product = {
    */
   quantity?: number;
   /**
-   * Quantity x product price.
+   * Total price calculated as the product price multiplied by the quantity.
    */
   total_price?: number;
   /**
-   * Total price incl. VAT.
+   * Total product price including VAT.
    */
   total_with_vat?: number;
 };

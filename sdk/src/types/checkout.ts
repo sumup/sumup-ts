@@ -21,7 +21,7 @@ export type Checkout = {
   amount?: number;
   currency?: Currency;
   /**
-   * Merchant account that receives the payment.
+   * Short unique identifier for the merchant that receives the payment.
    */
   merchant_code?: string;
   /**
@@ -41,7 +41,7 @@ export type Checkout = {
    */
   status?: "PENDING" | "FAILED" | "PAID" | "EXPIRED";
   /**
-   * Date and time of the creation of the payment checkout. Response format expressed according to [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) code.
+   * The timestamp of when the checkout was created.
    */
   date?: string;
   /**

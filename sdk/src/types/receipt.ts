@@ -19,9 +19,21 @@ export type Receipt = {
    * Acquirer-specific metadata related to the card authorization.
    */
   acquirer_data?: {
+    /**
+     * Identifier of the terminal used for the authorization.
+     */
     tid?: string;
+    /**
+     * Authorization code returned by the acquirer.
+     */
     authorization_code?: string;
+    /**
+     * Return code reported by the acquirer.
+     */
     return_code?: string;
+    /**
+     * Local timestamp of the card authorization.
+     */
     local_time?: string;
   };
 };

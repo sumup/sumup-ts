@@ -7,11 +7,11 @@ import type { TransactionStatus } from "./transaction-status";
 /**
  * Transaction Base
  *
- * Details of the transaction.
+ * Core details shared by transaction resources.
  */
 export type TransactionBase = {
   /**
-   * Unique ID of the transaction.
+   * Unique identifier of the transaction.
    */
   id?: string;
   /**
@@ -24,13 +24,13 @@ export type TransactionBase = {
   amount?: number;
   currency?: Currency;
   /**
-   * Date and time of the creation of the transaction. Response format expressed according to [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) code.
+   * The timestamp of when the transaction was created.
    */
   timestamp?: string;
   status?: TransactionStatus;
   payment_type?: PaymentType;
   /**
-   * Current number of the installment for deferred payments.
+   * Number of installments for a deferred payment.
    */
   installments_count?: number;
 };

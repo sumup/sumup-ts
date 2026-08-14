@@ -6,7 +6,7 @@ import type { MandateResponse } from "./mandate-response";
 /**
  * Payment Instrument Response
  *
- * Payment Instrument Response
+ * Details of a saved payment instrument.
  */
 export type PaymentInstrumentResponse = {
   /**
@@ -33,7 +33,7 @@ export type PaymentInstrumentResponse = {
   };
   mandate?: MandateResponse;
   /**
-   * Creation date of payment instrument. Response format expressed according to [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) code.
+   * The timestamp of when the payment instrument was created.
    */
   created_at?: string;
 };
