@@ -23,11 +23,11 @@ export type TransactionFull = TransactionBase &
   TransactionCheckoutInfo &
   TransactionMixinHistory & {
     /**
-     * External/foreign transaction id (passed by clients).
+     * External transaction identifier supplied by the client.
      */
     foreign_transaction_id?: string;
     /**
-     * Client transaction id.
+     * Client-supplied identifier of the transaction.
      */
     client_transaction_id?: string;
     /**
@@ -42,7 +42,7 @@ export type TransactionFull = TransactionBase &
     lon?: Lon;
     horizontal_accuracy?: HorizontalAccuracy;
     /**
-     * SumUp merchant internal Id.
+     * Internal SumUp identifier of the merchant.
      */
     merchant_id?: number;
     device_info?: Device;
@@ -77,7 +77,7 @@ export type TransactionFull = TransactionBase &
     card?: CardResponse;
     elv_account?: ElvCardAccount;
     /**
-     * Local date and time of the creation of the transaction.
+     * Local timestamp of when the transaction was created.
      */
     local_time?: string;
     /**
@@ -89,7 +89,7 @@ export type TransactionFull = TransactionBase &
      */
     payout_type?: "BANK_ACCOUNT" | "PREPAID_CARD";
     /**
-     * Debit/Credit.
+     * Whether the transaction was processed as credit or debit.
      */
     process_as?: "CREDIT" | "DEBIT";
     /**

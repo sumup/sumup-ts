@@ -57,7 +57,13 @@
       ]
     },
     {
-      "name": "Readers"
+      "name": "Readers",
+      "description": "A reader represents a device that accepts payments. You can use the SumUp Solo to accept in-person payments.",
+      "x-core-objects": [
+        {
+          "$ref": "#/components/schemas/Reader"
+        }
+      ]
     },
     {
       "name": "Members",
@@ -117,7 +123,7 @@
             "in": "path",
             "name": "merchant_code",
             "required": true,
-            "description": "The SumUp merchant code.",
+            "description": "Short unique identifier for the merchant.",
             "schema": {
               "type": "string",
               "example": "MH4H92C7"
@@ -154,6 +160,7 @@
                   "properties": {
                     "available_payment_methods": {
                       "type": "array",
+                      "description": "Payment methods available to the merchant for the checkout.",
                       "example": [
                         {
                           "id": "apple_pay"
@@ -170,7 +177,7 @@
                         "properties": {
                           "id": {
                             "type": "string",
-                            "description": "The ID of the payment method.",
+                            "description": "Unique identifier of the payment method.",
                             "example": "qr_code_pix"
                           }
                         }
@@ -573,10 +580,11 @@
           {
             "name": "checkout_reference",
             "in": "query",
-            "description": "Filters the list of checkout resources by the unique ID of the checkout.",
+            "description": "Filters the list of checkout resources by the unique reference of the checkout.",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "example": "f00a8f74-b05d-4605-bd73-2a901bae5802"
             }
           }
         ],
@@ -637,9 +645,10 @@
           "name": "checkout_id",
           "in": "path",
           "required": true,
-          "description": "Unique ID of the checkout resource.",
+          "description": "Unique identifier of the checkout resource.",
           "schema": {
-            "type": "string"
+            "type": "string",
+            "example": "4e425463-3e1b-431d-83fa-1e51c2925e99"
           }
         }
       ],
@@ -1373,9 +1382,10 @@
             "name": "checkout_id",
             "in": "path",
             "required": true,
-            "description": "Unique ID of the checkout resource.",
+            "description": "Unique identifier of the checkout resource.",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "example": "4e425463-3e1b-431d-83fa-1e51c2925e99"
             }
           }
         ],
@@ -1556,13 +1566,19 @@
                       ],
                       "properties": {
                         "instance": {
-                          "type": "string"
+                          "type": "string",
+                          "description": "Unique identifier of this error occurrence.",
+                          "example": "32a44c6c-85d3-49e8-86bf-a5bba98c4621"
                         },
                         "error_code": {
-                          "type": "string"
+                          "type": "string",
+                          "description": "Platform code for the error.",
+                          "example": "INVALID"
                         },
                         "error_message": {
-                          "type": "string"
+                          "type": "string",
+                          "description": "Short description of the error.",
+                          "example": "customer_id"
                         }
                       }
                     }
@@ -1651,9 +1667,10 @@
           "name": "customer_id",
           "in": "path",
           "required": true,
-          "description": "Unique ID of the saved customer resource.",
+          "description": "Unique identifier of the saved customer resource.",
           "schema": {
-            "type": "string"
+            "type": "string",
+            "example": "831ff8d4cd5958ab5670"
           }
         }
       ],
@@ -1878,9 +1895,10 @@
           "name": "customer_id",
           "in": "path",
           "required": true,
-          "description": "Unique ID of the saved customer resource.",
+          "description": "Unique identifier of the saved customer resource.",
           "schema": {
-            "type": "string"
+            "type": "string",
+            "example": "831ff8d4cd5958ab5670"
           }
         }
       ],
@@ -1993,9 +2011,10 @@
           "name": "customer_id",
           "in": "path",
           "required": true,
-          "description": "Unique ID of the saved customer resource.",
+          "description": "Unique identifier of the saved customer resource.",
           "schema": {
-            "type": "string"
+            "type": "string",
+            "example": "831ff8d4cd5958ab5670"
           }
         },
         {
@@ -2004,7 +2023,8 @@
           "required": true,
           "description": "Unique token identifying the card saved as a payment instrument resource.",
           "schema": {
-            "type": "string"
+            "type": "string",
+            "example": "bcfc8e5f-3b47-4cb9-854b-3b7a4cce7be3"
           }
         }
       ],
@@ -2125,7 +2145,7 @@
         {
           "name": "merchant_code",
           "in": "path",
-          "description": "Merchant code of the account that owns the payment to refund.",
+          "description": "Short unique identifier for the merchant.",
           "required": true,
           "schema": {
             "type": "string",
@@ -2136,9 +2156,10 @@
           "name": "transaction_id",
           "in": "path",
           "required": true,
-          "description": "Unique ID of the transaction.",
+          "description": "Unique identifier of the transaction.",
           "schema": {
-            "type": "string"
+            "type": "string",
+            "example": "4ffb8dfc-7f2b-413d-a497-2ad00766585e"
           }
         }
       ],
@@ -2347,7 +2368,7 @@
           {
             "name": "merchant_code",
             "in": "path",
-            "description": "Merchant code of the account whose transaction should be retrieved.",
+            "description": "Short unique identifier for the merchant.",
             "required": true,
             "schema": {
               "type": "string",
@@ -2360,7 +2381,8 @@
             "description": "Retrieves the transaction resource with the specified transaction ID (the `id` parameter in the transaction resource).",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "example": "410fc44a-5956-44e1-b5cc-19c6f8d727a4"
             }
           },
           {
@@ -2369,23 +2391,26 @@
             "description": "Retrieves the transaction resource with the specified transaction code.",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "example": "TEENSK4W2K"
             }
           },
           {
             "name": "foreign_transaction_id",
             "in": "query",
-            "description": "External/foreign transaction id (passed by clients).",
+            "description": "External transaction identifier supplied by the client.",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "example": "J13253253x1"
             }
           },
           {
             "name": "client_transaction_id",
             "in": "query",
-            "description": "Client transaction id.",
+            "description": "Client-supplied identifier of the transaction.",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "example": "urn:sumup:pos:sale:MNKKNGST:1D4E3B2D-111D-48D7-9AF0-832DAEF63DD7;2"
             }
           }
         ],
@@ -2489,7 +2514,7 @@
           {
             "name": "merchant_code",
             "in": "path",
-            "description": "Merchant code of the account whose transaction history should be listed.",
+            "description": "Short unique identifier for the merchant.",
             "required": true,
             "schema": {
               "type": "string",
@@ -2502,7 +2527,8 @@
             "description": "Retrieves the transaction resource with the specified transaction code.",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "example": "TEENSK4W2K"
             }
           },
           {
@@ -2523,7 +2549,8 @@
             "in": "query",
             "description": "Specifies the maximum number of results per page. Value must be a positive integer and if not specified, will return 10 results.",
             "schema": {
-              "type": "integer"
+              "type": "integer",
+              "example": 10
             }
           },
           {
@@ -2552,6 +2579,10 @@
             "required": false,
             "schema": {
               "type": "array",
+              "example": [
+                "SUCCESSFUL",
+                "REFUNDED"
+              ],
               "items": {
                 "type": "string",
                 "enum": [
@@ -2571,6 +2602,10 @@
             "required": false,
             "schema": {
               "type": "array",
+              "example": [
+                "ECOM",
+                "POS"
+              ],
               "items": {
                 "$ref": "#/components/schemas/PaymentType"
               }
@@ -2583,6 +2618,10 @@
             "required": false,
             "schema": {
               "type": "array",
+              "example": [
+                "CUSTOMER_ENTRY",
+                "CHIP"
+              ],
               "items": {
                 "$ref": "#/components/schemas/EntryMode"
               }
@@ -2595,6 +2634,10 @@
             "required": false,
             "schema": {
               "type": "array",
+              "example": [
+                "PAYMENT",
+                "REFUND"
+              ],
               "items": {
                 "type": "string",
                 "enum": [
@@ -2612,7 +2655,8 @@
             "required": false,
             "schema": {
               "type": "string",
-              "format": "date-time"
+              "format": "date-time",
+              "example": "2019-08-28T09:00:00Z"
             }
           },
           {
@@ -2622,7 +2666,8 @@
             "required": false,
             "schema": {
               "type": "string",
-              "format": "date-time"
+              "format": "date-time",
+              "example": "2019-08-29T09:00:00Z"
             }
           },
           {
@@ -2631,7 +2676,8 @@
             "description": "Filters the results by the reference ID of transaction events and returns only transactions with events whose IDs are *smaller* than the specified value. This parameters supersedes the `newest_time` parameter (if both are provided in the request).",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "example": "090df9bf-93b7-40f1-8181-fbdb236568a1"
             }
           },
           {
@@ -2641,7 +2687,8 @@
             "required": false,
             "schema": {
               "type": "string",
-              "format": "date-time"
+              "format": "date-time",
+              "example": "2019-08-28T09:00:00Z"
             }
           },
           {
@@ -2650,7 +2697,8 @@
             "description": "Filters the results by the reference ID of transaction events and returns only transactions with events whose IDs are *greater* than the specified value. This parameters supersedes the `oldest_time` parameter (if both are provided in the request).",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "example": "090df9bf-93b7-40f1-8181-fbdb236568a1"
             }
           }
         ],
@@ -2664,6 +2712,7 @@
                   "properties": {
                     "items": {
                       "type": "array",
+                      "description": "Transactions in the current result page.",
                       "example": [
                         {
                           "transaction_code": "TEENSK4W2K",
@@ -2688,6 +2737,7 @@
                     },
                     "links": {
                       "type": "array",
+                      "description": "Pagination links for navigating the transaction history.",
                       "example": [],
                       "items": {
                         "$ref": "#/components/schemas/TransactionsHistoryLink"
@@ -2795,7 +2845,7 @@
           {
             "name": "merchant_code",
             "in": "path",
-            "description": "Merchant code of the account whose payouts should be listed.",
+            "description": "Short unique identifier for the merchant.",
             "required": true,
             "schema": {
               "type": "string",
@@ -2993,25 +3043,28 @@
             "description": "SumUp unique transaction ID or transaction code, e.g. TS7HDYLSKD.",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "example": "410fc44a-5956-44e1-b5cc-19c6f8d727a4"
             }
           },
           {
             "in": "query",
             "name": "mid",
-            "description": "Merchant code.",
+            "description": "Short unique identifier for the merchant.",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "example": "MH4H92C7"
             }
           },
           {
             "in": "query",
             "name": "tx_event_id",
-            "description": "The ID of the transaction event (refund).",
+            "description": "Unique identifier of the transaction event to include on the receipt.",
             "required": false,
             "schema": {
-              "type": "integer"
+              "type": "integer",
+              "example": 9567461191
             }
           }
         ],
@@ -3200,22 +3253,6 @@
                   "title": "Unprocessable Entity",
                   "status": 422,
                   "detail": "Validation failed."
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "An unexpected error occurred while processing the request.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Problem"
-                },
-                "example": {
-                  "type": "https://developer.sumup.com/problem/internal-server-error",
-                  "title": "Internal Server Error",
-                  "status": 500,
-                  "detail": "An unexpected error occurred while processing the request."
                 }
               }
             }
@@ -6137,6 +6174,7 @@
             "type": "string",
             "description": "Month from the expiration time of the payment card. Accepted format is `MM`.",
             "writeOnly": true,
+            "example": "12",
             "enum": [
               "01",
               "02",
@@ -6295,7 +6333,7 @@
           },
           "merchant_code": {
             "type": "string",
-            "description": "Merchant account that receives the payment.",
+            "description": "Short unique identifier for the merchant that receives the payment.",
             "example": "MH4H92C7"
           },
           "description": {
@@ -6330,7 +6368,7 @@
             "type": "string",
             "example": "2020-02-29T10:56:56+00:00",
             "format": "date-time",
-            "description": "Date and time of the creation of the payment checkout. Response format expressed according to [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) code."
+            "description": "The timestamp of when the checkout was created."
           },
           "valid_until": {
             "type": "string",
@@ -6410,7 +6448,7 @@
           },
           "merchant_code": {
             "type": "string",
-            "description": "Merchant account that should receive the payment.",
+            "description": "Short unique identifier for the merchant that should receive the payment.",
             "example": "MH4H92C7"
           },
           "description": {
@@ -6612,13 +6650,13 @@
               },
               "transaction_id": {
                 "type": "string",
-                "description": "Transaction ID of the successful transaction with which the payment for the checkout is completed.",
+                "description": "Unique identifier of the successful transaction that completed payment for the checkout.",
                 "readOnly": true,
                 "example": "410fc44a-5956-44e1-b5cc-19c6f8d727a4"
               },
               "merchant_name": {
                 "type": "string",
-                "description": "Name of the merchant",
+                "description": "Name of the merchant.",
                 "example": "Sample Merchant"
               },
               "redirect_url": {
@@ -6632,7 +6670,7 @@
                 "properties": {
                   "token": {
                     "type": "string",
-                    "description": "Token value",
+                    "description": "Unique token of the saved payment instrument.",
                     "example": "e76d7e5c-9375-4fac-a7e7-b19dc5302fbc"
                   }
                 }
@@ -6674,7 +6712,10 @@
                     "browser"
                   ]
                 },
-                "description": "Allowed presentation mechanisms for the next step. `iframe` means the flow can be embedded, while `browser` means it can be completed through a full-page redirect."
+                "description": "Allowed presentation mechanisms for the next step. `iframe` means the flow can be embedded, while `browser` means it can be completed through a full-page redirect.",
+                "example": [
+                  "iframe"
+                ]
               },
               "payload": {
                 "type": "object",
@@ -6702,7 +6743,7 @@
         "properties": {
           "customer_id": {
             "type": "string",
-            "description": "Unique ID of the customer.",
+            "description": "Unique identifier of the customer.",
             "example": "831ff8d4cd5958ab5670"
           },
           "personal_details": {
@@ -6713,7 +6754,7 @@
       "Error": {
         "title": "Error",
         "type": "object",
-        "description": "Error message structure.",
+        "description": "Details of an API error.",
         "properties": {
           "message": {
             "type": "string",
@@ -6755,7 +6796,8 @@
           "instance": {
             "description": "A URI reference that identifies the specific occurrence of the problem.",
             "type": "string",
-            "format": "uri"
+            "format": "uri",
+            "example": "https://api.sumup.com/v0.1/checkouts/4e425463-3e1b-431d-83fa-1e51c2925e99"
           }
         },
         "additionalProperties": true,
@@ -6776,7 +6818,8 @@
             "properties": {
               "param": {
                 "type": "string",
-                "description": "Parameter name (with relative location) to which the error applies. Parameters from embedded resources are displayed using dot notation. For example, `card.name` refers to the `name` parameter embedded in the `card` object."
+                "description": "Parameter name (with relative location) to which the error applies. Parameters from embedded resources are displayed using dot notation. For example, `card.name` refers to the `name` parameter embedded in the `card` object.",
+                "example": "card.name"
               }
             }
           }
@@ -6785,7 +6828,7 @@
       "ErrorForbidden": {
         "title": "Error Forbidden",
         "type": "object",
-        "description": "Error message for forbidden requests.",
+        "description": "Details of an error returned for a forbidden request.",
         "properties": {
           "error_message": {
             "type": "string",
@@ -6807,7 +6850,7 @@
       "DetailsError": {
         "title": "Details Error",
         "type": "object",
-        "description": "Error message structure.",
+        "description": "Details of a request validation error.",
         "properties": {
           "title": {
             "type": "string",
@@ -6821,7 +6864,7 @@
           },
           "status": {
             "type": "number",
-            "description": "The status code.",
+            "description": "HTTP status code for the error.",
             "example": 400
           },
           "failed_constraints": {
@@ -6837,10 +6880,14 @@
               "type": "object",
               "properties": {
                 "message": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "Human-readable description of the violated constraint.",
+                  "example": "Currency must also be specified when filtering by amount"
                 },
                 "reference": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "Name of the field that violated the constraint.",
+                  "example": "currency"
                 }
               }
             }
@@ -6867,31 +6914,37 @@
           "amount": {
             "type": "number",
             "format": "float",
-            "description": "Amount of the event."
+            "description": "Amount associated with the transaction event, in major units.",
+            "example": 10.1
           },
           "timestamp": {
             "type": "string",
             "format": "date-time",
-            "description": "Date and time of the transaction event."
+            "description": "The timestamp of when the transaction event occurred.",
+            "example": "2020-05-25T10:49:42.784Z"
           },
           "fee_amount": {
             "type": "number",
             "format": "float",
-            "description": "Amount of the fee related to the event."
+            "description": "Fee associated with the transaction event, in major units.",
+            "example": 0.25
           },
           "installment_number": {
             "type": "integer",
-            "description": "Consecutive number of the installment."
+            "description": "Consecutive number of the installment associated with the event.",
+            "example": 1
           },
           "deducted_amount": {
             "type": "number",
             "format": "float",
-            "description": "Amount deducted for the event."
+            "description": "Amount deducted from the merchant for the event, in major units.",
+            "example": 10.1
           },
           "deducted_fee_amount": {
             "type": "number",
             "format": "float",
-            "description": "Amount of the fee deducted for the event."
+            "description": "Fee deducted from the merchant for the event, in major units.",
+            "example": 0.25
           }
         }
       },
@@ -6988,26 +7041,31 @@
         "properties": {
           "rel": {
             "type": "string",
-            "description": "Specifies the relation to the current resource."
+            "description": "Relation of the linked resource to the current resource.",
+            "example": "refund"
           },
           "href": {
             "type": "string",
             "format": "uri",
-            "description": "URL for accessing the related resource."
+            "description": "URL for accessing the related resource.",
+            "example": "https://api.sumup.com/v1.0/merchants/MH4H92C7/payments/4ffb8dfc-7f2b-413d-a497-2ad00766585e/refunds"
           },
           "type": {
             "type": "string",
-            "description": "Specifies the media type of the related resource."
+            "description": "Media type of the linked resource.",
+            "example": "application/json"
           },
           "min_amount": {
             "type": "number",
             "format": "float",
-            "description": "Minimum allowed amount for the refund."
+            "description": "Minimum amount allowed for a refund, in major units.",
+            "example": 0.01
           },
           "max_amount": {
             "type": "number",
             "format": "float",
-            "description": "Maximum allowed amount for the refund."
+            "description": "Maximum amount allowed for a refund, in major units.",
+            "example": 10.1
           }
         }
       },
@@ -7073,7 +7131,8 @@
         "properties": {
           "type": {
             "type": "string",
-            "description": "Type of mandate stored for the checkout or payment instrument."
+            "description": "Type of mandate stored for the checkout or payment instrument.",
+            "example": "recurrent"
           },
           "status": {
             "type": "string",
@@ -7086,7 +7145,7 @@
           },
           "merchant_code": {
             "type": "string",
-            "description": "Merchant account for which the mandate is valid.",
+            "description": "Short unique identifier for the merchant for which the mandate is valid.",
             "example": "MH4H92C7"
           }
         },
@@ -7099,12 +7158,13 @@
       "PaymentInstrumentResponse": {
         "title": "Payment Instrument Response",
         "type": "object",
-        "description": "Payment Instrument Response",
+        "description": "Details of a saved payment instrument.",
         "properties": {
           "token": {
             "type": "string",
             "description": "Unique token identifying the saved payment card for a customer.",
-            "readOnly": true
+            "readOnly": true,
+            "example": "bcfc8e5f-3b47-4cb9-854b-3b7a4cce7be3"
           },
           "active": {
             "type": "boolean",
@@ -7117,7 +7177,8 @@
             "description": "Type of the payment instrument.",
             "enum": [
               "card"
-            ]
+            ],
+            "example": "card"
           },
           "card": {
             "type": "object",
@@ -7141,8 +7202,9 @@
           },
           "created_at": {
             "type": "string",
-            "description": "Creation date of payment instrument. Response format expressed according to [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) code.",
-            "format": "date-time"
+            "description": "The timestamp of when the payment instrument was created.",
+            "format": "date-time",
+            "example": "2021-03-30T10:06:07.000+00:00"
           }
         },
         "example": {
@@ -7194,7 +7256,7 @@
           },
           "tax_id": {
             "type": "string",
-            "description": "An identification number user for tax purposes (e.g. CPF)",
+            "description": "Identification number used for tax purposes, such as a CPF in Brazil.",
             "maxLength": 255,
             "example": "423.378.593-47"
           },
@@ -7206,7 +7268,7 @@
       "Product": {
         "title": "Product",
         "type": "object",
-        "description": "Purchase product.",
+        "description": "Product details associated with a transaction.",
         "properties": {
           "name": {
             "type": "string",
@@ -7215,7 +7277,8 @@
           },
           "price_label": {
             "type": "string",
-            "description": "Product description."
+            "description": "Human-readable label for the product price.",
+            "example": "EUR 100.00"
           },
           "price": {
             "type": "number",
@@ -7226,22 +7289,26 @@
           "vat_rate": {
             "type": "number",
             "format": "decimal",
-            "description": "VAT percentage."
+            "description": "VAT rate applied to the product price.",
+            "example": 0.19
           },
           "single_vat_amount": {
             "type": "number",
             "format": "decimal",
-            "description": "VAT amount for a single product."
+            "description": "VAT amount for a single product.",
+            "example": 19
           },
           "price_with_vat": {
             "type": "number",
             "format": "decimal",
-            "description": "Product price incl. VAT."
+            "description": "Product price including VAT.",
+            "example": 119
           },
           "vat_amount": {
             "type": "number",
             "format": "decimal",
-            "description": "VAT amount."
+            "description": "Total VAT amount for the product quantity.",
+            "example": 19
           },
           "quantity": {
             "type": "integer",
@@ -7251,13 +7318,14 @@
           "total_price": {
             "type": "number",
             "format": "decimal",
-            "description": "Quantity x product price.",
+            "description": "Total price calculated as the product price multiplied by the quantity.",
             "example": 100
           },
           "total_with_vat": {
             "type": "number",
             "format": "decimal",
-            "description": "Total price incl. VAT."
+            "description": "Total product price including VAT.",
+            "example": 119
           }
         }
       },
@@ -7286,16 +7354,24 @@
             },
             "properties": {
               "tid": {
-                "type": "string"
+                "type": "string",
+                "description": "Identifier of the terminal used for the authorization.",
+                "example": "12345678"
               },
               "authorization_code": {
-                "type": "string"
+                "type": "string",
+                "description": "Authorization code returned by the acquirer.",
+                "example": "053201"
               },
               "return_code": {
-                "type": "string"
+                "type": "string",
+                "description": "Return code reported by the acquirer.",
+                "example": "00"
               },
               "local_time": {
-                "type": "string"
+                "type": "string",
+                "description": "Local timestamp of the card authorization.",
+                "example": "2020-02-29T11:56:56+01:00"
               }
             }
           }
@@ -7321,16 +7397,19 @@
           "amount": {
             "type": "string",
             "format": "double",
-            "description": "Amount of the event."
+            "description": "Amount associated with the transaction event, in major units.",
+            "example": "10.10"
           },
           "timestamp": {
             "type": "string",
             "format": "date-time",
-            "description": "Date and time of the transaction event."
+            "description": "The timestamp of when the transaction event occurred.",
+            "example": "2020-05-25T10:49:42.784Z"
           },
           "receipt_no": {
             "type": "string",
-            "description": "Receipt number associated with the event."
+            "description": "Receipt number associated with the event.",
+            "example": "123456"
           }
         }
       },
@@ -7341,11 +7420,13 @@
         "properties": {
           "last_4_digits": {
             "type": "string",
-            "description": "Card last 4 digits."
+            "description": "Last four digits of the payment card number.",
+            "example": "3456"
           },
           "type": {
             "type": "string",
-            "description": "Card Scheme."
+            "description": "Issuing card network of the payment card.",
+            "example": "VISA"
           }
         }
       },
@@ -7356,18 +7437,20 @@
         "properties": {
           "code": {
             "type": "string",
-            "description": "Reader serial number."
+            "description": "Unique identifier of the physical card reader.",
+            "example": "U1DT3NA00-CN"
           },
           "type": {
             "type": "string",
-            "description": "Reader type."
+            "description": "Model of the physical card reader.",
+            "example": "solo"
           }
         }
       },
       "ReceiptMerchantData": {
         "title": "Receipt Merchant Data",
         "type": "object",
-        "description": "Receipt merchant data",
+        "description": "Merchant details displayed on a transaction receipt.",
         "properties": {
           "merchant_profile": {
             "type": "object",
@@ -7375,55 +7458,87 @@
             "properties": {
               "merchant_code": {
                 "type": "string",
+                "description": "Short unique identifier for the merchant.",
                 "example": "MH4H92C7"
               },
               "business_name": {
-                "type": "string"
+                "type": "string",
+                "description": "Business name of the merchant.",
+                "example": "Coffee House"
               },
               "company_registration_number": {
-                "type": "string"
+                "type": "string",
+                "description": "Company registration number of the merchant.",
+                "example": "HRB 123456"
               },
               "vat_id": {
-                "type": "string"
+                "type": "string",
+                "description": "VAT identification number of the merchant.",
+                "example": "DE123456789"
               },
               "website": {
-                "type": "string"
+                "type": "string",
+                "description": "Website of the merchant.",
+                "example": "https://example.com"
               },
               "email": {
-                "type": "string"
+                "type": "string",
+                "description": "Email address of the merchant.",
+                "example": "merchant@example.com"
               },
               "language": {
-                "type": "string"
+                "type": "string",
+                "description": "Language configured for the merchant profile.",
+                "example": "de"
               },
               "address": {
                 "type": "object",
+                "description": "Business address of the merchant.",
                 "properties": {
                   "address_line1": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "First line of the merchant address.",
+                    "example": "Sample street 1"
                   },
                   "address_line2": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Second line of the merchant address.",
+                    "example": "Floor 2"
                   },
                   "city": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "City of the merchant address.",
+                    "example": "Berlin"
                   },
                   "country": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Two-letter ISO 3166-1 alpha-2 country code of the merchant address.",
+                    "example": "DE"
                   },
                   "country_en_name": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "English name of the country in the merchant address.",
+                    "example": "Germany"
                   },
                   "country_native_name": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Localized name of the country in the merchant address.",
+                    "example": "Deutschland"
                   },
                   "region_name": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Region or state of the merchant address.",
+                    "example": "Berlin"
                   },
                   "post_code": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Postal code of the merchant address.",
+                    "example": "10115"
                   },
                   "landline": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Landline phone number of the merchant.",
+                    "example": "+493012345678"
                   }
                 }
               }
@@ -7431,14 +7546,15 @@
           },
           "locale": {
             "type": "string",
-            "description": "Locale used for rendering localized receipt fields."
+            "description": "Locale used for rendering localized receipt fields.",
+            "example": "de-DE"
           }
         }
       },
       "ReceiptTransaction": {
         "title": "Receipt Transaction",
         "type": "object",
-        "description": "Transaction information.",
+        "description": "Transaction details displayed on a receipt.",
         "example": {
           "transaction_code": "TEENSK4W2K",
           "transaction_id": "410fc44a-5956-44e1-b5cc-19c6f8d727a4",
@@ -7457,51 +7573,62 @@
         "properties": {
           "transaction_code": {
             "type": "string",
-            "description": "Transaction code."
+            "description": "Transaction code returned after processing the transaction.",
+            "example": "TEENSK4W2K"
           },
           "transaction_id": {
             "$ref": "#/components/schemas/TransactionID"
           },
           "merchant_code": {
             "type": "string",
-            "description": "Merchant code."
+            "description": "Short unique identifier for the merchant.",
+            "example": "MH4H92C7"
           },
           "amount": {
             "type": "string",
-            "description": "Transaction amount."
+            "description": "Total transaction amount, in major units.",
+            "example": "10.10"
           },
           "vat_amount": {
             "type": "string",
-            "description": "Transaction VAT amount."
+            "description": "VAT included in the transaction amount, in major units.",
+            "example": "6.00"
           },
           "tip_amount": {
             "type": "string",
-            "description": "Tip amount (included in transaction amount)."
+            "description": "Tip included in the transaction amount, in major units.",
+            "example": "3.00"
           },
           "currency": {
             "type": "string",
-            "description": "Transaction currency."
+            "description": "Three-letter ISO 4217 currency code of the transaction.",
+            "example": "EUR"
           },
           "timestamp": {
             "type": "string",
             "format": "date-time",
-            "description": "Time created at."
+            "description": "The timestamp of when the transaction was created.",
+            "example": "2020-02-29T10:56:56.876Z"
           },
           "status": {
             "type": "string",
-            "description": "Transaction processing status."
+            "description": "Current processing status of the transaction.",
+            "example": "SUCCESSFUL"
           },
           "payment_type": {
             "type": "string",
-            "description": "Transaction type."
+            "description": "Payment type used for the transaction.",
+            "example": "ECOM"
           },
           "entry_mode": {
             "type": "string",
-            "description": "Transaction entry mode."
+            "description": "Entry mode of the payment details.",
+            "example": "CUSTOMER_ENTRY"
           },
           "verification_method": {
             "type": "string",
-            "description": "Cardholder verification method."
+            "description": "Cardholder verification method.",
+            "example": "none"
           },
           "card_reader": {
             "$ref": "#/components/schemas/ReceiptReader"
@@ -7511,11 +7638,12 @@
           },
           "installments_count": {
             "type": "integer",
-            "description": "Number of installments."
+            "description": "Number of installments.",
+            "example": 1
           },
           "process_as": {
             "type": "string",
-            "description": "Debit/Credit.",
+            "description": "Whether the transaction was processed as credit or debit.",
             "enum": [
               "CREDIT",
               "DEBIT"
@@ -7524,65 +7652,66 @@
           },
           "products": {
             "type": "array",
-            "description": "Products",
+            "description": "Products associated with the transaction.",
             "items": {
               "type": "object",
               "properties": {
                 "name": {
                   "type": "string",
-                  "description": "Product name",
+                  "description": "Product name.",
                   "example": "Coffee"
                 },
                 "description": {
                   "type": "string",
-                  "description": "Product description"
+                  "description": "Product description.",
+                  "example": "Cappuccino"
                 },
                 "price": {
                   "type": "string",
                   "format": "double",
-                  "description": "Product price",
+                  "description": "Product price.",
                   "example": "150.0"
                 },
                 "vat_rate": {
                   "type": "string",
                   "format": "double",
-                  "description": "VAT rate",
+                  "description": "VAT rate.",
                   "example": "0.0"
                 },
                 "single_vat_amount": {
                   "type": "string",
                   "format": "double",
-                  "description": "VAT amount for a single product",
+                  "description": "VAT amount for a single product.",
                   "example": "0.0"
                 },
                 "price_with_vat": {
                   "type": "string",
                   "format": "double",
-                  "description": "Product price including VAT",
+                  "description": "Product price including VAT.",
                   "example": "150.0"
                 },
                 "vat_amount": {
                   "type": "string",
                   "format": "double",
-                  "description": "VAT amount",
+                  "description": "Total VAT amount for the product quantity.",
                   "example": "0.0"
                 },
                 "quantity": {
                   "type": "integer",
                   "format": "int64",
-                  "description": "Product quantity",
+                  "description": "Product quantity.",
                   "example": 1
                 },
                 "total_price": {
                   "type": "string",
                   "format": "double",
-                  "description": "Quantity x product price",
+                  "description": "Total price calculated as the product price multiplied by the quantity.",
                   "example": "150.0"
                 },
                 "total_with_vat": {
                   "type": "string",
                   "format": "double",
-                  "description": "Total price including VAT",
+                  "description": "Total product price including VAT.",
                   "example": "150.0"
                 }
               }
@@ -7590,43 +7719,48 @@
           },
           "vat_rates": {
             "type": "array",
-            "description": "Vat rates.",
+            "description": "VAT breakdown for the transaction.",
             "items": {
               "type": "object",
               "properties": {
                 "gross": {
                   "type": "number",
                   "format": "float",
-                  "description": "Gross"
+                  "description": "Gross amount to which the VAT rate applies.",
+                  "example": 10.1
                 },
                 "net": {
                   "type": "number",
                   "format": "float",
-                  "description": "Net"
+                  "description": "Net amount to which the VAT rate applies.",
+                  "example": 8.49
                 },
                 "rate": {
                   "type": "number",
                   "format": "float",
-                  "description": "Rate"
+                  "description": "VAT rate applied to the transaction amount.",
+                  "example": 0.19
                 },
                 "vat": {
                   "type": "number",
                   "format": "float",
-                  "description": "Vat"
+                  "description": "VAT amount included in the gross amount.",
+                  "example": 1.61
                 }
               }
             }
           },
           "events": {
             "type": "array",
-            "description": "Events",
+            "description": "Transaction events displayed on the receipt.",
             "items": {
               "$ref": "#/components/schemas/ReceiptEvent"
             }
           },
           "receipt_no": {
             "type": "string",
-            "description": "Receipt number"
+            "description": "Receipt number associated with the transaction.",
+            "example": "123456"
           }
         }
       },
@@ -7678,11 +7812,11 @@
       "TransactionBase": {
         "title": "Transaction Base",
         "type": "object",
-        "description": "Details of the transaction.",
+        "description": "Core details shared by transaction resources.",
         "properties": {
           "id": {
             "type": "string",
-            "description": "Unique ID of the transaction.",
+            "description": "Unique identifier of the transaction.",
             "example": "6b425463-3e1b-431d-83fa-1e51c2925e99"
           },
           "transaction_code": {
@@ -7703,7 +7837,7 @@
             "type": "string",
             "example": "2020-02-29T10:56:56.876Z",
             "format": "date-time",
-            "description": "Date and time of the creation of the transaction. Response format expressed according to [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) code."
+            "description": "The timestamp of when the transaction was created."
           },
           "status": {
             "$ref": "#/components/schemas/TransactionStatus"
@@ -7713,8 +7847,9 @@
           },
           "installments_count": {
             "type": "integer",
-            "description": "Current number of the installment for deferred payments.",
-            "minimum": 1
+            "description": "Number of installments for a deferred payment.",
+            "minimum": 1,
+            "example": 1
           }
         }
       },
@@ -7757,15 +7892,18 @@
         "properties": {
           "product_summary": {
             "type": "string",
-            "description": "Short description of the payment. The value is taken from the `description` property of the related checkout resource."
+            "description": "Short description of the payment. The value is taken from the `description` property of the related checkout resource.",
+            "example": "Purchase"
           },
           "payouts_total": {
             "type": "integer",
-            "description": "Total number of payouts to the registered user specified in the `user` property."
+            "description": "Total number of payouts to the registered user specified in the `user` property.",
+            "example": 1
           },
           "payouts_received": {
             "type": "integer",
-            "description": "Number of payouts that are made to the registered user specified in the `user` property."
+            "description": "Number of payouts that are made to the registered user specified in the `user` property.",
+            "example": 1
           },
           "payout_plan": {
             "type": "string",
@@ -7774,7 +7912,8 @@
               "SINGLE_PAYMENT",
               "TRUE_INSTALLMENT",
               "ACCELERATED_INSTALLMENT"
-            ]
+            ],
+            "example": "SINGLE_PAYMENT"
           }
         }
       },
@@ -7796,12 +7935,14 @@
               },
               "client_transaction_id": {
                 "type": "string",
-                "description": "Client-specific ID of the transaction."
+                "description": "Client-supplied identifier of the transaction.",
+                "example": "urn:sumup:pos:sale:MNKKNGST:1D4E3B2D-111D-48D7-9AF0-832DAEF63DD7;2"
               },
               "user": {
                 "type": "string",
                 "format": "email",
-                "description": "Email address of the registered user (merchant) to whom the payment is made."
+                "description": "Email address of the registered user (merchant) to whom the payment is made.",
+                "example": "merchant@example.com"
               },
               "type": {
                 "type": "string",
@@ -7810,7 +7951,8 @@
                   "PAYMENT",
                   "REFUND",
                   "CHARGE_BACK"
-                ]
+                ],
+                "example": "PAYMENT"
               },
               "card_type": {
                 "$ref": "#/components/schemas/CardType"
@@ -7856,7 +7998,8 @@
           "DIRECT_DEBIT",
           "APM",
           "UNKNOWN"
-        ]
+        ],
+        "example": "ECOM"
       },
       "EntryMode": {
         "title": "Entry Mode",
@@ -7890,7 +8033,8 @@
           "MOTO",
           "CONTACTLESS_MAGSTRIPE",
           "N/A"
-        ]
+        ],
+        "example": "CUSTOMER_ENTRY"
       },
       "CardType": {
         "title": "Card Type",
@@ -7921,7 +8065,8 @@
           "VPAY",
           "VR",
           "UNKNOWN"
-        ]
+        ],
+        "example": "VISA"
       },
       "TransactionFull": {
         "title": "Transaction Full",
@@ -7941,18 +8086,19 @@
             "properties": {
               "foreign_transaction_id": {
                 "type": "string",
-                "description": "External/foreign transaction id (passed by clients).",
+                "description": "External transaction identifier supplied by the client.",
                 "example": "J13253253x1"
               },
               "client_transaction_id": {
                 "type": "string",
-                "description": "Client transaction id.",
+                "description": "Client-supplied identifier of the transaction.",
                 "example": "urn:sumup:pos:sale:MNKKNGST:1D4E3B2D-111D-48D7-9AF0-832DAEF63DD7;2"
               },
               "username": {
                 "type": "string",
                 "format": "email",
-                "description": "Email address of the registered user (merchant) to whom the payment is made."
+                "description": "Email address of the registered user (merchant) to whom the payment is made.",
+                "example": "merchant@example.com"
               },
               "fee_amount": {
                 "type": "number",
@@ -7972,7 +8118,7 @@
               "merchant_id": {
                 "type": "integer",
                 "format": "int64",
-                "description": "SumUp merchant internal Id.",
+                "description": "Internal SumUp identifier of the merchant.",
                 "example": 136902
               },
               "device_info": {
@@ -7996,7 +8142,8 @@
                   "APM",
                   "BITCOIN",
                   "CARD"
-                ]
+                ],
+                "example": "CARD"
               },
               "verification_method": {
                 "type": "string",
@@ -8008,7 +8155,8 @@
                   "online PIN",
                   "offline PIN + signature",
                   "na"
-                ]
+                ],
+                "example": "none"
               },
               "card": {
                 "$ref": "#/components/schemas/CardResponse"
@@ -8019,7 +8167,8 @@
               "local_time": {
                 "type": "string",
                 "format": "date-time",
-                "description": "Local date and time of the creation of the transaction."
+                "description": "Local timestamp of when the transaction was created.",
+                "example": "2020-02-29T11:56:56+01:00"
               },
               "payout_date": {
                 "type": "string",
@@ -8033,11 +8182,12 @@
                 "enum": [
                   "BANK_ACCOUNT",
                   "PREPAID_CARD"
-                ]
+                ],
+                "example": "BANK_ACCOUNT"
               },
               "process_as": {
                 "type": "string",
-                "description": "Debit/Credit.",
+                "description": "Whether the transaction was processed as credit or debit.",
                 "enum": [
                   "CREDIT",
                   "DEBIT"
@@ -8105,7 +8255,8 @@
                   "REFUNDED",
                   "NON_COLLECTION",
                   "PENDING"
-                ]
+                ],
+                "example": "SUCCESSFUL"
               },
               "links": {
                 "type": "array",
@@ -8138,7 +8289,8 @@
               },
               "tax_enabled": {
                 "type": "boolean",
-                "description": "Indicates whether tax deduction is enabled for the transaction."
+                "description": "Indicates whether tax deduction is enabled for the transaction.",
+                "example": true
               }
             }
           }
@@ -8147,7 +8299,7 @@
       "Currency": {
         "title": "Currency",
         "type": "string",
-        "description": "Three-letter [ISO4217](https://en.wikipedia.org/wiki/ISO_4217) code of the currency for the amount. Currently supported currency values are enumerated above.",
+        "description": "Three-letter [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) currency code of the amount.",
         "enum": [
           "BGN",
           "BRL",
@@ -8178,7 +8330,8 @@
           "FAILED",
           "PENDING",
           "REFUNDED"
-        ]
+        ],
+        "example": "SUCCESSFUL"
       },
       "TransactionEventType": {
         "title": "Transaction Event Type",
@@ -8189,7 +8342,8 @@
           "CHARGE_BACK",
           "REFUND",
           "PAYOUT_DEDUCTION"
-        ]
+        ],
+        "example": "REFUND"
       },
       "TransactionEventStatus": {
         "title": "Transaction Event Status",
@@ -8203,19 +8357,22 @@
           "REFUNDED",
           "SCHEDULED",
           "SUCCESSFUL"
-        ]
+        ],
+        "example": "SUCCESSFUL"
       },
       "TransactionEventID": {
         "title": "Transaction Event ID",
         "type": "integer",
         "format": "int64",
-        "description": "Unique ID of the transaction event."
+        "description": "Unique identifier of the transaction event.",
+        "example": 9567461191
       },
       "HorizontalAccuracy": {
         "title": "Horizontal Accuracy",
         "type": "number",
         "format": "float",
-        "description": "Indication of the precision of the geographical position received from the payment terminal."
+        "description": "Indication of the precision of the geographical position received from the payment terminal.",
+        "example": 5
       },
       "Lat": {
         "title": "Latitude",
@@ -8223,7 +8380,8 @@
         "format": "float",
         "description": "Latitude value from the coordinates of the payment location (as received from the payment terminal reader).",
         "minimum": 0,
-        "maximum": 90
+        "maximum": 90,
+        "example": 52.520008
       },
       "Lon": {
         "title": "Longitude",
@@ -8231,12 +8389,14 @@
         "format": "float",
         "description": "Longitude value from the coordinates of the payment location (as received from the payment terminal reader).",
         "minimum": 0,
-        "maximum": 180
+        "maximum": 180,
+        "example": 13.404954
       },
       "TransactionID": {
         "title": "Transaction ID",
         "type": "string",
-        "description": "Unique ID of the transaction."
+        "description": "Unique identifier of the transaction.",
+        "example": "410fc44a-5956-44e1-b5cc-19c6f8d727a4"
       },
       "Affiliate": {
         "properties": {
@@ -11113,22 +11273,6 @@
           }
         }
       },
-      "InternalError": {
-        "description": "An unexpected error occurred while processing the request.",
-        "content": {
-          "application/problem+json": {
-            "schema": {
-              "$ref": "#/components/schemas/Problem"
-            },
-            "example": {
-              "type": "https://developer.sumup.com/problem/internal-server-error",
-              "title": "Internal Server Error",
-              "status": 500,
-              "detail": "An unexpected error occurred while processing the request."
-            }
-          }
-        }
-      },
       "ListMemberships": {
         "description": "Returns a list of Membership objects.",
         "content": {
@@ -11206,28 +11350,31 @@
       "CheckoutReference": {
         "name": "checkout_reference",
         "in": "query",
-        "description": "Filters the list of checkout resources by the unique ID of the checkout.",
+        "description": "Filters the list of checkout resources by the unique reference of the checkout.",
         "required": false,
         "schema": {
-          "type": "string"
+          "type": "string",
+          "example": "f00a8f74-b05d-4605-bd73-2a901bae5802"
         }
       },
       "CheckoutID": {
         "name": "checkout_id",
         "in": "path",
         "required": true,
-        "description": "Unique ID of the checkout resource.",
+        "description": "Unique identifier of the checkout resource.",
         "schema": {
-          "type": "string"
+          "type": "string",
+          "example": "4e425463-3e1b-431d-83fa-1e51c2925e99"
         }
       },
       "CustomerID": {
         "name": "customer_id",
         "in": "path",
         "required": true,
-        "description": "Unique ID of the saved customer resource.",
+        "description": "Unique identifier of the saved customer resource.",
         "schema": {
-          "type": "string"
+          "type": "string",
+          "example": "831ff8d4cd5958ab5670"
         }
       },
       "Token": {
@@ -11236,7 +11383,8 @@
         "required": true,
         "description": "Unique token identifying the card saved as a payment instrument resource.",
         "schema": {
-          "type": "string"
+          "type": "string",
+          "example": "bcfc8e5f-3b47-4cb9-854b-3b7a4cce7be3"
         }
       },
       "TransactionCode": {
@@ -11245,7 +11393,8 @@
         "description": "Retrieves the transaction resource with the specified transaction code.",
         "required": false,
         "schema": {
-          "type": "string"
+          "type": "string",
+          "example": "TEENSK4W2K"
         }
       },
       "OrderFilter": {
@@ -11266,7 +11415,8 @@
         "in": "query",
         "description": "Specifies the maximum number of results per page. Value must be a positive integer and if not specified, will return 10 results.",
         "schema": {
-          "type": "integer"
+          "type": "integer",
+          "example": 10
         }
       },
       "UsersFilter": {
@@ -11295,6 +11445,10 @@
         "required": false,
         "schema": {
           "type": "array",
+          "example": [
+            "SUCCESSFUL",
+            "REFUNDED"
+          ],
           "items": {
             "type": "string",
             "enum": [
@@ -11314,6 +11468,10 @@
         "required": false,
         "schema": {
           "type": "array",
+          "example": [
+            "ECOM",
+            "POS"
+          ],
           "items": {
             "$ref": "#/components/schemas/PaymentType"
           }
@@ -11326,6 +11484,10 @@
         "required": false,
         "schema": {
           "type": "array",
+          "example": [
+            "CUSTOMER_ENTRY",
+            "CHIP"
+          ],
           "items": {
             "$ref": "#/components/schemas/EntryMode"
           }
@@ -11338,6 +11500,10 @@
         "required": false,
         "schema": {
           "type": "array",
+          "example": [
+            "PAYMENT",
+            "REFUND"
+          ],
           "items": {
             "type": "string",
             "enum": [
@@ -11355,7 +11521,8 @@
         "required": false,
         "schema": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "example": "2019-08-28T09:00:00Z"
         }
       },
       "NewestTimeFilter": {
@@ -11365,7 +11532,8 @@
         "required": false,
         "schema": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "example": "2019-08-29T09:00:00Z"
         }
       },
       "NewestRefFilter": {
@@ -11374,7 +11542,8 @@
         "description": "Filters the results by the reference ID of transaction events and returns only transactions with events whose IDs are *smaller* than the specified value. This parameters supersedes the `newest_time` parameter (if both are provided in the request).",
         "required": false,
         "schema": {
-          "type": "string"
+          "type": "string",
+          "example": "090df9bf-93b7-40f1-8181-fbdb236568a1"
         }
       },
       "TransactionID": {
@@ -11383,7 +11552,8 @@
         "description": "Retrieves the transaction resource with the specified transaction ID (the `id` parameter in the transaction resource).",
         "required": false,
         "schema": {
-          "type": "string"
+          "type": "string",
+          "example": "410fc44a-5956-44e1-b5cc-19c6f8d727a4"
         }
       }
     },

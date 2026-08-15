@@ -3,7 +3,7 @@
 /**
  * Details Error
  *
- * Error message structure.
+ * Details of a request validation error.
  */
 export type DetailsError = {
   /**
@@ -15,11 +15,20 @@ export type DetailsError = {
    */
   details?: string;
   /**
-   * The status code.
+   * HTTP status code for the error.
    */
   status?: number;
   /**
    * List of violated validation constraints.
    */
-  failed_constraints?: { message?: string; reference?: string }[];
+  failed_constraints?: {
+    /**
+     * Human-readable description of the violated constraint.
+     */
+    message?: string;
+    /**
+     * Name of the field that violated the constraint.
+     */
+    reference?: string;
+  }[];
 };

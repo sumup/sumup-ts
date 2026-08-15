@@ -19,7 +19,7 @@ export type CheckoutCreateRequest = {
   amount: number;
   currency: Currency;
   /**
-   * Merchant account that should receive the payment.
+   * Short unique identifier for the merchant that should receive the payment.
    */
   merchant_code: string;
   /**

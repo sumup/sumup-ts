@@ -16,11 +16,11 @@ export type ReceiptEvent = {
   type?: TransactionEventType;
   status?: TransactionEventStatus;
   /**
-   * Amount of the event.
+   * Amount associated with the transaction event, in major units.
    */
   amount?: string;
   /**
-   * Date and time of the transaction event.
+   * The timestamp of when the transaction event occurred.
    */
   timestamp?: string;
   /**

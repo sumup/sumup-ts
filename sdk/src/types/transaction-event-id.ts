@@ -3,6 +3,6 @@
 /**
  * Transaction Event ID
  *
- * Unique ID of the transaction event.
+ * Unique identifier of the transaction event.
  */
 export type TransactionEventID = number;

@@ -3,6 +3,6 @@
 /**
  * Transaction ID
  *
- * Unique ID of the transaction.
+ * Unique identifier of the transaction.
  */
 export type TransactionID = string;

@@ -13,11 +13,11 @@ export type CheckoutSuccess = Checkout & {
    */
   readonly transaction_code?: string;
   /**
-   * Transaction ID of the successful transaction with which the payment for the checkout is completed.
+   * Unique identifier of the successful transaction that completed payment for the checkout.
    */
   readonly transaction_id?: string;
   /**
-   * Name of the merchant
+   * Name of the merchant.
    */
   merchant_name?: string;
   /**
@@ -29,7 +29,7 @@ export type CheckoutSuccess = Checkout & {
    */
   payment_instrument?: {
     /**
-     * Token value
+     * Unique token of the saved payment instrument.
      */
     token?: string;
   };

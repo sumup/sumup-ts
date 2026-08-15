@@ -3,7 +3,7 @@
 /**
  * Error Forbidden
  *
- * Error message for forbidden requests.
+ * Details of an error returned for a forbidden request.
  */
 export type ErrorForbidden = {
   /**

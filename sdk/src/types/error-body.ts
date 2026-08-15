@@ -3,7 +3,7 @@
 /**
  * Error
  *
- * Error message structure.
+ * Details of an API error.
  */
 export type ErrorBody = {
   /**

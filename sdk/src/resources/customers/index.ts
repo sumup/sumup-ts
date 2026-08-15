@@ -13,7 +13,20 @@ import type {
 } from "../../types";
 export type CreateCustomerError =
   | ErrorExtended
-  | { instance: string; error_code: string; error_message: string };
+  | {
+      /**
+       * Unique identifier of this error occurrence.
+       */
+      instance: string;
+      /**
+       * Platform code for the error.
+       */
+      error_code: string;
+      /**
+       * Short description of the error.
+       */
+      error_message: string;
+    };
 
 export type UpdateCustomerParams = { personal_details?: PersonalDetails };
 

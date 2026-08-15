@@ -7,11 +7,11 @@
  */
 export type ReceiptCard = {
   /**
-   * Card last 4 digits.
+   * Last four digits of the payment card number.
    */
   last_4_digits?: string;
   /**
-   * Card Scheme.
+   * Issuing card network of the payment card.
    */
   type?: string;
 };

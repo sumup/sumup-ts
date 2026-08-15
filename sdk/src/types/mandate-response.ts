@@ -15,7 +15,7 @@ export type MandateResponse = {
    */
   status?: "active" | "inactive";
   /**
-   * Merchant account for which the mandate is valid.
+   * Short unique identifier for the merchant for which the mandate is valid.
    */
   merchant_code?: string;
 };

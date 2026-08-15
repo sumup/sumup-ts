@@ -3,29 +3,80 @@
 /**
  * Receipt Merchant Data
  *
- * Receipt merchant data
+ * Merchant details displayed on a transaction receipt.
  */
 export type ReceiptMerchantData = {
   /**
    * Merchant profile details displayed on the receipt.
    */
   merchant_profile?: {
+    /**
+     * Short unique identifier for the merchant.
+     */
     merchant_code?: string;
+    /**
+     * Business name of the merchant.
+     */
     business_name?: string;
+    /**
+     * Company registration number of the merchant.
+     */
     company_registration_number?: string;
+    /**
+     * VAT identification number of the merchant.
+     */
     vat_id?: string;
+    /**
+     * Website of the merchant.
+     */
     website?: string;
+    /**
+     * Email address of the merchant.
+     */
     email?: string;
+    /**
+     * Language configured for the merchant profile.
+     */
     language?: string;
+    /**
+     * Business address of the merchant.
+     */
     address?: {
+      /**
+       * First line of the merchant address.
+       */
       address_line1?: string;
+      /**
+       * Second line of the merchant address.
+       */
       address_line2?: string;
+      /**
+       * City of the merchant address.
+       */
       city?: string;
+      /**
+       * Two-letter ISO 3166-1 alpha-2 country code of the merchant address.
+       */
       country?: string;
+      /**
+       * English name of the country in the merchant address.
+       */
       country_en_name?: string;
+      /**
+       * Localized name of the country in the merchant address.
+       */
       country_native_name?: string;
+      /**
+       * Region or state of the merchant address.
+       */
       region_name?: string;
+      /**
+       * Postal code of the merchant address.
+       */
       post_code?: string;
+      /**
+       * Landline phone number of the merchant.
+       */
       landline?: string;
     };
   };
