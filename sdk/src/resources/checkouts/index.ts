@@ -7,13 +7,10 @@ import {
 } from "../../core";
 import type {
   Checkout,
-  CheckoutAccepted,
   CheckoutCreateRequest,
   CheckoutSuccess,
   CheckoutUpdateRequest,
   ErrorBody,
-  ErrorExtended,
-  ProcessCheckout,
 } from "../../types";
 export type GetPaymentMethodsQueryParams = {
   amount?: number;
@@ -37,12 +34,6 @@ export type ListCheckoutsQueryParams = {
 };
 
 export type ListCheckoutsResponse = CheckoutSuccess[];
-
-export type ProcessCheckoutError =
-  | ErrorExtended /**
-   * List of error messages.
-   */
-  | ErrorExtended[];
 
 export type CreateApplePaySessionParams = {
   /**
@@ -180,35 +171,6 @@ export class Checkouts extends APIResource {
   ): Promise<WithResponse<CheckoutSuccess>> {
     return this._client.getWithResponse<CheckoutSuccess>({
       path: `/v0.1/checkouts/${checkoutId}`,
-      ...options,
-    });
-  }
-
-  /**
-   * Processing a checkout will attempt to charge the provided payment instrument for the amount of the specified checkout resource initiated in the `Create a checkout` endpoint.
-   *
-   * Follow this request with `Retrieve a checkout` to confirm its status.
-   */
-  process(
-    checkoutId: string,
-    body: ProcessCheckout,
-    options?: RequestOptions,
-  ): Promise<CheckoutSuccess | CheckoutAccepted> {
-    return this._client.put<CheckoutSuccess | CheckoutAccepted>({
-      path: `/v0.1/checkouts/${checkoutId}`,
-      body,
-      ...options,
-    });
-  }
-
-  processWithResponse(
-    checkoutId: string,
-    body: ProcessCheckout,
-    options?: RequestOptions,
-  ): Promise<WithResponse<CheckoutSuccess | CheckoutAccepted>> {
-    return this._client.putWithResponse<CheckoutSuccess | CheckoutAccepted>({
-      path: `/v0.1/checkouts/${checkoutId}`,
-      body,
       ...options,
     });
   }
