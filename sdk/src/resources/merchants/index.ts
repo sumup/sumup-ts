@@ -6,18 +6,6 @@ import {
   type WithResponse,
 } from "../../core";
 import type { ListPersonsResponseBody, Merchant, Person } from "../../types";
-export type GetMerchantQueryParams = {
-  version?: string;
-};
-
-export type ListPersonsQueryParams = {
-  version?: string;
-};
-
-export type GetPersonQueryParams = {
-  version?: string;
-};
-
 /**
  * API resource for the Merchants endpoints.
  *
@@ -27,26 +15,19 @@ export class Merchants extends APIResource {
   /**
    * Returns a Merchant for a valid Merchant code.
    */
-  get(
-    merchantCode: string,
-    query?: GetMerchantQueryParams,
-    options?: RequestOptions,
-  ): Promise<Merchant> {
+  get(merchantCode: string, options?: RequestOptions): Promise<Merchant> {
     return this._client.get<Merchant>({
       path: `/v1/merchants/${merchantCode}`,
-      query,
       ...options,
     });
   }
 
   getWithResponse(
     merchantCode: string,
-    query?: GetMerchantQueryParams,
     options?: RequestOptions,
   ): Promise<WithResponse<Merchant>> {
     return this._client.getWithResponse<Merchant>({
       path: `/v1/merchants/${merchantCode}`,
-      query,
       ...options,
     });
   }
@@ -56,24 +37,20 @@ export class Merchants extends APIResource {
    */
   listPersons(
     merchantCode: string,
-    query?: ListPersonsQueryParams,
     options?: RequestOptions,
   ): Promise<ListPersonsResponseBody> {
     return this._client.get<ListPersonsResponseBody>({
       path: `/v1/merchants/${merchantCode}/persons`,
-      query,
       ...options,
     });
   }
 
   listPersonsWithResponse(
     merchantCode: string,
-    query?: ListPersonsQueryParams,
     options?: RequestOptions,
   ): Promise<WithResponse<ListPersonsResponseBody>> {
     return this._client.getWithResponse<ListPersonsResponseBody>({
       path: `/v1/merchants/${merchantCode}/persons`,
-      query,
       ...options,
     });
   }
@@ -84,12 +61,10 @@ export class Merchants extends APIResource {
   getPerson(
     merchantCode: string,
     personId: string,
-    query?: GetPersonQueryParams,
     options?: RequestOptions,
   ): Promise<Person> {
     return this._client.get<Person>({
       path: `/v1/merchants/${merchantCode}/persons/${personId}`,
-      query,
       ...options,
     });
   }
@@ -97,12 +72,10 @@ export class Merchants extends APIResource {
   getPersonWithResponse(
     merchantCode: string,
     personId: string,
-    query?: GetPersonQueryParams,
     options?: RequestOptions,
   ): Promise<WithResponse<Person>> {
     return this._client.getWithResponse<Person>({
       path: `/v1/merchants/${merchantCode}/persons/${personId}`,
-      query,
       ...options,
     });
   }

@@ -7,10 +7,13 @@ import {
 } from "../../core";
 import type {
   Checkout,
+  CheckoutAccepted,
   CheckoutCreateRequest,
   CheckoutSuccess,
   CheckoutUpdateRequest,
   ErrorBody,
+  ErrorExtended,
+  ProcessCheckout,
 } from "../../types";
 export type GetPaymentMethodsQueryParams = {
   amount?: number;
@@ -34,6 +37,40 @@ export type ListCheckoutsQueryParams = {
 };
 
 export type ListCheckoutsResponse = CheckoutSuccess[];
+
+export type ProcessCheckoutResponse = Checkout & {
+  /**
+   * Transaction code of the successful transaction with which the payment for the checkout is completed.
+   */
+  readonly transaction_code?: string;
+  /**
+   * Unique identifier of the successful transaction that completed payment for the checkout.
+   */
+  readonly transaction_id?: string;
+  /**
+   * Name of the merchant.
+   */
+  merchant_name?: string;
+  /**
+   * URL where the payer is redirected after a redirect-based payment or SCA flow completes.
+   */
+  redirect_url?: string;
+  /**
+   * Details of the saved payment instrument created or reused during checkout processing.
+   */
+  payment_instrument?: {
+    /**
+     * Unique token of the saved payment instrument.
+     */
+    token?: string;
+  };
+};
+
+export type ProcessCheckoutError =
+  | ErrorExtended /**
+   * List of error messages.
+   */
+  | ErrorExtended[];
 
 export type CreateApplePaySessionParams = {
   /**
@@ -171,6 +208,41 @@ export class Checkouts extends APIResource {
   ): Promise<WithResponse<CheckoutSuccess>> {
     return this._client.getWithResponse<CheckoutSuccess>({
       path: `/v0.1/checkouts/${checkoutId}`,
+      ...options,
+    });
+  }
+
+  /**
+   * :::caution[PCI DSS compliance required]
+   * When you submit raw card details directly to the Checkout API, your systems store, process, or transmit cardholder data and are therefore subject to applicable [PCI DSS requirements](https://www.pcisecuritystandards.org/document_library/). You should only use this integration if your environment is appropriately PCI DSS compliant.
+   * :::
+   *
+   * Processing a checkout will attempt to charge the provided payment instrument for the amount of the specified checkout resource initiated in the `Create a checkout` endpoint.
+   *
+   * Follow this request with `Retrieve a checkout` to confirm its status.
+   */
+  process(
+    checkoutId: string,
+    body: ProcessCheckout,
+    options?: RequestOptions,
+  ): Promise<ProcessCheckoutResponse | CheckoutAccepted> {
+    return this._client.put<ProcessCheckoutResponse | CheckoutAccepted>({
+      path: `/v0.1/checkouts/${checkoutId}`,
+      body,
+      ...options,
+    });
+  }
+
+  processWithResponse(
+    checkoutId: string,
+    body: ProcessCheckout,
+    options?: RequestOptions,
+  ): Promise<WithResponse<ProcessCheckoutResponse | CheckoutAccepted>> {
+    return this._client.putWithResponse<
+      ProcessCheckoutResponse | CheckoutAccepted
+    >({
+      path: `/v0.1/checkouts/${checkoutId}`,
+      body,
       ...options,
     });
   }
