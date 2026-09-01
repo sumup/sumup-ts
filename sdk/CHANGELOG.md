@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.2.0](https://github.com/sumup/sumup-ts/compare/v0.1.9...v0.2.0) (2026-09-01)
+
+
+### ⚠ BREAKING CHANGES
+
+* **codegen:** normalize repeated query parameter names ([#442](https://github.com/sumup/sumup-ts/issues/442))
+
+### Bug Fixes
+
+* **codegen:** normalize repeated query parameter names ([#442](https://github.com/sumup/sumup-ts/issues/442)) ([fe23300](https://github.com/sumup/sumup-ts/commit/fe23300ddea72cde47348981ab1016363bcaaf14))
+
+
+### Chores
+
+* **deps-dev:** bump @biomejs/biome from 2.5.8 to 2.5.9 in /sdk ([#433](https://github.com/sumup/sumup-ts/issues/433)) ([7b7eddb](https://github.com/sumup/sumup-ts/commit/7b7eddb17af2b6d8b658d1ed1d41a985233d4128))
+* **deps-dev:** bump @biomejs/biome from 2.5.9 to 2.5.10 in /sdk ([#438](https://github.com/sumup/sumup-ts/issues/438)) ([a4490da](https://github.com/sumup/sumup-ts/commit/a4490da3438d9ead925a7d38a71dfc7644a7a612))
+* **deps-dev:** bump vitest from 4.1.10 to 4.1.11 in /sdk ([#439](https://github.com/sumup/sumup-ts/issues/439)) ([06ee829](https://github.com/sumup/sumup-ts/commit/06ee8298df7d6fe472ea2948a181a574e3fc376c))
+* synced file(s) with sumup/apis ([#436](https://github.com/sumup/sumup-ts/issues/436)) ([9a12e11](https://github.com/sumup/sumup-ts/commit/9a12e1156f6952f0bf36cac5eea8acbdae4680e4))
+* synced file(s) with sumup/apis ([#441](https://github.com/sumup/sumup-ts/issues/441)) ([e69b516](https://github.com/sumup/sumup-ts/commit/e69b5160bf972ad97ed8d8f98da4232fc46b3bdc))
+
 ## [0.1.9](https://github.com/sumup/sumup-ts/compare/v0.1.8...v0.1.9) (2026-08-19)
 
 
