@@ -38,7 +38,7 @@
     "build": "rslib build",
     "build:watch": "rslib build --watch",
     "inspect": "rslib inspect",
-    "test": "vitest",
+    "test": "rstest",
     "tsc": "tsc",
     "prerelease": "npm run build",
     "generate": "node ../codegen/dist/index.cjs ../openapi.json ./src/",
@@ -61,11 +61,11 @@
   "devDependencies": {
     "@biomejs/biome": "^2.1.2",
     "@rslib/core": "^0.23.0",
+    "@rstest/core": "^0.11.11",
     "rsbuild-plugin-dts": "^0.23.0",
     "rsbuild-plugin-publint": "^1.0.0",
     "ts-node": "^10.9.2",
     "typedoc": "^0.28.3",
-    "typescript": "^6.0.2",
-    "vitest": "^4.0.3"
+    "typescript": "^6.0.2"
   }
 }

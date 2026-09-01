@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, rs } from "@rstest/core";
 
 import { SumUp } from "../src";
 import { API_VERSION } from "../src/api-version";
@@ -65,13 +65,13 @@ describe("merge params", () => {
 });
 
 afterEach(() => {
-  vi.restoreAllMocks();
-  vi.useRealTimers();
+  rs.restoreAllMocks();
+  rs.useRealTimers();
 });
 
 describe("request options", () => {
   it("retries a request when the per-call override allows it", async () => {
-    const fetchMock = vi
+    const fetchMock = rs
       .fn()
       .mockRejectedValueOnce(new TypeError("network"))
       .mockResolvedValueOnce(
@@ -82,7 +82,7 @@ describe("request options", () => {
           status: 200,
         }),
       );
-    vi.stubGlobal("fetch", fetchMock);
+    rs.stubGlobal("fetch", fetchMock);
 
     const client = new SumUp({ maxRetries: 0 });
     const data = await client.checkouts.get("checkout-id", { maxRetries: 1 });
@@ -92,9 +92,9 @@ describe("request options", () => {
   });
 
   it("aborts a request when the per-call timeout is exceeded", async () => {
-    vi.useFakeTimers();
+    rs.useFakeTimers();
 
-    const fetchMock = vi.fn((_input: URL | RequestInfo, init?: RequestInit) => {
+    const fetchMock = rs.fn((_input: URL | RequestInfo, init?: RequestInit) => {
       return new Promise<Response>((_resolve, reject) => {
         const signal = init?.signal;
         signal?.addEventListener(
@@ -106,7 +106,7 @@ describe("request options", () => {
         );
       });
     });
-    vi.stubGlobal("fetch", fetchMock);
+    rs.stubGlobal("fetch", fetchMock);
 
     const client = new SumUp();
     const request = client.checkouts.get("checkout-id", { timeout: 10 });
@@ -114,16 +114,16 @@ describe("request options", () => {
       "Request timed out after 10ms.",
     );
 
-    await vi.advanceTimersByTimeAsync(10);
+    await rs.advanceTimersByTimeAsync(10);
 
     await assertion;
     expect(fetchMock).toHaveBeenCalledTimes(1);
   });
 
   it("returns parsed data and an unread response from companion withResponse methods", async () => {
-    vi.stubGlobal(
+    rs.stubGlobal(
       "fetch",
-      vi.fn().mockResolvedValue(
+      rs.fn().mockResolvedValue(
         new Response(JSON.stringify({ id: "merchant-id" }), {
           headers: {
             "content-type": "application/json",
@@ -142,9 +142,9 @@ describe("request options", () => {
   });
 
   it("still throws APIError from plain Promise-returning methods", async () => {
-    vi.stubGlobal(
+    rs.stubGlobal(
       "fetch",
-      vi.fn().mockResolvedValue(
+      rs.fn().mockResolvedValue(
         new Response(JSON.stringify({ message: "nope" }), {
           headers: {
             "content-type": "application/json",
@@ -165,7 +165,7 @@ describe("request options", () => {
 describe("generated signatures", () => {
   it("maps ergonomic repeated query parameter names to their wire names", () => {
     const client = new SumUp();
-    const getSpy = vi
+    const getSpy = rs
       .spyOn(client, "get")
       .mockReturnValue({} as ReturnType<typeof client.get>);
 
@@ -187,7 +187,7 @@ describe("generated signatures", () => {
 
   it("keeps request options in the final argument position", () => {
     const client = new SumUp();
-    const getSpy = vi
+    const getSpy = rs
       .spyOn(client, "get")
       .mockReturnValue({} as ReturnType<typeof client.get>);
 
@@ -202,7 +202,7 @@ describe("generated signatures", () => {
 
   it("generates companion response-aware methods", () => {
     const client = new SumUp();
-    const getWithResponseSpy = vi
+    const getWithResponseSpy = rs
       .spyOn(client, "getWithResponse")
       .mockResolvedValue({ data: [], response: new Response() });
 
