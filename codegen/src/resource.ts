@@ -7,6 +7,7 @@ import {
   getSortedSchemas,
   iterParams,
   iterPathConfig,
+  queryParameterName,
   responseSchema,
 } from "./base";
 import { fileWriter } from "./io";
@@ -205,7 +206,7 @@ export async function generateResource(
           }
         }
 
-        writer.w(`  '${param.name}'`);
+        writer.w(`  '${queryParameterName(param)}'`);
         if (!param.required) writer.w0("?");
         writer.w0(": ");
         schemaToTypes(param.schema, writer);
@@ -289,6 +290,9 @@ export class ${resourceClassName} extends APIResource {`);
     const queryParams = params.filter(
       (p) => "in" in p && p.in === "query",
     ) as OpenAPIV3_1.ParameterObject[];
+    const renamedQueryParams = queryParams
+      .map((param) => [queryParameterName(param), param.name] as const)
+      .filter(([name, wireName]) => name !== wireName);
 
     const successResponses = Object.entries(methodSpec.responses)
       .filter(([code]) => code.startsWith("2"))
@@ -333,7 +337,15 @@ export class ${resourceClassName} extends APIResource {`);
       writer.w("  body,");
     }
     if (queryParams.length > 0) {
-      writer.w("  query,");
+      if (renamedQueryParams.length > 0) {
+        writer.w("  query: this._transformQueryParams(query, {");
+        for (const [name, wireName] of renamedQueryParams) {
+          writer.w(`    '${name}': '${wireName}',`);
+        }
+        writer.w("  }),");
+      } else {
+        writer.w("  query,");
+      }
     }
     writer.w(`  ...options,
          })
@@ -369,7 +381,15 @@ export class ${resourceClassName} extends APIResource {`);
       writer.w("  body,");
     }
     if (queryParams.length > 0) {
-      writer.w("  query,");
+      if (renamedQueryParams.length > 0) {
+        writer.w("  query: this._transformQueryParams(query, {");
+        for (const [name, wireName] of renamedQueryParams) {
+          writer.w(`    '${name}': '${wireName}',`);
+        }
+        writer.w("  }),");
+      } else {
+        writer.w("  query,");
+      }
     }
     writer.w(`  ...options,
          })

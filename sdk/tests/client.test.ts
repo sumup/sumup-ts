@@ -163,6 +163,28 @@ describe("request options", () => {
 });
 
 describe("generated signatures", () => {
+  it("maps ergonomic repeated query parameter names to their wire names", () => {
+    const client = new SumUp();
+    const getSpy = vi
+      .spyOn(client, "get")
+      .mockReturnValue({} as ReturnType<typeof client.get>);
+
+    client.transactions.list("MC123", {
+      limit: 10,
+      statuses: ["SUCCESSFUL", "REFUNDED"],
+      users: ["user-1", "user-2"],
+    });
+
+    expect(getSpy).toHaveBeenCalledWith({
+      path: "/v2.1/merchants/MC123/transactions/history",
+      query: {
+        limit: 10,
+        "statuses[]": ["SUCCESSFUL", "REFUNDED"],
+        "users[]": ["user-1", "user-2"],
+      },
+    });
+  });
+
   it("keeps request options in the final argument position", () => {
     const client = new SumUp();
     const getSpy = vi

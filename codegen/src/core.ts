@@ -27,6 +27,19 @@ export class APIResource {
   constructor(client: ${apiName}) {
     this._client = client;
   }
+
+  protected _transformQueryParams(
+    query: QueryParams | undefined,
+    names: Record<string, string>,
+  ): QueryParams | undefined {
+    if (!query) {
+      return query;
+    }
+
+    return Object.fromEntries(
+      Object.entries(query).map(([name, value]) => [names[name] ?? name, value]),
+    );
+  }
 }
 
 // has to be any. the particular query params types don't like unknown
