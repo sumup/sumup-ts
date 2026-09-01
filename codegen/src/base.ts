@@ -134,6 +134,22 @@ export function getResponse(
   return inlineTypeName;
 }
 
+/**
+ * Returns the ergonomic SDK name for an OpenAPI query parameter.
+ *
+ * Some APIs use bracket-suffixed names to indicate repeated query parameters.
+ * The brackets are a wire-format concern, so array parameters omit them from
+ * the generated SDK surface.
+ */
+export function queryParameterName(param: OpenAPIV3_1.ParameterObject): string {
+  const schema = param.schema;
+  const isArray = schema && !("$ref" in schema) && schema.type === "array";
+
+  return isArray && param.name.endsWith("[]")
+    ? param.name.slice(0, -2)
+    : param.name;
+}
+
 type PathConfig = ReturnType<typeof iterPathConfig>[number];
 
 /**

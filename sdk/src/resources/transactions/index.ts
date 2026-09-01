@@ -32,17 +32,17 @@ export type ListTransactionsV2_1QueryParams = {
   transaction_code?: string;
   order?: "ascending" | "descending";
   limit?: number;
-  "users[]"?: string[];
-  "statuses[]"?: (
+  users?: string[];
+  statuses?: (
     | "SUCCESSFUL"
     | "CANCELLED"
     | "FAILED"
     | "REFUNDED"
     | "CHARGE_BACK"
   )[];
-  "payment_types[]"?: PaymentType[];
-  "entry_modes[]"?: EntryMode[];
-  "types[]"?: ("PAYMENT" | "REFUND" | "CHARGE_BACK")[];
+  payment_types?: PaymentType[];
+  entry_modes?: EntryMode[];
+  types?: ("PAYMENT" | "REFUND" | "CHARGE_BACK")[];
   changes_since?: string;
   newest_time?: string;
   newest_ref?: string;
@@ -154,7 +154,13 @@ export class Transactions extends APIResource {
   ): Promise<ListTransactionsV2_1Response> {
     return this._client.get<ListTransactionsV2_1Response>({
       path: `/v2.1/merchants/${merchantCode}/transactions/history`,
-      query,
+      query: this._transformQueryParams(query, {
+        users: "users[]",
+        statuses: "statuses[]",
+        payment_types: "payment_types[]",
+        entry_modes: "entry_modes[]",
+        types: "types[]",
+      }),
       ...options,
     });
   }
@@ -166,7 +172,13 @@ export class Transactions extends APIResource {
   ): Promise<WithResponse<ListTransactionsV2_1Response>> {
     return this._client.getWithResponse<ListTransactionsV2_1Response>({
       path: `/v2.1/merchants/${merchantCode}/transactions/history`,
-      query,
+      query: this._transformQueryParams(query, {
+        users: "users[]",
+        statuses: "statuses[]",
+        payment_types: "payment_types[]",
+        entry_modes: "entry_modes[]",
+        types: "types[]",
+      }),
       ...options,
     });
   }

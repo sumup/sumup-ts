@@ -2,7 +2,7 @@ import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { Case } from "change-case-all";
 import type { OpenAPIV3_1 } from "openapi-types";
-import { getRequestBody, iterPathConfig } from "./base";
+import { getRequestBody, iterPathConfig, queryParameterName } from "./base";
 
 export interface SampleCatalog {
   schemaVersion: 1;
@@ -154,7 +154,7 @@ function renderProgram(
     args.push(
       Object.fromEntries(
         selectedQueryParameters.map((parameter) => [
-          parameter.name,
+          queryParameterName(parameter),
           sampleParameter(spec, parameter),
         ]),
       ),
