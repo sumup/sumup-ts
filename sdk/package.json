@@ -39,6 +39,7 @@
     "build:watch": "rslib build --watch",
     "inspect": "rslib inspect",
     "test": "rstest",
+    "test:browser": "rstest --config rstest.browser.config.ts",
     "tsc": "tsc -p tsconfig.test.json",
     "prerelease": "npm run build",
     "generate": "node ../codegen/dist/index.cjs ../openapi.json ./src/",
@@ -61,8 +62,10 @@
   "devDependencies": {
     "@biomejs/biome": "^2.1.2",
     "@rslib/core": "^0.23.0",
+    "@rstest/browser": "^0.11.11",
     "@rstest/core": "^0.11.11",
     "@types/node": "^24.13.3",
+    "playwright": "^1.62.1",
     "rsbuild-plugin-dts": "^0.23.0",
     "rsbuild-plugin-publint": "^1.0.0",
     "ts-node": "^10.9.2",
