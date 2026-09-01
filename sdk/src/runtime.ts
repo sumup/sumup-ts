@@ -52,7 +52,13 @@ function getRuntimeInfo(): RuntimeInfo {
     };
   };
 
-  const isVercel = globalAny.process?.env?.VERCEL === "1";
+  const isVercel = (): boolean => {
+    try {
+      return globalAny.process?.env?.VERCEL === "1";
+    } catch {
+      return false;
+    }
+  };
 
   if (globalAny.Bun?.version) {
     cachedRuntimeInfo = {
@@ -76,7 +82,7 @@ function getRuntimeInfo(): RuntimeInfo {
 
   if (globalAny.process?.versions?.node) {
     cachedRuntimeInfo = {
-      runtime: isVercel ? "vercel" : "node",
+      runtime: isVercel() ? "vercel" : "node",
       runtimeVersion: globalAny.process.version || UNKNOWN,
       os: globalAny.process.platform || UNKNOWN,
       arch: normalizeArch(globalAny.process.arch || ""),
@@ -86,7 +92,7 @@ function getRuntimeInfo(): RuntimeInfo {
 
   if (globalAny.EdgeRuntime) {
     cachedRuntimeInfo = {
-      runtime: isVercel ? "vercel-edge" : "edge",
+      runtime: isVercel() ? "vercel-edge" : "edge",
       runtimeVersion: globalAny.process?.version || UNKNOWN,
       os: UNKNOWN,
       arch: `${globalAny.EdgeRuntime}`,
