@@ -5,10 +5,15 @@ export default defineConfig({
   lib: [
     {
       format: "esm",
+      syntax: "es2022",
       dts: true,
+      output: {
+        target: "web",
+      },
     },
     {
       format: "cjs",
+      syntax: "es2022",
       dts: {
         autoExtension: true,
       },

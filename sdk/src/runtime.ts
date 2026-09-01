@@ -29,10 +29,9 @@ function getRuntimeInfo(): RuntimeInfo {
     return cachedRuntimeInfo;
   }
 
-  const isVercel = typeof process !== "undefined" && process.env.VERCEL === "1";
-
   const globalAny = globalThis as {
     process?: {
+      env?: Record<string, string | undefined>;
       versions?: { node?: string };
       version?: string;
       platform?: string;
@@ -52,6 +51,8 @@ function getRuntimeInfo(): RuntimeInfo {
       userAgentData?: { platform?: string };
     };
   };
+
+  const isVercel = globalAny.process?.env?.VERCEL === "1";
 
   if (globalAny.Bun?.version) {
     cachedRuntimeInfo = {
