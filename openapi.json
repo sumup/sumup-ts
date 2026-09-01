@@ -3602,6 +3602,19 @@
             }
           },
           {
+            "name": "user.type",
+            "in": "query",
+            "description": "Filter the returned members by user type. Repeat this parameter to include multiple user types.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/UserType"
+              }
+            },
+            "style": "form",
+            "explode": true
+          },
+          {
             "name": "status",
             "in": "query",
             "description": "Filter the returned members by the membership status.",
@@ -8902,6 +8915,17 @@
           }
         }
       },
+      "UserType": {
+        "type": "string",
+        "description": "Type of the user account.",
+        "enum": [
+          "user",
+          "managed_user",
+          "service_account",
+          "system_account"
+        ],
+        "example": "user"
+      },
       "Metadata": {
         "description": "Set of user-defined key-value pairs attached to the object. Partial updates are not supported. When updating, always submit whole metadata. Maximum of 64 parameters are allowed in the object.",
         "type": "object",
@@ -8914,17 +8938,6 @@
         "type": "object",
         "example": {},
         "additionalProperties": true
-      },
-      "UserType": {
-        "type": "string",
-        "description": "Type of the user account.",
-        "enum": [
-          "user",
-          "managed_user",
-          "service_account",
-          "system_account"
-        ],
-        "example": "user"
       },
       "Address": {
         "externalDocs": {
