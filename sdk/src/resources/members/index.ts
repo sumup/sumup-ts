@@ -10,6 +10,7 @@ import type {
   Member,
   MembershipStatus,
   Metadata,
+  UserType,
 } from "../../types";
 export type ListMerchantMembersQueryParams = {
   offset?: number;
@@ -17,6 +18,7 @@ export type ListMerchantMembersQueryParams = {
   scroll?: boolean;
   email?: string;
   "user.id"?: string;
+  "user.type"?: UserType[];
   status?: MembershipStatus;
   roles?: string[];
 };
