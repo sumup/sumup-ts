@@ -11413,5 +11413,227 @@
         "description": "Delete the reader."
       }
     }
+  },
+  "webhooks": {
+    "readers.created": {
+      "post": {
+        "operationId": "ReaderCreatedWebhook",
+        "tags": [
+          "Readers"
+        ],
+        "summary": "Reader created",
+        "description": "Sent when a reader is paired to a merchant account and becomes available through the Readers API.",
+        "x-object": {
+          "$ref": "#/components/schemas/Reader"
+        },
+        "x-object-type": "reader",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Event"
+              },
+              "examples": {
+                "created": {
+                  "summary": "A reader created webhook event.",
+                  "value": {
+                    "id": "evt_reader_123",
+                    "type": "readers.created",
+                    "created_at": "2023-05-09T14:52:58.714Z",
+                    "object": {
+                      "id": "rdr_3MSAFM23CK82VSTT4BN6RWSQ65",
+                      "type": "reader",
+                      "url": "https://api.sumup.com/v0.1/merchants/MC0DE/readers/rdr_3MSAFM23CK82VSTT4BN6RWSQ65"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "2XX": {
+            "description": "Return any 2xx response to acknowledge successful delivery."
+          }
+        }
+      }
+    },
+    "readers.deleted": {
+      "post": {
+        "operationId": "ReaderDeletedWebhook",
+        "tags": [
+          "Readers"
+        ],
+        "summary": "Reader deleted",
+        "description": "Sent when a reader is unpaired from a merchant account and is no longer available through the Readers API.",
+        "x-object": {
+          "$ref": "#/components/schemas/Reader"
+        },
+        "x-object-type": "reader",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Event"
+              },
+              "examples": {
+                "deleted": {
+                  "summary": "A reader deleted webhook event.",
+                  "value": {
+                    "id": "evt_reader_456",
+                    "type": "readers.deleted",
+                    "created_at": "2023-05-10T09:21:33.004Z",
+                    "object": {
+                      "id": "rdr_3MSAFM23CK82VSTT4BN6RWSQ65",
+                      "type": "reader",
+                      "url": "https://api.sumup.com/v0.1/merchants/MC0DE/readers/rdr_3MSAFM23CK82VSTT4BN6RWSQ65"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "2XX": {
+            "description": "Return any 2xx response to acknowledge successful delivery."
+          }
+        }
+      }
+    },
+    "members.created": {
+      "post": {
+        "operationId": "MemberCreatedWebhook",
+        "tags": [
+          "Members"
+        ],
+        "summary": "Member created",
+        "description": "Sent when a member is created, invited, or accepts an invitation for a merchant account.",
+        "x-object": {
+          "$ref": "#/components/schemas/Member"
+        },
+        "x-object-type": "member",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Event"
+              },
+              "examples": {
+                "created": {
+                  "summary": "A member created webhook event.",
+                  "value": {
+                    "id": "evt_membership_123",
+                    "type": "members.created",
+                    "created_at": "2026-05-14T08:30:00Z",
+                    "object": {
+                      "id": "mem_123",
+                      "type": "member",
+                      "url": "https://api.sumup.com/v0.1/merchants/MC0DE/members/mem_123"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "2XX": {
+            "description": "Return any 2xx response to acknowledge successful delivery."
+          }
+        }
+      }
+    },
+    "members.updated": {
+      "post": {
+        "operationId": "MemberUpdatedWebhook",
+        "tags": [
+          "Members"
+        ],
+        "summary": "Member updated",
+        "description": "Sent when a member is updated, disabled, rejected, or expires for a merchant account.",
+        "x-object": {
+          "$ref": "#/components/schemas/Member"
+        },
+        "x-object-type": "member",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Event"
+              },
+              "examples": {
+                "updated": {
+                  "summary": "A member updated webhook event.",
+                  "value": {
+                    "id": "evt_membership_456",
+                    "type": "members.updated",
+                    "created_at": "2026-05-14T09:15:00Z",
+                    "object": {
+                      "id": "mem_123",
+                      "type": "member",
+                      "url": "https://api.sumup.com/v0.1/merchants/MC0DE/members/mem_123"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "2XX": {
+            "description": "Return any 2xx response to acknowledge successful delivery."
+          }
+        }
+      }
+    },
+    "members.deleted": {
+      "post": {
+        "operationId": "MemberDeletedWebhook",
+        "tags": [
+          "Members"
+        ],
+        "summary": "Member deleted",
+        "description": "Sent when a member is deleted from a merchant account.",
+        "x-object": {
+          "$ref": "#/components/schemas/Member"
+        },
+        "x-object-type": "member",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Event"
+              },
+              "examples": {
+                "deleted": {
+                  "summary": "A member deleted webhook event.",
+                  "value": {
+                    "id": "evt_membership_789",
+                    "type": "members.deleted",
+                    "created_at": "2026-05-14T10:45:00Z",
+                    "object": {
+                      "id": "mem_123",
+                      "type": "member",
+                      "url": "https://api.sumup.com/v0.1/merchants/MC0DE/members/mem_123"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "2XX": {
+            "description": "Return any 2xx response to acknowledge successful delivery."
+          }
+        }
+      }
+    }
   }
 }
