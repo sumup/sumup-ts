@@ -6,7 +6,10 @@ export default defineConfig({
     {
       format: "esm",
       syntax: "es2022",
-      dts: true,
+      dts: {
+        autoExtension: true,
+      },
+      redirect: { dts: { path: true, extension: true } },
       output: {
         target: "web",
       },
@@ -17,6 +20,7 @@ export default defineConfig({
       dts: {
         autoExtension: true,
       },
+      redirect: { dts: { path: true, extension: true } },
     },
   ],
   output: {
