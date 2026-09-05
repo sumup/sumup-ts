@@ -1,11 +1,8 @@
 import { resolve } from "node:path";
-import type { OpenAPIV3_1 } from "openapi-types";
 import { fileWriter } from "./io";
+import type { Document } from "./openapi";
 
-export async function generateApiVersion(
-  spec: OpenAPIV3_1.Document,
-  destDir: string,
-) {
+export async function generateApiVersion(spec: Document, destDir: string) {
   const outFile = resolve(destDir, "api-version.ts");
   const writer = fileWriter(outFile);
   const version = spec.info?.version || "unknown";

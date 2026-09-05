@@ -3,10 +3,10 @@ import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import SwaggerParser from "@apidevtools/swagger-parser";
-import type { OpenAPIV3_1 } from "openapi-types";
 import { describe, expect, it } from "vitest";
+import type { Document } from "./openapi";
 import { buildSampleCatalog, readSDKVersion } from "./samples";
+import { loadSpec } from "./spec";
 
 const repositoryRoot = resolve(
   dirname(fileURLToPath(import.meta.url)),
@@ -14,9 +14,7 @@ const repositoryRoot = resolve(
 );
 
 async function catalog() {
-  const spec = (await SwaggerParser.parse(
-    resolve(repositoryRoot, "openapi.json"),
-  )) as OpenAPIV3_1.Document;
+  const spec = await loadSpec(resolve(repositoryRoot, "openapi.json"));
   return buildSampleCatalog(
     spec,
     readSDKVersion(resolve(repositoryRoot, "sdk/package.json")),
@@ -25,7 +23,7 @@ async function catalog() {
 
 describe("code sample catalog", () => {
   it("prefers a whole-request example over property examples", () => {
-    const spec: OpenAPIV3_1.Document = {
+    const spec: Document = {
       openapi: "3.1.0",
       info: { title: "Samples", version: "1.0.0" },
       paths: {
@@ -62,6 +60,48 @@ describe("code sample catalog", () => {
     expect(generated).toContain('"selected": "request-selected"');
     expect(generated).toContain('"missing": "example"');
     expect(generated).not.toContain("property-");
+  });
+
+  it("uses 3.1 examples and nullable types in request samples", () => {
+    const spec: Document = {
+      openapi: "3.1.0",
+      info: { title: "Samples", version: "1.0.0" },
+      paths: {
+        "/samples": {
+          post: {
+            operationId: "CreateSample",
+            tags: ["Samples"],
+            requestBody: {
+              required: true,
+              content: {
+                "application/json": {
+                  schema: {
+                    type: "object",
+                    required: ["count", "empty", "kind"],
+                    properties: {
+                      count: { type: ["integer", "null"] },
+                      empty: { type: ["string", "null"], examples: [null] },
+                      kind: { const: "fixed" },
+                      details: {
+                        type: ["object", "null"],
+                        examples: [{ enabled: false }],
+                        properties: { enabled: { type: "boolean" } },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+            responses: { "204": { description: "Created" } },
+          },
+        },
+      },
+    };
+    const generated = buildSampleCatalog(spec, "test").samples[0]?.sample;
+    expect(generated).toContain('"count": 1');
+    expect(generated).toContain('"empty": null');
+    expect(generated).toContain('"kind": "fixed"');
+    expect(generated).toContain('"enabled": false');
   });
 
   it("is deterministic and follows the portal contract", async () => {

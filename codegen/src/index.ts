@@ -2,9 +2,7 @@
 
 import { existsSync, mkdirSync, rmSync } from "node:fs";
 import { resolve } from "node:path";
-import SwaggerParser from "@apidevtools/swagger-parser";
 import { program } from "commander";
-import type { OpenAPIV3_1 } from "openapi-types";
 import { generateIndex } from "./api";
 import { generateApiVersion } from "./api-version";
 import { generateCore } from "./core";
@@ -14,15 +12,8 @@ import {
   readSDKVersion,
   writeSampleCatalog,
 } from "./samples";
+import { loadSpec } from "./spec";
 import { generateTypes } from "./types";
-
-async function loadSpec(specFile: string): Promise<OpenAPIV3_1.Document> {
-  const rawSpec = await SwaggerParser.parse(specFile);
-  if (!("openapi" in rawSpec) || !rawSpec.openapi.startsWith("3.0")) {
-    throw new Error("Only OpenAPI 3.0 is currently supported");
-  }
-  return rawSpec as OpenAPIV3_1.Document;
-}
 
 /**
  * Main code generation function.

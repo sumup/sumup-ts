@@ -1,9 +1,9 @@
-import type { OpenAPIV3_1 } from "openapi-types";
 import { expect, test } from "vitest";
+import type { Document } from "./openapi";
 import { collectReferencedSchemas } from "./resolver";
 
 test("collects refs from additionalProperties alongside properties", () => {
-  const spec: OpenAPIV3_1.Document = {
+  const spec: Document = {
     openapi: "3.1.0",
     info: {
       title: "test",

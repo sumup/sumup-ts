@@ -1,18 +1,15 @@
 import { resolve } from "node:path";
 import { Case } from "change-case-all";
-import type { OpenAPIV3_1 } from "openapi-types";
 import { getSortedSchemas } from "./base";
 import { fileWriter } from "./io";
+import type { Document } from "./openapi";
 import { schemaNameToTypeName } from "./schema";
 
 /**
  * Generates the main index.ts file with the primary API client class.
  * Creates a client class that instantiates all resource classes as properties.
  */
-export async function generateIndex(
-  spec: OpenAPIV3_1.Document,
-  destDir: string,
-) {
+export async function generateIndex(spec: Document, destDir: string) {
   const apiName = "SumUp";
 
   if (!spec.components) return;

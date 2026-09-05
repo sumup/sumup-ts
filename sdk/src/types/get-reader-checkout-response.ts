@@ -8,7 +8,7 @@ export type GetReaderCheckoutResponse = {
     /**
      * Type of the card. Required for some countries
      */
-    card_type: "credit" | "debit" | null;
+    card_type: "credit" | "debit";
     /**
      * Unique identifier for the checkout
      */

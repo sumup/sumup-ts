@@ -3,6 +3,12 @@ import { dirname, resolve } from "node:path";
 import { Case } from "change-case-all";
 import type { OpenAPIV3_1 } from "openapi-types";
 import { getRequestBody, iterPathConfig, queryParameterName } from "./base";
+import type {
+  Document,
+  OperationObject,
+  ParameterObject,
+  PathItemObject,
+} from "./openapi";
 
 export interface SampleCatalog {
   schemaVersion: 1;
@@ -35,13 +41,13 @@ interface RequestExample {
 }
 
 type Schema = OpenAPIV3_1.SchemaObject | OpenAPIV3_1.ReferenceObject;
-type Parameter = OpenAPIV3_1.ParameterObject;
-type Operation = OpenAPIV3_1.OperationObject & {
+type Parameter = ParameterObject;
+type Operation = OperationObject & {
   "x-codegen"?: { method_name?: string };
 };
 
 export function buildSampleCatalog(
-  spec: OpenAPIV3_1.Document,
+  spec: Document,
   sdkVersion: string,
 ): SampleCatalog {
   if (!sdkVersion.trim()) {
@@ -113,9 +119,9 @@ function optionalText(key: "summary" | "description", value?: string) {
 }
 
 function renderProgram(
-  spec: OpenAPIV3_1.Document,
+  spec: Document,
   operation: Operation,
-  pathItem: OpenAPIV3_1.PathItemObject,
+  pathItem: PathItemObject,
   example: RequestExample,
 ): string {
   const tag = operation.tags?.[0];
@@ -214,10 +220,7 @@ function queryArguments(parameters: Parameter[]): Parameter[] {
   return parameters.length > 0 ? [parameters[0]] : [];
 }
 
-function sampleParameter(
-  spec: OpenAPIV3_1.Document,
-  parameter: Parameter,
-): unknown {
+function sampleParameter(spec: Document, parameter: Parameter): unknown {
   if (parameter.example !== undefined) {
     return parameter.example;
   }
@@ -233,7 +236,7 @@ function sampleParameter(
 }
 
 function sampleSchema(
-  spec: OpenAPIV3_1.Document,
+  spec: Document,
   schema: Schema | undefined,
   hint: string,
   depth = 0,
@@ -247,6 +250,10 @@ function sampleSchema(
     return resolved
       ? sampleSchema(spec, resolved, hint, depth + 1, allowSchemaExamples)
       : null;
+  }
+  if ("const" in schema) return schema.const;
+  if (allowSchemaExamples && schema.examples?.length) {
+    return coerceValue(spec, schema, schema.examples[0], hint, depth + 1);
   }
   if (allowSchemaExamples && schema.example !== undefined) {
     return coerceValue(spec, schema, schema.example, hint, depth + 1);
@@ -291,8 +298,13 @@ function sampleSchema(
     );
   }
 
-  const type = schema.type || (schema.properties ? "object" : undefined);
+  const type =
+    (Array.isArray(schema.type)
+      ? (schema.type.find((type) => type !== "null") ?? "null")
+      : schema.type) || (schema.properties ? "object" : undefined);
   switch (type) {
+    case "null":
+      return null;
     case "object": {
       const required = new Set(schema.required || []);
       return Object.fromEntries(
@@ -309,7 +321,13 @@ function sampleSchema(
     }
     case "array":
       return [
-        sampleSchema(spec, schema.items, hint, depth + 1, allowSchemaExamples),
+        sampleSchema(
+          spec,
+          "items" in schema ? schema.items : undefined,
+          hint,
+          depth + 1,
+          allowSchemaExamples,
+        ),
       ];
     case "boolean":
       return true;
@@ -323,7 +341,7 @@ function sampleSchema(
 }
 
 function coerceValue(
-  spec: OpenAPIV3_1.Document,
+  spec: Document,
   schema: Schema,
   value: unknown,
   hint: string,
@@ -336,6 +354,13 @@ function coerceValue(
       ? coerceValue(spec, resolved, value, hint, depth + 1)
       : value;
   }
+  if (
+    value === null &&
+    (schema.type === "null" ||
+      (Array.isArray(schema.type) && schema.type.includes("null")))
+  )
+    return null;
+  if ("const" in schema) return schema.const;
   if (schema.allOf?.length) {
     return Object.assign(
       {},
@@ -356,7 +381,10 @@ function coerceValue(
       : value;
   }
 
-  const type = schema.type || (schema.properties ? "object" : undefined);
+  const type =
+    (Array.isArray(schema.type)
+      ? (schema.type.find((type) => type !== "null") ?? "null")
+      : schema.type) || (schema.properties ? "object" : undefined);
   if (type === "object") {
     const raw = isObject(value) ? value : {};
     const properties = Object.entries(schema.properties || {});
@@ -397,7 +425,7 @@ function coerceValue(
 }
 
 function schemaMatchesValue(
-  spec: OpenAPIV3_1.Document,
+  spec: Document,
   schema: Schema,
   value: unknown,
 ): boolean {
@@ -416,6 +444,8 @@ function schemaHasExample(schema: Schema): boolean {
   return "$ref" in schema
     ? false
     : schema.example !== undefined ||
+        !!schema.examples?.length ||
+        "const" in schema ||
         schema.default !== undefined ||
         !!schema.enum?.length;
 }
@@ -434,7 +464,7 @@ function sampleString(schema: OpenAPIV3_1.SchemaObject, hint: string): string {
 }
 
 function requestExamples(
-  spec: OpenAPIV3_1.Document,
+  spec: Document,
   operation: Operation,
 ): RequestExample[] {
   const requestBody = resolveRequestBody(spec, operation.requestBody);
@@ -465,7 +495,7 @@ function requestExamples(
 }
 
 function resolveExample(
-  spec: OpenAPIV3_1.Document,
+  spec: Document,
   example: OpenAPIV3_1.ReferenceObject | OpenAPIV3_1.ExampleObject | undefined,
 ): Omit<RequestExample, "name"> {
   if (!example) {
@@ -487,7 +517,7 @@ function resolveExample(
 }
 
 function resolveRequestBody(
-  spec: OpenAPIV3_1.Document,
+  spec: Document,
   body: OpenAPIV3_1.ReferenceObject | OpenAPIV3_1.RequestBodyObject | undefined,
 ): OpenAPIV3_1.RequestBodyObject | null {
   if (!body) return null;
@@ -496,17 +526,14 @@ function resolveRequestBody(
 }
 
 function resolveParameter(
-  spec: OpenAPIV3_1.Document,
+  spec: Document,
   parameter: OpenAPIV3_1.ReferenceObject | Parameter,
 ): Parameter | null {
   if (!("$ref" in parameter)) return parameter;
   return resolveReference<Parameter>(spec, parameter.$ref);
 }
 
-function resolveReference<T>(
-  spec: OpenAPIV3_1.Document,
-  reference: string,
-): T | null {
+function resolveReference<T>(spec: Document, reference: string): T | null {
   if (!reference.startsWith("#/")) return null;
   let value: unknown = spec;
   for (const part of reference.slice(2).split("/")) {
