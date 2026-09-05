@@ -84,3 +84,57 @@ test("readOnly properties are generated as readonly", () => {
 "name": string,
 }`);
 });
+
+test("3.1 type arrays retain requiredness and object properties", () => {
+  expect(
+    render({
+      type: "object",
+      required: ["name"],
+      properties: {
+        name: { type: ["string", "null"] },
+        count: { type: ["integer", "null"] },
+      },
+    }),
+  ).toBe('{"name": (string) | (null),\n"count"?: (number) | (null),\n}');
+  expect(
+    render({
+      type: ["object", "null"],
+      properties: { id: { type: "string" } },
+    }),
+  ).toBe('({"id"?: string,\n}) | (null)');
+  expect(render({ type: ["array", "null"], items: { type: "string" } })).toBe(
+    "((string)[]) | (null)",
+  );
+});
+
+test("3.1 enums and constants constrain nullable types", () => {
+  expect(render({ type: ["string", "null"], enum: ["credit", "debit"] })).toBe(
+    '"credit" | "debit"',
+  );
+  expect(render({ enum: ["credit", null] })).toBe('"credit" | null');
+  expect(render({ type: "null" })).toBe("null");
+  expect(render({ const: false })).toBe("false");
+  expect(render({ const: null })).toBe("null");
+});
+
+test("nullable references are grouped inside intersections", () => {
+  const schema: Schema = {
+    allOf: [
+      { anyOf: [{ $ref: "#/components/schemas/Error" }, { type: "null" }] },
+      { type: "object", properties: { id: { type: "string" } } },
+    ],
+  };
+  expect(render(schema)).toBe(
+    '\n& ((ErrorBody) | (null))& ({"id"?: string,\n})',
+  );
+  expect([...collectSchemaRefs(schema)]).toEqual(["ErrorBody"]);
+});
+
+test("composition constrains sibling types instead of treating null as nullable", () => {
+  expect(
+    render({
+      type: "null",
+      allOf: [{ $ref: "#/components/schemas/ResourceType" }],
+    }),
+  ).toBe("\n& (null)& (\n& (ResourceType))");
+});

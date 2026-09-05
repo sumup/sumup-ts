@@ -1,15 +1,12 @@
 import { resolve } from "node:path";
-import type { OpenAPIV3_1 } from "openapi-types";
 import { fileWriter } from "./io";
+import type { Document } from "./openapi";
 
 /**
  * Generates the core.ts file containing base classes and types used by all resources.
  * This includes APIResource base class, error handling, and shared response helpers.
  */
-export async function generateCore(
-  spec: OpenAPIV3_1.Document,
-  destDir: string,
-) {
+export async function generateCore(spec: Document, destDir: string) {
   if (!spec.components) return;
 
   const outFile = resolve(destDir, "core.ts");

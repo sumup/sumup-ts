@@ -53,11 +53,11 @@
     "tsc": "tsc"
   },
   "dependencies": {
+    "@apidevtools/swagger-parser": "^12.1.0",
     "@biomejs/js-api": "^6.0.0",
     "@biomejs/wasm-nodejs": "^2.5.10",
     "change-case-all": "^2.1.0",
     "commander": "^15.0.0",
-    "swagger-parser": "^10.0.3",
     "ts-pattern": "^5.9.0"
   },
   "devDependencies": {

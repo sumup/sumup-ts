@@ -1,11 +1,12 @@
 import type { OpenAPIV3_1 } from "openapi-types";
+import type { Document, OperationObject } from "./openapi";
 
 /**
  * Collects all schema references used by operations with a specific tag.
  * Recursively traverses schemas to find all dependencies.
  */
 export const collectReferencedSchemas = (
-  spec: OpenAPIV3_1.Document,
+  spec: Document,
   tag: string,
 ): Set<string> => {
   const visitedSchemas = new Set<string>();
@@ -57,7 +58,7 @@ export const collectReferencedSchemas = (
     }
   };
 
-  const processOperation = (operation: OpenAPIV3_1.OperationObject) => {
+  const processOperation = (operation: OperationObject) => {
     // Process parameters
     if (operation.parameters) {
       for (const param of operation.parameters) {
@@ -106,7 +107,7 @@ export const collectReferencedSchemas = (
       "trace",
     ]) {
       const operation = pathItem[method as keyof typeof pathItem] as
-        | OpenAPIV3_1.OperationObject
+        | OperationObject
         | undefined;
       if (operation?.tags?.includes(tag)) {
         processOperation(operation);

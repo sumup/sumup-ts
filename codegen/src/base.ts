@@ -1,12 +1,15 @@
 import { Case } from "change-case-all";
 import type { OpenAPIV3_1 } from "openapi-types";
 import { OpenAPIV3 } from "openapi-types";
+import type { Document, OperationObject, ParameterObject } from "./openapi";
 import { refToSchemaName, type Schema } from "./schema";
 import { bodyType, responseType, topologicalSort } from "./util";
 
 const HttpMethods = OpenAPIV3.HttpMethods;
 
-const getJsonMediaType = (content?: OpenAPIV3_1.ContentObject) => {
+const getJsonMediaType = (
+  content?: Record<string, OpenAPIV3_1.MediaTypeObject>,
+) => {
   if (!content) {
     return null;
   }
@@ -23,7 +26,9 @@ const getJsonMediaType = (content?: OpenAPIV3_1.ContentObject) => {
   return content[selectedMediaType] || null;
 };
 
-const getJsonSchemaFromContent = (content?: OpenAPIV3_1.ContentObject) => {
+const getJsonSchemaFromContent = (
+  content?: Record<string, OpenAPIV3_1.MediaTypeObject>,
+) => {
   return getJsonMediaType(content)?.schema || null;
 };
 
@@ -31,7 +36,7 @@ const getJsonSchemaFromContent = (content?: OpenAPIV3_1.ContentObject) => {
  * Returns a list of schema names sorted by dependency order.
  * Schemas that depend on others come after their dependencies.
  */
-export const getSortedSchemas = (spec: OpenAPIV3_1.Document) => {
+export const getSortedSchemas = (spec: Document) => {
   return topologicalSort(
     Object.keys(spec.components?.schemas || {}).map((name) => [
       name,
@@ -46,7 +51,7 @@ export const getSortedSchemas = (spec: OpenAPIV3_1.Document) => {
  * Extracts the response schema from a response object (if it exists)
  */
 export function responseSchema(
-  o: OpenAPIV3_1.ResponseObject | OpenAPIV3_1.ReferenceObject,
+  o: OpenAPIV3_1.ResponseObject | OpenAPIV3_1.ReferenceObject | undefined,
 ) {
   if (!(o && "content" in o)) {
     return null;
@@ -60,7 +65,7 @@ export function responseSchema(
  */
 export function getRequestBody(
   operationId: string,
-  o?: OpenAPIV3_1.OperationObject,
+  o?: OperationObject,
 ): {
   typeName: string;
   required: boolean;
@@ -125,7 +130,7 @@ export function getResponse(
   }
 
   if (schema.type === "array") {
-    if ("$ref" in schema.items) {
+    if (schema.items && "$ref" in schema.items) {
       return `${refTypeName(refToSchemaName(schema.items.$ref))}[]`;
     }
     return null;
@@ -141,9 +146,13 @@ export function getResponse(
  * The brackets are a wire-format concern, so array parameters omit them from
  * the generated SDK surface.
  */
-export function queryParameterName(param: OpenAPIV3_1.ParameterObject): string {
+export function queryParameterName(param: ParameterObject): string {
   const schema = param.schema;
-  const isArray = schema && !("$ref" in schema) && schema.type === "array";
+  const isArray =
+    schema &&
+    !("$ref" in schema) &&
+    (schema.type === "array" ||
+      (Array.isArray(schema.type) && schema.type.includes("array")));
 
   return isArray && param.name.endsWith("[]")
     ? param.name.slice(0, -2)
@@ -155,7 +164,7 @@ type PathConfig = ReturnType<typeof iterPathConfig>[number];
 /**
  * Iterates over all path and method combinations in the OpenAPI spec
  */
-export function iterPathConfig(paths: OpenAPIV3_1.Document["paths"]) {
+export function iterPathConfig(paths: Document["paths"]) {
   if (!paths) return [];
 
   return Object.entries(paths).flatMap(([path, handlers]) => {
@@ -175,8 +184,8 @@ export function iterPathConfig(paths: OpenAPIV3_1.Document["paths"]) {
   });
 }
 
-type Param = Omit<OpenAPIV3_1.ParameterObject, "schema"> &
-  Required<Pick<OpenAPIV3_1.ParameterObject, "schema">>;
+type Param = Omit<ParameterObject, "schema"> &
+  Required<Pick<ParameterObject, "schema">>;
 
 interface IterParamsResult extends PathConfig {
   pathParams: Param[];
@@ -186,7 +195,7 @@ interface IterParamsResult extends PathConfig {
 /**
  * Iterates over all path and method combinations, extracting path and query parameters
  */
-export function iterParams(paths: OpenAPIV3_1.Document["paths"]) {
+export function iterParams(paths: Document["paths"]) {
   const collectedParams: IterParamsResult[] = [];
   for (const { methodSpec: conf, ...others } of iterPathConfig(paths)) {
     const params = conf.parameters;

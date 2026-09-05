@@ -30,3 +30,16 @@ test("preserves array query parameter names without a bracket suffix", () => {
     }),
   ).toBe("include");
 });
+
+test("normalizes array query parameters with a 3.1 type union", () => {
+  expect(
+    queryParameterName({
+      in: "query",
+      name: "statuses[]",
+      schema: {
+        type: ["array", "null"],
+        items: { type: "string" },
+      },
+    }),
+  ).toBe("statuses");
+});

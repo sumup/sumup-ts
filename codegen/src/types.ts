@@ -4,6 +4,7 @@ import { Case } from "change-case-all";
 import type { OpenAPIV3_1 } from "openapi-types";
 import { getSortedSchemas } from "./base";
 import { type FileWriter, fileWriter } from "./io";
+import type { Document } from "./openapi";
 import { schemaNameToTypeName, schemaToTypes } from "./schema";
 import { docComment, extractDoc } from "./util";
 
@@ -37,10 +38,7 @@ const renderSchemaType = (schema: OpenAPIV3_1.SchemaObject) => {
 /**
  * Generates the sdk/src/types folder with one file per component schema.
  */
-export async function generateTypes(
-  spec: OpenAPIV3_1.Document,
-  destDir: string,
-) {
+export async function generateTypes(spec: Document, destDir: string) {
   const typesDir = resolve(destDir, "types");
   rmSync(typesDir, { recursive: true, force: true });
   mkdirSync(typesDir, { recursive: true });

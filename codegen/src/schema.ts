@@ -22,15 +22,6 @@ export type SchemaToTypesOptions = {
 
 const defaultRefName = (name: string) => name;
 
-/**
- * Helper to add nullable suffix to a type if the schema is nullable
- */
-const withNullable = (schema: Schema, writer: FileWriter) => {
-  if ("nullable" in schema) {
-    writer.w0(" | null");
-  }
-};
-
 const hasExplicitAdditionalProperties = (
   schema: OpenAPIV3_1.SchemaObject,
 ): boolean =>
@@ -39,7 +30,7 @@ const hasExplicitAdditionalProperties = (
 
 const writeAdditionalPropertiesRecord = (
   schema: OpenAPIV3_1.SchemaObject,
-  writer: FileWriter,
+  writer: Pick<FileWriter, "w" | "w0">,
   options: SchemaToTypesOptions,
 ): void => {
   writer.w0("Record<string, ");
@@ -56,57 +47,78 @@ const writeAdditionalPropertiesRecord = (
  */
 export const schemaToTypes = (
   schema: Schema,
-  writer: FileWriter,
+  writer: Pick<FileWriter, "w" | "w0">,
   options: SchemaToTypesOptions = {},
 ): void => {
   const refName = options.refName || defaultRefName;
   const onRef = options.onRef;
+
+  // Composition keywords constrain sibling types as intersections in JSON Schema.
+  if (
+    !("$ref" in schema) &&
+    schema.type &&
+    (schema.allOf || schema.oneOf || schema.anyOf)
+  ) {
+    const { allOf, oneOf, anyOf, ...base } = schema;
+    const parts: Schema[] = [base];
+    if (allOf) parts.push({ allOf });
+    if (oneOf) parts.push({ oneOf });
+    if (anyOf) parts.push({ anyOf });
+    schemaToTypes({ allOf: parts }, writer, options);
+    return;
+  }
+
+  // Enum and const constrain the entire type union, including null.
+  if ("const" in schema) {
+    writer.w0(JSON.stringify(schema.const));
+    return;
+  }
+  if ("enum" in schema && schema.enum) {
+    writer.w0(
+      schema.enum.map((value) => JSON.stringify(value)).join(" | ") || "never",
+    );
+    return;
+  }
+  if ("type" in schema && Array.isArray(schema.type)) {
+    schema.type.forEach((type, index) => {
+      if (index > 0) writer.w0(" | ");
+      writer.w0("(");
+      schemaToTypes({ ...schema, type } as Schema, writer, options);
+      writer.w0(")");
+    });
+    return;
+  }
 
   match(schema)
     .with({ $ref: P.string }, (s) => {
       const typeName = refToSchemaName(s.$ref);
       onRef?.(typeName);
       writer.w0(refName(typeName));
-      withNullable(s, writer);
     })
-    .with({ enum: P.array(P.not(P.nullish)) }, (s) => {
-      s.enum!.forEach((arm, i) => {
-        if (i > 0) writer.w0("| ");
-        writer.w(JSON.stringify(arm));
-      });
-      withNullable(s, writer);
+    .with({ type: "null" }, () => {
+      writer.w0("null");
     })
-    .with({ type: "boolean" }, (s) => {
+    .with({ type: "boolean" }, () => {
       writer.w0("boolean");
-      withNullable(s, writer);
     })
-    .with({ type: "string", format: "date-time" }, (s) => {
+    .with({ type: "string" }, () => {
       writer.w0("string");
-      withNullable(s, writer);
     })
-    .with({ type: "string" }, (s) => {
-      writer.w0("string");
-      withNullable(s, writer);
-    })
-    .with({ type: "number" }, (s) => {
+    .with({ type: "number" }, () => {
       writer.w0("number");
-      withNullable(s, writer);
     })
-    .with({ type: "integer" }, (s) => {
+    .with({ type: "integer" }, () => {
       writer.w0("number");
-      withNullable(s, writer);
     })
     .with({ type: "array" }, (s) => {
       writer.w0("(");
-      schemaToTypes(s.items, writer, options);
+      schemaToTypes(s.items ?? {}, writer, options);
       writer.w0(")[]");
-      withNullable(s, writer);
     })
     .with({ type: "object" }, (s) => {
       // record type, which only tells us the type of the values
       if (!s.properties || Object.keys(s.properties).length === 0) {
         writeAdditionalPropertiesRecord(s, writer, options);
-        withNullable(s, writer);
         return;
       }
 
@@ -136,7 +148,6 @@ export const schemaToTypes = (
         }
         writer.w0(">");
       }
-      withNullable(s, writer);
     })
     .with({ oneOf: P.not(P.nullish) }, (s) => {
       writer.w("");
@@ -146,9 +157,18 @@ export const schemaToTypes = (
           writer.w(comment);
         }
         writer.w0("| ");
+        writer.w0("(");
         schemaToTypes(sub, writer, options);
+        writer.w0(")");
       }
-      withNullable(s, writer);
+    })
+    .with({ anyOf: P.not(P.nullish) }, (s) => {
+      s.anyOf!.forEach((sub, index) => {
+        if (index > 0) writer.w0(" | ");
+        writer.w0("(");
+        schemaToTypes(sub, writer, options);
+        writer.w0(")");
+      });
     })
     .with({ allOf: P.not(P.nullish) }, (s) => {
       writer.w("");
@@ -158,12 +178,13 @@ export const schemaToTypes = (
           writer.w(comment);
         }
         writer.w0("& ");
+        writer.w0("(");
         schemaToTypes(sub, writer, options);
+        writer.w0(")");
       }
-      withNullable(s, writer);
     })
     .with({}, () => {
-      writer.w0("Record<string, unknown>");
+      writer.w0("unknown");
     })
     .otherwise((s) => {
       throw Error(`UNHANDLED SCHEMA: ${JSON.stringify(s, null, 2)}`);
@@ -186,7 +207,7 @@ const collectSchemaRefsInner = (schema: Schema, refs: Set<string>): void => {
     collectSchemaRefsInner(schema.additionalProperties, refs);
   }
 
-  if (schema.items) {
+  if ("items" in schema && schema.items) {
     collectSchemaRefsInner(schema.items, refs);
   }
 
@@ -194,6 +215,11 @@ const collectSchemaRefsInner = (schema: Schema, refs: Set<string>): void => {
     for (const subSchema of schema.allOf) {
       collectSchemaRefsInner(subSchema, refs);
     }
+  }
+
+  if (schema.anyOf) {
+    for (const subSchema of schema.anyOf)
+      collectSchemaRefsInner(subSchema, refs);
   }
 
   if (schema.oneOf) {

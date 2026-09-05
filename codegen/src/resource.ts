@@ -11,6 +11,7 @@ import {
   responseSchema,
 } from "./base";
 import { fileWriter } from "./io";
+import type { Document, ParameterObject } from "./openapi";
 import { schemaNameToTypeName, schemaToTypes } from "./schema";
 import {
   docComment,
@@ -27,7 +28,7 @@ import {
  */
 export async function generateResource(
   tag: OpenAPIV3_1.TagObject,
-  spec: OpenAPIV3_1.Document<{
+  spec: Document<{
     "x-codegen": {
       method_name?: string;
     };
@@ -111,10 +112,10 @@ export async function generateResource(
     }
 
     const successResponse =
-      methodSpec.responses["200"] ||
-      methodSpec.responses["201"] ||
-      methodSpec.responses["202"] ||
-      methodSpec.responses["204"];
+      methodSpec.responses?.["200"] ||
+      methodSpec.responses?.["201"] ||
+      methodSpec.responses?.["202"] ||
+      methodSpec.responses?.["204"];
 
     const successSchema = responseSchema(
       successResponse
@@ -126,7 +127,7 @@ export async function generateResource(
       schemaToTypes(successSchema, collectorWriter, { onRef: addSharedType });
     }
 
-    const inlineErrorSchemas = Object.entries(methodSpec.responses)
+    const inlineErrorSchemas = Object.entries(methodSpec.responses ?? {})
       .filter(([code]) => !code.startsWith("2"))
       .map(([, response]) => resolveResponseObject(response) || response)
       .map((response) => responseSchema(response))
@@ -147,7 +148,7 @@ export async function generateResource(
     );
     const pathParams = params.filter(
       (p) => "in" in p && p.in === "path",
-    ) as OpenAPIV3_1.ParameterObject[];
+    ) as ParameterObject[];
 
     for (const pathParam of pathParams) {
       schemaToTypes(pathParam.schema!, collectorWriter, {
@@ -155,7 +156,7 @@ export async function generateResource(
       });
     }
 
-    Object.entries(methodSpec.responses)
+    Object.entries(methodSpec.responses ?? {})
       .filter(([code]) => code.startsWith("2"))
       .map(([, response]) => resolveResponseObject(response) || response)
       .map((response) =>
@@ -216,10 +217,10 @@ export async function generateResource(
     }
 
     const successResponse =
-      methodSpec.responses["200"] ||
-      methodSpec.responses["201"] ||
-      methodSpec.responses["202"] ||
-      methodSpec.responses["204"];
+      methodSpec.responses?.["200"] ||
+      methodSpec.responses?.["201"] ||
+      methodSpec.responses?.["202"] ||
+      methodSpec.responses?.["204"];
 
     const resp = responseSchema(
       successResponse
@@ -232,7 +233,7 @@ export async function generateResource(
       writer.w("\n");
     }
 
-    const inlineErrorSchemas = Object.entries(methodSpec.responses)
+    const inlineErrorSchemas = Object.entries(methodSpec.responses ?? {})
       .filter(([code]) => !code.startsWith("2"))
       .map(([, response]) => resolveResponseObject(response) || response)
       .map((response) => responseSchema(response))
@@ -286,15 +287,15 @@ export class ${resourceClassName} extends APIResource {`);
     );
     const pathParams = params.filter(
       (p) => "in" in p && p.in === "path",
-    ) as OpenAPIV3_1.ParameterObject[];
+    ) as ParameterObject[];
     const queryParams = params.filter(
       (p) => "in" in p && p.in === "query",
-    ) as OpenAPIV3_1.ParameterObject[];
+    ) as ParameterObject[];
     const renamedQueryParams = queryParams
       .map((param) => [queryParameterName(param), param.name] as const)
       .filter(([name, wireName]) => name !== wireName);
 
-    const successResponses = Object.entries(methodSpec.responses)
+    const successResponses = Object.entries(methodSpec.responses ?? {})
       .filter(([code]) => code.startsWith("2"))
       .map(([, response]) => resolveResponseObject(response) || response)
       .map((response) =>
