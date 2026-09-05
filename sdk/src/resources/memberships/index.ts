@@ -15,7 +15,7 @@ export type ListMembershipsQueryParams = {
   "resource.attributes.sandbox"?: boolean;
   "resource.name"?: string;
   "resource.parent.id"?: string | null;
-  "resource.parent.type"?: ResourceType | null;
+  "resource.parent.type"?: null & ResourceType;
   roles?: string[];
 };
 
