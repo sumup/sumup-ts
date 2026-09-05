@@ -4,6 +4,8 @@ import * as Core from "./core";
 import { buildRuntimeHeaders } from "./runtime";
 import { VERSION } from "./version";
 
+const DEFAULT_HOST = "https://api.sumup.com";
+
 export type APIConfig = {
   apiKey?: string;
   host?: string;
@@ -19,7 +21,7 @@ export class HTTPClient {
 
   constructor({
     apiKey,
-    host = "https://api.sumup.com",
+    host = DEFAULT_HOST,
     baseParams = {},
     maxRetries = 0,
     timeout,
