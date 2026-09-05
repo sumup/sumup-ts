@@ -122,37 +122,40 @@ const { data, response } = await client.merchants.getWithResponse(merchantCode);
 console.info(response.status, data);
 ```
 
-## Webhooks
+## Events
 
-The SDK includes helpers to verify and parse SumUp webhooks using the same
-signature model as the other SDKs:
-
-- `X-SumUp-Webhook-Signature`
-- `X-SumUp-Webhook-Timestamp`
-- signed payload format `v1:<unix_timestamp>:<raw_body>`
+Receive signed event notifications and register callbacks for the changes your application needs:
 
 ```ts
-import SumUp, {
-  CheckoutCreatedEvent,
-  SIGNATURE_HEADER,
-  TIMESTAMP_HEADER,
-} from "@sumup/sdk";
+import SumUp, { SIGNATURE_HEADER } from "@sumup/sdk";
 
 const client = new SumUp({ apiKey: process.env.SUMUP_API_KEY });
-const webhooks = client.webhookHandler(process.env.SUMUP_WEBHOOK_SECRET!);
+const secret = process.env.SUMUP_EVENT_SECRET;
+if (!secret) throw new Error("SUMUP_EVENT_SECRET is required");
 
-const body = await request.text();
-const event = await webhooks.verifyAndParse(
-  body,
+const events = client.eventsHandler(secret, event => {
+  console.info("Unhandled event", event.id, event.type);
+});
+events.on("members.updated", async event => {
+  const member = await event.fetchObject();
+  console.info("Member updated", member.id);
+});
+
+// Inside your HTTP handler, pass the unchanged request body and signature.
+await events.handle(
+  await request.arrayBuffer(),
   request.headers.get(SIGNATURE_HEADER) ?? "",
-  request.headers.get(TIMESTAMP_HEADER) ?? "",
 );
-
-if (event instanceof CheckoutCreatedEvent) {
-  const checkout = await event.fetchObject();
-  console.info(checkout.status);
-}
+// Return a 2xx response after processing succeeds.
 ```
+
+The handler verifies the signature before running callbacks and waits for them to finish.
+
+For a standard Fetch `Request`, use `await events.handleRequest(request)` instead.
+
+Make callbacks idempotent and use `event.id` to deduplicate deliveries. Return a `5xx` response if processing fails so delivery can be retried. For queued processing, verify before storing the payload.
+
+See the [Node.js / Express](https://github.com/sumup/sumup-ts/tree/main/examples/events-nodejs), [Deno](https://github.com/sumup/sumup-ts/tree/main/examples/events-deno), and [Bun](https://github.com/sumup/sumup-ts/tree/main/examples/events-bun) examples for complete receivers and error handling.
 
 ## Examples
 
@@ -224,30 +227,13 @@ npx tsx index.ts
 
 Then open `http://localhost:8080/login` in your browser to start the flow.
 
-### `examples/webhooks`
+### Event receivers
 
-Runs a minimal Express server that verifies SumUp webhook signatures, parses the
-event payload, and optionally fetches the referenced resource.
+Each example verifies raw request bytes and dispatches typed events. See its README for setup:
 
-Required environment variables:
-
-```bash
-export SUMUP_WEBHOOK_SECRET="whsec_..."
-```
-
-Optional environment variables:
-
-```bash
-export SUMUP_API_KEY="sup_sk_..."
-export PORT="3000"
-```
-
-Run it with:
-
-```bash
-cd examples/webhooks
-npx tsx index.ts
-```
+- [Node.js / Express](https://github.com/sumup/sumup-ts/tree/main/examples/events-nodejs) (default)
+- [Deno](https://github.com/sumup/sumup-ts/tree/main/examples/events-deno), using `Deno.serve`
+- [Bun](https://github.com/sumup/sumup-ts/tree/main/examples/events-bun), using `Bun.serve`
 
 ## Support
 

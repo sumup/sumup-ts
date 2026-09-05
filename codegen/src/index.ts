@@ -6,6 +6,7 @@ import { program } from "commander";
 import { generateIndex } from "./api";
 import { generateApiVersion } from "./api-version";
 import { generateCore } from "./core";
+import { generateEvents } from "./events";
 import { generateResource } from "./resource";
 import {
   buildSampleCatalog,
@@ -38,6 +39,7 @@ async function generate(specFile: string, destDir: string) {
   await generateApiVersion(spec, destDirAbs);
   await generateTypes(spec, destDirAbs);
   await generateIndex(spec, destDirAbs);
+  await generateEvents(spec, destDirAbs);
   await generateCore(spec, destDirAbs);
   for (const t of spec.tags || []) {
     await generateResource(t, spec, destDirAbs);

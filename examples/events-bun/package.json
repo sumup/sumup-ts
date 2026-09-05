@@ -1,0 +1,12 @@
+{
+  "name": "events-bun",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "bun run index.ts"
+  },
+  "dependencies": {
+    "@sumup/sdk": "file:../../sdk"
+  }
+}
