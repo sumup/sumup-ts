@@ -203,33 +203,48 @@ describe("parseEventNotification", () => {
     bytes.fill(0);
     expect((await parsed).id).toBe("evt_123");
   });
-  it.each([
-    "{",
-    "null",
-    "[]",
-    "{}",
-    `${payload()} {}`,
-    payload().replace("2026-04-11T10:00:00Z", "invalid"),
-    payload().replace("2026-04-11T10:00:00Z", "1"),
-    payload("members.updated", "reader"),
-  ])("rejects invalid envelope %s", (body) => {
-    expect(() =>
-      client.parseEventNotificationWithoutVerification(body),
-    ).toThrow(EventPayloadError);
+  it.each(["{", "null", "[]", "42", `${payload()} {}`])(
+    "rejects input that cannot be decoded as a JSON object: %s",
+    (body) => {
+      expect(() =>
+        client.parseEventNotificationWithoutVerification(body),
+      ).toThrow(EventPayloadError);
+    },
+  );
+  it.each(["id", "type", "created_at", "object"])(
+    "does not require %s",
+    (key) => {
+      const body = JSON.parse(payload());
+      delete body[key];
+      expect(() =>
+        client.parseEventNotificationWithoutVerification(JSON.stringify(body)),
+      ).not.toThrow();
+    },
+  );
+  it("preserves object metadata without checking its resource type", () => {
+    const body = JSON.parse(payload("members.updated", "future-resource"));
+    body.object.id = "";
+    body.object.url = "";
+    const event = client.parseEventNotificationWithoutVerification(
+      JSON.stringify(body),
+    );
+    expect(event).toBeInstanceOf(MemberUpdatedEvent);
+    expect(event.object).toEqual(body.object);
   });
-  it.each(["id", "type", "created_at", "object"])("requires %s", (key) => {
-    const body = JSON.parse(payload());
-    delete body[key];
-    expect(() =>
-      client.parseEventNotificationWithoutVerification(JSON.stringify(body)),
-    ).toThrow(EventPayloadError);
+  it("uses normal Date conversion without a separate timestamp validator", () => {
+    const event = client.parseEventNotificationWithoutVerification(
+      payload().replace("2026-04-11T10:00:00Z", "2026-04-11 10:00:00Z"),
+    );
+    expect(event.createdAt.toISOString()).toBe("2026-04-11T10:00:00.000Z");
+    const invalidDate = client.parseEventNotificationWithoutVerification(
+      payload().replace("2026-04-11T10:00:00Z", "invalid"),
+    );
+    expect(Number.isNaN(invalidDate.createdAt.getTime())).toBe(true);
   });
-  it.each(["id", "type", "url"])("rejects empty object.%s", (key) => {
-    const body = JSON.parse(payload());
-    body.object[key] = "";
-    expect(() =>
-      client.parseEventNotificationWithoutVerification(JSON.stringify(body)),
-    ).toThrow(EventPayloadError);
+  it("decodes an empty object as an unknown event", () => {
+    expect(
+      client.parseEventNotificationWithoutVerification("{}"),
+    ).toBeInstanceOf(UnknownEvent);
   });
 });
 

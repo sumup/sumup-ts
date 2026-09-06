@@ -8,7 +8,6 @@ type Definition = {
   name: string;
   type: string;
   object: string;
-  objectType: string;
 };
 
 export function collectEventDefinitions(
@@ -22,21 +21,17 @@ export function collectEventDefinitions(
         throw new Error(`Event ${type}: missing POST operation ID`);
       const operation = item.post as OpenAPIV3_1.OperationObject & {
         "x-object"?: { $ref?: string };
-        "x-object-type"?: string;
       };
       const ref = operation["x-object"]?.$ref;
-      const objectType = operation["x-object-type"];
-      if (!ref?.startsWith("#/components/schemas/") || !objectType)
-        throw new Error(
-          `Event ${type}: expected local x-object and x-object-type`,
-        );
+      if (!ref?.startsWith("#/components/schemas/"))
+        throw new Error(`Event ${type}: expected local x-object`);
       const schema = ref.slice("#/components/schemas/".length);
       if (!spec.components?.schemas?.[schema])
         throw new Error(`Event ${type}: missing object schema ${schema}`);
       const name = `${Case.pascal(item.post.operationId.replace(/Webhook$/, ""))}Event`;
       if (names.has(name)) throw new Error(`Duplicate event class ${name}`);
       names.add(name);
-      return { name, type, object: schemaNameToTypeName(schema), objectType };
+      return { name, type, object: schemaNameToTypeName(schema) };
     });
 }
 
@@ -67,9 +62,7 @@ export interface EventMap {`);
   writer.w(`}
 /** A recognized event notification or {@link UnknownEvent}. Narrow with instanceof to access a specific resource type. */
 export type EventNotification = EventMap[keyof EventMap] | UnknownEvent;
-/** @internal Expected object types from the event specification. */
-export const eventObjectTypes: Record<string, string> = ${JSON.stringify(Object.fromEntries(events.map((e) => [e.type, e.objectType])))};
-/** @internal Construct the typed notification after envelope validation. */
+/** @internal Construct the typed notification from the decoded JSON object. */
 export function createEvent(payload: EventPayload, client: HTTPClient): EventNotification {
   switch (payload.type) {`);
   for (const event of events)

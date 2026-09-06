@@ -1,12 +1,7 @@
 import type { HTTPClient } from "./client";
 import { SumUpError } from "./core";
 import type { EventPayload } from "./event";
-import {
-  createEvent,
-  type EventMap,
-  type EventNotification,
-  eventObjectTypes,
-} from "./events";
+import { createEvent, type EventMap, type EventNotification } from "./events";
 
 export {
   EventBase,
@@ -32,7 +27,7 @@ export class EventSignatureError extends EventError {}
 export class EventTimestampError extends EventSignatureError {}
 /** Signing timestamp more than five minutes before or after the receiver's clock. */
 export class EventSignatureExpiredError extends EventSignatureError {}
-/** Invalid JSON, UTF-8, or notification envelope. */
+/** Invalid raw input, UTF-8, JSON, or a payload that is not a JSON object. */
 export class EventPayloadError extends EventError {}
 /**
  * The selected callback threw or rejected. The original error is available as cause.
@@ -92,12 +87,13 @@ export class EventsHandler {
   /**
    * Verify and parse an incoming event without invoking callbacks.
    * Requires a signing timestamp within five minutes of the receiver's clock.
+   * Event fields follow the API contract and are not separately validated.
    *
    * @param body - Unchanged request body, read before JSON parsing.
    * @param signature - Complete value of the {@link SIGNATURE_HEADER} header.
    * @returns A typed notification, or {@link UnknownEvent} for an unrecognized type.
    * @throws {@link EventSignatureError} If verification fails.
-   * @throws {@link EventPayloadError} If the verified payload is invalid.
+   * @throws {@link EventPayloadError} If the body cannot be decoded as a JSON object.
    */
   parse(body: EventBody, signature: string): Promise<EventNotification> {
     return parseEventNotification(this.#client, this.#secret, body, signature);
@@ -126,7 +122,7 @@ export class EventsHandler {
    * @param body - Unchanged request body. The caller owns reading and limiting it.
    * @param signature - Complete value of the {@link SIGNATURE_HEADER} header.
    * @throws {@link EventSignatureError} If verification fails, including the five-minute timestamp check.
-   * @throws {@link EventPayloadError} If the verified payload is invalid.
+   * @throws {@link EventPayloadError} If the body cannot be decoded as a JSON object.
    * @throws {@link EventCallbackError} If processing fails; its cause holds the original error.
    */
   async handle(body: EventBody, signature: string): Promise<void> {
@@ -280,37 +276,7 @@ function parse(
   } catch (cause) {
     throw new EventPayloadError("Invalid event JSON or UTF-8.", { cause });
   }
-  if (
-    !isRecord(payload) ||
-    !nonempty(payload.id) ||
-    !nonempty(payload.type) ||
-    !nonempty(payload.created_at) ||
-    !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$/.test(
-      payload.created_at,
-    ) ||
-    !Number.isFinite(Date.parse(payload.created_at)) ||
-    !isRecord(payload.object) ||
-    !nonempty(payload.object.id) ||
-    !nonempty(payload.object.type) ||
-    !nonempty(payload.object.url)
-  ) {
-    throw new EventPayloadError(
-      "Invalid event envelope: required fields are missing or invalid.",
-    );
-  }
-  const expectedObjectType = Object.hasOwn(eventObjectTypes, payload.type)
-    ? eventObjectTypes[payload.type]
-    : undefined;
-  if (expectedObjectType && payload.object.type !== expectedObjectType)
-    throw new EventPayloadError(
-      "Event object type does not match its notification type.",
-    );
+  if (payload === null || typeof payload !== "object" || Array.isArray(payload))
+    throw new EventPayloadError("Expected an event JSON object.");
   return createEvent(payload as EventPayload, client);
-}
-
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return value !== null && typeof value === "object" && !Array.isArray(value);
-}
-function nonempty(value: unknown): value is string {
-  return typeof value === "string" && value.length > 0;
 }

@@ -97,7 +97,7 @@ export class SumUp extends HTTPClient {
    * @param signature - Complete value of the {@link SIGNATURE_HEADER} header.
    * @returns A typed notification, or {@link UnknownEvent} for an unrecognized type.
    * @throws {@link EventSignatureError} If verification fails, including the five-minute timestamp check.
-   * @throws {@link EventPayloadError} If the verified payload is invalid.
+   * @throws {@link EventPayloadError} If the body cannot be decoded as a JSON object.
    */
   parseEventNotification(
     secret: string,
@@ -113,7 +113,7 @@ export class SumUp extends HTTPClient {
    *
    * @param body - The stored event payload.
    * @returns A typed notification, or {@link UnknownEvent} for an unrecognized type.
-   * @throws {@link EventPayloadError} If the payload is invalid.
+   * @throws {@link EventPayloadError} If the body cannot be decoded as a JSON object.
    */
   parseEventNotificationWithoutVerification(
     body: EventBody,

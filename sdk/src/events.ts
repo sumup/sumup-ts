@@ -33,15 +33,7 @@ export interface EventMap {
 }
 /** A recognized event notification or {@link UnknownEvent}. Narrow with instanceof to access a specific resource type. */
 export type EventNotification = EventMap[keyof EventMap] | UnknownEvent;
-/** @internal Expected object types from the event specification. */
-export const eventObjectTypes: Record<string, string> = {
-  "members.created": "member",
-  "members.deleted": "member",
-  "members.updated": "member",
-  "readers.created": "reader",
-  "readers.deleted": "reader",
-};
-/** @internal Construct the typed notification after envelope validation. */
+/** @internal Construct the typed notification from the decoded JSON object. */
 export function createEvent(
   payload: EventPayload,
   client: HTTPClient,

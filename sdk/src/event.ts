@@ -18,7 +18,7 @@ export class EventBase<T = unknown> {
   readonly id: string;
   /** Event type, such as members.updated. */
   readonly type: string;
-  /** When the event was created; distinct from the delivery's signing timestamp. */
+  /** When the event was created, converted with Date; distinct from the signing timestamp. */
   readonly createdAt: Date;
   /** Reference to the affected resource, rather than a snapshot of its data. */
   readonly object: EventObject;
