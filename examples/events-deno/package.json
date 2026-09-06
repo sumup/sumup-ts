@@ -1,0 +1,13 @@
+{
+  "name": "events-deno",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check": "deno check index.ts",
+    "start": "deno run --allow-env=SUMUP_EVENT_SECRET,SUMUP_API_KEY,PORT --allow-net index.ts"
+  },
+  "dependencies": {
+    "@sumup/sdk": "file:../../sdk"
+  }
+}

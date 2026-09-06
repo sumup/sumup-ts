@@ -1,6 +1,7 @@
 import { resolve } from "node:path";
 import { Case } from "change-case-all";
 import { getSortedSchemas } from "./base";
+import { collectEventDefinitions } from "./events";
 import { fileWriter } from "./io";
 import type { Document } from "./openapi";
 import { schemaNameToTypeName } from "./schema";
@@ -25,6 +26,17 @@ export async function generateIndex(spec: Document, destDir: string) {
   export type { APIConfig } from './client'
   export { APIError, SumUpError } from './core'
   export type { RequestOptions, WithResponse } from './core'
+  import { EventsHandler, parseEventNotification, parseEventNotificationWithoutVerification } from './events-handler'
+  import type { EventCallback, EventBody } from './events-handler'
+  import type { EventNotification } from './events'
+  export { EventsHandler, SIGNATURE_HEADER, EventError, EventSignatureError, EventTimestampError, EventSignatureExpiredError, EventPayloadError, EventCallbackError, verifyEventSignature } from './events-handler'
+  export type { EventCallback, EventBody } from './events-handler'
+  export { UnknownEvent } from './event'
+  export type { EventObject } from './event'
+  export type { EventNotification } from './events'
+  export { ${collectEventDefinitions(spec)
+    .map((event) => event.name)
+    .join(", ")} } from './events'
   export * from './types'
   `);
 
@@ -53,7 +65,44 @@ export async function generateIndex(spec: Document, destDir: string) {
   }
 
   writer.w("");
-  writer.w(`export class ${apiName} extends HTTPClient {`);
+  writer.w(`export class ${apiName} extends HTTPClient {
+    /**
+     * Create an event handler bound to this API client.
+     * Register typed callbacks with on(); events without a callback reach fallback.
+     *
+     * @param secret - Your event signing secret, not an API key.
+     * @param fallback - Required callback for unregistered or unrecognized event types.
+     */
+    eventsHandler(secret: string, fallback: EventCallback): EventsHandler {
+      return new EventsHandler(this, secret, fallback);
+    }
+    /**
+     * Verify an incoming event's signature and timestamp, then parse it without running callbacks.
+     * For already verified, trusted payloads, use {@link SumUp.parseEventNotificationWithoutVerification}.
+     *
+     * @param secret - Your event signing secret, not an API key.
+     * @param body - Unchanged request body, read before JSON parsing.
+     * @param signature - Complete value of the {@link SIGNATURE_HEADER} header.
+     * @returns A typed notification, or {@link UnknownEvent} for an unrecognized type.
+     * @throws {@link EventSignatureError} If verification fails, including the five-minute timestamp check.
+     * @throws {@link EventPayloadError} If the verified payload is invalid.
+     */
+    parseEventNotification(secret: string, body: EventBody, signature: string): Promise<EventNotification> {
+      return parseEventNotification(this, secret, body, signature);
+    }
+    /**
+     * Parse an event without checking its signature or signing timestamp.
+     * Use only for fixtures or trusted payloads verified before being queued.
+     * Use {@link SumUp.parseEventNotification} for incoming HTTP deliveries.
+     *
+     * @param body - The stored event payload.
+     * @returns A typed notification, or {@link UnknownEvent} for an unrecognized type.
+     * @throws {@link EventPayloadError} If the payload is invalid.
+     */
+    parseEventNotificationWithoutVerification(body: EventBody): EventNotification {
+      return parseEventNotificationWithoutVerification(this, body);
+    }
+  `);
   for (const tag of tags) {
     const resourceClassName = resourceClassByTag.get(tag.name)!;
     writer.w(

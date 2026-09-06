@@ -1,0 +1,24 @@
+{
+  "name": "events-nodejs",
+  "version": "0.0.1",
+  "description": "Event example with SumUp SDK",
+  "main": "dist/index.js",
+  "license": "Apache-2.0",
+  "scripts": {
+    "lint": "biome check",
+    "lint:fix": "biome check --write",
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "@sumup/sdk": "file:../../sdk",
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.1.2",
+    "@types/express": "^5.0.6",
+    "@types/node": "^24.13.3",
+    "typescript": "^5.7.3"
+  },
+  "type": "module"
+}

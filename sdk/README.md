@@ -122,6 +122,41 @@ const { data, response } = await client.merchants.getWithResponse(merchantCode);
 console.info(response.status, data);
 ```
 
+## Events
+
+Receive signed event notifications and register callbacks for the changes your application needs:
+
+```ts
+import SumUp, { SIGNATURE_HEADER } from "@sumup/sdk";
+
+const client = new SumUp({ apiKey: process.env.SUMUP_API_KEY });
+const secret = process.env.SUMUP_EVENT_SECRET;
+if (!secret) throw new Error("SUMUP_EVENT_SECRET is required");
+
+const events = client.eventsHandler(secret, event => {
+  console.info("Unhandled event", event.id, event.type);
+});
+events.on("members.updated", async event => {
+  const member = await event.fetchObject();
+  console.info("Member updated", member.id);
+});
+
+// Inside your HTTP handler, pass the unchanged request body and signature.
+await events.handle(
+  await request.arrayBuffer(),
+  request.headers.get(SIGNATURE_HEADER) ?? "",
+);
+// Return a 2xx response after processing succeeds.
+```
+
+The handler verifies the signature before running callbacks and waits for them to finish.
+
+For a standard Fetch `Request`, use `await events.handleRequest(request)` instead.
+
+Make callbacks idempotent and use `event.id` to deduplicate deliveries. Return a `5xx` response if processing fails so delivery can be retried. For queued processing, verify before storing the payload.
+
+See the [Node.js / Express](https://github.com/sumup/sumup-ts/tree/main/examples/events-nodejs), [Deno](https://github.com/sumup/sumup-ts/tree/main/examples/events-deno), and [Bun](https://github.com/sumup/sumup-ts/tree/main/examples/events-bun) examples for complete receivers and error handling.
+
 ## Examples
 
 Install dependencies inside an example directory before running it:
@@ -191,6 +226,14 @@ npx tsx index.ts
 ```
 
 Then open `http://localhost:8080/login` in your browser to start the flow.
+
+### Event receivers
+
+Each example verifies raw request bytes and dispatches typed events. See its README for setup:
+
+- [Node.js / Express](https://github.com/sumup/sumup-ts/tree/main/examples/events-nodejs) (default)
+- [Deno](https://github.com/sumup/sumup-ts/tree/main/examples/events-deno), using `Deno.serve`
+- [Bun](https://github.com/sumup/sumup-ts/tree/main/examples/events-bun), using `Bun.serve`
 
 ## Support
 

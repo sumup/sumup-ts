@@ -5,6 +5,37 @@ import { HTTPClient } from "./client";
 export type { APIConfig } from "./client";
 export type { RequestOptions, WithResponse } from "./core";
 export { APIError, SumUpError } from "./core";
+
+import type { EventNotification } from "./events";
+import type { EventBody, EventCallback } from "./events-handler";
+import {
+  EventsHandler,
+  parseEventNotification,
+  parseEventNotificationWithoutVerification,
+} from "./events-handler";
+
+export type { EventObject } from "./event";
+export { UnknownEvent } from "./event";
+export type { EventNotification } from "./events";
+export {
+  MemberCreatedEvent,
+  MemberDeletedEvent,
+  MemberUpdatedEvent,
+  ReaderCreatedEvent,
+  ReaderDeletedEvent,
+} from "./events";
+export type { EventBody, EventCallback } from "./events-handler";
+export {
+  EventCallbackError,
+  EventError,
+  EventPayloadError,
+  EventSignatureError,
+  EventSignatureExpiredError,
+  EventsHandler,
+  EventTimestampError,
+  SIGNATURE_HEADER,
+  verifyEventSignature,
+} from "./events-handler";
 export * from "./resources/checkouts";
 export * from "./types";
 
@@ -47,6 +78,49 @@ export * from "./resources/transactions";
 import { Transactions } from "./resources/transactions";
 
 export class SumUp extends HTTPClient {
+  /**
+   * Create an event handler bound to this API client.
+   * Register typed callbacks with on(); events without a callback reach fallback.
+   *
+   * @param secret - Your event signing secret, not an API key.
+   * @param fallback - Required callback for unregistered or unrecognized event types.
+   */
+  eventsHandler(secret: string, fallback: EventCallback): EventsHandler {
+    return new EventsHandler(this, secret, fallback);
+  }
+  /**
+   * Verify an incoming event's signature and timestamp, then parse it without running callbacks.
+   * For already verified, trusted payloads, use {@link SumUp.parseEventNotificationWithoutVerification}.
+   *
+   * @param secret - Your event signing secret, not an API key.
+   * @param body - Unchanged request body, read before JSON parsing.
+   * @param signature - Complete value of the {@link SIGNATURE_HEADER} header.
+   * @returns A typed notification, or {@link UnknownEvent} for an unrecognized type.
+   * @throws {@link EventSignatureError} If verification fails, including the five-minute timestamp check.
+   * @throws {@link EventPayloadError} If the verified payload is invalid.
+   */
+  parseEventNotification(
+    secret: string,
+    body: EventBody,
+    signature: string,
+  ): Promise<EventNotification> {
+    return parseEventNotification(this, secret, body, signature);
+  }
+  /**
+   * Parse an event without checking its signature or signing timestamp.
+   * Use only for fixtures or trusted payloads verified before being queued.
+   * Use {@link SumUp.parseEventNotification} for incoming HTTP deliveries.
+   *
+   * @param body - The stored event payload.
+   * @returns A typed notification, or {@link UnknownEvent} for an unrecognized type.
+   * @throws {@link EventPayloadError} If the payload is invalid.
+   */
+  parseEventNotificationWithoutVerification(
+    body: EventBody,
+  ): EventNotification {
+    return parseEventNotificationWithoutVerification(this, body);
+  }
+
   /** Access the Checkouts API endpoints. */
   checkouts: Checkouts = new Checkouts(this);
   /** Access the Customers API endpoints. */
