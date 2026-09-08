@@ -64,7 +64,7 @@
     "@rslib/core": "^0.23.0",
     "@rstest/browser": "^0.11.11",
     "@rstest/core": "^0.11.11",
-    "@types/node": "^24.13.3",
+    "@types/node": "^26.4.0",
     "playwright": "^1.62.1",
     "rsbuild-plugin-dts": "^0.23.0",
     "rsbuild-plugin-publint": "^1.0.0",
