@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.2.1](https://github.com/sumup/sumup-ts/compare/v0.2.0...v0.2.1) (2026-09-11)
+
+
+### Features
+
+* **codegen:** use OpenAPI 3.1.0 specs ([#448](https://github.com/sumup/sumup-ts/issues/448)) ([689e524](https://github.com/sumup/sumup-ts/commit/689e52413761db6fe959f7377ca7394f8fdc8796))
+* **sdk:** default host const ([430ef7f](https://github.com/sumup/sumup-ts/commit/430ef7f3c103f70246dd375ff4b61456895c422a))
+* **sdk:** events ([#327](https://github.com/sumup/sumup-ts/issues/327)) ([0d5d899](https://github.com/sumup/sumup-ts/commit/0d5d89933040b7ae4d6d5dab55c99906daaab3ec))
+
+
+### Bug Fixes
+
+* **sdk:** resolve declaration imports in NodeNext ([#450](https://github.com/sumup/sumup-ts/issues/450)) ([90ea40a](https://github.com/sumup/sumup-ts/commit/90ea40a2d940dad9f47c32bb9f170aa3c7b118f6))
+
+
+### Chores
+
+* **sdk:** harden TypeScript and runtime configuration ([#444](https://github.com/sumup/sumup-ts/issues/444)) ([8cac9eb](https://github.com/sumup/sumup-ts/commit/8cac9eb8753c233ca5d328e7e54ba31e6d46f0ac))
+* **sdk:** simplify event parsing ([d7614b3](https://github.com/sumup/sumup-ts/commit/d7614b30c837148339d2b8fdc5006e30cb29c6b9))
+
 ## [0.2.0](https://github.com/sumup/sumup-ts/compare/v0.1.9...v0.2.0) (2026-09-01)
 
 
