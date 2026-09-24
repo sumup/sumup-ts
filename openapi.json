@@ -243,7 +243,7 @@
       "post": {
         "operationId": "CreateCheckout",
         "summary": "Create a checkout",
-        "description": "Creates a new payment checkout resource. The unique `checkout_reference` created by this request, is used for further manipulation of the checkout.\n\nFor 3DS checkouts, add the `redirect_url` parameter to your request body schema.\nTo use the [Hosted Checkout](https://developer.sumup.com/online-payments/checkouts/hosted-checkout/) page, set the `hosted_checkout.enabled` to `true`.\n\nFollow by processing a checkout to charge the provided payment instrument.",
+        "description": "Creates a payment checkout for the specified merchant, amount, and currency. Supply a `checkout_reference` to identify the payment attempt in your own systems. Creating a checkout does not charge a payment instrument.\n\nSet `hosted_checkout.enabled` to `true` to receive a [Hosted Checkout](https://developer.sumup.com/online-payments/checkouts/hosted-checkout/) URL where the customer can complete the payment.\nUse `redirect_url` for redirect-based payment and 3DS flows. If `return_url` is provided, SumUp sends processing updates to that backend callback URL.\n\nComplete the payment through [Hosted Checkout](https://developer.sumup.com/online-payments/checkouts/hosted-checkout/) or the [Payment Widget](https://developer.sumup.com/online-payments/checkouts/card-widget).",
         "tags": [
           "Checkouts"
         ],
@@ -746,7 +746,7 @@
       "patch": {
         "operationId": "UpdateCheckout",
         "summary": "Update a checkout",
-        "description": "Updates an identified checkout resource.",
+        "description": "Updates the amount, currency, description, reference, expiration, or customer associated with an existing checkout. Only the supplied fields are updated.\n\nThis request changes the checkout details; it does not charge a payment instrument. Process the checkout separately to attempt a payment.",
         "tags": [
           "Checkouts"
         ],
@@ -3444,6 +3444,14 @@
             }
           },
           {
+            "name": "resource.id",
+            "in": "query",
+            "description": "Filter memberships by the ID of the resource the membership is in.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "resource.parent.id",
             "in": "query",
             "description": "Filter memberships by the parent of the resource the membership is in.\nWhen filtering by parent both `resource.parent.id` and `resource.parent.type` must be present. Pass explicit null to filter for resources without a parent.",
@@ -3459,12 +3467,14 @@
             "in": "query",
             "description": "Filter memberships by the parent of the resource the membership is in.\nWhen filtering by parent both `resource.parent.id` and `resource.parent.type` must be present. Pass explicit null to filter for resources without a parent.",
             "schema": {
-              "allOf": [
+              "anyOf": [
                 {
                   "$ref": "#/components/schemas/ResourceType"
+                },
+                {
+                  "type": "null"
                 }
-              ],
-              "type": "null"
+              ]
             }
           },
           {
@@ -3604,19 +3614,6 @@
             }
           },
           {
-            "name": "user.type",
-            "in": "query",
-            "description": "Filter the returned members by user type. Repeat this parameter to include multiple user types.",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/components/schemas/UserType"
-              }
-            },
-            "style": "form",
-            "explode": true
-          },
-          {
             "name": "status",
             "in": "query",
             "description": "Filter the returned members by the membership status.",
@@ -3730,7 +3727,7 @@
       "post": {
         "operationId": "CreateMerchantMember",
         "summary": "Create a member",
-        "description": "Create a merchant member.",
+        "description": "Adds a member to the merchant account with the specified roles.\n\nBy default, sends an invitation email to the provided address. The recipient must accept the invitation to join the account.\nWhen `is_managed_user` is `true`, creates a managed user with the provided password and optional nickname and assigns the roles directly, without sending an invitation.",
         "tags": [
           "Members"
         ],
@@ -3795,6 +3792,7 @@
                   "roles": {
                     "type": "array",
                     "description": "List of roles to assign to the new member.",
+                    "minItems": 1,
                     "maxItems": 124,
                     "items": {
                       "type": "string",
@@ -3978,7 +3976,7 @@
       },
       "put": {
         "summary": "Update a member",
-        "description": "Update the merchant member.",
+        "description": "Updates a merchant member and returns the updated member.\n\nProviding `roles` replaces the member's assigned roles and can grant or revoke access. Providing `metadata` replaces the entire metadata object.\nFor managed users, `user.nickname` changes the display name and `user.password` replaces the password. Updating the password also enables the managed user account.",
         "tags": [
           "Members"
         ],
@@ -4017,6 +4015,7 @@
                 "properties": {
                   "roles": {
                     "type": "array",
+                    "minItems": 1,
                     "maxItems": 124,
                     "items": {
                       "type": "string",
@@ -4392,6 +4391,7 @@
                   "permissions": {
                     "type": "array",
                     "description": "User's permissions.",
+                    "minItems": 1,
                     "maxItems": 100,
                     "items": {
                       "type": "string"
@@ -4652,7 +4652,7 @@
       "patch": {
         "operationId": "UpdateMerchantRole",
         "summary": "Update a role",
-        "description": "Update a custom role.",
+        "description": "Updates a custom role's name, description, or permissions and returns the updated role.\n\nProviding `permissions` replaces the role's permission list and changes the access granted to members assigned to that role. Omitted fields remain unchanged.",
         "tags": [
           "Roles"
         ],
@@ -4696,6 +4696,7 @@
                   "permissions": {
                     "type": "array",
                     "description": "User's permissions.",
+                    "minItems": 1,
                     "maxItems": 100,
                     "items": {
                       "type": "string"
@@ -5438,7 +5439,7 @@
       },
       "patch": {
         "summary": "Update a Reader",
-        "description": "Update a Reader.",
+        "description": "Updates a reader's name or metadata and returns the updated reader.\n\nProviding `metadata` replaces the entire metadata object; include all entries that should be retained. Omitted fields remain unchanged.",
         "operationId": "UpdateReader",
         "tags": [
           "Readers"
@@ -8923,17 +8924,6 @@
           }
         }
       },
-      "UserType": {
-        "type": "string",
-        "description": "Type of the user account.",
-        "enum": [
-          "user",
-          "managed_user",
-          "service_account",
-          "system_account"
-        ],
-        "example": "user"
-      },
       "Metadata": {
         "description": "Set of user-defined key-value pairs attached to the object. Partial updates are not supported. When updating, always submit whole metadata. Maximum of 64 parameters are allowed in the object.",
         "type": "object",
@@ -8946,6 +8936,17 @@
         "type": "object",
         "example": {},
         "additionalProperties": true
+      },
+      "UserType": {
+        "type": "string",
+        "description": "Type of the user account.",
+        "enum": [
+          "user",
+          "managed_user",
+          "service_account",
+          "system_account"
+        ],
+        "example": "user"
       },
       "Address": {
         "externalDocs": {

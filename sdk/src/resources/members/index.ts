@@ -10,7 +10,6 @@ import type {
   Member,
   MembershipStatus,
   Metadata,
-  UserType,
 } from "../../types";
 export type ListMerchantMembersQueryParams = {
   offset?: number;
@@ -18,7 +17,6 @@ export type ListMerchantMembersQueryParams = {
   scroll?: boolean;
   email?: string;
   "user.id"?: string;
-  "user.type"?: UserType[];
   status?: MembershipStatus;
   roles?: string[];
 };
@@ -106,7 +104,10 @@ export class Members extends APIResource {
   }
 
   /**
-   * Create a merchant member.
+   * Adds a member to the merchant account with the specified roles.
+   *
+   * By default, sends an invitation email to the provided address. The recipient must accept the invitation to join the account.
+   * When `is_managed_user` is `true`, creates a managed user with the provided password and optional nickname and assigns the roles directly, without sending an invitation.
    */
   create(
     merchantCode: string,
@@ -158,7 +159,10 @@ export class Members extends APIResource {
   }
 
   /**
-   * Update the merchant member.
+   * Updates a merchant member and returns the updated member.
+   *
+   * Providing `roles` replaces the member's assigned roles and can grant or revoke access. Providing `metadata` replaces the entire metadata object.
+   * For managed users, `user.nickname` changes the display name and `user.password` replaces the password. Updating the password also enables the managed user account.
    */
   update(
     merchantCode: string,
