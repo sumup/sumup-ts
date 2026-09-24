@@ -146,7 +146,9 @@ export class Roles extends APIResource {
   }
 
   /**
-   * Update a custom role.
+   * Updates a custom role's name, description, or permissions and returns the updated role.
+   *
+   * Providing `permissions` replaces the role's permission list and changes the access granted to members assigned to that role. Omitted fields remain unchanged.
    */
   update(
     merchantCode: string,
