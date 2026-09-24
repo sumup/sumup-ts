@@ -3454,27 +3454,19 @@
           {
             "name": "resource.parent.id",
             "in": "query",
-            "description": "Filter memberships by the parent of the resource the membership is in.\nWhen filtering by parent both `resource.parent.id` and `resource.parent.type` must be present. Pass explicit null to filter for resources without a parent.",
+            "allowEmptyValue": true,
+            "description": "Filter memberships by the parent of the resource the membership is in.\nOmit both `resource.parent.id` and `resource.parent.type` to skip parent filtering. When filtering by parent, both parameters must be present. To select resources without a parent, set each parameter to an empty value. Otherwise, both parameters must identify a parent.",
             "schema": {
-              "type": [
-                "string",
-                "null"
-              ]
+              "type": "string"
             }
           },
           {
             "name": "resource.parent.type",
             "in": "query",
-            "description": "Filter memberships by the parent of the resource the membership is in.\nWhen filtering by parent both `resource.parent.id` and `resource.parent.type` must be present. Pass explicit null to filter for resources without a parent.",
+            "allowEmptyValue": true,
+            "description": "Filter memberships by the parent of the resource the membership is in.\nOmit both `resource.parent.id` and `resource.parent.type` to skip parent filtering. When filtering by parent, both parameters must be present. To select resources without a parent, set each parameter to an empty value. Otherwise, both parameters must identify a parent.",
             "schema": {
-              "anyOf": [
-                {
-                  "$ref": "#/components/schemas/ResourceType"
-                },
-                {
-                  "type": "null"
-                }
-              ]
+              "$ref": "#/components/schemas/ResourceType"
             }
           },
           {
