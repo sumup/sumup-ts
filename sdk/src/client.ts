@@ -228,16 +228,13 @@ export class HTTPClient {
         ) {
           return `${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
         }
-        if (value === null) {
-          return `${encodeURIComponent(key)}=`;
-        }
         if (Array.isArray(value)) {
           return value
             .map((v) => `${encodeURIComponent(key)}=${encodeURIComponent(v)}`)
             .join("&");
         }
         throw new Error(
-          `Cannot stringify type ${typeof value}; Expected string, number, boolean, or null.`,
+          `Cannot stringify type ${typeof value}; Expected string, number, boolean, or array.`,
         );
       })
       .join("&");
