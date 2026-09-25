@@ -39,10 +39,18 @@ describe("query string", () => {
       stringifyQuery({
         "a": "b",
         "foo": false,
-        "x": null,
+        "x": "",
+        "omitted": undefined,
+        "zero": 0,
         "include": ["1", "2"],
       }),
-    ).toEqual("a=b&foo=false&x=&include=1&include=2");
+    ).toEqual("a=b&foo=false&x=&zero=0&include=1&include=2");
+  });
+
+  it("rejects null instead of treating it as an empty value", () => {
+    expect(() => stringifyQuery({ x: null })).toThrow(
+      "Cannot stringify type object; Expected string, number, boolean, or array.",
+    );
   });
 });
 
@@ -163,6 +171,42 @@ describe("request options", () => {
 });
 
 describe("generated signatures", () => {
+  it.each(["list", "listWithResponse"] as const)(
+    "%s preserves empty membership parent filters and omits undefined filters",
+    async (method) => {
+      const fetchMock = rs.fn().mockImplementation((_url: URL | RequestInfo) =>
+        Promise.resolve(
+          new Response(JSON.stringify({ items: [], total_count: 0 }), {
+            headers: { "content-type": "application/json" },
+          }),
+        ),
+      );
+      rs.stubGlobal("fetch", fetchMock);
+      const client = new SumUp();
+
+      await client.memberships[method]({
+        "resource.parent.id": "",
+        "resource.parent.type": "",
+      });
+      await client.memberships[method]({
+        "resource.parent.id": undefined,
+        "resource.parent.type": undefined,
+      });
+      await client.memberships[method]({
+        "resource.parent.id": "parent & id",
+        "resource.parent.type": "merchant",
+      });
+
+      const urls = fetchMock.mock.calls.map(([url]) => new URL(String(url)));
+      expect(urls[0]?.pathname).toBe("/v0.1/memberships");
+      expect(urls.map((url) => url.search)).toEqual([
+        "?resource.parent.id=&resource.parent.type=",
+        "",
+        "?resource.parent.id=parent%20%26%20id&resource.parent.type=merchant",
+      ]);
+    },
+  );
+
   it("maps ergonomic repeated query parameter names to their wire names", () => {
     const client = new SumUp();
     const getSpy = rs

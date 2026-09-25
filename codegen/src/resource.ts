@@ -210,7 +210,13 @@ export async function generateResource(
         writer.w(`  '${queryParameterName(param)}'`);
         if (!param.required) writer.w0("?");
         writer.w0(": ");
-        schemaToTypes(param.schema, writer);
+        // Empty query values are allowed independently of the value schema.
+        schemaToTypes(
+          param.allowEmptyValue
+            ? { anyOf: [param.schema, { const: "" }] }
+            : param.schema,
+          writer,
+        );
         writer.w(",");
       }
       writer.w("}\n");
