@@ -1,5 +1,34 @@
 # Changelog
 
+## [0.2.1](https://github.com/sumup/sumup-ts/compare/v0.2.0...v0.2.1) (2026-09-25)
+
+
+### Features
+
+* **codegen:** use OpenAPI 3.1.0 specs ([#448](https://github.com/sumup/sumup-ts/issues/448)) ([689e524](https://github.com/sumup/sumup-ts/commit/689e52413761db6fe959f7377ca7394f8fdc8796))
+* **sdk:** default host const ([430ef7f](https://github.com/sumup/sumup-ts/commit/430ef7f3c103f70246dd375ff4b61456895c422a))
+* **sdk:** events ([#327](https://github.com/sumup/sumup-ts/issues/327)) ([0d5d899](https://github.com/sumup/sumup-ts/commit/0d5d89933040b7ae4d6d5dab55c99906daaab3ec))
+
+
+### Bug Fixes
+
+* **sdk:** resolve declaration imports in NodeNext ([#450](https://github.com/sumup/sumup-ts/issues/450)) ([90ea40a](https://github.com/sumup/sumup-ts/commit/90ea40a2d940dad9f47c32bb9f170aa3c7b118f6))
+
+
+### Chores
+
+* **deps-dev:** bump @biomejs/biome from 2.5.10 to 2.5.13 in /sdk ([#460](https://github.com/sumup/sumup-ts/issues/460)) ([6e64fe0](https://github.com/sumup/sumup-ts/commit/6e64fe09c853846b20b8284f4d21e310dad33fea))
+* **deps-dev:** bump @rstest/browser from 0.11.11 to 0.11.12 in /sdk ([#467](https://github.com/sumup/sumup-ts/issues/467)) ([187ae4b](https://github.com/sumup/sumup-ts/commit/187ae4b7a67aa87a183e1c381bacf4c804c53559))
+* **deps-dev:** bump @types/node from 24.13.3 to 26.5.0 in /sdk ([#461](https://github.com/sumup/sumup-ts/issues/461)) ([f6f4f3f](https://github.com/sumup/sumup-ts/commit/f6f4f3f374997857fbbeb056727f519bc9ca2376))
+* **deps-dev:** bump @types/node from 26.5.0 to 26.5.1 in /sdk ([#465](https://github.com/sumup/sumup-ts/issues/465)) ([64afdb6](https://github.com/sumup/sumup-ts/commit/64afdb6a0720bba796d0775165b771cbc2e9bfd7))
+* **deps-dev:** bump playwright from 1.62.1 to 1.63.0 in /sdk ([#459](https://github.com/sumup/sumup-ts/issues/459)) ([a7c890d](https://github.com/sumup/sumup-ts/commit/a7c890d2831ccb45ceb82789987064566cf74715))
+* **deps-dev:** bump the rslib group in /sdk with 2 updates ([#458](https://github.com/sumup/sumup-ts/issues/458)) ([0e737ab](https://github.com/sumup/sumup-ts/commit/0e737abcf790bb2e5b95ea582434dc98416fabee))
+* **deps-dev:** bump the rslib group in /sdk with 2 updates ([#464](https://github.com/sumup/sumup-ts/issues/464)) ([12355f6](https://github.com/sumup/sumup-ts/commit/12355f6798196bb639f136934e68b7407b30f900))
+* **sdk:** harden TypeScript and runtime configuration ([#444](https://github.com/sumup/sumup-ts/issues/444)) ([8cac9eb](https://github.com/sumup/sumup-ts/commit/8cac9eb8753c233ca5d328e7e54ba31e6d46f0ac))
+* **sdk:** simplify event parsing ([d7614b3](https://github.com/sumup/sumup-ts/commit/d7614b30c837148339d2b8fdc5006e30cb29c6b9))
+* synced file(s) with sumup/apis ([#469](https://github.com/sumup/sumup-ts/issues/469)) ([d6a23f8](https://github.com/sumup/sumup-ts/commit/d6a23f8ab88358b9ce7b9039efed54f8f670d3a9))
+* synced file(s) with sumup/apis ([#470](https://github.com/sumup/sumup-ts/issues/470)) ([cd0834d](https://github.com/sumup/sumup-ts/commit/cd0834d7c4247fc0d163f9263cf885b8c64ac60f))
+
 ## [0.2.0](https://github.com/sumup/sumup-ts/compare/v0.1.9...v0.2.0) (2026-09-01)
 
 
