@@ -6,7 +6,6 @@
  * Three-letter [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) currency code of the amount.
  */
 export type Currency =
-  | "BGN"
   | "BRL"
   | "CHF"
   | "CLP"

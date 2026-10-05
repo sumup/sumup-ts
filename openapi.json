@@ -6239,6 +6239,11 @@
           },
           "type": {
             "$ref": "#/components/schemas/CardType"
+          },
+          "payment_account_reference": {
+            "type": "string",
+            "description": "PAR (Payment account reference) if available for the card.",
+            "example": "5665ABCDEFGHIJKLMNOPQRSTUVWXY"
           }
         }
       },
@@ -8312,7 +8317,6 @@
         "type": "string",
         "description": "Three-letter [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) currency code of the amount.",
         "enum": [
-          "BGN",
           "BRL",
           "CHF",
           "CLP",
