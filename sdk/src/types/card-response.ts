@@ -13,4 +13,8 @@ export type CardResponse = {
    */
   readonly last_4_digits?: string;
   type?: CardType;
+  /**
+   * PAR (Payment account reference) if available for the card.
+   */
+  payment_account_reference?: string;
 };
