@@ -11379,27 +11379,6 @@
               "payouts.read": "View payouts.",
               "user.subaccounts": "View and manage the user profile details of your employees."
             }
-          },
-          "clientCredentials": {
-            "tokenUrl": "https://api.sumup.com/token",
-            "scopes": {
-              "payments": "Make payments by creating and processing checkouts.",
-              "checkouts.read": "View checkouts.",
-              "checkouts.write": "Create, process, and deactivate checkouts.",
-              "transactions.history": "View transactions and transaction history.",
-              "transactions.read": "View transactions and transaction history.",
-              "refunds.write": "Refund transactions.",
-              "receipts.read": "View receipts.",
-              "user.profile_readonly": "View user profile details.",
-              "user.profile": "View and manage your user profile.",
-              "user.app-settings": "View and manage the SumUp mobile application settings.",
-              "payment_instruments": "Manage customers and their payment instruments.",
-              "customers.read": "View customers and their payment instruments.",
-              "customers.write": "Create and manage customers and their payment instruments.",
-              "user.payout-settings": "View and manage your payout settings.",
-              "payouts.read": "View payouts.",
-              "user.subaccounts": "View and manage the user profile details of your employee."
-            }
           }
         }
       }
