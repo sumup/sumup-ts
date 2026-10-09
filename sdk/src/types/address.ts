@@ -15,7 +15,11 @@ export type Address = {
    *
    */
   post_code?: string;
-  country: CountryCode;
+  country: /**
+   * The ISO3166-1 Alpha-2 code of the address country.
+   *
+   */
+  unknown & CountryCode;
   /**
    * The city of the address.
    *

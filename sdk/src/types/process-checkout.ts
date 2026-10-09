@@ -36,7 +36,7 @@ export type ProcessCheckout = {
    */
   apple_pay?: Record<string, unknown>;
   /**
-   * Saved-card token to use instead of raw card details when processing with a previously stored payment instrument.
+   * Token of a saved payment instrument returned by checkout processing or the customer's payment-instruments endpoint. To charge a saved card, set `payment_type` to `card` and provide both this `token` and the associated `customer_id` instead of raw card details.
    */
   token?: string;
   /**

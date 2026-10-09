@@ -4,7 +4,10 @@ import type { Affiliate } from "./affiliate";
 import type { Amount } from "./amount";
 
 export type ReaderPaymentRequestParams = {
-  affiliate?: Affiliate;
+  affiliate?: /**
+   * Optional caller-supplied context about the integration initiating the payment.
+   */
+  Record<string, unknown> & Affiliate;
   /**
    * Caller-supplied correlation identifier, used as the idempotency key.
    */
@@ -13,5 +16,8 @@ export type ReaderPaymentRequestParams = {
    * Optional tip amount in minor units, added on top of total_amount.
    */
   tip_amount?: number;
-  total_amount: Amount;
+  total_amount: /**
+   * Amount structure. The amount is represented as an integer value altogether with the currency and the minor unit. For example, MXN 10.00 is represented as value 1000 with minor unit of 2.
+   */
+  unknown & Amount;
 };

@@ -3,7 +3,7 @@
 /**
  * Entry Mode
  *
- * Entry mode of the payment details.
+ * How the payment details were captured, for example `CHIP` or `CONTACTLESS` for card-present payments and `CUSTOMER_ENTRY` for card details entered by the payer. For wallet and alternative payment methods, this can identify the method, such as `APPLE_PAY` or `BLIK`.
  */
 export type EntryMode =
   | "BOLETO"

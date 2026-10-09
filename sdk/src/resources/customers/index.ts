@@ -35,15 +35,15 @@ export type ListPaymentInstrumentsResponse = PaymentInstrumentResponse[];
 /**
  * API resource for the Customers endpoints.
  *
- * Allow your regular customers to save their information with the Customers model.
+ * Customers represent payers in your integration. Create a customer with your own `customer_id` to associate their personal details and saved payment instruments with your business records.
  *
- * This will prevent re-entering payment instrument information for recurring payments on your platform.
+ * To save a card, create a checkout for that customer with `purpose = SETUP_RECURRING_PAYMENT`, then process it with the payer's consent and mandate details. See the [tokenization guide](https://developer.sumup.com/online-payments/guides/tokenization-with-payment-sdk/).
  *
- * Depending on the needs you can allow, creating, listing or deactivating payment instruments & creating, retrieving and updating customers.
+ * Use the Customers endpoints to create, retrieve, or update customer details and to list or deactivate saved payment instruments. For subsequent payments, process a new checkout with the saved instrument's `token` and its associated `customer_id`.
  */
 export class Customers extends APIResource {
   /**
-   * Creates a new saved customer resource which you can later manipulate and save payment instruments to.
+   * Creates a customer using the `customer_id` you supply. Choose an identifier that maps to the payer in your own system and reuse it when retrieving the customer or associating checkouts and saved payment instruments with them.
    */
   create(body: Customer, options?: RequestOptions): Promise<Customer> {
     return this._client.post<Customer>({
@@ -65,7 +65,7 @@ export class Customers extends APIResource {
   }
 
   /**
-   * Retrieves an identified saved customer resource through the unique `customer_id` parameter, generated upon customer creation.
+   * Retrieves a saved customer using the `customer_id` you supplied when creating the customer.
    */
   get(customerId: string, options?: RequestOptions): Promise<Customer> {
     return this._client.get<Customer>({

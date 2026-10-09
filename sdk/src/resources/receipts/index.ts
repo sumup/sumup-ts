@@ -14,11 +14,11 @@ export type GetReceiptQueryParams = {
 /**
  * API resource for the Receipts endpoints.
  *
- * The Receipts model obtains receipt-like details for specific transactions.
+ * Retrieve structured receipt data for a transaction, including payment, merchant, and acquirer details. Use this data to display a receipt in your application. The response is JSON, rather than a rendered receipt document.
  */
 export class Receipts extends APIResource {
   /**
-   * Retrieves receipt specific data for a transaction.
+   * Retrieves structured receipt data for a transaction belonging to the merchant specified by `mid`. The path accepts either the SumUp transaction ID or transaction code. Provide `tx_event_id` to include a specific transaction event, such as a refund, on the receipt.
    */
   get(
     transactionId: string,

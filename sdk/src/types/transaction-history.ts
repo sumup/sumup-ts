@@ -35,7 +35,7 @@ export type TransactionHistory = TransactionBase &
      */
     payout_type?: "BANK_ACCOUNT" | "PREPAID_CARD";
     /**
-     * Total refunded amount.
+     * Total amount refunded for this transaction, in major units of the transaction's currency.
      */
     refunded_amount?: number;
   };

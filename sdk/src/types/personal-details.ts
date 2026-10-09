@@ -25,7 +25,7 @@ export type PersonalDetails = {
    */
   phone?: string;
   /**
-   * Date of birth of the customer.
+   * Date of birth of the customer in `YYYY-MM-DD` format, without a time or timezone.
    */
   birth_date?: string;
   /**
