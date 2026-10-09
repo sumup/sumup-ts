@@ -23,6 +23,9 @@ export {
   MemberUpdatedEvent,
   ReaderCreatedEvent,
   ReaderDeletedEvent,
+  RoleCreatedEvent,
+  RoleDeletedEvent,
+  RoleUpdatedEvent,
 } from "./events";
 export type { EventBody, EventCallback } from "./events-handler";
 export {

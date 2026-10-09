@@ -3,6 +3,7 @@ import type { HTTPClient } from "./client";
 import { EventBase, type EventPayload, UnknownEvent } from "./event";
 import type { Member } from "./types/member";
 import type { Reader } from "./types/reader";
+import type { Role } from "./types/role";
 /** A members.created notification. Call fetchObject() to retrieve the latest Member. */
 export class MemberCreatedEvent extends EventBase<Member> {
   declare readonly type: "members.created";
@@ -23,6 +24,18 @@ export class ReaderCreatedEvent extends EventBase<Reader> {
 export class ReaderDeletedEvent extends EventBase<Reader> {
   declare readonly type: "readers.deleted";
 }
+/** A roles.created notification. Call fetchObject() to retrieve the latest Role. */
+export class RoleCreatedEvent extends EventBase<Role> {
+  declare readonly type: "roles.created";
+}
+/** A roles.deleted notification. Call fetchObject() to retrieve the latest Role. */
+export class RoleDeletedEvent extends EventBase<Role> {
+  declare readonly type: "roles.deleted";
+}
+/** A roles.updated notification. Call fetchObject() to retrieve the latest Role. */
+export class RoleUpdatedEvent extends EventBase<Role> {
+  declare readonly type: "roles.updated";
+}
 /** Known wire event names and their notification classes. */
 export interface EventMap {
   "members.created": MemberCreatedEvent;
@@ -30,6 +43,9 @@ export interface EventMap {
   "members.updated": MemberUpdatedEvent;
   "readers.created": ReaderCreatedEvent;
   "readers.deleted": ReaderDeletedEvent;
+  "roles.created": RoleCreatedEvent;
+  "roles.deleted": RoleDeletedEvent;
+  "roles.updated": RoleUpdatedEvent;
 }
 /** A recognized event notification or {@link UnknownEvent}. Narrow with instanceof to access a specific resource type. */
 export type EventNotification = EventMap[keyof EventMap] | UnknownEvent;
@@ -49,6 +65,12 @@ export function createEvent(
       return new ReaderCreatedEvent(payload, client);
     case "readers.deleted":
       return new ReaderDeletedEvent(payload, client);
+    case "roles.created":
+      return new RoleCreatedEvent(payload, client);
+    case "roles.deleted":
+      return new RoleDeletedEvent(payload, client);
+    case "roles.updated":
+      return new RoleUpdatedEvent(payload, client);
     default:
       return new UnknownEvent(payload, client);
   }

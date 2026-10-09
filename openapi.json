@@ -3,7 +3,7 @@
   "info": {
     "title": "SumUp REST API",
     "version": "1.0.0",
-    "description": "SumUp’s REST API operates with [JSON](https://www.json.org/json-en.html) HTTP requests and responses. The request bodies are sent through resource-oriented URLs and use the standard [HTTP response codes](https://developer.mozilla.org/docs/Web/HTTP/Status).\n\nYou can experiment and work on your integration in a sandbox that doesn't affect your regular data and doesn't process real transactions. To create a sandbox merchant account visit the [dashboard](https://me.sumup.com/settings/developer). To use the sandbox when interacting with SumUp APIs [create an API](https://me.sumup.com/settings/api-keys) key and use it for [authentication](https://developer.sumup.com/api/authentication).",
+    "description": "SumUp's REST API lets you create and process payments, manage saved customers and payment instruments, and retrieve transactions, payouts, and receipt details. It uses resource-oriented URLs and standard [HTTP response codes](https://developer.mozilla.org/docs/Web/HTTP/Status). Send request bodies as [JSON](https://www.json.org/json-en.html) with `Content-Type: application/json`, unless an endpoint specifies another format.\n\nYou can experiment and work on your integration in a sandbox that doesn't affect your regular data and doesn't process real transactions. To create a sandbox merchant account visit the [dashboard](https://me.sumup.com/settings/developer). To use the sandbox when interacting with SumUp APIs [create an API](https://me.sumup.com/settings/api-keys) key and use it for [authentication](https://developer.sumup.com/api/authentication).",
     "license": {
       "name": "Apache 2.0",
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
@@ -27,7 +27,7 @@
     },
     {
       "name": "Customers",
-      "description": "Allow your regular customers to save their information with the Customers model.\n\nThis will prevent re-entering payment instrument information for recurring payments on your platform.\n\nDepending on the needs you can allow, creating, listing or deactivating payment instruments \u0026 creating, retrieving and updating customers.",
+      "description": "Customers represent payers in your integration. Create a customer with your own `customer_id` to associate their personal details and saved payment instruments with your business records.\n\nTo save a card, create a checkout for that customer with `purpose = SETUP_RECURRING_PAYMENT`, then process it with the payer's consent and mandate details. See the [tokenization guide](https://developer.sumup.com/online-payments/guides/tokenization-with-payment-sdk/).\n\nUse the Customers endpoints to create, retrieve, or update customer details and to list or deactivate saved payment instruments. For subsequent payments, process a new checkout with the saved instrument's `token` and its associated `customer_id`.",
       "x-core-objects": [
         {
           "$ref": "#/components/schemas/Customer"
@@ -49,7 +49,7 @@
     },
     {
       "name": "Receipts",
-      "description": "The Receipts model obtains receipt-like details for specific transactions.",
+      "description": "Retrieve structured receipt data for a transaction, including payment, merchant, and acquirer details. Use this data to display a receipt in your application. The response is JSON, rather than a rendered receipt document.",
       "x-core-objects": [
         {
           "$ref": "#/components/schemas/Receipt"
@@ -110,7 +110,7 @@
       "get": {
         "operationId": "GetPaymentMethods",
         "summary": "Get available payment methods",
-        "description": "Get payment methods available for the given merchant to use with a checkout.",
+        "description": "Lists the payment methods available to the merchant for checkout payments. Use the optional amount and currency filters to check eligibility for a particular payment before presenting payment options to the payer.",
         "tags": [
           "Checkouts"
         ],
@@ -133,7 +133,7 @@
             "in": "query",
             "name": "amount",
             "required": false,
-            "description": "The amount for which the payment methods should be eligible, in major units.",
+            "description": "Payment amount in major units, for example `9.99` for EUR 9.99. When filtering by `amount`, also provide `currency`.",
             "schema": {
               "type": "number",
               "example": 9.99
@@ -143,7 +143,7 @@
             "in": "query",
             "name": "currency",
             "required": false,
-            "description": "The currency for which the payment methods should be eligible.",
+            "description": "Three-letter ISO 4217 currency code for which the payment methods should be eligible, for example `EUR`.",
             "schema": {
               "type": "string",
               "example": "EUR"
@@ -282,7 +282,7 @@
                     "currency": "EUR",
                     "merchant_code": "MH4H92C7",
                     "description": "Purchase",
-                    "valid_until": "2020-02-29T10:56:56+00:00",
+                    "valid_until": "2030-12-31T23:59:59Z",
                     "redirect_url": "https://sumup.com"
                   }
                 },
@@ -349,7 +349,7 @@
                       "id": "88fcf8de-304d-4820-8f1c-ec880290eb92",
                       "status": "PENDING",
                       "date": "2020-02-29T10:56:56+00:00",
-                      "valid_until": "2020-02-29T10:56:56+00:00",
+                      "valid_until": "2030-12-31T23:59:59Z",
                       "customer_id": "831ff8d4cd5958ab5670",
                       "mandate": {
                         "type": "recurrent",
@@ -386,7 +386,7 @@
                       "id": "88fcf8de-304d-4820-8f1c-ec880290eb92",
                       "status": "PENDING",
                       "date": "2020-02-29T10:56:56+00:00",
-                      "valid_until": "2020-02-29T10:56:56+00:00",
+                      "valid_until": "2030-12-31T23:59:59Z",
                       "customer_id": "831ff8d4cd5958ab5670",
                       "redirect_url": "https://mysite.com/completed_purchase",
                       "transactions": [
@@ -580,7 +580,7 @@
           {
             "name": "checkout_reference",
             "in": "query",
-            "description": "Filters the list of checkout resources by the unique reference of the checkout.",
+            "description": "Filters checkouts by the merchant-defined `checkout_reference` supplied when creating the checkout. This is separate from the SumUp-generated checkout `id`.",
             "required": false,
             "schema": {
               "type": "string",
@@ -645,7 +645,7 @@
           "name": "checkout_id",
           "in": "path",
           "required": true,
-          "description": "Unique identifier of the checkout resource.",
+          "description": "SumUp-generated `id` returned when creating a checkout. Use this value to retrieve, update, process, or deactivate the checkout.",
           "schema": {
             "type": "string",
             "example": "4e425463-3e1b-431d-83fa-1e51c2925e99"
@@ -655,7 +655,7 @@
       "get": {
         "operationId": "GetCheckout",
         "summary": "Retrieve a checkout",
-        "description": "Retrieves an identified checkout resource. Use this request after processing a checkout to confirm its status and inform the end user respectively.",
+        "description": "Retrieves a checkout by its SumUp `checkout_id`. After processing a payment, returning from a redirect, or receiving a checkout notification, retrieve the checkout to confirm its current `status` before updating your order or displaying the payment outcome to the payer.",
         "tags": [
           "Checkouts"
         ],
@@ -781,7 +781,7 @@
                 "currency": "EUR",
                 "description": "Updated purchase",
                 "checkout_reference": "f00a8f74-b05d-4605-bd73-2a901bae5802",
-                "valid_until": "2020-02-29T10:56:56+00:00",
+                "valid_until": "2030-12-31T23:59:59Z",
                 "customer_id": "831ff8d4cd5958ab5670"
               }
             }
@@ -805,7 +805,7 @@
                   "id": "88fcf8de-304d-4820-8f1c-ec880290eb92",
                   "status": "PENDING",
                   "date": "2020-02-29T10:56:56+00:00",
-                  "valid_until": "2020-02-29T10:56:56+00:00",
+                  "valid_until": "2030-12-31T23:59:59Z",
                   "customer_id": "831ff8d4cd5958ab5670",
                   "transactions": []
                 }
@@ -858,7 +858,7 @@
       "put": {
         "operationId": "ProcessCheckout",
         "summary": "Process a checkout",
-        "description": ":::caution[PCI DSS compliance required]\nWhen you submit raw card details directly to the Checkout API, your systems store, process, or transmit cardholder data and are therefore subject to applicable [PCI DSS requirements](https://www.pcisecuritystandards.org/document_library/). You should only use this integration if your environment is appropriately PCI DSS compliant.\n:::\n\nProcessing a checkout will attempt to charge the provided payment instrument for the amount of the specified checkout resource initiated in the `Create a checkout` endpoint.\n\nFollow this request with `Retrieve a checkout` to confirm its status.",
+        "description": ":::caution[PCI DSS compliance required]\nWhen you submit raw card details directly to the Checkout API, your systems store, process, or transmit cardholder data and are therefore subject to applicable [PCI DSS requirements](https://www.pcisecuritystandards.org/document_library/). You should only use this integration if your environment is appropriately PCI DSS compliant.\n:::\n\nProcessing a checkout will attempt to charge the provided payment instrument for the amount of the specified checkout resource initiated in the `Create a checkout` endpoint.\n\nA processing response can require an additional payer action, such as a 3DS challenge or a payment-provider redirect. If `next_step` is returned, follow its instructions to continue the payment flow.\n\nRetrieve the checkout afterwards to confirm its payment status. Acceptance of the processing request does not by itself mean the checkout is paid.",
         "tags": [
           "Checkouts"
         ],
@@ -1033,9 +1033,9 @@
                       "description": "Purchase",
                       "return_url": "http://example.com",
                       "id": "4e425463-3e1b-431d-83fa-1e51c2925e99",
-                      "status": "PENDING",
+                      "status": "PAID",
                       "date": "2020-02-29T10:56:56+00:00",
-                      "valid_until": "2020-02-29T10:56:56+00:00",
+                      "valid_until": "2030-12-31T23:59:59Z",
                       "customer_id": "831ff8d4cd5958ab5670",
                       "mandate": {
                         "type": "recurrent",
@@ -1072,7 +1072,7 @@
                       "merchant_code": "MH4H92C7",
                       "description": "Purchase with token",
                       "id": "4e425463-3e1b-431d-83fa-1e51c2925e99",
-                      "status": "PENDING",
+                      "status": "PAID",
                       "date": "2020-02-29T10:56:56+00:00",
                       "transaction_code": "TEENSK4W2K",
                       "transaction_id": "410fc44a-5956-44e1-b5cc-19c6f8d727a4",
@@ -1102,7 +1102,7 @@
                     }
                   },
                   "CheckoutSuccessBoleto": {
-                    "description": "Successfully processed checkout with Boleto",
+                    "description": "Boleto payment initiated, awaiting payment by the payer",
                     "value": {
                       "checkout_reference": "f00a8f74-b05d-4605-bd73-2a901bae5802",
                       "amount": 10.1,
@@ -1138,7 +1138,7 @@
                     }
                   },
                   "CheckoutSuccessiDeal": {
-                    "description": "Successfully processed checkout with iDeal",
+                    "description": "iDEAL processing response requiring a payer redirect",
                     "value": {
                       "next_step": {
                         "url": "https://r3.girogate.de/ti/simideal",
@@ -1156,7 +1156,7 @@
                     }
                   },
                   "CheckoutSuccessBancontact": {
-                    "description": "Successfully processed checkout with Bancontact",
+                    "description": "Bancontact processing response requiring a payer redirect",
                     "value": {
                       "next_step": {
                         "url": "https://r3.girogate.de/ti/simbcmc",
@@ -1335,7 +1335,7 @@
                 },
                 "example": {
                   "checkout_reference": "f00a8f74-b05d-4605-bd73-2a901bae5802",
-                  "id": "817340ce-f1d9-4609-b90a-6152f8ee267j",
+                  "id": "817340ce-f1d9-4609-b90a-6152f8ee267a",
                   "amount": 2,
                   "currency": "EUR",
                   "merchant_code": "MH4H92C7",
@@ -1343,7 +1343,7 @@
                   "purpose": "CHECKOUT",
                   "status": "EXPIRED",
                   "date": "2020-02-29T10:56:56+00:00",
-                  "valid_until": "2020-02-29T10:56:56+00:00",
+                  "valid_until": "2030-12-31T23:59:59Z",
                   "merchant_name": "Sample Merchant",
                   "transactions": []
                 }
@@ -1426,7 +1426,7 @@
             "name": "checkout_id",
             "in": "path",
             "required": true,
-            "description": "Unique identifier of the checkout resource.",
+            "description": "SumUp-generated `id` returned when creating a checkout. Use this value to retrieve, update, process, or deactivate the checkout.",
             "schema": {
               "type": "string",
               "example": "4e425463-3e1b-431d-83fa-1e51c2925e99"
@@ -1438,7 +1438,7 @@
         },
         "x-scopes": [],
         "requestBody": {
-          "description": "The data needed to create an apple pay session for a checkout.",
+          "description": "Merchant validation details from the Apple Pay session in the payer's browser.",
           "content": {
             "application/json": {
               "schema": {
@@ -1450,13 +1450,13 @@
                 "properties": {
                   "context": {
                     "type": "string",
-                    "description": "the context to create this apple pay session.",
+                    "description": "Hostname of the website displaying the Apple Pay payment sheet, without a URL scheme or path. Use the domain registered for Apple Pay.",
                     "format": "hostname",
                     "example": "example.com"
                   },
                   "target": {
                     "type": "string",
-                    "description": "The target url to create this apple pay session.",
+                    "description": "Apple Pay validation URL received as `validationURL` in the browser's `onvalidatemerchant` event.",
                     "format": "uri",
                     "example": "https://apple-pay-gateway-cert.apple.com/paymentservices/startSession"
                   }
@@ -1548,7 +1548,7 @@
       "post": {
         "operationId": "CreateCustomer",
         "summary": "Create a customer",
-        "description": "Creates a new saved customer resource which you can later manipulate and save payment instruments to.",
+        "description": "Creates a customer using the `customer_id` you supply. Choose an identifier that maps to the payer in your own system and reuse it when retrieving the customer or associating checkouts and saved payment instruments with them.",
         "tags": [
           "Customers"
         ],
@@ -1711,7 +1711,7 @@
           "name": "customer_id",
           "in": "path",
           "required": true,
-          "description": "Unique identifier of the saved customer resource.",
+          "description": "The `customer_id` you supplied when creating the customer.",
           "schema": {
             "type": "string",
             "example": "831ff8d4cd5958ab5670"
@@ -1721,7 +1721,7 @@
       "get": {
         "operationId": "GetCustomer",
         "summary": "Retrieve a customer",
-        "description": "Retrieves an identified saved customer resource through the unique `customer_id` parameter, generated upon customer creation.",
+        "description": "Retrieves a saved customer using the `customer_id` you supplied when creating the customer.",
         "tags": [
           "Customers"
         ],
@@ -1939,7 +1939,7 @@
           "name": "customer_id",
           "in": "path",
           "required": true,
-          "description": "Unique identifier of the saved customer resource.",
+          "description": "The `customer_id` you supplied when creating the customer.",
           "schema": {
             "type": "string",
             "example": "831ff8d4cd5958ab5670"
@@ -2055,7 +2055,7 @@
           "name": "customer_id",
           "in": "path",
           "required": true,
-          "description": "Unique identifier of the saved customer resource.",
+          "description": "The `customer_id` you supplied when creating the customer.",
           "schema": {
             "type": "string",
             "example": "831ff8d4cd5958ab5670"
@@ -2210,7 +2210,7 @@
       "post": {
         "operationId": "RefundTransaction",
         "summary": "Refund a transaction",
-        "description": "Refunds an identified transaction either in full or partially.",
+        "description": "Refunds a transaction identified by its SumUp transaction ID. Omit the request body to request a full refund, or provide `amount` for a partial refund in the transaction's currency.\n\nRetrieve the transaction afterwards to inspect its refunded amount and refund events. The transaction must be eligible for a refund; see the error responses for invalid amounts, permissions, and processing failures.",
         "tags": [
           "Transactions"
         ],
@@ -2246,7 +2246,7 @@
                   "amount": {
                     "type": "number",
                     "format": "float",
-                    "description": "Amount to be refunded. Eligible amount can't exceed the amount of the transaction and varies based on country and currency. If you do not specify a value, the system performs a full refund of the transaction.",
+                    "description": "Amount to refund in major units of the transaction's currency, for example `5` for EUR 5.00. It must be greater than zero and cannot exceed the amount eligible for a refund. Eligibility depends on the transaction and country/currency rules. If omitted, the system requests a full refund.",
                     "example": 5
                   }
                 }
@@ -2260,7 +2260,8 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "type": "object",
+                  "properties": {}
                 },
                 "example": {}
               }
@@ -2532,7 +2533,7 @@
       "get": {
         "operationId": "ListTransactionsV2.1",
         "summary": "List transactions",
-        "description": "Lists detailed history of all transactions associated with the merchant profile.",
+        "description": "Lists transaction history for the merchant, with optional filters for payment type, status, and date range. The response contains the current page in `items` and pagination query strings in `links`.\n\nTo request another page, use the query string from the relevant link's `href` with this history endpoint. Use `changes_since` when retrieving transactions modified since a previous synchronization, including transactions created earlier whose status has changed.",
         "tags": [
           "Transactions"
         ],
@@ -2578,7 +2579,7 @@
           {
             "name": "order",
             "in": "query",
-            "description": "Specifies the order in which the returned results are displayed.",
+            "description": "Sort direction for the transaction history. Use `ascending` or `descending`; the default is `ascending`.",
             "schema": {
               "type": "string",
               "enum": [
@@ -2591,7 +2592,7 @@
           {
             "name": "limit",
             "in": "query",
-            "description": "Specifies the maximum number of results per page. Value must be a positive integer and if not specified, will return 10 results.",
+            "description": "Maximum number of transactions per page. Must be a positive integer. Defaults to `10` when omitted; a page can contain fewer results.",
             "schema": {
               "type": "integer",
               "example": 10
@@ -2600,7 +2601,7 @@
           {
             "name": "users[]",
             "in": "query",
-            "description": "Filters the returned results by user email.",
+            "description": "Filters transactions by user email. For multiple values, repeat the query parameter, for example `users[]=first@example.com\u0026users[]=second@example.com`.",
             "required": false,
             "example": [
               "merchant@example.com"
@@ -2619,7 +2620,7 @@
           {
             "name": "statuses[]",
             "in": "query",
-            "description": "Filters the returned results by the specified list of final statuses of the transactions.",
+            "description": "Filters transactions by the listed final statuses. For multiple values, repeat the query parameter, for example `statuses[]=SUCCESSFUL\u0026statuses[]=REFUNDED`.",
             "required": false,
             "schema": {
               "type": "array",
@@ -2717,7 +2718,7 @@
           {
             "name": "newest_ref",
             "in": "query",
-            "description": "Filters the results by the reference ID of transaction events and returns only transactions with events whose IDs are *smaller* than the specified value. This parameters supersedes the `newest_time` parameter (if both are provided in the request).",
+            "description": "Pagination reference that returns results before the specified reference. Use the value from a returned pagination link rather than constructing it yourself. This parameter takes precedence over `newest_time` when both are provided.",
             "required": false,
             "schema": {
               "type": "string",
@@ -2738,7 +2739,7 @@
           {
             "name": "oldest_ref",
             "in": "query",
-            "description": "Filters the results by the reference ID of transaction events and returns only transactions with events whose IDs are *greater* than the specified value. This parameters supersedes the `oldest_time` parameter (if both are provided in the request).",
+            "description": "Pagination reference that returns results after the specified reference. Use the value from a returned pagination link rather than constructing it yourself. This parameter takes precedence over `oldest_time` when both are provided.",
             "required": false,
             "schema": {
               "type": "string",
@@ -3060,7 +3061,7 @@
       "get": {
         "operationId": "GetReceipt",
         "summary": "Retrieve receipt details",
-        "description": "Retrieves receipt specific data for a transaction.",
+        "description": "Retrieves structured receipt data for a transaction belonging to the merchant specified by `mid`. The path accepts either the SumUp transaction ID or transaction code. Provide `tx_event_id` to include a specific transaction event, such as a refund, on the receipt.",
         "tags": [
           "Receipts"
         ],
@@ -6242,7 +6243,7 @@
           },
           "payment_account_reference": {
             "type": "string",
-            "description": "PAR (Payment account reference) if available for the card.",
+            "description": "Payment Account Reference (PAR) defined by [EMVCo](https://www.emvco.com/emv-technologies/payment-tokenisation/). It links a card's primary account number (PAN) with its affiliated payment tokens, allowing transactions made with the physical card and tokenized versions of that card, such as digital wallets, to be correlated when PAR is available.\n\nThis reference cannot be used to initiate a payment and is separate from the saved payment instrument `token` used to process checkouts. Returned only when available for the card; integrations must handle its absence.",
             "example": "5665ABCDEFGHIJKLMNOPQRSTUVWXY"
           }
         }
@@ -6328,7 +6329,7 @@
         "properties": {
           "checkout_reference": {
             "type": "string",
-            "maxLength": 90,
+            "maxLength": 64,
             "description": "Merchant-defined reference for the checkout. Use it to correlate the SumUp checkout with your own order, cart, subscription, or payment attempt in your systems.",
             "example": "f00a8f74-b05d-4605-bd73-2a901bae5802"
           },
@@ -6354,7 +6355,7 @@
           "return_url": {
             "type": "string",
             "format": "uri",
-            "description": "Optional backend callback URL used by SumUp to notify your platform about processing updates for the checkout.",
+            "description": "Optional backend callback URL for checkout status notifications. SumUp sends an HTTP POST with `event_type` and the checkout `id`. Retrieve the checkout to verify its current status before updating your order. See the [webhook guide](https://developer.sumup.com/online-payments/webhooks/) for the payload and response requirements.",
             "example": "http://example.com"
           },
           "id": {
@@ -6385,7 +6386,7 @@
               "string",
               "null"
             ],
-            "example": "2020-02-29T10:56:56+00:00",
+            "example": "2030-12-31T23:59:59Z",
             "format": "date-time",
             "description": "Optional expiration timestamp. The checkout must be processed before this moment, otherwise it becomes unusable. If omitted, the checkout does not have an explicit expiry time."
           },
@@ -6446,7 +6447,7 @@
           "checkout_reference": {
             "type": "string",
             "maxLength": 64,
-            "description": "Merchant-defined reference for the new checkout. It should be unique enough for you to identify the payment attempt in your own systems.",
+            "description": "Merchant-defined reference for the new checkout, up to 64 characters. Use it to correlate the checkout with an order or payment attempt in your own system. If a checkout already exists for the supplied unique parameters, creation returns `409` with `DUPLICATED_CHECKOUT`; see the conflict response.",
             "example": "f00a8f74-b05d-4605-bd73-2a901bae5802"
           },
           "amount": {
@@ -6471,7 +6472,7 @@
           "return_url": {
             "type": "string",
             "format": "uri",
-            "description": "Optional backend callback URL used by SumUp to notify your platform about processing updates for the checkout.",
+            "description": "Optional backend callback URL for checkout status notifications. SumUp sends an HTTP POST with `event_type` and the checkout `id`. Retrieve the checkout to verify its current status before updating your order. See the [webhook guide](https://developer.sumup.com/online-payments/webhooks/) for the payload and response requirements.",
             "example": "http://example.com/"
           },
           "customer_id": {
@@ -6493,7 +6494,7 @@
               "string",
               "null"
             ],
-            "example": "2020-02-29T10:56:56+00:00",
+            "example": "2030-12-31T23:59:59Z",
             "format": "date-time",
             "description": "Optional expiration timestamp. The checkout must be processed before this moment, otherwise it becomes unusable. If omitted, the checkout does not have an explicit expiry time."
           },
@@ -6534,7 +6535,7 @@
           },
           "checkout_reference": {
             "type": "string",
-            "maxLength": 90,
+            "maxLength": 64,
             "description": "Updated merchant-defined reference for the checkout.",
             "example": "f00a8f74-b05d-4605-bd73-2a901bae5802"
           },
@@ -6543,7 +6544,7 @@
               "string",
               "null"
             ],
-            "example": "2020-02-29T10:56:56+00:00",
+            "example": "2030-12-31T23:59:59Z",
             "format": "date-time",
             "description": "Updated expiration timestamp. The checkout must be processed before this moment, otherwise it becomes unusable."
           },
@@ -6632,7 +6633,7 @@
           },
           "token": {
             "type": "string",
-            "description": "Saved-card token to use instead of raw card details when processing with a previously stored payment instrument.",
+            "description": "Token of a saved payment instrument returned by checkout processing or the customer's payment-instruments endpoint. To charge a saved card, set `payment_type` to `card` and provide both this `token` and the associated `customer_id` instead of raw card details.",
             "example": "ba85dfee-c3cf-48a6-84f5-d7d761fbba50"
           },
           "customer_id": {
@@ -6752,14 +6753,14 @@
       "Customer": {
         "type": "object",
         "title": "Customer",
-        "description": "Saved customer details.",
+        "description": "Saved payer details identified by the `customer_id` supplied by your integration. A customer can have saved payment instruments for subsequent payments.",
         "required": [
           "customer_id"
         ],
         "properties": {
           "customer_id": {
             "type": "string",
-            "description": "Unique identifier of the customer.",
+            "description": "Identifier you supply when creating the customer. Use an ID from your own system and retain it for subsequent customer, checkout, and saved-payment-instrument requests.",
             "example": "831ff8d4cd5958ab5670"
           },
           "personal_details": {
@@ -7092,12 +7093,12 @@
         "properties": {
           "rel": {
             "type": "string",
-            "description": "Relation.",
+            "description": "Pagination relation indicating which page the link retrieves, for example `next`.",
             "example": "next"
           },
           "href": {
             "type": "string",
-            "description": "Location.",
+            "description": "Query string to use with the transaction history endpoint when requesting the linked page. Preserve the returned pagination references and query parameters.",
             "example": "limit=10\u0026oldest_ref=090df9bf-93b7-40f1-8181-fbdb236568a1\u0026order=ascending"
           }
         },
@@ -7178,7 +7179,7 @@
         "properties": {
           "token": {
             "type": "string",
-            "description": "Unique token identifying the saved payment card for a customer.",
+            "description": "Token identifying the customer's saved payment card. Pass it as `token`, together with the associated `customer_id` and `payment_type = card`, when processing a checkout with this instrument.",
             "readOnly": true,
             "example": "bcfc8e5f-3b47-4cb9-854b-3b7a4cce7be3"
           },
@@ -7266,7 +7267,7 @@
           },
           "birth_date": {
             "type": "string",
-            "description": "Date of birth of the customer.",
+            "description": "Date of birth of the customer in `YYYY-MM-DD` format, without a time or timezone.",
             "format": "date",
             "example": "1993-12-31"
           },
@@ -7305,7 +7306,7 @@
           "vat_rate": {
             "type": "number",
             "format": "decimal",
-            "description": "VAT rate applied to the product price.",
+            "description": "VAT rate as a decimal fraction, for example `0.19` for 19%.",
             "example": 0.19
           },
           "single_vat_amount": {
@@ -7348,7 +7349,7 @@
       "Receipt": {
         "type": "object",
         "title": "Receipt",
-        "description": "Receipt details for a transaction.",
+        "description": "Structured receipt details for a transaction. The transaction's `amount`, `vat_amount`, and `tip_amount`, as well as event amounts, are returned as decimal strings in major currency units, for example `\"10.10\"` for EUR 10.10.",
         "properties": {
           "transaction_data": {
             "$ref": "#/components/schemas/ReceiptTransaction"
@@ -7797,7 +7798,7 @@
           "amount": {
             "type": "number",
             "format": "decimal",
-            "description": "Amount of the event.",
+            "description": "Amount of the event in major units of the associated transaction's currency.",
             "example": 58.8
           },
           "due_date": {
@@ -7814,7 +7815,7 @@
           },
           "installment_number": {
             "type": "integer",
-            "description": "Consecutive number of the installment that is paid. Applicable only payout events, i.e. `event_type = PAYOUT`.",
+            "description": "Consecutive number of the installment that is paid. Applicable only to payout events, i.e. `event_type = PAYOUT`.",
             "example": 1
           },
           "timestamp": {
@@ -7837,13 +7838,13 @@
           },
           "transaction_code": {
             "type": "string",
-            "description": "Transaction code returned by the acquirer/processing entity after processing the transaction.",
+            "description": "SumUp transaction code, for example `TEENSK4W2K`. Use it to look up the transaction with the `transaction_code` query parameter. This is separate from the transaction's `id` and the card issuer's `auth_code`.",
             "example": "TEENSK4W2K"
           },
           "amount": {
             "type": "number",
             "format": "float",
-            "description": "Total amount of the transaction.",
+            "description": "Total amount of the transaction in major units of `currency`, for example `10.1` for EUR 10.10.",
             "example": 10.1
           },
           "currency": {
@@ -7882,13 +7883,13 @@
           "vat_amount": {
             "type": "number",
             "format": "float",
-            "description": "Amount of the applicable VAT (out of the total transaction amount).",
+            "description": "VAT included in the total transaction amount, in major units of the transaction's currency.",
             "example": 6
           },
           "tip_amount": {
             "type": "number",
             "format": "float",
-            "description": "Amount of the tip (out of the total transaction amount).",
+            "description": "Tip included in the total transaction amount, in major units of the transaction's currency.",
             "example": 3
           },
           "entry_mode": {
@@ -7991,7 +7992,7 @@
               "refunded_amount": {
                 "type": "number",
                 "format": "decimal",
-                "description": "Total refunded amount.",
+                "description": "Total amount refunded for this transaction, in major units of the transaction's currency.",
                 "example": 0
               }
             }
@@ -8001,7 +8002,7 @@
       "PaymentType": {
         "title": "Payment Type",
         "type": "string",
-        "description": "Payment type used for the transaction.",
+        "description": "Payment category recorded on a transaction, for example `POS` for a point-of-sale card payment, `ECOM` for an online card payment, or `RECURRING` for a recurring card payment. These reporting values are separate from the lowercase `payment_type` values used to process checkouts.",
         "enum": [
           "CASH",
           "POS",
@@ -8020,7 +8021,7 @@
       "EntryMode": {
         "title": "Entry Mode",
         "type": "string",
-        "description": "Entry mode of the payment details.",
+        "description": "How the payment details were captured, for example `CHIP` or `CONTACTLESS` for card-present payments and `CUSTOMER_ENTRY` for card details entered by the payer. For wallet and alternative payment methods, this can identify the method, such as `APPLE_PAY` or `BLIK`.",
         "enum": [
           "BOLETO",
           "SOFORT",
@@ -8119,7 +8120,7 @@
               "fee_amount": {
                 "type": "number",
                 "format": "decimal",
-                "description": "Transaction SumUp total fee amount.",
+                "description": "Total SumUp transaction fee in major units of the transaction's currency.",
                 "example": 8
               },
               "lat": {
@@ -8351,7 +8352,7 @@
       "TransactionEventType": {
         "title": "Transaction Event Type",
         "type": "string",
-        "description": "Type of the transaction event.",
+        "description": "Financial event associated with a transaction.\n\n- `PAYOUT`: Funds from the transaction being prepared for or included in a merchant payout. Check the event status to determine whether they have been paid out.\n- `REFUND`: Money returned to the payer.\n- `CHARGE_BACK`: A reversal of the payment following a chargeback.\n- `PAYOUT_DEDUCTION`: An amount deducted from a merchant payout, for example to cover a refund or chargeback.",
         "enum": [
           "PAYOUT",
           "CHARGE_BACK",
@@ -8379,7 +8380,7 @@
         "title": "Transaction Event ID",
         "type": "integer",
         "format": "int64",
-        "description": "Unique identifier of the transaction event.",
+        "description": "Numeric identifier of a transaction event. Use it as `tx_event_id` when requesting receipt details for a specific event. This is separate from the transaction ID and the transaction history pagination references.",
         "example": 9567461191
       },
       "HorizontalAccuracy": {
@@ -8394,7 +8395,7 @@
         "type": "number",
         "format": "float",
         "description": "Latitude value from the coordinates of the payment location (as received from the payment terminal reader).",
-        "minimum": 0,
+        "minimum": -90,
         "maximum": 90,
         "example": 52.520008
       },
@@ -8403,7 +8404,7 @@
         "type": "number",
         "format": "float",
         "description": "Longitude value from the coordinates of the payment location (as received from the payment terminal reader).",
-        "minimum": 0,
+        "minimum": -180,
         "maximum": 180,
         "example": 13.404954
       },
@@ -8459,7 +8460,15 @@
       "ReaderPaymentRequestParams": {
         "properties": {
           "affiliate": {
-            "$ref": "#/components/schemas/Affiliate"
+            "allOf": [
+              {
+                "description": "Optional caller-supplied context about the integration initiating the payment.",
+                "type": "object"
+              },
+              {
+                "$ref": "#/components/schemas/Affiliate"
+              }
+            ]
           },
           "client_transaction_id": {
             "description": "Caller-supplied correlation identifier, used as the idempotency key.",
@@ -8472,7 +8481,18 @@
             "type": "integer"
           },
           "total_amount": {
-            "$ref": "#/components/schemas/Amount"
+            "allOf": [
+              {
+                "description": "Amount structure. The amount is represented as an integer value altogether with the currency and the minor unit. For example, MXN 10.00 is represented as value 1000 with minor unit of 2.",
+                "example": {
+                  "currency": "MXN",
+                  "value": 1000
+                }
+              },
+              {
+                "$ref": "#/components/schemas/Amount"
+              }
+            ]
           }
         },
         "required": [
@@ -8975,7 +8995,15 @@
             "example": "10999"
           },
           "country": {
-            "$ref": "#/components/schemas/CountryCode"
+            "allOf": [
+              {
+                "description": "The ISO3166-1 Alpha-2 code of the address country.\n",
+                "example": "DE"
+              },
+              {
+                "$ref": "#/components/schemas/CountryCode"
+              }
+            ]
           },
           "city": {
             "type": "string",
@@ -9504,7 +9532,8 @@
             "maxLength": 60
           },
           "phone_number": {
-            "$ref": "#/components/schemas/PhoneNumber"
+            "$ref": "#/components/schemas/PhoneNumber",
+            "description": "The (mobile) phone number of the individual (used for verification) in [E.164](https://en.wikipedia.org/wiki/E.164) format.\n"
           },
           "relationships": {
             "type": "array",
@@ -9522,16 +9551,19 @@
             }
           },
           "ownership": {
-            "$ref": "#/components/schemas/Ownership"
+            "$ref": "#/components/schemas/Ownership",
+            "description": "Details about the ownership relationship between the Person and the Merchant. This is only set if the Person has a relationship of type `owner`.\n"
           },
           "address": {
-            "$ref": "#/components/schemas/Address"
+            "$ref": "#/components/schemas/Address",
+            "description": "The address of the individual."
           },
           "identifiers": {
             "$ref": "#/components/schemas/PersonalIdentifiers"
           },
           "citizenship": {
-            "$ref": "#/components/schemas/CountryCode"
+            "$ref": "#/components/schemas/CountryCode",
+            "description": "The Alpha-2 ISO code of the country where the Person is a citizen.\n"
           },
           "nationality": {
             "type": [
@@ -9579,19 +9611,23 @@
             "pattern": "^[0-9]{4}$"
           },
           "legal_type": {
-            "$ref": "#/components/schemas/LegalType"
+            "$ref": "#/components/schemas/LegalType",
+            "description": "The category identifying the legal structure of the company or legal entity.\n"
           },
           "address": {
-            "$ref": "#/components/schemas/Address"
+            "$ref": "#/components/schemas/Address",
+            "description": "The company's primary address."
           },
           "trading_address": {
-            "$ref": "#/components/schemas/Address"
+            "$ref": "#/components/schemas/Address",
+            "description": "A trading address is where your suppliers, banks or customers send you correspondence to. Trading address can be different to the company's registered address (`address`).\n"
           },
           "identifiers": {
             "$ref": "#/components/schemas/CompanyIdentifiers"
           },
           "phone_number": {
-            "$ref": "#/components/schemas/PhoneNumber"
+            "$ref": "#/components/schemas/PhoneNumber",
+            "description": "The company's phone number (used for verification) in [E.164](https://en.wikipedia.org/wiki/E.164) format.\n"
           },
           "website": {
             "description": "HTTP(S) URL of the company's website.\n",
@@ -10548,7 +10584,7 @@
                   "currency": "EUR",
                   "merchant_code": "MH4H92C7",
                   "description": "Purchase",
-                  "valid_until": "2020-02-29T10:56:56+00:00",
+                  "valid_until": "2030-12-31T23:59:59Z",
                   "redirect_url": "https://sumup.com"
                 }
               },
@@ -10606,7 +10642,7 @@
               "currency": "EUR",
               "description": "Updated purchase",
               "checkout_reference": "f00a8f74-b05d-4605-bd73-2a901bae5802",
-              "valid_until": "2020-02-29T10:56:56+00:00",
+              "valid_until": "2030-12-31T23:59:59Z",
               "customer_id": "831ff8d4cd5958ab5670"
             }
           }
@@ -10653,7 +10689,7 @@
                 "amount": {
                   "type": "number",
                   "format": "float",
-                  "description": "Amount to be refunded. Eligible amount can't exceed the amount of the transaction and varies based on country and currency. If you do not specify a value, the system performs a full refund of the transaction.",
+                  "description": "Amount to refund in major units of the transaction's currency, for example `5` for EUR 5.00. It must be greater than zero and cannot exceed the amount eligible for a refund. Eligibility depends on the transaction and country/currency rules. If omitted, the system requests a full refund.",
                   "example": 5
                 }
               }
@@ -10684,7 +10720,7 @@
                   "id": "88fcf8de-304d-4820-8f1c-ec880290eb92",
                   "status": "PENDING",
                   "date": "2020-02-29T10:56:56+00:00",
-                  "valid_until": "2020-02-29T10:56:56+00:00",
+                  "valid_until": "2030-12-31T23:59:59Z",
                   "customer_id": "831ff8d4cd5958ab5670",
                   "mandate": {
                     "type": "recurrent",
@@ -10721,7 +10757,7 @@
                   "id": "88fcf8de-304d-4820-8f1c-ec880290eb92",
                   "status": "PENDING",
                   "date": "2020-02-29T10:56:56+00:00",
-                  "valid_until": "2020-02-29T10:56:56+00:00",
+                  "valid_until": "2030-12-31T23:59:59Z",
                   "customer_id": "831ff8d4cd5958ab5670",
                   "redirect_url": "https://mysite.com/completed_purchase",
                   "transactions": [
@@ -10820,7 +10856,7 @@
               "id": "88fcf8de-304d-4820-8f1c-ec880290eb92",
               "status": "PENDING",
               "date": "2020-02-29T10:56:56+00:00",
-              "valid_until": "2020-02-29T10:56:56+00:00",
+              "valid_until": "2030-12-31T23:59:59Z",
               "customer_id": "831ff8d4cd5958ab5670",
               "transactions": []
             }
@@ -11140,7 +11176,7 @@
       "CheckoutReference": {
         "name": "checkout_reference",
         "in": "query",
-        "description": "Filters the list of checkout resources by the unique reference of the checkout.",
+        "description": "Filters checkouts by the merchant-defined `checkout_reference` supplied when creating the checkout. This is separate from the SumUp-generated checkout `id`.",
         "required": false,
         "schema": {
           "type": "string",
@@ -11151,7 +11187,7 @@
         "name": "checkout_id",
         "in": "path",
         "required": true,
-        "description": "Unique identifier of the checkout resource.",
+        "description": "SumUp-generated `id` returned when creating a checkout. Use this value to retrieve, update, process, or deactivate the checkout.",
         "schema": {
           "type": "string",
           "example": "4e425463-3e1b-431d-83fa-1e51c2925e99"
@@ -11161,7 +11197,7 @@
         "name": "customer_id",
         "in": "path",
         "required": true,
-        "description": "Unique identifier of the saved customer resource.",
+        "description": "The `customer_id` you supplied when creating the customer.",
         "schema": {
           "type": "string",
           "example": "831ff8d4cd5958ab5670"
@@ -11190,7 +11226,7 @@
       "OrderFilter": {
         "name": "order",
         "in": "query",
-        "description": "Specifies the order in which the returned results are displayed.",
+        "description": "Sort direction for the transaction history. Use `ascending` or `descending`; the default is `ascending`.",
         "schema": {
           "type": "string",
           "enum": [
@@ -11203,7 +11239,7 @@
       "LimitFilter": {
         "name": "limit",
         "in": "query",
-        "description": "Specifies the maximum number of results per page. Value must be a positive integer and if not specified, will return 10 results.",
+        "description": "Maximum number of transactions per page. Must be a positive integer. Defaults to `10` when omitted; a page can contain fewer results.",
         "schema": {
           "type": "integer",
           "example": 10
@@ -11212,7 +11248,7 @@
       "UsersFilter": {
         "name": "users[]",
         "in": "query",
-        "description": "Filters the returned results by user email.",
+        "description": "Filters transactions by user email. For multiple values, repeat the query parameter, for example `users[]=first@example.com\u0026users[]=second@example.com`.",
         "required": false,
         "example": [
           "merchant@example.com"
@@ -11231,7 +11267,7 @@
       "StatusesFilter": {
         "name": "statuses[]",
         "in": "query",
-        "description": "Filters the returned results by the specified list of final statuses of the transactions.",
+        "description": "Filters transactions by the listed final statuses. For multiple values, repeat the query parameter, for example `statuses[]=SUCCESSFUL\u0026statuses[]=REFUNDED`.",
         "required": false,
         "schema": {
           "type": "array",
@@ -11329,7 +11365,7 @@
       "NewestRefFilter": {
         "name": "newest_ref",
         "in": "query",
-        "description": "Filters the results by the reference ID of transaction events and returns only transactions with events whose IDs are *smaller* than the specified value. This parameters supersedes the `newest_time` parameter (if both are provided in the request).",
+        "description": "Pagination reference that returns results before the specified reference. Use the value from a returned pagination link rather than constructing it yourself. This parameter takes precedence over `newest_time` when both are provided.",
         "required": false,
         "schema": {
           "type": "string",
@@ -11349,13 +11385,13 @@
     },
     "securitySchemes": {
       "apiKey": {
-        "description": "API keys allow you easily interact with SumUp APIs. API keys are static tokens. You can create API keys from the [Dashboard](https://me.sumup.com/settings/api-keys)",
+        "description": "Authenticate requests with an API key created in the [Dashboard](https://me.sumup.com/settings/api-keys). Send the key in the HTTP `Authorization` header as `Bearer YOUR_API_KEY`. See the [API key guide](https://developer.sumup.com/tools/authorization/api-keys/).",
         "type": "http",
         "scheme": "Bearer"
       },
       "oauth2": {
         "type": "oauth2",
-        "description": "SumUp supports [OAuth 2.0](https://tools.ietf.org/html/rfc6749) authentication for platforms that want to offer their services to SumUp users.\n\nTo integrate via OAuth 2.0 you will need a client credentials that you can create in the [SumUp Dashboard](https://me.sumup.com/settings/oauth2-applications).\n\nTo maintain security of our users, we highly recommend that you use one of the [recommended OAuth 2.0 libraries](https://oauth.net/code/) for authentication.",
+        "description": "SumUp supports [OAuth 2.0](https://tools.ietf.org/html/rfc6749) authentication for platforms that want to offer their services to SumUp users.\n\nRegister an application in the [SumUp Dashboard](https://me.sumup.com/settings/oauth2-applications) to obtain a client ID and client secret. Use the authorization code flow to request a merchant's consent, then send the issued access token in the HTTP `Authorization` header as `Bearer ACCESS_TOKEN`. Request the scopes needed for the endpoints your integration calls.\n\nTo maintain security of our users, we highly recommend that you use one of the [recommended OAuth 2.0 libraries](https://oauth.net/code/) for authentication.",
         "flows": {
           "authorizationCode": {
             "authorizationUrl": "https://api.sumup.com/authorize",
@@ -11623,6 +11659,138 @@
                       "id": "mem_123",
                       "type": "member",
                       "url": "https://api.sumup.com/v0.1/merchants/MC0DE/members/mem_123"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "2XX": {
+            "description": "Return any 2xx response to acknowledge successful delivery."
+          }
+        }
+      }
+    },
+    "roles.created": {
+      "post": {
+        "operationId": "RoleCreatedWebhook",
+        "tags": [
+          "Roles"
+        ],
+        "summary": "Role created",
+        "description": "Sent when a role is created for a merchant account.",
+        "x-object": {
+          "$ref": "#/components/schemas/Role"
+        },
+        "x-object-type": "role",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Event"
+              },
+              "examples": {
+                "created": {
+                  "summary": "A role created webhook event.",
+                  "value": {
+                    "id": "evt_role_123",
+                    "type": "roles.created",
+                    "created_at": "2026-05-14T08:30:00Z",
+                    "object": {
+                      "id": "rol_123",
+                      "type": "role",
+                      "url": "https://api.sumup.com/v0.1/merchants/MC0DE/roles/rol_123"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "2XX": {
+            "description": "Return any 2xx response to acknowledge successful delivery."
+          }
+        }
+      }
+    },
+    "roles.updated": {
+      "post": {
+        "operationId": "RoleUpdatedWebhook",
+        "tags": [
+          "Roles"
+        ],
+        "summary": "Role updated",
+        "description": "Sent when a role is updated for a merchant account.",
+        "x-object": {
+          "$ref": "#/components/schemas/Role"
+        },
+        "x-object-type": "role",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Event"
+              },
+              "examples": {
+                "updated": {
+                  "summary": "A role updated webhook event.",
+                  "value": {
+                    "id": "evt_role_123",
+                    "type": "roles.updated",
+                    "created_at": "2026-05-14T08:30:00Z",
+                    "object": {
+                      "id": "rol_123",
+                      "type": "role",
+                      "url": "https://api.sumup.com/v0.1/merchants/MC0DE/roles/rol_123"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "2XX": {
+            "description": "Return any 2xx response to acknowledge successful delivery."
+          }
+        }
+      }
+    },
+    "roles.deleted": {
+      "post": {
+        "operationId": "RoleDeletedWebhook",
+        "tags": [
+          "Roles"
+        ],
+        "summary": "Role deleted",
+        "description": "Sent when a role is deleted for a merchant account.",
+        "x-object": {
+          "$ref": "#/components/schemas/Role"
+        },
+        "x-object-type": "role",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Event"
+              },
+              "examples": {
+                "deleted": {
+                  "summary": "A role deleted webhook event.",
+                  "value": {
+                    "id": "evt_role_123",
+                    "type": "roles.deleted",
+                    "created_at": "2026-05-14T08:30:00Z",
+                    "object": {
+                      "id": "rol_123",
+                      "type": "role",
+                      "url": "https://api.sumup.com/v0.1/merchants/MC0DE/roles/rol_123"
                     }
                   }
                 }

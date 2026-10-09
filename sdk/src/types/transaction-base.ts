@@ -15,11 +15,11 @@ export type TransactionBase = {
    */
   id?: string;
   /**
-   * Transaction code returned by the acquirer/processing entity after processing the transaction.
+   * SumUp transaction code, for example `TEENSK4W2K`. Use it to look up the transaction with the `transaction_code` query parameter. This is separate from the transaction's `id` and the card issuer's `auth_code`.
    */
   transaction_code?: string;
   /**
-   * Total amount of the transaction.
+   * Total amount of the transaction in major units of `currency`, for example `10.1` for EUR 10.10.
    */
   amount?: number;
   currency?: Currency;

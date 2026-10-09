@@ -35,7 +35,7 @@ export type TransactionFull = TransactionBase &
      */
     username?: string;
     /**
-     * Transaction SumUp total fee amount.
+     * Total SumUp transaction fee in major units of the transaction's currency.
      */
     fee_amount?: number;
     lat?: Lat;

@@ -14,7 +14,7 @@ import type {
 } from "../../types";
 export type RefundTransactionParams = {
   /**
-   * Amount to be refunded. Eligible amount can't exceed the amount of the transaction and varies based on country and currency. If you do not specify a value, the system performs a full refund of the transaction.
+   * Amount to refund in major units of the transaction's currency, for example `5` for EUR 5.00. It must be greater than zero and cannot exceed the amount eligible for a refund. Eligibility depends on the transaction and country/currency rules. If omitted, the system requests a full refund.
    */
   amount?: number;
 };
@@ -85,7 +85,9 @@ export type ListTransactionsV2_1Response = {
  */
 export class Transactions extends APIResource {
   /**
-   * Refunds an identified transaction either in full or partially.
+   * Refunds a transaction identified by its SumUp transaction ID. Omit the request body to request a full refund, or provide `amount` for a partial refund in the transaction's currency.
+   *
+   * Retrieve the transaction afterwards to inspect its refunded amount and refund events. The transaction must be eligible for a refund; see the error responses for invalid amounts, permissions, and processing failures.
    */
   refund(
     merchantCode: string,
@@ -145,7 +147,9 @@ export class Transactions extends APIResource {
   }
 
   /**
-   * Lists detailed history of all transactions associated with the merchant profile.
+   * Lists transaction history for the merchant, with optional filters for payment type, status, and date range. The response contains the current page in `items` and pagination query strings in `links`.
+   *
+   * To request another page, use the query string from the relevant link's `href` with this history endpoint. Use `changes_since` when retrieving transactions modified since a previous synchronization, including transactions created earlier whose status has changed.
    */
   list(
     merchantCode: string,

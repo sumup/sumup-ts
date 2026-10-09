@@ -14,7 +14,7 @@ export type TransactionEvent = {
   event_type?: TransactionEventType;
   status?: TransactionEventStatus;
   /**
-   * Amount of the event.
+   * Amount of the event in major units of the associated transaction's currency.
    */
   amount?: number;
   /**
@@ -26,7 +26,7 @@ export type TransactionEvent = {
    */
   date?: string;
   /**
-   * Consecutive number of the installment that is paid. Applicable only payout events, i.e. `event_type = PAYOUT`.
+   * Consecutive number of the installment that is paid. Applicable only to payout events, i.e. `event_type = PAYOUT`.
    */
   installment_number?: number;
   /**

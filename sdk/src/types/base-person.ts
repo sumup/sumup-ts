@@ -43,15 +43,30 @@ export type BasePerson = {
    *
    */
   middle_name?: string;
+  /**
+   * The (mobile) phone number of the individual (used for verification) in [E.164](https://en.wikipedia.org/wiki/E.164) format.
+   *
+   */
   phone_number?: PhoneNumber;
   /**
    * A list of roles the Person has in the Merchant or towards SumUp. A Merchant must have at least one Person with the relationship `representative`.
    *
    */
   relationships?: string[];
+  /**
+   * Details about the ownership relationship between the Person and the Merchant. This is only set if the Person has a relationship of type `owner`.
+   *
+   */
   ownership?: Ownership;
+  /**
+   * The address of the individual.
+   */
   address?: Address;
   identifiers?: PersonalIdentifiers;
+  /**
+   * The Alpha-2 ISO code of the country where the Person is a citizen.
+   *
+   */
   citizenship?: CountryCode;
   /**
    * The Person's nationality. May be an [ISO3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) country code, but legacy data may not conform to this standard.
