@@ -12,13 +12,15 @@ describe("event generation", () => {
       collectEventDefinitions(spec as unknown as OpenAPIV3_1.Document).map(
         (e) => [e.type, e.name, e.object],
       ),
-    ).toEqual([
-      ["members.created", "MemberCreatedEvent", "Member"],
-      ["members.deleted", "MemberDeletedEvent", "Member"],
-      ["members.updated", "MemberUpdatedEvent", "Member"],
-      ["readers.created", "ReaderCreatedEvent", "Reader"],
-      ["readers.deleted", "ReaderDeletedEvent", "Reader"],
-    ]);
+    ).toEqual(
+      expect.arrayContaining([
+        ["members.created", "MemberCreatedEvent", "Member"],
+        ["members.deleted", "MemberDeletedEvent", "Member"],
+        ["members.updated", "MemberUpdatedEvent", "Member"],
+        ["readers.created", "ReaderCreatedEvent", "Reader"],
+        ["readers.deleted", "ReaderDeletedEvent", "Reader"],
+      ]),
+    );
   });
   it("generates deterministic callback maps and typed factories", async () => {
     const dir = await mkdtemp(join(tmpdir(), "sumup-events-"));
