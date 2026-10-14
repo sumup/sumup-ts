@@ -18,6 +18,7 @@ export default defineConfig({
       format: "cjs",
       syntax: "es2022",
       dts: {
+        distPath: "./dist/cjs",
         autoExtension: true,
       },
       redirect: { dts: { path: true, extension: true } },

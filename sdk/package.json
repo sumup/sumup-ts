@@ -45,7 +45,7 @@
     "generate": "node ../codegen/dist/index.cjs ../openapi.json ./src/",
     "lint": "biome check",
     "lint:fix": "biome check --write",
-    "docs": "typedoc --cleanOutputDir --out ../docs/ --favicon https://static.sumup.com/favicons/favicon.svg"
+    "docs": "npm exec --yes --package typedoc@0.28.20 --package typescript@6.0.3 -- typedoc --cleanOutputDir --out ../docs/ --favicon https://static.sumup.com/favicons/favicon.svg"
   },
   "main": "./dist/index.cjs",
   "types": "./dist/index.d.ts",
@@ -55,7 +55,7 @@
       "default": "./dist/index.js"
     },
     "require": {
-      "types": "./dist/index.d.cts",
+      "types": "./dist/cjs/index.d.cts",
       "default": "./dist/index.cjs"
     }
   },
@@ -69,7 +69,6 @@
     "rsbuild-plugin-dts": "^1.0.0",
     "rsbuild-plugin-publint": "^1.0.0",
     "ts-node": "^10.9.2",
-    "typedoc": "^0.28.3",
-    "typescript": "^6.0.2"
+    "typescript": "^7.0.2"
   }
 }
