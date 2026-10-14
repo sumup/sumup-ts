@@ -2,6 +2,7 @@ import { resolve } from "node:path";
 import { Case } from "change-case-all";
 import type { OpenAPIV3_1 } from "openapi-types";
 import { fileWriter } from "./io";
+import type { Document } from "./openapi";
 import { schemaNameToTypeName } from "./schema";
 
 type Definition = {
@@ -10,9 +11,7 @@ type Definition = {
   object: string;
 };
 
-export function collectEventDefinitions(
-  spec: OpenAPIV3_1.Document,
-): Definition[] {
+export function collectEventDefinitions(spec: Document): Definition[] {
   const names = new Set<string>();
   return Object.entries(spec.webhooks ?? {})
     .sort(([a], [b]) => a.localeCompare(b))
@@ -36,7 +35,7 @@ export function collectEventDefinitions(
 }
 
 export async function generateEvents(
-  spec: OpenAPIV3_1.Document,
+  spec: Document,
   destDir: string,
 ): Promise<void> {
   const events = collectEventDefinitions(spec);
