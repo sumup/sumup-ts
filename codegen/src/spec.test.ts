@@ -1,7 +1,7 @@
 import { mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { expect, test } from "vitest";
+import { expect, test } from "@rstest/core";
 import { loadSpec } from "./spec";
 
 test("loads 3.1 schemas without changing nullable type arrays", async () => {

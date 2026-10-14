@@ -1,4 +1,4 @@
-import { expect, test } from "vitest";
+import { expect, test } from "@rstest/core";
 import { queryParameterName } from "./base";
 
 test("removes a bracket suffix from repeated query parameter names", () => {

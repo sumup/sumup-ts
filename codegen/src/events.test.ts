@@ -1,8 +1,8 @@
 import { mkdtemp, readFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { describe, expect, it } from "@rstest/core";
 import type { OpenAPIV3_1 } from "openapi-types";
-import { describe, expect, it } from "vitest";
 import spec from "../../openapi.json";
 import { collectEventDefinitions, generateEvents } from "./events";
 

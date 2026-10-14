@@ -1,7 +1,7 @@
 import { mkdtemp, readFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { expect, test } from "vitest";
+import { expect, test } from "@rstest/core";
 import { collectReferencedSchemas } from "./resolver";
 import { loadSpec } from "./spec";
 import { generateTypes } from "./types";
