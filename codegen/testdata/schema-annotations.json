@@ -1,20 +1,8 @@
 {
   "openapi": "3.1.0",
-  "info": {
-    "title": "Schema audit",
-    "version": "1.0.0"
-  },
-  "servers": [
-    {
-      "url": "https://api.sumup.com"
-    }
-  ],
-  "tags": [
-    {
-      "name": "Merchants",
-      "description": "Merchant API."
-    }
-  ],
+  "info": { "title": "Schema annotations", "version": "1.0.0" },
+  "servers": [{ "url": "https://api.sumup.com" }],
+  "tags": [{ "name": "Merchants", "description": "Merchant API." }],
   "paths": {
     "/merchants": {
       "post": {
@@ -24,9 +12,7 @@
           "required": true,
           "content": {
             "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Merchant"
-              }
+              "schema": { "$ref": "#/components/schemas/Merchant" }
             }
           }
         },
@@ -35,9 +21,7 @@
             "description": "Created merchant",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Merchant"
-                }
+                "schema": { "$ref": "#/components/schemas/Merchant" }
               }
             }
           }
@@ -47,104 +31,17 @@
   },
   "components": {
     "schemas": {
-      "CountryCode": {
-        "type": "string",
-        "pattern": "^[A-Z]{2}$"
-      },
-      "PhoneNumber": {
-        "type": "string"
-      },
-      "Identifier": {
-        "type": "string",
-        "format": "uuid"
-      },
-      "LegalType": {
-        "type": "string",
-        "enum": ["sole_trader", "company"]
-      },
-      "Ownership": {
-        "type": "object",
-        "required": ["share"],
-        "properties": {
-          "share": {
-            "type": "integer"
-          }
-        }
-      },
+      "CountryCode": { "type": "string" },
+      "PhoneNumber": { "type": "string" },
       "Address": {
         "type": "object",
         "required": ["country"],
         "properties": {
           "country": {
             "allOf": [
-              {
-                "description": "Address country.",
-                "example": "DE"
-              },
-              {
-                "$ref": "#/components/schemas/CountryCode"
-              }
+              { "description": "Address country.", "example": "DE" },
+              { "$ref": "#/components/schemas/CountryCode" }
             ]
-          },
-          "city": {
-            "type": "string"
-          }
-        }
-      },
-      "Merchant": {
-        "type": "object",
-        "required": ["address", "phone_number", "id"],
-        "properties": {
-          "id": {
-            "$ref": "#/components/schemas/Identifier",
-            "description": "Local documentation."
-          },
-          "address": {
-            "$ref": "#/components/schemas/Address",
-            "description": "Local documentation."
-          },
-          "phone_number": {
-            "$ref": "#/components/schemas/PhoneNumber",
-            "description": "Local documentation."
-          },
-          "legal_type": {
-            "$ref": "#/components/schemas/LegalType",
-            "description": "Local documentation."
-          },
-          "ownership": {
-            "$ref": "#/components/schemas/Ownership",
-            "description": "Local documentation."
-          },
-          "addresses": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Address",
-              "description": "Local documentation."
-            }
-          },
-          "address_map": {
-            "type": "object",
-            "additionalProperties": {
-              "$ref": "#/components/schemas/Address",
-              "description": "Local documentation."
-            }
-          },
-          "extended_address": {
-            "$ref": "#/components/schemas/ExtendedAddress",
-            "description": "Extended address."
-          },
-          "country_codes": {
-            "type": "array",
-            "items": {
-              "allOf": [
-                {
-                  "description": "Country item."
-                },
-                {
-                  "$ref": "#/components/schemas/CountryAlias"
-                }
-              ]
-            }
           }
         }
       },
@@ -156,23 +53,35 @@
           },
           {
             "type": "object",
-            "properties": {
-              "label": {
-                "type": "string"
-              }
-            }
+            "properties": { "label": { "type": "string" } }
           }
         ]
       },
-      "CountryAlias": {
-        "allOf": [
-          {
-            "description": "Country alias."
+      "Merchant": {
+        "type": "object",
+        "required": ["address", "phone_number"],
+        "properties": {
+          "address": {
+            "$ref": "#/components/schemas/Address",
+            "description": "Merchant address."
           },
-          {
-            "$ref": "#/components/schemas/CountryCode"
+          "phone_number": {
+            "$ref": "#/components/schemas/PhoneNumber",
+            "description": "Merchant phone number."
+          },
+          "extended_address": {
+            "$ref": "#/components/schemas/ExtendedAddress"
+          },
+          "country_codes": {
+            "type": "array",
+            "items": {
+              "allOf": [
+                { "description": "Country item." },
+                { "$ref": "#/components/schemas/CountryCode" }
+              ]
+            }
           }
-        ]
+        }
       }
     }
   }
