@@ -50,6 +50,27 @@ export const topologicalSort = (
 };
 
 /**
+ * Annotation-only schemas do not constrain an allOf intersection.
+ */
+export const isAnnotationOnlySchema = (
+  schema: OpenAPIV3_1.SchemaObject,
+): boolean =>
+  Object.keys(schema).every((key) =>
+    [
+      "title",
+      "description",
+      "externalDocs",
+      "deprecated",
+      "readOnly",
+      "writeOnly",
+      "example",
+      "examples",
+      "default",
+      "$comment",
+    ].includes(key),
+  );
+
+/**
  * Extracts documentation from an OpenAPI schema object.
  * Combines title, description, external docs, and deprecation notices.
  */
@@ -63,6 +84,7 @@ export const extractDoc = (schema: OpenAPIV3_1.SchemaObject): string =>
     schema.deprecated
       ? `@deprecated${"x-deprecation-notice" in schema ? `: ${schema["x-deprecation-notice"]}` : ""}`
       : undefined,
+    ...(schema.allOf ?? []).map((member) => extractDoc(member)),
   ]
     .filter(Boolean)
     .filter((n) => n)

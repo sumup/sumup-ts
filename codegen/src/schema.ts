@@ -1,7 +1,7 @@
 import type { OpenAPIV3_1 } from "openapi-types";
 import { match, P } from "ts-pattern";
 import type { FileWriter } from "./io";
-import { docComment, extractDoc } from "./util";
+import { docComment, extractDoc, isAnnotationOnlySchema } from "./util";
 
 export type Schema = OpenAPIV3_1.ReferenceObject | OpenAPIV3_1.SchemaObject;
 
@@ -171,12 +171,17 @@ export const schemaToTypes = (
       });
     })
     .with({ allOf: P.not(P.nullish) }, (s) => {
+      const members = s.allOf!.filter((sub) => !isAnnotationOnlySchema(sub));
+      if (members.length === 0) {
+        writer.w0("unknown");
+        return;
+      }
+      if (members.length === 1) {
+        schemaToTypes(members[0], writer, options);
+        return;
+      }
       writer.w("");
-      for (const sub of s.allOf!) {
-        const comment = docComment(extractDoc(sub));
-        if (comment) {
-          writer.w(comment);
-        }
+      for (const sub of members) {
         writer.w0("& ");
         writer.w0("(");
         schemaToTypes(sub, writer, options);
