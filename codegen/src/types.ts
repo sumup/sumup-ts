@@ -82,11 +82,9 @@ export async function generateTypes(spec: Document, destDir: string) {
       writer.w("");
     }
 
-    if ("description" in schema || "title" in schema) {
-      const comment = docComment(extractDoc(schema));
-      if (comment) {
-        writer.w(comment);
-      }
+    const comment = docComment(extractDoc(schema));
+    if (comment) {
+      writer.w(comment);
     }
 
     writer.w(`export type ${typeName} =`);

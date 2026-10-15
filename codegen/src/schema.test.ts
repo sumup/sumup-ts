@@ -136,5 +136,5 @@ test("composition constrains sibling types instead of treating null as nullable"
       type: "null",
       allOf: [{ $ref: "#/components/schemas/ResourceType" }],
     }),
-  ).toBe("\n& (null)& (\n& (ResourceType))");
+  ).toBe("\n& (null)& (ResourceType)");
 });

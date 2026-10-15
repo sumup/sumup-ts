@@ -19,7 +19,12 @@ test("annotated schemas retain references and inherited fields", async () => {
       join(output, "types/extended-address.ts"),
       "utf8",
     );
-    expect(address).toContain("unknown & CountryCode;");
+    expect(address).toContain(
+      "* Address country.\n   */\n  country: CountryCode;",
+    );
+    const merchant = await readFile(join(output, "types/merchant.ts"), "utf8");
+    expect(merchant).toContain("country_codes?: CountryCode[];");
+    expect(extended).toContain("* Inherited address.");
     expect(extended).toContain("Address &");
     expect(extended).toContain("label?: string");
   } finally {
