@@ -22,10 +22,25 @@ export type Company = {
    *
    */
   merchant_category_code?: string;
+  /**
+   * The category identifying the legal structure of the company or legal entity.
+   *
+   */
   legal_type?: LegalType;
+  /**
+   * The company's primary address.
+   */
   address?: Address;
+  /**
+   * A trading address is where your suppliers, banks or customers send you correspondence to. Trading address can be different to the company's registered address (`address`).
+   *
+   */
   trading_address?: Address;
   identifiers?: CompanyIdentifiers;
+  /**
+   * The company's phone number (used for verification) in [E.164](https://en.wikipedia.org/wiki/E.164) format.
+   *
+   */
   phone_number?: PhoneNumber;
   /**
    * HTTP(S) URL of the company's website.

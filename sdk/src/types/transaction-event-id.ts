@@ -3,6 +3,6 @@
 /**
  * Transaction Event ID
  *
- * Unique identifier of the transaction event.
+ * Numeric identifier of a transaction event. Use it as `tx_event_id` when requesting receipt details for a specific event. This is separate from the transaction ID and the transaction history pagination references.
  */
 export type TransactionEventID = number;
