@@ -19,7 +19,7 @@ export type Product = {
    */
   price?: number;
   /**
-   * VAT rate applied to the product price.
+   * VAT rate as a decimal fraction, for example `0.19` for 19%.
    */
   vat_rate?: number;
   /**

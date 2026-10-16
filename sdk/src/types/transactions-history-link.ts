@@ -7,11 +7,11 @@
  */
 export type TransactionsHistoryLink = {
   /**
-   * Relation.
+   * Pagination relation indicating which page the link retrieves, for example `next`.
    */
   rel: string;
   /**
-   * Location.
+   * Query string to use with the transaction history endpoint when requesting the linked page. Preserve the returned pagination references and query parameters.
    */
   href: string;
 };
