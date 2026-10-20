@@ -2,33 +2,54 @@ import { mkdtemp, readFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, expect, it } from "@rstest/core";
-import type { OpenAPIV3_1 } from "openapi-types";
-import spec from "../../openapi.json";
 import { collectEventDefinitions, generateEvents } from "./events";
+import type { Document } from "./openapi";
+
+const spec = {
+  openapi: "3.1.0",
+  info: { title: "Events", version: "test" },
+  components: {
+    schemas: {
+      Widget: { type: "object" },
+      Device: { type: "object" },
+    },
+  },
+  webhooks: {
+    "widgets.updated": {
+      post: {
+        operationId: "WidgetChangedWebhook",
+        "x-object": { $ref: "#/components/schemas/Widget" },
+        responses: { "204": { description: "Accepted" } },
+      },
+    },
+    "devices.deleted": {
+      post: {
+        operationId: "DeviceDeletedWebhook",
+        "x-object": { $ref: "#/components/schemas/Device" },
+        responses: { "204": { description: "Accepted" } },
+      },
+    },
+  },
+} as Document;
 
 describe("event generation", () => {
   it("uses wire names and resource types from the schema", () => {
     expect(
-      collectEventDefinitions(spec as unknown as OpenAPIV3_1.Document).map(
-        (e) => [e.type, e.name, e.object],
-      ),
+      collectEventDefinitions(spec).map((e) => [e.type, e.name, e.object]),
     ).toEqual([
-      ["members.created", "MemberCreatedEvent", "Member"],
-      ["members.deleted", "MemberDeletedEvent", "Member"],
-      ["members.updated", "MemberUpdatedEvent", "Member"],
-      ["readers.created", "ReaderCreatedEvent", "Reader"],
-      ["readers.deleted", "ReaderDeletedEvent", "Reader"],
+      ["devices.deleted", "DeviceDeletedEvent", "Device"],
+      ["widgets.updated", "WidgetChangedEvent", "Widget"],
     ]);
   });
   it("generates deterministic callback maps and typed factories", async () => {
     const dir = await mkdtemp(join(tmpdir(), "sumup-events-"));
     try {
-      await generateEvents(spec as unknown as OpenAPIV3_1.Document, dir);
+      await generateEvents(spec, dir);
       const first = await readFile(join(dir, "events.ts"), "utf8");
-      await generateEvents(spec as unknown as OpenAPIV3_1.Document, dir);
+      await generateEvents(spec, dir);
       expect(await readFile(join(dir, "events.ts"), "utf8")).toBe(first);
-      expect(first).toContain('"members.updated": MemberUpdatedEvent');
-      expect(first).toContain("new ReaderDeletedEvent(payload, client)");
+      expect(first).toContain('"widgets.updated": WidgetChangedEvent');
+      expect(first).toContain("new DeviceDeletedEvent(payload, client)");
     } finally {
       await rm(dir, { recursive: true, force: true });
     }
@@ -36,17 +57,17 @@ describe("event generation", () => {
   it.each(["operation", "object", "schema", "duplicate"])(
     "rejects invalid %s definitions",
     (kind) => {
-      const copy = structuredClone(spec) as unknown as OpenAPIV3_1.Document;
-      const item = copy.webhooks?.["members.updated"];
+      const copy = structuredClone(spec);
+      const item = copy.webhooks?.["widgets.updated"];
       if (!item || "$ref" in item || !item.post)
         throw new Error("missing fixture");
       if (kind === "operation") delete item.post.operationId;
       if (kind === "object")
         Object.assign(item.post, {
-          "x-object": { $ref: "external.json#/Member" },
+          "x-object": { $ref: "external.json#/Widget" },
         });
       if (kind === "schema" && copy.components?.schemas)
-        delete copy.components.schemas.Member;
+        delete copy.components.schemas.Widget;
       if (kind === "duplicate" && copy.webhooks) copy.webhooks.duplicate = item;
       expect(() => collectEventDefinitions(copy)).toThrow();
     },
