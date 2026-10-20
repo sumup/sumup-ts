@@ -8,6 +8,7 @@
 export type CardType =
   | "ALELO"
   | "AMEX"
+  | "BANCOMAT"
   | "CONECS"
   | "CUP"
   | "DINERS"
@@ -22,6 +23,7 @@ export type CardType =
   | "MAESTRO"
   | "MASTERCARD"
   | "PLUXEE"
+  | "SUMUP"
   | "SWILE"
   | "TICKET"
   | "VISA"

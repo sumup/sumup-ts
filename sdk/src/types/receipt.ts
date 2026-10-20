@@ -6,7 +6,7 @@ import type { ReceiptTransaction } from "./receipt-transaction";
 /**
  * Receipt
  *
- * Receipt details for a transaction.
+ * Structured receipt details for a transaction. The transaction's `amount`, `vat_amount`, and `tip_amount`, as well as event amounts, are returned as decimal strings in major currency units, for example `"10.10"` for EUR 10.10.
  */
 export type Receipt = {
   transaction_data?: ReceiptTransaction;

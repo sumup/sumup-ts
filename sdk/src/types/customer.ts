@@ -5,11 +5,11 @@ import type { PersonalDetails } from "./personal-details";
 /**
  * Customer
  *
- * Saved customer details.
+ * Saved payer details identified by the `customer_id` supplied by your integration. A customer can have saved payment instruments for subsequent payments.
  */
 export type Customer = {
   /**
-   * Unique identifier of the customer.
+   * Identifier you supply when creating the customer. Use an ID from your own system and retain it for subsequent customer, checkout, and saved-payment-instrument requests.
    */
   customer_id: string;
   personal_details?: PersonalDetails;

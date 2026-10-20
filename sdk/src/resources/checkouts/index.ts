@@ -74,11 +74,11 @@ export type ProcessCheckoutError =
 
 export type CreateApplePaySessionParams = {
   /**
-   * the context to create this apple pay session.
+   * Hostname of the website displaying the Apple Pay payment sheet, without a URL scheme or path. Use the domain registered for Apple Pay.
    */
   context: string;
   /**
-   * The target url to create this apple pay session.
+   * Apple Pay validation URL received as `validationURL` in the browser's `onvalidatemerchant` event.
    */
   target: string;
 };
@@ -111,7 +111,7 @@ export type CreateApplePaySessionError =
  */
 export class Checkouts extends APIResource {
   /**
-   * Get payment methods available for the given merchant to use with a checkout.
+   * Lists the payment methods available to the merchant for checkout payments. Use the optional amount and currency filters to check eligibility for a particular payment before presenting payment options to the payer.
    */
   listAvailablePaymentMethods(
     merchantCode: string,
@@ -193,7 +193,7 @@ export class Checkouts extends APIResource {
   }
 
   /**
-   * Retrieves an identified checkout resource. Use this request after processing a checkout to confirm its status and inform the end user respectively.
+   * Retrieves a checkout by its SumUp `checkout_id`. After processing a payment, returning from a redirect, or receiving a checkout notification, retrieve the checkout to confirm its current `status` before updating your order or displaying the payment outcome to the payer.
    */
   get(checkoutId: string, options?: RequestOptions): Promise<CheckoutSuccess> {
     return this._client.get<CheckoutSuccess>({
@@ -219,7 +219,9 @@ export class Checkouts extends APIResource {
    *
    * Processing a checkout will attempt to charge the provided payment instrument for the amount of the specified checkout resource initiated in the `Create a checkout` endpoint.
    *
-   * Follow this request with `Retrieve a checkout` to confirm its status.
+   * A processing response can require an additional payer action, such as a 3DS challenge or a payment-provider redirect. If `next_step` is returned, follow its instructions to continue the payment flow.
+   *
+   * Retrieve the checkout afterwards to confirm its payment status. Acceptance of the processing request does not by itself mean the checkout is paid.
    */
   process(
     checkoutId: string,
