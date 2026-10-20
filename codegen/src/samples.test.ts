@@ -104,36 +104,61 @@ describe("code sample catalog", () => {
     expect(generated).toContain('"enabled": false');
   });
 
-  it("is deterministic and follows the portal contract", async () => {
-    const first = await catalog();
-    const second = await catalog();
+  it("is deterministic and follows the portal contract", () => {
+    const spec: Document = {
+      openapi: "3.1.0",
+      info: { title: "Samples", version: "test-api" },
+      paths: {
+        "/samples": {
+          get: {
+            operationId: "ListSamples",
+            tags: ["Samples"],
+            responses: { "200": { description: "OK" } },
+          },
+          post: {
+            operationId: "CreateSample",
+            tags: ["Samples"],
+            requestBody: {
+              required: true,
+              content: {
+                "application/json": {
+                  schema: {
+                    type: "object",
+                    required: ["name"],
+                    properties: { name: { type: "string" } },
+                  },
+                  examples: {
+                    Second: { value: { name: "second-sample" } },
+                    First: { value: { name: "first-sample" } },
+                  },
+                },
+              },
+            },
+            responses: { "201": { description: "Created" } },
+          },
+        },
+      },
+    };
+    const first = buildSampleCatalog(spec, "test-sdk");
+    const second = buildSampleCatalog(spec, "test-sdk");
 
     expect(JSON.stringify(first)).toBe(JSON.stringify(second));
     expect(first).toMatchObject({
       schemaVersion: 1,
       language: "typescript",
-      sdk: { module: "@sumup/sdk" },
-      openAPIVersion: "1.0.0",
+      sdk: { module: "@sumup/sdk", version: "test-sdk" },
+      openAPIVersion: "test-api",
     });
-    expect(first.sdk.version).toBe(
-      readSDKVersion(resolve(repositoryRoot, "sdk/package.json")),
-    );
-    expect(first.samples.length).toBeGreaterThan(0);
-    expect(new Set(first.samples.map((sample) => sample.id)).size).toBe(
-      first.samples.length,
-    );
-    expect(first.samples.map((sample) => sample.id)).toEqual(
-      [...first.samples.map((sample) => sample.id)].sort(),
-    );
+    expect(first.samples.map((sample) => sample.id)).toEqual([
+      "CreateSample.First",
+      "CreateSample.Second",
+      "ListSamples",
+    ]);
 
-    const hosted = first.samples.find(
-      (sample) => sample.id === "CreateCheckout.HostedCheckout",
-    );
-    expect(hosted?.sample).toContain("client.checkouts.create(");
-    expect(hosted?.sample).toContain(
-      '"checkout_reference": "b50pr914-6k0e-3091-a592-890010285b3d"',
-    );
-    expect(JSON.stringify(hosted)).toContain('"sample"');
+    const example = first.samples[0];
+    expect(example?.sample).toContain("client.samples.createSample(");
+    expect(example?.sample).toContain('"name": "first-sample"');
+    expect(JSON.stringify(example)).toContain('"sample"');
   });
 
   it("type-checks every program against the local SDK", async () => {

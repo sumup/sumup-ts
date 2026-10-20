@@ -18,11 +18,19 @@ export type { EventObject } from "./event";
 export { UnknownEvent } from "./event";
 export type { EventNotification } from "./events";
 export {
+  CheckoutCreatedEvent,
+  CheckoutExpiredEvent,
+  CheckoutFailedEvent,
+  CheckoutPaidEvent,
+  CheckoutUpdatedEvent,
   MemberCreatedEvent,
   MemberDeletedEvent,
   MemberUpdatedEvent,
   ReaderCreatedEvent,
   ReaderDeletedEvent,
+  RoleCreatedEvent,
+  RoleDeletedEvent,
+  RoleUpdatedEvent,
 } from "./events";
 export type { EventBody, EventCallback } from "./events-handler";
 export {

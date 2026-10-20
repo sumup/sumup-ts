@@ -14,7 +14,9 @@ export type CardResponse = {
   readonly last_4_digits?: string;
   type?: CardType;
   /**
-   * PAR (Payment account reference) if available for the card.
+   * Payment Account Reference (PAR) defined by [EMVCo](https://www.emvco.com/emv-technologies/payment-tokenisation/). It links a card's primary account number (PAN) with its affiliated payment tokens, allowing transactions made with the physical card and tokenized versions of that card, such as digital wallets, to be correlated when PAR is available.
+   *
+   * This reference cannot be used to initiate a payment and is separate from the saved payment instrument `token` used to process checkouts. Returned only when available for the card; integrations must handle its absence.
    */
   payment_account_reference?: string;
 };
