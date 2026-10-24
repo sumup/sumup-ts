@@ -31,6 +31,7 @@ export type { CreateReaderTerminateError } from "./create-reader-terminate-error
 export type { CreateReaderTerminateUnprocessableEntity } from "./create-reader-terminate-unprocessable-entity";
 export type { Currency } from "./currency";
 export type { Customer } from "./customer";
+export type { CustomerValidationError } from "./customer-validation-error";
 export type { DetailsError } from "./details-error";
 export type { Device } from "./device";
 export type { ElvCardAccount } from "./elv-card-account";
