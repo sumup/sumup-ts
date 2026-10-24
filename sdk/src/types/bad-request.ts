@@ -15,6 +15,8 @@ export type BadRequest = {
      * Key indicating type of error
      */
     type:
+      | "INVALID_AFFILIATE_KEY"
+      | "APP_OUTDATED"
       | "INVALID_BEARER_TOKEN"
       | "INVALID_USER_AGENT"
       | "NOT_ENOUGH_UNPAID_PAYOUTS"

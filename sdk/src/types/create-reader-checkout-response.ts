@@ -11,9 +11,13 @@ export type CreateReaderCheckoutResponse = {
      */
     checkout_id?: string;
     /**
-     * The client transaction ID is a unique identifier for the transaction that is generated for the client.
+     * **SumUp API flow.** Unique identifier for this checkout-generated transaction.
      *
-     * It can be used later to fetch the transaction details via the [Transactions API](https://developer.sumup.com/api/transactions/get).
+     * Pass this value as `terminal.client_id` when the reader creates the terminal so
+     * checkout metadata (including affiliate sent here) is merged into the payment.
+     *
+     * SDK clients do not use this field for affiliate metadata; they send affiliate in
+     * `terminal.affiliate` on `POST /api/terminals` instead.
      *
      */
     client_transaction_id: string;

@@ -6,9 +6,9 @@
 export type GetReaderCheckoutResponse = {
   data: {
     /**
-     * Type of the card. Required for some countries
+     * Type of the card, or null when no card type was specified.
      */
-    card_type: "credit" | "debit";
+    card_type: "credit" | "debit" | null;
     /**
      * Unique identifier for the checkout
      */
@@ -28,7 +28,7 @@ export type GetReaderCheckoutResponse = {
     /**
      * Payment failure reason
      */
-    payment_failure_reason?: string | null;
+    payment_failure_reason: string | null;
     /**
      * Payment status from payments v2 event
      */

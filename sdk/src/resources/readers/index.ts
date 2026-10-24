@@ -211,6 +211,12 @@ export class Readers extends APIResource {
    *
    * **Note**: If the target device is a Solo, it must be in version 3.3.24.3 or higher.
    *
+   *
+   * **Affiliate metadata**: Optionally include an `affiliate` object to attach integrator metadata to the payment.
+   * When provided, the affiliate key is validated against Identity Admin, stored server-side for approximately 600 seconds,
+   * and merged into the downstream payment when the reader starts the transaction using the returned `client_transaction_id`.
+   * Affiliate metadata is not sent to the device during checkout creation.
+   *
    */
   createCheckout(
     merchantCode: string,
