@@ -122,6 +122,27 @@ const { data, response } = await client.merchants.getWithResponse(merchantCode);
 console.info(response.status, data);
 ```
 
+## Handling errors
+
+Catch an API error to read its status and details. Problem responses provide typed fields:
+
+```typescript
+import { APIError } from '@sumup/sdk';
+
+try {
+  await client.checkouts.get('your-checkout-id');
+} catch (error) {
+  if (error instanceof APIError) {
+    console.log(error.status, error.problem?.type, error.problem?.detail);
+  } else {
+    throw error;
+  }
+}
+```
+
+Use `error.error` for other error bodies, or `error.response` for the original response.
+Connection failures raise `APIConnectionError`; timeouts raise `APITimeoutError`.
+
 ## Events
 
 Receive signed event notifications and register callbacks for the changes your application needs:
@@ -247,24 +268,3 @@ If you need to report a bug or request an enhancement, open an issue in this
 repository.
 
 [docs-badge]: https://img.shields.io/badge/SumUp-documentation-white.svg?logo=data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgY29sb3I9IndoaXRlIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgogICAgPHBhdGggZD0iTTIyLjI5IDBIMS43Qy43NyAwIDAgLjc3IDAgMS43MVYyMi4zYzAgLjkzLjc3IDEuNyAxLjcxIDEuN0gyMi4zYy45NCAwIDEuNzEtLjc3IDEuNzEtMS43MVYxLjdDMjQgLjc3IDIzLjIzIDAgMjIuMjkgMFptLTcuMjIgMTguMDdhNS42MiA1LjYyIDAgMCAxLTcuNjguMjQuMzYuMzYgMCAwIDEtLjAxLS40OWw3LjQ0LTcuNDRhLjM1LjM1IDAgMCAxIC40OSAwIDUuNiA1LjYgMCAwIDEtLjI0IDcuNjlabTEuNTUtMTEuOS03LjQ0IDcuNDVhLjM1LjM1IDAgMCAxLS41IDAgNS42MSA1LjYxIDAgMCAxIDcuOS03Ljk2bC4wMy4wM2MuMTMuMTMuMTQuMzUuMDEuNDlaIiBmaWxsPSJjdXJyZW50Q29sb3IiLz4KPC9zdmc+
-
-## Handling errors
-
-Catch an API error to read its status and details. Problem responses provide typed fields:
-
-```typescript
-import { APIError } from '@sumup/sdk';
-
-try {
-  await client.checkouts.get('your-checkout-id');
-} catch (error) {
-  if (error instanceof APIError) {
-    console.log(error.status, error.problem?.type, error.problem?.detail);
-  } else {
-    throw error;
-  }
-}
-```
-
-Use `error.error` for other error bodies, or `error.response` for the original response.
-Connection failures raise `APIConnectionError`; timeouts raise `APITimeoutError`.
