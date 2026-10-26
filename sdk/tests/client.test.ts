@@ -3,7 +3,7 @@ import { afterEach, describe, expect, it, rs } from "@rstest/core";
 import { SumUp } from "../src";
 import { API_VERSION } from "../src/api-version";
 import { mergeParams } from "../src/client";
-import { APIError } from "../src/core";
+import { APIConnectionError, APIError } from "../src/core";
 import { buildRuntimeHeaders } from "../src/runtime";
 import { VERSION } from "../src/version";
 
@@ -257,5 +257,81 @@ describe("generated signatures", () => {
       query: undefined,
       timeout: 25,
     });
+  });
+});
+
+describe("typed API errors", () => {
+  it("exposes Problem fields and leaves the original response readable", async () => {
+    const body = { type: "about:blank", detail: "Invalid amount" };
+    rs.stubGlobal(
+      "fetch",
+      rs.fn().mockResolvedValue(
+        new Response(JSON.stringify(body), {
+          status: 400,
+          headers: { "content-type": "application/problem+json" },
+        }),
+      ),
+    );
+    try {
+      await new SumUp().merchants.get("MC123");
+      throw new Error("Expected API error");
+    } catch (error) {
+      expect(error).toBeInstanceOf(APIError);
+      if (!(error instanceof APIError)) throw error;
+      expect(error.problem?.detail).toBe("Invalid amount");
+      expect(error.message).toBe("400: Invalid amount");
+      expect(await error.response.json()).toEqual(body);
+    }
+  });
+  it("preserves malformed error JSON as an API error", async () => {
+    rs.stubGlobal(
+      "fetch",
+      rs.fn().mockResolvedValue(
+        new Response("{invalid", {
+          status: 400,
+          headers: { "content-type": "application/json" },
+        }),
+      ),
+    );
+    try {
+      await new SumUp().merchants.get("MC123");
+      throw new Error("Expected API error");
+    } catch (error) {
+      expect(error).toBeInstanceOf(APIError);
+      if (!(error instanceof APIError)) throw error;
+      expect(error.status).toBe(400);
+      expect(error.error).toBe("{invalid");
+      expect(error.problem).toBeUndefined();
+    }
+  });
+});
+
+describe("transport errors", () => {
+  it.each([new TypeError("Fetch failed"), new Error("Network failure")])(
+    "keeps the original connection failure as the cause",
+    async (cause) => {
+      rs.stubGlobal("fetch", rs.fn().mockRejectedValue(cause));
+      try {
+        await new SumUp().merchants.get("MC123");
+        throw new Error("Expected connection error");
+      } catch (error) {
+        expect(error).toBeInstanceOf(APIConnectionError);
+        if (!(error instanceof APIConnectionError)) throw error;
+        expect(error.cause).toBe(cause);
+      }
+    },
+  );
+  it("preserves caller cancellation", async () => {
+    const controller = new AbortController();
+    controller.abort();
+    const cause = new DOMException("Aborted", "AbortError");
+    rs.stubGlobal("fetch", rs.fn().mockRejectedValue(cause));
+    await expect(
+      new SumUp().request({
+        method: "GET",
+        path: "/test",
+        signal: controller.signal,
+      }),
+    ).rejects.toBe(cause);
   });
 });

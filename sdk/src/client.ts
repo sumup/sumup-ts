@@ -191,13 +191,7 @@ export class HTTPClient {
             continue;
           }
 
-          const contentType = res.headers.get("content-type");
-          const isJSON = contentType?.includes("json");
-          throw new Core.APIError(
-            res.status,
-            isJSON ? await res.json() : await res.text(),
-            res,
-          );
+          throw await Core.APIError.fromResponse(res);
         }
 
         return res;
@@ -206,9 +200,15 @@ export class HTTPClient {
           continue;
         }
         if (didTimeout()) {
-          throw new Core.SumUpError(
+          throw new Core.APITimeoutError(
             `Request timed out after ${options.timeout}ms.`,
+            { cause: error },
           );
+        }
+        if (!options.signal?.aborted && !(error instanceof Core.SumUpError)) {
+          throw new Core.APIConnectionError("Connection error.", {
+            cause: error,
+          });
         }
         throw error;
       } finally {
