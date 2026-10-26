@@ -7,26 +7,12 @@ import {
 } from "../../core";
 import type {
   Customer,
+  CustomerValidationError,
   ErrorExtended,
   PaymentInstrumentResponse,
   PersonalDetails,
 } from "../../types";
-export type CreateCustomerError =
-  | ErrorExtended
-  | {
-      /**
-       * Unique identifier of this error occurrence.
-       */
-      instance: string;
-      /**
-       * Platform code for the error.
-       */
-      error_code: string;
-      /**
-       * Short description of the error.
-       */
-      error_message: string;
-    };
+export type CreateCustomerError = ErrorExtended | CustomerValidationError;
 
 export type UpdateCustomerParams = { personal_details?: PersonalDetails };
 

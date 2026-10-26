@@ -9,6 +9,7 @@ import type {
   CreateReaderCheckoutRequest,
   CreateReaderCheckoutResponse,
   GetReaderCheckoutResponse,
+  GetReaderSettingsResponse,
   Metadata,
   Reader,
   ReaderID,
@@ -17,6 +18,8 @@ import type {
   ReaderPaymentRequestParams,
   ReaderPaymentResponse,
   StatusResponse,
+  UpdateReaderSettingsRequest,
+  UpdateReaderSettingsResponse,
 } from "../../types";
 export type ListReadersResponse = { items: Reader[] };
 
@@ -211,6 +214,10 @@ export class Readers extends APIResource {
    *
    * **Note**: If the target device is a Solo, it must be in version 3.3.24.3 or higher.
    *
+   *
+   * Optionally include an `affiliate` object to attach integrator metadata to the payment.
+   * Provide both `app_id` and `key` when including this object.
+   *
    */
   createCheckout(
     merchantCode: string,
@@ -278,6 +285,76 @@ export class Readers extends APIResource {
   ): Promise<WithResponse<StatusResponse>> {
     return this._client.getWithResponse<StatusResponse>({
       path: `/v0.1/merchants/${merchantCode}/readers/${readerId}/status`,
+      ...options,
+    });
+  }
+
+  /**
+   * Returns the menu lock settings for a Solo reader.
+   *
+   * For an online reader, returns the current settings. For an offline reader,
+   * returns the last saved settings, which may differ from its current configuration.
+   * Returns `404` if the reader is offline and no saved settings are available.
+   *
+   * The response may include the menu lock PIN.
+   *
+   */
+  getReaderSettings(
+    merchantCode: string,
+    readerId: string,
+    options?: RequestOptions,
+  ): Promise<GetReaderSettingsResponse> {
+    return this._client.get<GetReaderSettingsResponse>({
+      path: `/v0.1/merchants/${merchantCode}/readers/${readerId}/settings`,
+      ...options,
+    });
+  }
+
+  getReaderSettingsWithResponse(
+    merchantCode: string,
+    readerId: string,
+    options?: RequestOptions,
+  ): Promise<WithResponse<GetReaderSettingsResponse>> {
+    return this._client.getWithResponse<GetReaderSettingsResponse>({
+      path: `/v0.1/merchants/${merchantCode}/readers/${readerId}/settings`,
+      ...options,
+    });
+  }
+
+  /**
+   * Updates the menu lock settings for a Solo reader. The reader must be online.
+   * A successful response confirms that the reader applied the update.
+   *
+   * Include at least one of `menu_lock.enabled` or `menu_lock.passcode`.
+   * Omitted settings keep their current values. The response contains only the
+   * settings included in the request.
+   *
+   * When enabling menu lock for a reader without a PIN, include a four-digit PIN
+   * in `menu_lock.passcode` in the same request.
+   *
+   */
+  updateReaderSettings(
+    merchantCode: string,
+    readerId: string,
+    body: UpdateReaderSettingsRequest,
+    options?: RequestOptions,
+  ): Promise<UpdateReaderSettingsResponse> {
+    return this._client.patch<UpdateReaderSettingsResponse>({
+      path: `/v0.1/merchants/${merchantCode}/readers/${readerId}/settings`,
+      body,
+      ...options,
+    });
+  }
+
+  updateReaderSettingsWithResponse(
+    merchantCode: string,
+    readerId: string,
+    body: UpdateReaderSettingsRequest,
+    options?: RequestOptions,
+  ): Promise<WithResponse<UpdateReaderSettingsResponse>> {
+    return this._client.patchWithResponse<UpdateReaderSettingsResponse>({
+      path: `/v0.1/merchants/${merchantCode}/readers/${readerId}/settings`,
+      body,
       ...options,
     });
   }
