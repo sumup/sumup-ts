@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.2.2](https://github.com/sumup/sumup-ts/compare/v0.2.1...v0.2.2) (2026-10-26)
+
+
+### Features
+
+* add typed Problem details and consistent API errors ([#510](https://github.com/sumup/sumup-ts/issues/510)) ([0d80d3d](https://github.com/sumup/sumup-ts/commit/0d80d3dc1aeb69c9c2bcb896e66c0fb2d8d5f180))
+
+
+### Chores
+
+* synced file(s) with sumup/apis ([#509](https://github.com/sumup/sumup-ts/issues/509)) ([ec14855](https://github.com/sumup/sumup-ts/commit/ec148558dc68d6bc56f5600ab25315eb923f3459))
+
 ## [0.2.1](https://github.com/sumup/sumup-ts/compare/v0.2.0...v0.2.1) (2026-10-20)
 
 
