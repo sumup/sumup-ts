@@ -283,6 +283,56 @@ describe("typed API errors", () => {
       expect(await error.response.json()).toEqual(body);
     }
   });
+  it("keeps HTTP context when the response body cannot be read", async () => {
+    const cause = new Error("Response interrupted");
+    const response = new Response(
+      new ReadableStream({
+        start(controller) {
+          controller.error(cause);
+        },
+      }),
+      {
+        status: 502,
+        statusText: "Bad Gateway",
+        headers: { "retry-after": "7" },
+      },
+    );
+    rs.stubGlobal("fetch", rs.fn().mockResolvedValue(response));
+    try {
+      await new SumUp().merchants.get("MC123");
+      throw new Error("Expected API error");
+    } catch (error) {
+      expect(error).toBeInstanceOf(APIError);
+      if (!(error instanceof APIError)) throw error;
+      expect(error.status).toBe(502);
+      expect(error.response).toBe(response);
+      expect(error.response.headers.get("retry-after")).toBe("7");
+      expect(error.cause).toBe(cause);
+      expect(error.problem).toBeUndefined();
+      expect(error.message).toBe("502: Bad Gateway");
+    }
+  });
+  it("preserves caller cancellation while reading an error body", async () => {
+    const controller = new AbortController();
+    const cause = new DOMException("Cancelled", "AbortError");
+    rs.stubGlobal(
+      "fetch",
+      rs.fn().mockImplementation(async () => {
+        controller.abort(cause);
+        return new Response(
+          new ReadableStream({
+            start(stream) {
+              stream.error(cause);
+            },
+          }),
+          { status: 502 },
+        );
+      }),
+    );
+    await expect(
+      new SumUp().merchants.get("MC123", { signal: controller.signal }),
+    ).rejects.toBe(cause);
+  });
   it("preserves malformed error JSON as an API error", async () => {
     rs.stubGlobal(
       "fetch",

@@ -103,10 +103,16 @@ export class APIError<T = unknown> extends SumUpError {
   }
 
   static async fromResponse(response: Response): Promise<APIError> {
-    const text = await response.clone().text();
-    let body: unknown = text;
-    if (response.headers.get('content-type')?.toLowerCase().includes('json')) {
-      try { body = JSON.parse(text); } catch { /* Preserve invalid JSON as text. */ }
+    let body: unknown;
+    let options: ErrorOptions | undefined;
+    try {
+      const text = await response.clone().text();
+      body = text;
+      if (response.headers.get('content-type')?.toLowerCase().includes('json')) {
+        try { body = JSON.parse(text); } catch { /* Preserve invalid JSON as text. */ }
+      }
+    } catch (cause) {
+      options = { cause };
     }
     const classes: Record<number, typeof APIStatusError> = {
       400: BadRequestError, 401: AuthenticationError, 403: PermissionDeniedError,
@@ -114,13 +120,13 @@ export class APIError<T = unknown> extends SumUpError {
     };
     const ErrorType = response.status >= 500 && response.status < 600
       ? InternalServerError : (classes[response.status] ?? APIStatusError);
-    return new ErrorType(response.status, body, response);
+    return new ErrorType(response.status, body, response, options);
   }
 
-  constructor(status: number, error: T | string, response: Response) {
+  constructor(status: number, error: T | string, response: Response, options?: ErrorOptions) {
     const problem = problemDetails(error);
-    const message = problem?.detail ?? problem?.title ?? (typeof error === "string" ? error : JSON.stringify(error));
-    super(\`\${status}: \${message}\`);
+    const message = problem?.detail ?? problem?.title ?? (typeof error === "string" ? error : JSON.stringify(error)) ?? response.statusText;
+    super(\`\${status}: \${message}\`, options);
     this.status = status;
     this.error = error;
     this.response = response;

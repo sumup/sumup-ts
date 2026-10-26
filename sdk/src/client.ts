@@ -199,6 +199,11 @@ export class HTTPClient {
         if (attempt < maxRetries && isRetryableError(error, options.signal)) {
           continue;
         }
+        if (error instanceof Core.APIError) {
+          if (options.signal?.aborted && error.cause !== undefined)
+            throw error.cause;
+          throw error;
+        }
         if (didTimeout()) {
           throw new Core.APITimeoutError(
             `Request timed out after ${options.timeout}ms.`,
