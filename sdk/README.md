@@ -122,6 +122,27 @@ const { data, response } = await client.merchants.getWithResponse(merchantCode);
 console.info(response.status, data);
 ```
 
+## Handling errors
+
+Catch an API error to read its status and details. Problem responses provide typed fields:
+
+```typescript
+import { APIError } from '@sumup/sdk';
+
+try {
+  await client.checkouts.get('your-checkout-id');
+} catch (error) {
+  if (error instanceof APIError) {
+    console.log(error.status, error.problem?.type, error.problem?.detail);
+  } else {
+    throw error;
+  }
+}
+```
+
+Use `error.error` for other error bodies, or `error.response` for the original response.
+Connection failures raise `APIConnectionError`; timeouts raise `APITimeoutError`.
+
 ## Events
 
 Receive signed event notifications and register callbacks for the changes your application needs:

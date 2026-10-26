@@ -24,7 +24,7 @@ export async function generateIndex(spec: Document, destDir: string) {
   import { HTTPClient } from './client'
 
   export type { APIConfig } from './client'
-  export { APIError, SumUpError } from './core'
+  export { APIError, APIStatusError, BadRequestError, AuthenticationError, PermissionDeniedError, NotFoundError, ConflictError, UnprocessableEntityError, RateLimitError, InternalServerError, APIConnectionError, APITimeoutError, SumUpError } from './core'
   export type { RequestOptions, WithResponse } from './core'
   import { EventsHandler, parseEventNotification, parseEventNotificationWithoutVerification } from './events-handler'
   import type { EventCallback, EventBody } from './events-handler'

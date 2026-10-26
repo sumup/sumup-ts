@@ -4,7 +4,21 @@ import { HTTPClient } from "./client";
 
 export type { APIConfig } from "./client";
 export type { RequestOptions, WithResponse } from "./core";
-export { APIError, SumUpError } from "./core";
+export {
+  APIConnectionError,
+  APIError,
+  APIStatusError,
+  APITimeoutError,
+  AuthenticationError,
+  BadRequestError,
+  ConflictError,
+  InternalServerError,
+  NotFoundError,
+  PermissionDeniedError,
+  RateLimitError,
+  SumUpError,
+  UnprocessableEntityError,
+} from "./core";
 
 import type { EventNotification } from "./events";
 import type { EventBody, EventCallback } from "./events-handler";
