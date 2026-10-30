@@ -329,7 +329,21 @@
                     "description": "A sample checkout",
                     "hosted_checkout": {
                       "enabled": true
-                    }
+                    },
+                    "redirect_url": "https://example.com/orders/123/complete"
+                  }
+                },
+                "Tokenization": {
+                  "summary": "Save a customer card",
+                  "description": "Create a checkout to collect consent and save a card through the Payment Widget.",
+                  "value": {
+                    "checkout_reference": "save-card-123",
+                    "amount": 1,
+                    "currency": "EUR",
+                    "merchant_code": "MCXXXXXX",
+                    "description": "Save a card for future payments",
+                    "customer_id": "831ff8d4cd5958ab5670",
+                    "purpose": "SETUP_RECURRING_PAYMENT"
                   }
                 }
               }
@@ -470,6 +484,22 @@
                         "enabled": true
                       },
                       "hosted_checkout_url": "https://checkout.sumup.com/pay/8f9316a3-cda9-42a9-9771-54d534315676",
+                      "transactions": []
+                    }
+                  },
+                  "Tokenization": {
+                    "summary": "Checkout for saving a card",
+                    "value": {
+                      "checkout_reference": "save-card-123",
+                      "amount": 1,
+                      "currency": "EUR",
+                      "merchant_code": "MCXXXXXX",
+                      "description": "Save a card for future payments",
+                      "customer_id": "831ff8d4cd5958ab5670",
+                      "purpose": "SETUP_RECURRING_PAYMENT",
+                      "id": "7164c99b-13cb-42a1-8ba1-3c2c46a29de7",
+                      "status": "PENDING",
+                      "date": "2026-10-30T12:00:00+00:00",
                       "transactions": []
                     }
                   }
@@ -694,17 +724,65 @@
                 "schema": {
                   "$ref": "#/components/schemas/CheckoutSuccess"
                 },
-                "example": {
-                  "checkout_reference": "f00a8f74-b05d-4605-bd73-2a901bae5802",
-                  "amount": 10.1,
-                  "currency": "EUR",
-                  "merchant_code": "MH4H92C7",
-                  "description": "Purchase",
-                  "id": "4e425463-3e1b-431d-83fa-1e51c2925e99",
-                  "status": "PENDING",
-                  "date": "2020-02-29T10:56:56+00:00",
-                  "transaction_code": "TEENSK4W2K",
-                  "transaction_id": "410fc44a-5956-44e1-b5cc-19c6f8d727a4"
+                "examples": {
+                  "Checkout": {
+                    "value": {
+                      "checkout_reference": "f00a8f74-b05d-4605-bd73-2a901bae5802",
+                      "amount": 10.1,
+                      "currency": "EUR",
+                      "merchant_code": "MH4H92C7",
+                      "description": "Purchase",
+                      "id": "4e425463-3e1b-431d-83fa-1e51c2925e99",
+                      "status": "PENDING",
+                      "date": "2020-02-29T10:56:56+00:00",
+                      "transaction_code": "TEENSK4W2K",
+                      "transaction_id": "410fc44a-5956-44e1-b5cc-19c6f8d727a4"
+                    }
+                  },
+                  "PaidCheckout": {
+                    "summary": "Paid checkout with a transaction to refund",
+                    "value": {
+                      "checkout_reference": "f00a8f74-b05d-4605-bd73-2a901bae5802",
+                      "amount": 42.42,
+                      "currency": "EUR",
+                      "merchant_code": "MH4H92C7",
+                      "description": "Purchase",
+                      "id": "4e425463-3e1b-431d-83fa-1e51c2925e99",
+                      "status": "PAID",
+                      "date": "2020-02-29T10:56:56+00:00",
+                      "transaction_code": "TEENSK4W2K",
+                      "transaction_id": "410fc44a-5956-44e1-b5cc-19c6f8d727a4",
+                      "transactions": [
+                        {
+                          "id": "410fc44a-5956-44e1-b5cc-19c6f8d727a4",
+                          "transaction_code": "TEENSK4W2K",
+                          "amount": 42.42,
+                          "currency": "EUR",
+                          "status": "SUCCESSFUL",
+                          "timestamp": "2026-10-30T12:00:00+00:00"
+                        }
+                      ]
+                    }
+                  },
+                  "TokenizedCheckout": {
+                    "summary": "Checkout with a saved card",
+                    "value": {
+                      "checkout_reference": "save-card-123",
+                      "amount": 1,
+                      "currency": "EUR",
+                      "merchant_code": "MCXXXXXX",
+                      "description": "Save a card for future payments",
+                      "customer_id": "831ff8d4cd5958ab5670",
+                      "purpose": "SETUP_RECURRING_PAYMENT",
+                      "id": "7164c99b-13cb-42a1-8ba1-3c2c46a29de7",
+                      "status": "PAID",
+                      "date": "2026-10-30T12:00:00+00:00",
+                      "transactions": [],
+                      "payment_instrument": {
+                        "token": "6878cb7f-6515-47bf-bdd9-1408d270fdce"
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -923,9 +1001,8 @@
                   "description": "Process a checkout with a token",
                   "value": {
                     "payment_type": "card",
-                    "installments": 1,
-                    "token": "ba85dfee-c3cf-48a6-84f5-d7d761fbba50",
-                    "customer_id": "MEDKHDTI"
+                    "token": "6878cb7f-6515-47bf-bdd9-1408d270fdce",
+                    "customer_id": "831ff8d4cd5958ab5670"
                   }
                 },
                 "ProcessBoleto": {
@@ -2223,9 +2300,6 @@
           "description": "Optional amount for partial refunds.",
           "content": {
             "application/json": {
-              "example": {
-                "amount": 5
-              },
               "schema": {
                 "type": "object",
                 "description": "Optional amount for partial refunds of transactions.",
@@ -2235,6 +2309,18 @@
                     "format": "float",
                     "description": "Amount to refund in major units of the transaction's currency, for example `5` for EUR 5.00. It must be greater than zero and cannot exceed the amount eligible for a refund. Eligibility depends on the transaction and country/currency rules. If omitted, the system requests a full refund.",
                     "example": 5
+                  }
+                }
+              },
+              "examples": {
+                "FullRefund": {
+                  "summary": "Full refund",
+                  "value": {}
+                },
+                "PartialRefund": {
+                  "summary": "Partial refund",
+                  "value": {
+                    "amount": 24.42
                   }
                 }
               }
@@ -5589,6 +5675,14 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/CreateReaderCheckoutRequest"
+              },
+              "example": {
+                "total_amount": {
+                  "currency": "EUR",
+                  "minor_unit": 2,
+                  "value": 1500
+                },
+                "return_url": "https://example.com/sumup/webhook"
               }
             }
           },
@@ -11337,7 +11431,21 @@
                   "description": "A sample checkout",
                   "hosted_checkout": {
                     "enabled": true
-                  }
+                  },
+                  "redirect_url": "https://example.com/orders/123/complete"
+                }
+              },
+              "Tokenization": {
+                "summary": "Save a customer card",
+                "description": "Create a checkout to collect consent and save a card through the Payment Widget.",
+                "value": {
+                  "checkout_reference": "save-card-123",
+                  "amount": 1,
+                  "currency": "EUR",
+                  "merchant_code": "MCXXXXXX",
+                  "description": "Save a card for future payments",
+                  "customer_id": "831ff8d4cd5958ab5670",
+                  "purpose": "SETUP_RECURRING_PAYMENT"
                 }
               }
             }
@@ -11394,9 +11502,6 @@
         "description": "Optional amount for partial refunds.",
         "content": {
           "application/json": {
-            "example": {
-              "amount": 5
-            },
             "schema": {
               "type": "object",
               "description": "Optional amount for partial refunds of transactions.",
@@ -11406,6 +11511,18 @@
                   "format": "float",
                   "description": "Amount to refund in major units of the transaction's currency, for example `5` for EUR 5.00. It must be greater than zero and cannot exceed the amount eligible for a refund. Eligibility depends on the transaction and country/currency rules. If omitted, the system requests a full refund.",
                   "example": 5
+                }
+              }
+            },
+            "examples": {
+              "FullRefund": {
+                "summary": "Full refund",
+                "value": {}
+              },
+              "PartialRefund": {
+                "summary": "Partial refund",
+                "value": {
+                  "amount": 24.42
                 }
               }
             }
@@ -11549,6 +11666,22 @@
                   "hosted_checkout_url": "https://checkout.sumup.com/pay/8f9316a3-cda9-42a9-9771-54d534315676",
                   "transactions": []
                 }
+              },
+              "Tokenization": {
+                "summary": "Checkout for saving a card",
+                "value": {
+                  "checkout_reference": "save-card-123",
+                  "amount": 1,
+                  "currency": "EUR",
+                  "merchant_code": "MCXXXXXX",
+                  "description": "Save a card for future payments",
+                  "customer_id": "831ff8d4cd5958ab5670",
+                  "purpose": "SETUP_RECURRING_PAYMENT",
+                  "id": "7164c99b-13cb-42a1-8ba1-3c2c46a29de7",
+                  "status": "PENDING",
+                  "date": "2026-10-30T12:00:00+00:00",
+                  "transactions": []
+                }
               }
             }
           }
@@ -11610,17 +11743,65 @@
             "schema": {
               "$ref": "#/components/schemas/CheckoutSuccess"
             },
-            "example": {
-              "checkout_reference": "f00a8f74-b05d-4605-bd73-2a901bae5802",
-              "amount": 10.1,
-              "currency": "EUR",
-              "merchant_code": "MH4H92C7",
-              "description": "Purchase",
-              "id": "4e425463-3e1b-431d-83fa-1e51c2925e99",
-              "status": "PENDING",
-              "date": "2020-02-29T10:56:56+00:00",
-              "transaction_code": "TEENSK4W2K",
-              "transaction_id": "410fc44a-5956-44e1-b5cc-19c6f8d727a4"
+            "examples": {
+              "Checkout": {
+                "value": {
+                  "checkout_reference": "f00a8f74-b05d-4605-bd73-2a901bae5802",
+                  "amount": 10.1,
+                  "currency": "EUR",
+                  "merchant_code": "MH4H92C7",
+                  "description": "Purchase",
+                  "id": "4e425463-3e1b-431d-83fa-1e51c2925e99",
+                  "status": "PENDING",
+                  "date": "2020-02-29T10:56:56+00:00",
+                  "transaction_code": "TEENSK4W2K",
+                  "transaction_id": "410fc44a-5956-44e1-b5cc-19c6f8d727a4"
+                }
+              },
+              "PaidCheckout": {
+                "summary": "Paid checkout with a transaction to refund",
+                "value": {
+                  "checkout_reference": "f00a8f74-b05d-4605-bd73-2a901bae5802",
+                  "amount": 42.42,
+                  "currency": "EUR",
+                  "merchant_code": "MH4H92C7",
+                  "description": "Purchase",
+                  "id": "4e425463-3e1b-431d-83fa-1e51c2925e99",
+                  "status": "PAID",
+                  "date": "2020-02-29T10:56:56+00:00",
+                  "transaction_code": "TEENSK4W2K",
+                  "transaction_id": "410fc44a-5956-44e1-b5cc-19c6f8d727a4",
+                  "transactions": [
+                    {
+                      "id": "410fc44a-5956-44e1-b5cc-19c6f8d727a4",
+                      "transaction_code": "TEENSK4W2K",
+                      "amount": 42.42,
+                      "currency": "EUR",
+                      "status": "SUCCESSFUL",
+                      "timestamp": "2026-10-30T12:00:00+00:00"
+                    }
+                  ]
+                }
+              },
+              "TokenizedCheckout": {
+                "summary": "Checkout with a saved card",
+                "value": {
+                  "checkout_reference": "save-card-123",
+                  "amount": 1,
+                  "currency": "EUR",
+                  "merchant_code": "MCXXXXXX",
+                  "description": "Save a card for future payments",
+                  "customer_id": "831ff8d4cd5958ab5670",
+                  "purpose": "SETUP_RECURRING_PAYMENT",
+                  "id": "7164c99b-13cb-42a1-8ba1-3c2c46a29de7",
+                  "status": "PAID",
+                  "date": "2026-10-30T12:00:00+00:00",
+                  "transactions": [],
+                  "payment_instrument": {
+                    "token": "6878cb7f-6515-47bf-bdd9-1408d270fdce"
+                  }
+                }
+              }
             }
           }
         }
