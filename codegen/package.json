@@ -54,15 +54,15 @@
   },
   "dependencies": {
     "@apidevtools/swagger-parser": "^13.1.0",
-    "@biomejs/js-api": "^6.0.0",
+    "@biomejs/js-api": "^6.1.0",
     "@biomejs/wasm-nodejs": "^2.5.15",
     "change-case-all": "^2.1.0",
     "commander": "^15.0.0",
     "ts-pattern": "^5.9.2"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.5.15",
-    "@rstest/core": "^0.12.4",
+    "@biomejs/biome": "^2.6.3",
+    "@rstest/core": "^0.12.5",
     "@types/minimist": "^1.2.5",
     "@types/node": "^26.6.5",
     "openapi-types": "^12.1.3",
