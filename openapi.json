@@ -105,6 +105,19 @@
       ]
     },
     {
+      "name": "Sales",
+      "description": "Operations related to reading sales data.",
+      "x-core-objects": [
+        {
+          "$ref": "#/components/schemas/Sale"
+        },
+        {
+          "$ref": "#/components/schemas/PublicPaymentV10"
+        }
+      ],
+      "x-displayName": "Sales"
+    },
+    {
       "name": "Tokens",
       "description": "Merchant tokens let your application accept card-present payments with SumUp SDKs that support token-based authentication. Use them when you want users to sign in to your application with your own authentication, then accept payments for a SumUp merchant account.\n\nCreate tokens on your backend using one of the [supported authentication methods](https://developer.sumup.com/api/authentication). Keep your authentication credentials on your backend. Return only the short-lived merchant token to your application and pass its `access_token` to the SDK.\n\nBefore returning a token, authenticate the user in your application and check that they can accept payments for the requested merchant account. A merchant token is limited to that account and the requested actions, and does not grant permissions beyond those of the identity that created it.\n\nTokens expire 15 minutes after creation. Use `expires_in` to determine the remaining lifetime and create a new token when needed. This endpoint does not return a refresh token. Treat merchant tokens as secrets: send them over HTTPS and keep them out of URLs, logs, and source code.",
       "x-core-objects": [
@@ -5620,6 +5633,389 @@
         ]
       }
     },
+    "/v1.0/merchants/{merchant_code}/sales": {
+      "get": {
+        "tags": [
+          "Sales"
+        ],
+        "summary": "Lists sales",
+        "description": "Returns a paginated list of `Sale` objects. Results are sorted **newest first** by the\n**newest event** recorded for each sale. Pagination tokens follow that order.\n\nCovers the merchant’s **last two years** of sales. Non-finalised sales are never returned;\nonly fully-paid sales. Use `POST /sales/search` for filtered queries.",
+        "operationId": "ListSalesV10",
+        "security": [
+          {
+            "apiKey": []
+          },
+          {
+            "oauth2": [
+              "sales.read"
+            ]
+          }
+        ],
+        "x-scopes": [
+          "sales.read"
+        ],
+        "x-permissions": [
+          "merchant_read"
+        ],
+        "parameters": [
+          {
+            "name": "merchant_code",
+            "in": "path",
+            "description": "The merchant code.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "MCZM9TGQ",
+              "maxLength": 30
+            }
+          },
+          {
+            "name": "pagination_token",
+            "in": "query",
+            "required": false,
+            "description": "Pagination token for subsequent requests. Should only be set by clients if they have\nreceived a token in the previous response, and this request is an immediate follow-up\nrequest to that response to load the subsequent page. Clients should treat this as an\nopaque token and should not attempt to parse it in any way.",
+            "schema": {
+              "type": "string"
+            },
+            "example": "66bcbtzelrubzeuzruzgu76678trncH"
+          },
+          {
+            "name": "pagination_limit",
+            "in": "query",
+            "required": false,
+            "description": "Maximum number of results per page.",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 25,
+              "default": 10
+            },
+            "example": 10
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response with a page of sales.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SalePage"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error on the request.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemV10"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The client is not authenticated (auth header is empty or invalid).",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemV10"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Missing `sales.read`, merchant code mismatch on the token, or no `merchant_read` permission.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemV10"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "User-Agent header is not present or is empty.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemV10"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1.0/merchants/{merchant_code}/sales/search": {
+      "post": {
+        "tags": [
+          "Sales"
+        ],
+        "summary": "Searches sales",
+        "description": "Returns a paginated list of `SaleSearchItem` rows matching filter criteria. Results are\nsorted **newest first** by **sale close date**.\n\nFilters from different categories stack with **logical AND**; multiple values in one array\nfield stack with **logical OR**. Results cover the merchant’s **last two years** of sales\n(narrow further with `start_date` / `end_date`). Pagination tokens are not interchangeable\nwith `GET /sales`.",
+        "operationId": "SearchSalesV10",
+        "security": [
+          {
+            "apiKey": []
+          },
+          {
+            "oauth2": [
+              "sales.read"
+            ]
+          }
+        ],
+        "x-scopes": [
+          "sales.read"
+        ],
+        "x-permissions": [
+          "merchant_read"
+        ],
+        "parameters": [
+          {
+            "name": "merchant_code",
+            "in": "path",
+            "description": "The merchant code.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "MCZM9TGQ",
+              "maxLength": 30
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SaleSearchRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response with search results.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SaleSearchResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error on the request.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemV10"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The client is not authenticated (auth header is empty or invalid).",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemV10"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Missing `sales.read`, merchant code mismatch on the token, or no `merchant_read` permission.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemV10"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "User-Agent header is not present or is empty.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemV10"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1.0/merchants/{merchant_code}/sales/{sale_id}": {
+      "get": {
+        "tags": [
+          "Sales"
+        ],
+        "summary": "Gets a sale",
+        "description": "Returns `Sale` for `sale_id`, including item lines and `payments[]`.\nNon-finalised sales are never returned; only fully-paid sales.",
+        "operationId": "GetSaleV10",
+        "security": [
+          {
+            "apiKey": []
+          },
+          {
+            "oauth2": [
+              "sales.read"
+            ]
+          }
+        ],
+        "x-scopes": [
+          "sales.read"
+        ],
+        "x-permissions": [
+          "merchant_read"
+        ],
+        "parameters": [
+          {
+            "name": "merchant_code",
+            "in": "path",
+            "description": "The merchant code.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "MCZM9TGQ",
+              "maxLength": 30
+            }
+          },
+          {
+            "name": "sale_id",
+            "in": "path",
+            "description": "The sale ID.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "5965aa65-e45a-4cc1-9063-c1c1e3b8607f"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sale data with item lines and payments.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Sale"
+                },
+                "example": {
+                  "id": "dbe3178d-4b83-5024-9b26-9b8e1b280514",
+                  "currency": {
+                    "code": "EUR",
+                    "scale": 2
+                  },
+                  "tax_mode": "GROSS",
+                  "state": "CLOSED",
+                  "price": {
+                    "net_amount": 777,
+                    "gross_amount": 925,
+                    "taxes": [
+                      {
+                        "id": "tax-vat-19",
+                        "net_amount": 777,
+                        "gross_amount": 925,
+                        "tax_amount": 148
+                      }
+                    ]
+                  },
+                  "created_at": "2026-06-02T10:15:00Z",
+                  "closed_at": "2026-06-02T10:20:00Z",
+                  "source": {
+                    "channel": "POS"
+                  },
+                  "items": [
+                    {
+                      "id": "line-1",
+                      "type": "CATALOG",
+                      "name": "Cappuccino",
+                      "quantity": 1,
+                      "price": {
+                        "unit_amount": 300,
+                        "total_net_amount": 252,
+                        "total_gross_amount": 300,
+                        "taxes": [
+                          {
+                            "id": "tax-vat-19",
+                            "net_amount": 252,
+                            "gross_amount": 300,
+                            "tax_amount": 48
+                          }
+                        ],
+                        "total_net_amount_final": 252,
+                        "total_gross_amount_final": 300,
+                        "taxes_final": [
+                          {
+                            "id": "tax-vat-19",
+                            "net_amount": 252,
+                            "gross_amount": 300,
+                            "tax_amount": 48
+                          }
+                        ]
+                      }
+                    }
+                  ],
+                  "payments": [
+                    {
+                      "method": "apple_pay",
+                      "reference": "TERTYFQ4G3",
+                      "type": "purchase",
+                      "amount": 975,
+                      "status": "SUCCESSFUL",
+                      "processed_at": "2026-06-02T10:20:00Z"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The client is not authenticated (auth header is empty or invalid).",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemV10"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Missing `sales.read`, merchant code mismatch on the token, or no `merchant_read` permission.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemV10"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Sale not found. Non-finalised sales are never returned; only fully-paid sales.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemV10"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "User-Agent header is not present or is empty.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemV10"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v0.1/merchants/{merchant_code}/readers/{reader_id}/checkout": {
       "post": {
         "callbacks": {
@@ -10094,8 +10490,7 @@
             "maxLength": 60
           },
           "phone_number": {
-            "$ref": "#/components/schemas/PhoneNumber",
-            "description": "The (mobile) phone number of the individual (used for verification) in [E.164](https://en.wikipedia.org/wiki/E.164) format.\n"
+            "$ref": "#/components/schemas/PhoneNumber"
           },
           "relationships": {
             "type": "array",
@@ -10113,19 +10508,16 @@
             }
           },
           "ownership": {
-            "$ref": "#/components/schemas/Ownership",
-            "description": "Details about the ownership relationship between the Person and the Merchant. This is only set if the Person has a relationship of type `owner`.\n"
+            "$ref": "#/components/schemas/Ownership"
           },
           "address": {
-            "$ref": "#/components/schemas/Address",
-            "description": "The address of the individual."
+            "$ref": "#/components/schemas/Address"
           },
           "identifiers": {
             "$ref": "#/components/schemas/PersonalIdentifiers"
           },
           "citizenship": {
-            "$ref": "#/components/schemas/CountryCode",
-            "description": "The Alpha-2 ISO code of the country where the Person is a citizen.\n"
+            "$ref": "#/components/schemas/CountryCode"
           },
           "nationality": {
             "type": [
@@ -10342,6 +10734,1557 @@
         "example": "4WLFDSBF",
         "minLength": 8,
         "maxLength": 9
+      },
+      "Reference": {
+        "type": "string",
+        "description": "The reference to the actual payment used for this sale, e.g. the sumup transaction code.",
+        "example": "TERTYFQ4G3",
+        "maxLength": 50
+      },
+      "Brand": {
+        "type": "string",
+        "description": "The brand of the card.\nInput is case-insensitive; the canonical form is lowercase snake_case.\n**VALUES**: [amex, cup, diners, discover, elo, elv, hipercard, jcb, maestro, mastercard, visa, visa_electron,\nvisa_vpay, vr, eftpos, conecs, swile, girocard, interac, sumup, bancomat].",
+        "maxLength": 20,
+        "example": "visa"
+      },
+      "ItemTypeV10": {
+        "type": "string",
+        "description": "Classifies a sale line. Not a schema subclass.\n\nKnown values: `CATALOG`, `DEPOSIT`, `GIFT_CARD`, `CUSTOM`, `FEE`.\n\n`FEE` lines represent merchant-charged fees on the sale (e.g. shipping, service\ncharge, surcharge, cancellation). They participate in sale totals like any other\nline; type-specific data is carried in `features` (see `Feature` for the\nconventional feature keys).\n\nThis is intentionally an open string, NOT a closed enum: new values are added\nover time as pure data and consumers MUST tolerate unknown values, rendering the\nline from the generic envelope (name, quantity, price, taxes) and reading any\nextra information from `features`.",
+        "example": "CATALOG"
+      },
+      "Quantity": {
+        "type": "number",
+        "format": "double",
+        "description": "The numerical value representing the quantity in the specified unit.",
+        "minimum": 0,
+        "example": 2.15332
+      },
+      "UnitOfMeasure": {
+        "type": "object",
+        "description": "The unit of measure of the item.",
+        "required": [
+          "group_id",
+          "unit_id",
+          "unit_ratio"
+        ],
+        "properties": {
+          "group_id": {
+            "type": "string",
+            "description": "The group of the unit of measure.",
+            "maxLength": 100,
+            "example": "weight"
+          },
+          "unit_id": {
+            "type": "string",
+            "description": "The specific unit of measure within the group.",
+            "example": "weight.kilogram",
+            "maxLength": 100
+          },
+          "unit_ratio": {
+            "type": "number",
+            "format": "double",
+            "description": "The ratio of the specified unit to the base unit of the group.",
+            "example": 1.24412
+          }
+        }
+      },
+      "PositiveAmount": {
+        "type": "integer",
+        "format": "int64",
+        "description": "The value of the amount in minor units of the currency according to the Sale.currency.scale. \n`value` can get large for some currencies and applications. \nUse Long type or a similar data type when parsing `value`.",
+        "example": 100,
+        "minimum": 0
+      },
+      "TaxRate": {
+        "type": "integer",
+        "format": "int64",
+        "minimum": 0,
+        "description": "The tax rate percentage in minor units (1/100000). For example 19000 = 19%.",
+        "example": 19000
+      },
+      "TaxLine": {
+        "type": "object",
+        "required": [
+          "id",
+          "net_amount",
+          "gross_amount",
+          "tax_amount"
+        ],
+        "description": "Information about tax together with amounts before and after its application such as:\n - net amount: taxable net amount, scoped by this tax\n - gross amount: amount after applying the tax.",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Tax ID from the Tax Service (External Id)",
+            "maxLength": 100,
+            "example": "b064ed44-66e1-45a1-a963-b783808f0436"
+          },
+          "name": {
+            "type": "string",
+            "description": "Tax name, e.g. \"MwSt.\"",
+            "maxLength": 255
+          },
+          "percentage": {
+            "$ref": "#/components/schemas/TaxRate"
+          },
+          "net_amount": {
+            "description": "Net amount before applying the tax. \nThe value of the amount in minor units of the currency according to the Sale.currency.scale.\n",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Amount"
+              }
+            ]
+          },
+          "gross_amount": {
+            "description": "Gross amount after applying the tax.\nThe value of the amount in minor units of the currency according to the Sale.currency.scale.\n",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Amount"
+              }
+            ]
+          },
+          "tax_amount": {
+            "description": "Amount of tax.\nThe value of the amount in minor units of the currency according to the Sale.currency.scale.\n",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Amount"
+              }
+            ]
+          }
+        }
+      },
+      "DiscountLevel": {
+        "type": "string",
+        "description": "Specifies where discount was applied by user (either merchant or consumer):\n- CART: Applied to the whole cart (calculated and distributed per sale item)\n- ITEM: Applied to specific sale item\n\n*Accepted values:* [\"ITEM\", \"CART\"].",
+        "example": "CART",
+        "minLength": 4,
+        "maxLength": 4
+      },
+      "DiscountSourceAdHoc": {
+        "type": "object",
+        "description": "Discount created ad-hoc on device during checkout.",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The unique identifier of the ad-hoc discount.",
+            "example": "075b0b5c-a1f4-46da-9aca-92fb6dd5905d"
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the ad-hoc discount.",
+            "example": "Happy Hour",
+            "maxLength": 100
+          },
+          "description": {
+            "type": "string",
+            "description": "The description of the ad-hoc discount.",
+            "example": "Happy Hour from 10 to 12.",
+            "maxLength": 250
+          }
+        }
+      },
+      "DiscountApplicationMode": {
+        "type": "string",
+        "description": "Method of applying the discount to the items or cart.",
+        "enum": [
+          "MANUAL",
+          "AUTOMATIC"
+        ],
+        "example": "MANUAL"
+      },
+      "DiscountSourceBasic": {
+        "type": "object",
+        "description": "Preset discount applied manually on the POS.",
+        "required": [
+          "id",
+          "name",
+          "application_mode"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The unique identifier of the basic discount.",
+            "example": "075b0b5c-a1f4-46da-9aca-92fb6dd5905d"
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the basic discount.",
+            "example": "Staff discount",
+            "maxLength": 100
+          },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The description of the loyalty discount.",
+            "example": "10% off food for staff members.",
+            "maxLength": 250
+          },
+          "application_mode": {
+            "$ref": "#/components/schemas/DiscountApplicationMode"
+          }
+        }
+      },
+      "DiscountClass": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "The method used to target items to discount.\nMust be populated for ITEM level discounts, and must be null for CART level discounts (CART level targets all\nitems, therefore none of these categories apply).\n",
+        "enum": [
+          "ITEM",
+          "CATEGORY",
+          "BUNDLE",
+          "BUY_X_GET_Y",
+          "MEAL_DEAL"
+        ],
+        "example": "ITEM"
+      },
+      "DiscountSourceCoupon": {
+        "type": "object",
+        "description": "Discount applied manually when entering a coupon code at checkout.",
+        "required": [
+          "id",
+          "code",
+          "name",
+          "application_mode"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The unique identifier of the coupon discount.",
+            "example": "075b0b5c-a1f4-46da-9aca-92fb6dd5905d"
+          },
+          "code": {
+            "type": "string",
+            "description": "The coupon code.",
+            "example": "FREE_COFFEE",
+            "maxLength": 100
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the coupon discount.",
+            "example": "Free coffee",
+            "maxLength": 100
+          },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The description of the coupon discount.",
+            "example": "Free coffee with this coupon.",
+            "maxLength": 250
+          },
+          "discount_class": {
+            "$ref": "#/components/schemas/DiscountClass"
+          },
+          "application_mode": {
+            "$ref": "#/components/schemas/DiscountApplicationMode"
+          }
+        }
+      },
+      "DiscountSourceOffer": {
+        "type": "object",
+        "description": "Discount applied automatically when cart is updated based on preset promotions.",
+        "required": [
+          "id",
+          "name",
+          "application_mode"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The unique identifier of the offer discount.",
+            "example": "075b0b5c-a1f4-46da-9aca-92fb6dd5905d"
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the offer discount.",
+            "example": "Breakfast combo deal",
+            "maxLength": 100
+          },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The description of the offer discount.",
+            "example": "Buy a Croissant, get a coffee for £1",
+            "maxLength": 250
+          },
+          "discount_class": {
+            "$ref": "#/components/schemas/DiscountClass"
+          },
+          "application_mode": {
+            "$ref": "#/components/schemas/DiscountApplicationMode"
+          }
+        }
+      },
+      "DiscountSourceLoyaltyType": {
+        "type": "string",
+        "description": "The type of loyalty discount, either a promotion (e.g. new customer discount) or a reward (free coffee after completing stamp card).",
+        "enum": [
+          "PROMOTION",
+          "REWARD"
+        ],
+        "example": "REWARD"
+      },
+      "DiscountSourceLoyaltySchemeType": {
+        "type": "string",
+        "description": "The scheme type of the loyalty program.",
+        "enum": [
+          "STAMPS",
+          "POINTS"
+        ],
+        "example": "POINTS"
+      },
+      "DiscountSourceLoyalty": {
+        "type": "object",
+        "description": "Discount applied when redeeming a reward from the merchant's loyalty scheme.",
+        "required": [
+          "id",
+          "name",
+          "loyalty_type",
+          "scheme_type",
+          "application_mode"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The unique identifier of the promotion or reward.",
+            "example": "075b0b5c-a1f4-46da-9aca-92fb6dd5905d"
+          },
+          "loyalty_type": {
+            "$ref": "#/components/schemas/DiscountSourceLoyaltyType"
+          },
+          "scheme_type": {
+            "$ref": "#/components/schemas/DiscountSourceLoyaltySchemeType"
+          },
+          "points": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int64",
+            "minimum": 1,
+            "description": "The number of points used for this loyalty discount.\nMust be a positive integer if the scheme type is POINTS.\nMust not be populated if the scheme type is STAMPS.\n",
+            "example": 50
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the loyalty discount.",
+            "example": "Free coffee",
+            "maxLength": 100
+          },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The description of the loyalty discount.",
+            "example": "Free coffee for 50 points",
+            "maxLength": 250
+          },
+          "discount_class": {
+            "$ref": "#/components/schemas/DiscountClass"
+          },
+          "application_mode": {
+            "$ref": "#/components/schemas/DiscountApplicationMode"
+          }
+        }
+      },
+      "DiscountSource": {
+        "type": "object",
+        "description": "The source of discount. Exactly one property must be set.",
+        "properties": {
+          "ad_hoc": {
+            "$ref": "#/components/schemas/DiscountSourceAdHoc"
+          },
+          "basic": {
+            "$ref": "#/components/schemas/DiscountSourceBasic"
+          },
+          "coupon": {
+            "$ref": "#/components/schemas/DiscountSourceCoupon"
+          },
+          "offer": {
+            "$ref": "#/components/schemas/DiscountSourceOffer"
+          },
+          "loyalty": {
+            "$ref": "#/components/schemas/DiscountSourceLoyalty"
+          }
+        }
+      },
+      "DiscountValue": {
+        "type": "object",
+        "description": "The value type of the discount, either a percentage based or absolute monetary value.\n\nIt is required that only one of the following is set:\n- absolute\n- percentage.",
+        "properties": {
+          "absolute": {
+            "description": "The absolute value in minor units of the currency according to the Sale.currency.scale.\nExample: 10000 = 10.00\n",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PositiveAmount"
+              }
+            ]
+          },
+          "percentage": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 0,
+            "description": "The percentage in minor units (1/100000).\n\nExamples:\n- 10% -\u003e 0.10 (decimal) = 10000 (minor units)\n- 15.5% -\u003e 0.155 (decimal) = 15500 (minor units)\n- 0.001% -\u003e 0.00001 (decimal) = 1 (minor units)\n",
+            "example": 10000
+          }
+        }
+      },
+      "DiscountLine": {
+        "type": "object",
+        "description": "Object representing information about single discount line.",
+        "required": [
+          "level",
+          "source",
+          "value",
+          "net_amount",
+          "gross_amount",
+          "tax_amount"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "An id used to associate a discount line with a specific discount.\nSince we can apply multiple discounts (e.g. 2x 10% whole cart off) \nwe need to be able to identify which discount line belongs to which cart discount.\nRecommended to use UUID identifiers.",
+            "example": "075b0b5c-a1f4-46da-9aca-92fb6dd5905d",
+            "maxLength": 100
+          },
+          "description": {
+            "type": "string",
+            "description": "A description or reason of the discount.",
+            "example": "Happy Hour",
+            "maxLength": 250
+          },
+          "level": {
+            "$ref": "#/components/schemas/DiscountLevel"
+          },
+          "source": {
+            "$ref": "#/components/schemas/DiscountSource"
+          },
+          "value": {
+            "$ref": "#/components/schemas/DiscountValue"
+          },
+          "net_amount": {
+            "description": "The net amount of the discount.\nThe value of the amount in minor units of the currency according to the Sale.currency.scale.\n",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PositiveAmount"
+              }
+            ]
+          },
+          "gross_amount": {
+            "description": "The gross amount of the discount.\nThe value of the amount in minor units of the currency according to the Sale.currency.scale.\n",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PositiveAmount"
+              }
+            ]
+          },
+          "tax_amount": {
+            "description": "The tax amount of the discount.\nThe value of the amount in minor units of the currency according to the Sale.currency.scale.\n",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PositiveAmount"
+              }
+            ]
+          }
+        }
+      },
+      "LineItemPriceV10": {
+        "type": "object",
+        "description": "Pricing for a single line, valid for every item type.\n\nMerges the standard amounts (with tax breakdown) and the final amounts (after\ndiscounts/modifiers).\n\nTotals and tax amounts can be negative for return-like operations (for example\na deposit with `operation_type` = `RETURN`).",
+        "required": [
+          "unit_amount",
+          "total_net_amount",
+          "total_gross_amount",
+          "taxes",
+          "total_net_amount_final",
+          "total_gross_amount_final",
+          "taxes_final"
+        ],
+        "properties": {
+          "unit_amount": {
+            "description": "The price of a single unit. If the tax_mode is GROSS it includes taxes,\notherwise no tax is included. It does NOT include discounts.\n",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PositiveAmount"
+              }
+            ],
+            "example": 300
+          },
+          "total_net_amount": {
+            "description": "The net amount (including modifiers if applied). It does NOT include discounts.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Amount"
+              }
+            ],
+            "example": 252
+          },
+          "total_gross_amount": {
+            "description": "The gross amount (including modifiers if applied). It does NOT include discounts.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Amount"
+              }
+            ],
+            "example": 300
+          },
+          "taxes": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 1000,
+            "description": "Taxes applied on top of the net amount resulting in the gross amount.",
+            "items": {
+              "$ref": "#/components/schemas/TaxLine"
+            },
+            "example": [
+              {
+                "id": "tax-vat-19",
+                "net_amount": 252,
+                "gross_amount": 300,
+                "tax_amount": 48
+              }
+            ]
+          },
+          "discounts": {
+            "type": "array",
+            "maxItems": 1000,
+            "description": "Discounts applied. Discount amounts do not affect `total_net_amount` /\n`total_gross_amount`; they are reflected in the `*_final` amounts.\n",
+            "items": {
+              "$ref": "#/components/schemas/DiscountLine"
+            },
+            "example": []
+          },
+          "total_net_amount_final": {
+            "description": "The final net amount including discounts and modifiers. Equals `total_net_amount` if no discounts apply.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Amount"
+              }
+            ],
+            "example": 210
+          },
+          "total_gross_amount_final": {
+            "description": "The final gross amount including discounts, modifiers and taxes. Equals `total_gross_amount` if no discounts apply.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Amount"
+              }
+            ],
+            "example": 250
+          },
+          "taxes_final": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 1000,
+            "description": "Taxes applied on top of `total_net_amount_final` resulting in `total_gross_amount_final`. Equals `taxes` if no discounts apply.",
+            "items": {
+              "$ref": "#/components/schemas/TaxLine"
+            },
+            "example": [
+              {
+                "id": "tax-vat-19",
+                "net_amount": 210,
+                "gross_amount": 250,
+                "tax_amount": 40
+              }
+            ]
+          }
+        }
+      },
+      "CategoryV10": {
+        "type": "object",
+        "description": "A category a line belongs to.",
+        "required": [
+          "id",
+          "name"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "maxLength": 100,
+            "description": "The category id. Usually a UUID, but not always (legacy cases).",
+            "example": "b064ed44-66e1-45a1-a963-b783808f0436"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 30,
+            "description": "The category name.",
+            "example": "Food"
+          }
+        }
+      },
+      "PriceAmounts": {
+        "description": "Base price information for items including unit amount and totals.",
+        "type": "object",
+        "required": [
+          "unit_amount",
+          "total_net_amount",
+          "total_gross_amount"
+        ],
+        "properties": {
+          "unit_amount": {
+            "description": "The price of a single unit.\nIf the tax_mode is GROSS, it includes taxes, otherwise no tax included.\nIt doesn't include discounts.\n",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PositiveAmount"
+              }
+            ]
+          },
+          "total_net_amount": {
+            "description": "The net amount (including modifiers if applied). It does NOT include discounts.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Amount"
+              }
+            ]
+          },
+          "total_gross_amount": {
+            "description": "The gross amount (including modifiers if applied). It does NOT include discounts.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Amount"
+              }
+            ]
+          }
+        }
+      },
+      "PositivePriceAmounts": {
+        "description": "Price information for items with positive amounts only.",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PriceAmounts"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "total_net_amount": {
+                "$ref": "#/components/schemas/PositiveAmount"
+              },
+              "total_gross_amount": {
+                "$ref": "#/components/schemas/PositiveAmount"
+              }
+            }
+          }
+        ]
+      },
+      "PositiveTaxLine": {
+        "description": "Tax line with positive amounts only.\nInformation about tax together with amounts before and after its application such as:\n - net amount: taxable net amount, scoped by this tax\n - gross amount: amount after applying the tax\nThe numbers here can't be negative.",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/TaxLine"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "net_amount": {
+                "description": "Net amount before applying the tax. \nThe value of the amount in minor units of the currency according to the Sale.currency.scale.\n",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/PositiveAmount"
+                  }
+                ]
+              },
+              "gross_amount": {
+                "description": "Gross amount after applying the tax.\nThe value of the amount in minor units of the currency according to the Sale.currency.scale.\n",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/PositiveAmount"
+                  }
+                ]
+              },
+              "tax_amount": {
+                "description": "Amount of tax.\nThe value of the amount in minor units of the currency according to the Sale.currency.scale.\n",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/PositiveAmount"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "PositivePriceWithTaxes": {
+        "description": "Price information with positive amounts and detailed tax breakdown.",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PositivePriceAmounts"
+          },
+          {
+            "type": "object",
+            "required": [
+              "taxes"
+            ],
+            "properties": {
+              "taxes": {
+                "type": "array",
+                "minItems": 1,
+                "maxItems": 1000,
+                "description": "Taxes applied on top of net amount resulting in gross amount.",
+                "items": {
+                  "$ref": "#/components/schemas/PositiveTaxLine"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "FinalPriceAmounts": {
+        "description": "Final price amounts after all calculations and adjustments.",
+        "type": "object",
+        "required": [
+          "total_net_amount_final",
+          "total_gross_amount_final",
+          "taxes_final"
+        ],
+        "properties": {
+          "discounts": {
+            "type": "array",
+            "maxItems": 1000,
+            "description": "Discounts applied.\n\nImportant: \nDiscount amounts shouldn't take effect on net and gross amounts.\n\nDiscount money amounts depend on where discount was applied:\n - for item level discount: whole discount money amount is applied\n - for cart level discount: only part of the whole amount is applied \n    (discount money value is split on each line item)\n",
+            "items": {
+              "$ref": "#/components/schemas/DiscountLine"
+            }
+          },
+          "total_net_amount_final": {
+            "description": "The final net amount includes discounts and modifiers. It does NOT include taxes. If no discounts are applied, it should be equal to total_net_amount.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PositiveAmount"
+              }
+            ]
+          },
+          "total_gross_amount_final": {
+            "description": "The final gross amount includes discounts, modifiers, and taxes. If no discounts are applied, it should be equal to total_gross_amount.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PositiveAmount"
+              }
+            ]
+          },
+          "taxes_final": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 1000,
+            "description": "Taxes applied on top of `total_net_amount_final` amount resulting in `total_gross_amount_final` amount.\nIf no discounts are applied, it should be equal to `taxes`.\n",
+            "items": {
+              "$ref": "#/components/schemas/PositiveTaxLine"
+            }
+          }
+        }
+      },
+      "ModifierSet": {
+        "type": "object",
+        "description": "Modifier set attached to an item.",
+        "required": [
+          "id",
+          "name"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "maxLength": 100,
+            "description": "The id of the modifier set that modifier belongs to.",
+            "example": "b064ed44-66e1-45a1-a963-b783808f0436"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 150,
+            "description": "The name of the modifier set that the modifier belongs to.",
+            "example": "Burger Toppings"
+          }
+        }
+      },
+      "ModifierItem": {
+        "type": "object",
+        "description": "Modifiers are reported under line items and can be build from Item Catalog objects.\nModifiers has to be attached to an item and can't be sold and refunded alone.",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PositivePriceWithTaxes"
+          },
+          {
+            "$ref": "#/components/schemas/FinalPriceAmounts"
+          },
+          {
+            "type": "object",
+            "required": [
+              "id",
+              "name",
+              "set",
+              "quantity"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "maxLength": 100,
+                "description": "Modifier id, coming from the Item Catalog",
+                "example": "b064ed44-66e1-45a1-a963-b783808f0436"
+              },
+              "name": {
+                "type": "string",
+                "description": "Modifier name, coming from the Item Catalog",
+                "example": "Extra Cheese",
+                "maxLength": 150
+              },
+              "set": {
+                "$ref": "#/components/schemas/ModifierSet"
+              },
+              "quantity": {
+                "$ref": "#/components/schemas/Quantity"
+              }
+            }
+          }
+        ]
+      },
+      "ItemReferencesV10": {
+        "type": "object",
+        "description": "Outward identifiers and links for a line, kept in one place rather than scattered\nper item type.",
+        "properties": {
+          "catalog_source": {
+            "type": "string",
+            "description": "The source of the catalog the line originates from.",
+            "enum": [
+              "SUMUP",
+              "EXTERNAL"
+            ],
+            "default": "SUMUP",
+            "example": "SUMUP"
+          },
+          "catalog_reference": {
+            "type": "string",
+            "description": "Reference to the backing catalog entity (item variant, deposit, ...),\ntypically a URN such as\n`urn:sumup:pos:variant:${MERCHANT_CODE}:${ITEM_ID}:${VARIANT_ID}` or\n`urn:sumup:pos:deposit:${MERCHANT_CODE}:${DEPOSIT_ID}`.\nEmpty for ad-hoc / manual lines. Type-agnostic on purpose: a new item type\nbacked by a catalog entity reuses this field instead of adding its own.",
+            "maxLength": 255,
+            "example": "urn:sumup:pos:variant:MCGLE7VC:9736e947-6f1f-487f-846a-c5954fb06a5a:7fff192f-ce29-4673-890f-2d68ba557946"
+          },
+          "external_id": {
+            "type": "string",
+            "description": "An external reference id connecting this line to another system.",
+            "maxLength": 250,
+            "example": "POS-LINE-001"
+          },
+          "sku": {
+            "type": "string",
+            "description": "Stock keeping unit, enriched from the Catalog when available.",
+            "maxLength": 100,
+            "example": "COFFEE-LARGE"
+          }
+        }
+      },
+      "FeatureValueTypeV10": {
+        "type": "string",
+        "description": "The data type of a feature value. The wire `value` is always a string and is parsed\naccording to this type.",
+        "enum": [
+          "TEXT",
+          "INTEGER",
+          "DECIMAL",
+          "DATE",
+          "BOOLEAN"
+        ],
+        "example": "TEXT"
+      },
+      "FeatureV10": {
+        "type": "object",
+        "description": "A named, typed characteristic of a line. New item types add data here instead of\na typed sub-object per type.\n\nExamples by item type (illustrative, not exhaustive):\n  - DEPOSIT:   `operation_type` = \"SALE\", `linked_line_id` = \"line-1\"\n  - GIFT_CARD: `gift_card_reference` = \"GCMINGXPC5\"\n  - CATALOG:   `variant_name` = \"Large\", `item_id` / `variant_id` (TEXT),\n               `reporting_category_id` = \"cat-...\"\n  - FEE:       `fee_type` = \"SHIPPING\" (required); optional `fee_id`,\n               `value_absolute` or `value_percentage`, and per-type metadata\n               features such as `delivery_name` / `tracking_reference` (shipping),\n               `card_type` / `scheme` (surcharge), or `policy_id` (cancellation)\n  - (future) SUBSCRIPTION: `billing_period` = \"P1M\", `renews_at` = \"2026-07-02\"\n\nConventional `FEE` feature keys:\n  - `fee_type` (TEXT, required): `SHIPPING`, `SURCHARGE`, `SERVICE_CHARGE`, or\n    `CANCELLATION`\n  - `fee_id` (TEXT, optional): identifier of the fee definition\n  - `value_absolute` (INTEGER, optional): configured absolute value in minor units\n    of the sale currency (the charged amount is on `price`)\n  - `value_percentage` (INTEGER, optional): configured percentage in minor units\n    (1/100000; e.g. 10000 = 10%)\n  - Per-type metadata (optional, TEXT unless noted): `delivery_name`,\n    `tracking_reference` (shipping); `card_type`, `scheme` (surcharge);\n    `policy_id` (cancellation)",
+        "required": [
+          "name",
+          "value_type",
+          "value"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The feature name/key.",
+            "maxLength": 100,
+            "example": "operation_type"
+          },
+          "value_type": {
+            "$ref": "#/components/schemas/FeatureValueTypeV10"
+          },
+          "value": {
+            "type": "string",
+            "description": "The feature value in canonical string form, to be parsed per `value_type`\n(e.g. INTEGER -\u003e \"3\", DECIMAL -\u003e \"1.50\", DATE -\u003e \"2026-07-02\",\nBOOLEAN -\u003e \"true\"). Carrying it as a string keeps the wire format stable as\nnew feature names and value types are introduced.",
+            "maxLength": 1000,
+            "example": "SALE"
+          }
+        }
+      },
+      "SaleLineItemV10": {
+        "type": "object",
+        "description": "A single line of a sale.\n\nThe envelope (id, type, name, quantity, unit_of_measure, price) is stable and\ntype-agnostic: any consumer can render and total a line from these fields alone.\nType-specific data is in `features`. There is no per-type object and no discriminator,\nso a new item type does not change this schema.",
+        "required": [
+          "id",
+          "type",
+          "name",
+          "quantity",
+          "unit_of_measure",
+          "price"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Stable identifier of the line within the sale. Used for linking (e.g. deposits).",
+            "maxLength": 100,
+            "example": "line-1"
+          },
+          "type": {
+            "$ref": "#/components/schemas/ItemTypeV10"
+          },
+          "name": {
+            "type": "string",
+            "description": "Display name of the line.",
+            "maxLength": 250,
+            "example": "Cappuccino"
+          },
+          "quantity": {
+            "$ref": "#/components/schemas/Quantity"
+          },
+          "unit_of_measure": {
+            "$ref": "#/components/schemas/UnitOfMeasure"
+          },
+          "service_type": {
+            "type": "string",
+            "description": "The type of service for this line.",
+            "enum": [
+              "IN_HOUSE",
+              "TAKE_AWAY"
+            ],
+            "example": "IN_HOUSE"
+          },
+          "note": {
+            "type": "string",
+            "maxLength": 300,
+            "description": "Optional free-text note attached to the line, visible on receipts.",
+            "example": "extra hot"
+          },
+          "price": {
+            "$ref": "#/components/schemas/LineItemPriceV10"
+          },
+          "categories": {
+            "type": "array",
+            "description": "Categories the line belongs to. A shared optional structure available to any\nline; not a per-type field.\n",
+            "maxItems": 1000,
+            "items": {
+              "$ref": "#/components/schemas/CategoryV10"
+            },
+            "example": [
+              {
+                "id": "cat-hot-drinks",
+                "name": "Hot Drinks"
+              }
+            ]
+          },
+          "modifiers": {
+            "type": "array",
+            "description": "Modifiers customise a line (e.g. \"oat milk\" on a cappuccino). A shared\noptional structure available to any line; not a per-type field.\n",
+            "maxItems": 50,
+            "items": {
+              "$ref": "#/components/schemas/ModifierItem"
+            },
+            "example": []
+          },
+          "references": {
+            "$ref": "#/components/schemas/ItemReferencesV10"
+          },
+          "features": {
+            "type": "array",
+            "description": "Named, typed, type-specific data. New item types add their data here as\nfeatures instead of new schema variants. See `Feature` for per-type examples.\n",
+            "maxItems": 100,
+            "items": {
+              "$ref": "#/components/schemas/FeatureV10"
+            },
+            "example": [
+              {
+                "name": "variant_name",
+                "value_type": "TEXT",
+                "value": "Large"
+              }
+            ]
+          }
+        }
+      },
+      "SalePriceV10": {
+        "type": "object",
+        "description": "Sale-level pricing aggregate, parallel to `LineItemPrice` on each `SaleLineItem`.\n\nLine-level breakdown (unit price, line discounts, per-line taxes) lives on\n`items[].price`. This object holds the rolled-up totals and cart-level\nadjustments that consumers use for receipts and payment reconciliation.",
+        "required": [
+          "net_amount",
+          "gross_amount",
+          "taxes"
+        ],
+        "properties": {
+          "net_amount": {
+            "description": "Final net total for the sale: sum of `items[].price.total_net_amount_final`\nafter cart-level discounts (tips excluded).\nIn minor units according to `Sale.currency.scale`.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Amount"
+              }
+            ],
+            "example": 777
+          },
+          "gross_amount": {
+            "description": "Final gross total for the sale: sum of `items[].price.total_gross_amount_final`\nafter cart-level discounts (tips excluded).\nSame value as search `total_amount`, in minor units according to `Sale.currency.scale`.\nPayment amounts include tips and can therefore differ from this gross total.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Amount"
+              }
+            ],
+            "example": 925
+          },
+          "cart_discounts": {
+            "type": "array",
+            "maxItems": 1000,
+            "description": "Discounts applied at cart level. Item-level discounts remain on\n`items[].price.discounts`.",
+            "items": {
+              "$ref": "#/components/schemas/DiscountLine"
+            },
+            "example": []
+          },
+          "taxes": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 1000,
+            "description": "Tax lines aggregated across the sale (after cart-level discounts).\nPer-line tax detail remains on `items[].price.taxes` / `taxes_final`.",
+            "items": {
+              "$ref": "#/components/schemas/TaxLine"
+            },
+            "example": [
+              {
+                "id": "tax-vat-19",
+                "net_amount": 777,
+                "gross_amount": 925,
+                "tax_amount": 148
+              }
+            ]
+          }
+        }
+      },
+      "TaxMode": {
+        "type": "string",
+        "description": "The tax mode used by merchant for displaying prices and calculating taxes:\n- NO_TAX: The prices don't contain any taxes, merchant don't report taxes\n- GROSS: The prices used by merchant already include taxes (common in EU), the tax is calculated from the gross price\n- NET: The prices used by merchant don't include taxes (common in US), the tax is calculated from the net price\nSince tax values can be different for the same net price depending if the tax\nwas calculated from gross or net price, this info is necessary to be able to reconcile tax calculations.\n",
+        "enum": [
+          "NO_TAX",
+          "GROSS",
+          "NET"
+        ],
+        "example": "NO_TAX"
+      },
+      "SalesChannel": {
+        "type": "string",
+        "description": "The sale_channel is field that indicates the channel through\nwhich the sale was made. For example, if the sale was made in the merchant app,\nthe sale_channel could be POS. If the sale was made on a kiosk, the\nsale_channel is KIOSK.\n\n*Accepted values:* [\"POS\", \"KIOSK\", \"ONLINE_STORE\", \"SOLO\", \"ORDER_AND_PAY\", \"INVOICE\", \"BOOKINGS\", \"ORDER_AGGREGATOR\", \"SUBSCRIPTIONS\", \"UNKNOWN\"].",
+        "example": "POS"
+      },
+      "SaleSource": {
+        "type": "object",
+        "description": "Information about the source of the sale.",
+        "properties": {
+          "channel": {
+            "$ref": "#/components/schemas/SalesChannel"
+          },
+          "sub_channel": {
+            "type": "string",
+            "description": "The sub_channel is an optional field that can be used to provide more\ninformation about the sale_channel. For example, if the sale_channel is\nONLINE_PAYMENTS, the sub_channel could be \"WIX\" or \"QR_CODE\" or \"WOOCOMMERCE\".\n",
+            "example": "QR_CODE",
+            "maxLength": 50
+          },
+          "external_id": {
+            "type": "string",
+            "description": "An external reference ID for connecting orders/sales between products",
+            "example": "123456",
+            "maxLength": 250
+          },
+          "external_sub_channel_id": {
+            "type": "string",
+            "description": "An external reference ID for the sub-channel.\nFor example, when channel is BOOKINGS and sub_channel is POS,\nthis can hold the OMS order ID while external_id holds the appointment ID.\n",
+            "example": "9736e947-6f1f-487f-846a-c5954fb06a5a",
+            "maxLength": 250
+          }
+        },
+        "required": [
+          "channel"
+        ]
+      },
+      "PublicPaymentMethod": {
+        "type": "string",
+        "description": "Payment method on public sales read API v1.0.\nDigital wallets are first-class methods. Gift card payments use `gift_card`, not `apm`.\nInput is case-insensitive; the canonical form is lowercase snake_case.\n**VALUES**: [card, cash, apm, external, apple_pay, google_pay, whatsapp_pay, gift_card].",
+        "example": "card",
+        "maxLength": 20
+      },
+      "PublicApmType": {
+        "type": "string",
+        "description": "Alternative payment method type when `method` is `apm`.\nGift card is not an APM on this API.\nInput is case-insensitive; the canonical form is lowercase snake_case.\n**VALUES**: [qr_code_pix, sepa_dd, paypal, sumup_pay, twint, iris].",
+        "maxLength": 20
+      },
+      "PublicCardV10": {
+        "type": "object",
+        "description": "Card brand, credit/debit processing type, and last four digits.",
+        "required": [
+          "brand",
+          "type",
+          "last_4_digits"
+        ],
+        "properties": {
+          "brand": {
+            "$ref": "#/components/schemas/Brand"
+          },
+          "type": {
+            "type": "string",
+            "description": "Credit or debit processing choice, not brand or funding.\n`unknown` when unavailable; prepaid/voucher are not processing types.",
+            "enum": [
+              "credit",
+              "debit",
+              "unknown"
+            ],
+            "example": "debit"
+          },
+          "last_4_digits": {
+            "type": "string",
+            "description": "The last 4 digits of the card used for the payment.",
+            "example": "1234",
+            "pattern": "^\\d{4}$",
+            "minLength": 4,
+            "maxLength": 4
+          }
+        }
+      },
+      "PublicGiftCardPayment": {
+        "type": "object",
+        "description": "Gift card used for this payment. Present when `method` is `gift_card` and the gift card\nid is known.\nGift card IDs use the format \"GC\" followed by 9 alphanumeric characters\n(e.g. GCZ3NTMB1V).",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Gift card identifier. Format \"GC\" followed by 9 alphanumeric characters\n(e.g. GCZ3NTMB1V).",
+            "example": "GCZ3NTMB1V"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "PublicPaymentV10": {
+        "title": "PublicPayment",
+        "type": "object",
+        "description": "Payment on a closed sale, for bookkeeping and reconciliation.\n\nAcquirer/processing cost is not on this object. Merchant-charged fees (shipping, service\ncharge, etc.) appear as `type: \"FEE\"` item lines in `Sale.items`.",
+        "required": [
+          "method",
+          "reference",
+          "type",
+          "amount",
+          "status",
+          "processed_at"
+        ],
+        "properties": {
+          "method": {
+            "$ref": "#/components/schemas/PublicPaymentMethod"
+          },
+          "reference": {
+            "$ref": "#/components/schemas/Reference"
+          },
+          "type": {
+            "type": "string",
+            "default": "purchase",
+            "description": "Payment operation type.\nThis is distinct from the payment instrument in `method`.\nInput is case-insensitive; the canonical form is lowercase snake_case.\n**VALUES**: [purchase, unreferenced_refund]\nDefaults to \"purchase\" if unspecified. Either a normal purchase or an unreferenced refund for negative\nsales like deposit returns.\n",
+            "example": "purchase"
+          },
+          "amount": {
+            "description": "The amount of the payment including tips.\nThe value of the amount in minor units of `Sale.currency`.\n",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PositiveAmount"
+              }
+            ],
+            "example": 975
+          },
+          "status": {
+            "type": "string",
+            "description": "The status of the payment.",
+            "enum": [
+              "FAILED",
+              "SUCCESSFUL",
+              "CANCELED"
+            ],
+            "example": "SUCCESSFUL"
+          },
+          "apm_type": {
+            "$ref": "#/components/schemas/PublicApmType"
+          },
+          "card": {
+            "$ref": "#/components/schemas/PublicCardV10"
+          },
+          "gift_card": {
+            "$ref": "#/components/schemas/PublicGiftCardPayment"
+          },
+          "processed_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "UTC date-time when SumUp recorded this payment’s exposed `status` (successful, failed,\nor canceled). Server processed time when available; otherwise the payment provider’s\ntransaction time. Not the device clock.",
+            "example": "2017-07-21T17:32:28+01:00"
+          }
+        }
+      },
+      "SaleStateV10": {
+        "type": "string",
+        "description": "Lifecycle state of the sale.\nNon-finalised sales are never returned; only fully-paid sales.",
+        "enum": [
+          "CLOSED"
+        ],
+        "example": "CLOSED"
+      },
+      "Sale": {
+        "title": "Sale",
+        "type": "object",
+        "description": "Core model of the Sales API. Returned by `GET /sales` and `GET /sales/{sale_id}`.\n\nNon-finalised sales are never returned; only fully-paid sales.\n\nItem lines are `SaleLineItem`. Merchant fees appear as `type: \"FEE\"` lines; extra fee data\nis in `features`.",
+        "required": [
+          "id",
+          "currency",
+          "items",
+          "price",
+          "tax_mode",
+          "source",
+          "created_at",
+          "closed_at",
+          "state",
+          "payments"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The ID of the sale.",
+            "example": "dbe3178d-4b83-5024-9b26-9b8e1b280514"
+          },
+          "user_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Identity UUID of the cashier who processed the sale. Omitted when the cashier\nidentity is unknown.",
+            "example": "d6f51684-519b-454c-bdb3-deeb05f52b92"
+          },
+          "currency": {
+            "$ref": "#/components/schemas/Currency"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 160,
+            "description": "Human-readable name of the sale (not unique, not the sale id).",
+            "example": "Order 1234"
+          },
+          "note": {
+            "type": "string",
+            "maxLength": 300,
+            "description": "Optional note attached to the sale, visible on receipts and the UI.",
+            "example": "Please deliver to the back door."
+          },
+          "items": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 1000,
+            "description": "The lines sold in this sale, in the order they were added to the cart.\nIncludes merchant fees (`type: \"FEE\"`) when present; fee details are in `features`.\n",
+            "items": {
+              "$ref": "#/components/schemas/SaleLineItemV10"
+            }
+          },
+          "price": {
+            "$ref": "#/components/schemas/SalePriceV10"
+          },
+          "tax_mode": {
+            "$ref": "#/components/schemas/TaxMode"
+          },
+          "source": {
+            "$ref": "#/components/schemas/SaleSource"
+          },
+          "payments": {
+            "type": "array",
+            "maxItems": 1000,
+            "description": "Payments on this sale, in the order they were recorded.\n",
+            "items": {
+              "$ref": "#/components/schemas/PublicPaymentV10"
+            },
+            "example": [
+              {
+                "method": "card",
+                "reference": "TERTYFQ4G3",
+                "type": "purchase",
+                "amount": 975,
+                "status": "SUCCESSFUL",
+                "processed_at": "2026-06-02T10:20:00Z"
+              }
+            ]
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Instant when the sale was created.",
+            "example": "2026-06-02T10:15:00Z"
+          },
+          "closed_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Instant when the sale was closed. Always present: non-finalised sales are never returned.",
+            "example": "2026-06-02T10:20:00Z"
+          },
+          "state": {
+            "$ref": "#/components/schemas/SaleStateV10"
+          }
+        }
+      },
+      "SalePage": {
+        "title": "SalePage",
+        "type": "object",
+        "description": "Paginated list of `Sale` objects. Results are ordered **newest first** by the newest\nactivity recorded for each sale. See `ListSalesV10`.",
+        "required": [
+          "items"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Sale"
+            }
+          },
+          "pagination_token": {
+            "description": "Pagination token for subsequent requests. Should only be set by clients if they have\nreceived a token in the previous response, and this request is an immediate follow-up\nrequest to that response to load the subsequent page. Clients should treat this as an\nopaque token and should not attempt to parse it in any way.",
+            "type": "string",
+            "example": "66bcbtzelrubzeuzruzgu76678trncH"
+          }
+        }
+      },
+      "ProblemV10": {
+        "type": "object",
+        "description": "A RFC 9457 problem details object.\n\nAdditional properties specific to the problem type may be present.\n",
+        "required": [
+          "type"
+        ],
+        "additionalProperties": true,
+        "properties": {
+          "type": {
+            "type": "string",
+            "format": "uri",
+            "description": "A URI reference that identifies the problem type.",
+            "example": "https://developer.sumup.com/problem/not-found"
+          },
+          "title": {
+            "type": "string",
+            "description": "A short, human-readable summary of the problem type.",
+            "example": "Requested resource couldn't be found."
+          },
+          "status": {
+            "type": "integer",
+            "description": "The HTTP status code generated by the origin server for this occurrence of the problem.",
+            "example": 404
+          },
+          "detail": {
+            "type": "string",
+            "description": "A human-readable explanation specific to this occurrence of the problem.",
+            "example": "The requested resource doesn't exist or does not belong to you."
+          },
+          "instance": {
+            "type": "string",
+            "format": "uri",
+            "description": "A URI reference that identifies the specific occurrence of the problem."
+          }
+        }
+      },
+      "PaymentStatusFilterV10": {
+        "type": "string",
+        "description": "Payment outcome filter value. Multi-select uses **OR** within this field; combined with\nother filters using **AND**.\nOnly fully-paid closed sales are exposed. Refunded original sales remain searchable as\n`PAID`; refunds are separate negative sales, not a `REFUNDED` sale-search outcome.",
+        "enum": [
+          "PAID",
+          "CHARGED_BACK"
+        ],
+        "example": "PAID"
+      },
+      "SalesChannelFilterV10": {
+        "type": "string",
+        "description": "Sale channel filter value. Multi-select uses **OR** within this field.",
+        "enum": [
+          "POS",
+          "ONLINE_PAYMENTS",
+          "KIOSK",
+          "ONLINE_STORE",
+          "SOLO",
+          "ORDER_AND_PAY",
+          "INVOICE",
+          "BOOKINGS",
+          "ORDER_AGGREGATOR",
+          "SUBSCRIPTIONS",
+          "UNKNOWN"
+        ],
+        "example": "POS"
+      },
+      "SaleSearchRequest": {
+        "title": "SaleSearchRequest",
+        "type": "object",
+        "description": "Filter and pagination criteria for `POST /sales/search`. Filters from different categories\nstack with **logical AND**; multiple values in one array field stack with **logical OR**.\nResults cover the merchant’s **last two years** of sales (narrow further with `start_date` /\n`end_date`). Results are sorted **newest first** by sale close date.",
+        "properties": {
+          "start_date": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Sale created **on or after** this instant (inclusive).",
+            "example": "2026-06-01T00:00:00Z"
+          },
+          "end_date": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Sale created **on or before** this instant (inclusive).",
+            "example": "2026-06-02T23:59:59Z"
+          },
+          "sale_statuses": {
+            "type": "array",
+            "description": "Filters rows by sale lifecycle (`state`). Multiple values match any of them (**OR**).\nUses the same values as `Sale.state`. Non-finalised sales are never returned; only\nfully-paid sales.",
+            "items": {
+              "$ref": "#/components/schemas/SaleStateV10"
+            },
+            "example": [
+              "CLOSED"
+            ]
+          },
+          "payment_statuses": {
+            "type": "array",
+            "description": "Filters rows by payment outcome. Multiple values match any of them (**OR**). The search\nrow does not echo this value.",
+            "items": {
+              "$ref": "#/components/schemas/PaymentStatusFilterV10"
+            },
+            "example": [
+              "PAID"
+            ]
+          },
+          "sales_channels": {
+            "type": "array",
+            "description": "Sales channel filter. Multiple values match any of them (**OR**).",
+            "items": {
+              "$ref": "#/components/schemas/SalesChannelFilterV10"
+            },
+            "example": [
+              "POS"
+            ]
+          },
+          "pagination_token": {
+            "type": "string",
+            "description": "Opaque pagination token from a previous search response. Not interchangeable with tokens\nfrom `GET /sales`.",
+            "example": "66bcbtzelrubzeuzruzgu76678trncH"
+          },
+          "pagination_limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 25,
+            "default": 10,
+            "description": "Maximum number of results per page.",
+            "example": 10
+          }
+        }
+      },
+      "SaleSearchItem": {
+        "title": "SaleSearchItem",
+        "type": "object",
+        "description": "Summary row for a sale in search results. Use `GET /sales/{sale_id}` for the full `Sale`.",
+        "required": [
+          "id",
+          "state",
+          "tax_mode",
+          "currency",
+          "total_amount",
+          "created_at",
+          "closed_at"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Sale identifier.",
+            "example": "dbe3178d-4b83-5024-9b26-9b8e1b280514"
+          },
+          "user_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Identity UUID of the cashier who processed the sale. Omitted when the cashier\nidentity is unknown.",
+            "example": "d6f51684-519b-454c-bdb3-deeb05f52b92"
+          },
+          "state": {
+            "$ref": "#/components/schemas/SaleStateV10"
+          },
+          "name": {
+            "type": "string",
+            "description": "Display name of the sale when set; otherwise a concatenation of item names with\nquantities. Omitted when neither is available.",
+            "example": "Order 1234"
+          },
+          "tax_mode": {
+            "description": "Checkout tax mode for the sale. Same values as `Sale.tax_mode`.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/TaxMode"
+              }
+            ]
+          },
+          "currency": {
+            "$ref": "#/components/schemas/Currency"
+          },
+          "total_amount": {
+            "description": "Final sale gross total after discounts and taxes, excluding tips.\nSame value as `Sale.price.gross_amount`, in minor units according to `currency.scale`.\nPayment amounts include tips and can therefore differ from this total.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Amount"
+              }
+            ],
+            "example": 1250
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Instant when the sale was created.",
+            "example": "2026-06-01T14:30:00Z"
+          },
+          "closed_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Instant when the sale was closed. Always present: non-finalised sales are never returned.",
+            "example": "2026-06-01T14:35:00Z"
+          }
+        }
+      },
+      "SaleSearchResponse": {
+        "title": "SaleSearchResponse",
+        "type": "object",
+        "description": "Search hits and an optional pagination token. Results are ordered **newest first** by sale close date.",
+        "required": [
+          "items"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SaleSearchItem"
+            },
+            "example": [
+              {
+                "id": "dbe3178d-4b83-5024-9b26-9b8e1b280514",
+                "state": "CLOSED",
+                "tax_mode": "GROSS",
+                "currency": {
+                  "code": "EUR",
+                  "scale": 2
+                },
+                "name": "Order 1234",
+                "total_amount": 1250,
+                "created_at": "2026-06-01T14:30:00Z",
+                "closed_at": "2026-06-01T14:35:00Z"
+              }
+            ]
+          },
+          "pagination_token": {
+            "description": "Opaque token for the next page of search results.",
+            "type": "string",
+            "example": "66bcbtzelrubzeuzruzgu76678trncH"
+          }
+        }
       },
       "UpdateReaderSettingsError": {
         "description": "Details of a failed reader settings request.",
