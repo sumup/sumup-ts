@@ -39,11 +39,6 @@ export type BasePerson = {
    */
   family_name?: string;
   /**
-   * Middle name(s) of the End-User. Note that in some cultures, people can have multiple middle names; all can be present, with the names being separated by space characters. Also note that in some cultures, middle names are not used.
-   *
-   */
-  middle_name?: string;
-  /**
    * The (mobile) phone number of the individual (used for verification) in [E.164](https://en.wikipedia.org/wiki/E.164) format.
    *
    */
