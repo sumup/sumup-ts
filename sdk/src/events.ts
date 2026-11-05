@@ -5,6 +5,7 @@ import type { Checkout } from "./types/checkout";
 import type { Member } from "./types/member";
 import type { Reader } from "./types/reader";
 import type { Role } from "./types/role";
+import type { Sale } from "./types/sale";
 /** A checkouts.created notification. Call fetchObject() to retrieve the latest Checkout. */
 export class CheckoutCreatedEvent extends EventBase<Checkout> {
   declare readonly type: "checkouts.created";
@@ -57,6 +58,14 @@ export class RoleDeletedEvent extends EventBase<Role> {
 export class RoleUpdatedEvent extends EventBase<Role> {
   declare readonly type: "roles.updated";
 }
+/** A sales.completed notification. Call fetchObject() to retrieve the latest Sale. */
+export class SaleCompletedEvent extends EventBase<Sale> {
+  declare readonly type: "sales.completed";
+}
+/** A sales.updated notification. Call fetchObject() to retrieve the latest Sale. */
+export class SaleUpdatedEvent extends EventBase<Sale> {
+  declare readonly type: "sales.updated";
+}
 /** Known wire event names and their notification classes. */
 export interface EventMap {
   "checkouts.created": CheckoutCreatedEvent;
@@ -72,6 +81,8 @@ export interface EventMap {
   "roles.created": RoleCreatedEvent;
   "roles.deleted": RoleDeletedEvent;
   "roles.updated": RoleUpdatedEvent;
+  "sales.completed": SaleCompletedEvent;
+  "sales.updated": SaleUpdatedEvent;
 }
 /** A recognized event notification or {@link UnknownEvent}. Narrow with instanceof to access a specific resource type. */
 export type EventNotification = EventMap[keyof EventMap] | UnknownEvent;
@@ -107,6 +118,10 @@ export function createEvent(
       return new RoleDeletedEvent(payload, client);
     case "roles.updated":
       return new RoleUpdatedEvent(payload, client);
+    case "sales.completed":
+      return new SaleCompletedEvent(payload, client);
+    case "sales.updated":
+      return new SaleUpdatedEvent(payload, client);
     default:
       return new UnknownEvent(payload, client);
   }

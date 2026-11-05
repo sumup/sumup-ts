@@ -45,6 +45,8 @@ export {
   RoleCreatedEvent,
   RoleDeletedEvent,
   RoleUpdatedEvent,
+  SaleCompletedEvent,
+  SaleUpdatedEvent,
 } from "./events";
 export type { EventBody, EventCallback } from "./events-handler";
 export {
