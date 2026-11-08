@@ -9,6 +9,10 @@ import type { PositiveTaxLine } from "./positive-tax-line";
 export type PositivePriceWithTaxes = PositivePriceAmounts & {
   /**
    * Taxes applied on top of net amount resulting in gross amount.
+   *
+   * Min items: 1
+   *
+   * Max items: 1000
    */
   taxes: PositiveTaxLine[];
 };

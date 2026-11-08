@@ -8,14 +8,22 @@
 export type TaxLine = {
   /**
    * Tax ID from the Tax Service (External Id)
+   *
+   * Max length: 100
    */
   id: string;
   /**
    * Tax name, e.g. "MwSt."
+   *
+   * Max length: 255
    */
   name?: string;
   /**
    * The tax rate percentage in minor units (1/100000). For example 19000 = 19%.
+   *
+   * Format: int64
+   *
+   * Min: 0
    */
   percentage?: number;
   /**
@@ -26,6 +34,8 @@ export type TaxLine = {
    * The value of the amount in minor units of the currency according to the Sale.currency.scale.
    * `value` can get large for some currencies and applications.
    * Use Long type or a similar data type when parsing `value`.
+   *
+   * Format: int64
    */
   net_amount: number;
   /**
@@ -36,6 +46,8 @@ export type TaxLine = {
    * The value of the amount in minor units of the currency according to the Sale.currency.scale.
    * `value` can get large for some currencies and applications.
    * Use Long type or a similar data type when parsing `value`.
+   *
+   * Format: int64
    */
   gross_amount: number;
   /**
@@ -46,6 +58,8 @@ export type TaxLine = {
    * The value of the amount in minor units of the currency according to the Sale.currency.scale.
    * `value` can get large for some currencies and applications.
    * Use Long type or a similar data type when parsing `value`.
+   *
+   * Format: int64
    */
   tax_amount: number;
 };

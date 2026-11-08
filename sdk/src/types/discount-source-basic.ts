@@ -8,14 +8,20 @@ import type { DiscountApplicationMode } from "./discount-application-mode";
 export type DiscountSourceBasic = {
   /**
    * The unique identifier of the basic discount.
+   *
+   * Format: uuid
    */
   id: string;
   /**
    * The name of the basic discount.
+   *
+   * Max length: 100
    */
   name: string;
   /**
    * The description of the loyalty discount.
+   *
+   * Max length: 250
    */
   description?: string | null;
   application_mode: DiscountApplicationMode;

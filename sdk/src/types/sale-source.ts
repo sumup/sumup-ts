@@ -18,10 +18,14 @@ export type SaleSource = {
    * information about the sale_channel. For example, if the sale_channel is
    * ONLINE_PAYMENTS, the sub_channel could be "WIX" or "QR_CODE" or "WOOCOMMERCE".
    *
+   *
+   * Max length: 50
    */
   sub_channel?: string;
   /**
    * An external reference ID for connecting orders/sales between products
+   *
+   * Max length: 250
    */
   external_id?: string;
   /**
@@ -29,6 +33,8 @@ export type SaleSource = {
    * For example, when channel is BOOKINGS and sub_channel is POS,
    * this can hold the OMS order ID while external_id holds the appointment ID.
    *
+   *
+   * Max length: 250
    */
   external_sub_channel_id?: string;
 };

@@ -16,6 +16,10 @@ export type DiscountValue = {
    * The value of the amount in minor units of the currency according to the Sale.currency.scale.
    * `value` can get large for some currencies and applications.
    * Use Long type or a similar data type when parsing `value`.
+   *
+   * Format: int64
+   *
+   * Min: 0
    */
   absolute?: number;
   /**
@@ -26,6 +30,10 @@ export type DiscountValue = {
    * - 15.5% -> 0.155 (decimal) = 15500 (minor units)
    * - 0.001% -> 0.00001 (decimal) = 1 (minor units)
    *
+   *
+   * Format: int64
+   *
+   * Min: 0
    */
   percentage?: number;
 };

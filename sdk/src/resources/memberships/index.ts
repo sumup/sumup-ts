@@ -7,34 +7,61 @@ import {
 } from "../../core";
 import type { Membership, MembershipStatus } from "../../types";
 export type ListMembershipsQueryParams = {
+  /**
+   * Offset of the first member to return.
+   *
+   * Default: 0
+   *
+   * Min: 0
+   */
   offset?: number;
+  /**
+   * Maximum number of members to return.
+   *
+   * Default: 10
+   *
+   * Min: 1
+   *
+   * Max: 25
+   */
   limit?: number;
   /**
-   * The type of the membership resource.
-   * Possible values are:
-   * * `merchant` - merchant account(s)
-   * * `organization` - organization(s)
+   * Filter memberships by resource kind.
    */
   kind?: string;
+  /**
+   * Filter the returned memberships by the membership status.
+   */
   status?: MembershipStatus;
   /**
-   * The type of the membership resource.
-   * Possible values are:
-   * * `merchant` - merchant account(s)
-   * * `organization` - organization(s)
+   * Filter memberships by resource kind.
    */
   "resource.type"?: string;
+  /**
+   * Filter memberships by the sandbox status of the resource the membership is in.
+   */
   "resource.attributes.sandbox"?: boolean;
+  /**
+   * Filter memberships by the name of the resource the membership is in.
+   */
   "resource.name"?: string;
+  /**
+   * Filter memberships by the ID of the resource the membership is in.
+   */
   "resource.id"?: string;
+  /**
+   * Filter memberships by the parent of the resource the membership is in.
+   * Omit both `resource.parent.id` and `resource.parent.type` to skip parent filtering. When filtering by parent, both parameters must be present. To select resources without a parent, set each parameter to an empty value. Otherwise, both parameters must identify a parent.
+   */
   "resource.parent.id"?: string | "";
   /**
-   * The type of the membership resource.
-   * Possible values are:
-   * * `merchant` - merchant account(s)
-   * * `organization` - organization(s)
+   * Filter memberships by the parent of the resource the membership is in.
+   * Omit both `resource.parent.id` and `resource.parent.type` to skip parent filtering. When filtering by parent, both parameters must be present. To select resources without a parent, set each parameter to an empty value. Otherwise, both parameters must identify a parent.
    */
   "resource.parent.type"?: string | "";
+  /**
+   * Filter the returned memberships by role.
+   */
   roles?: string[];
 };
 

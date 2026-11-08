@@ -6,6 +6,12 @@
 export type SalesActivityCurrency = {
   /**
    * 3-letter currency code as defined by ISO-4217.
+   *
+   * Format: iso-4217
+   *
+   * Min length: 3
+   *
+   * Max length: 3
    */
   code: string;
   /**

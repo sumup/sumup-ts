@@ -72,12 +72,52 @@ export const isAnnotationOnlySchema = (
 
 /**
  * Extracts documentation from an OpenAPI schema object.
- * Combines title, description, external docs, and deprecation notices.
+ * Combines descriptions, schema constraints, and deprecation notices.
  */
 export const extractDoc = (schema: OpenAPIV3_1.SchemaObject): string =>
   [
     schema.title,
     schema.description,
+    [
+      schema.writeOnly ? "Write only" : undefined,
+      schema.format ? `Format: ${schema.format}` : undefined,
+      schema.default !== undefined
+        ? `Default: ${JSON.stringify(schema.default)}`
+        : undefined,
+      schema.minLength !== undefined
+        ? `Min length: ${schema.minLength}`
+        : undefined,
+      schema.maxLength !== undefined
+        ? `Max length: ${schema.maxLength}`
+        : undefined,
+      schema.pattern !== undefined ? `Pattern: ${schema.pattern}` : undefined,
+      schema.minimum !== undefined ? `Min: ${schema.minimum}` : undefined,
+      schema.exclusiveMinimum !== undefined
+        ? `Exclusive min: ${schema.exclusiveMinimum}`
+        : undefined,
+      schema.maximum !== undefined ? `Max: ${schema.maximum}` : undefined,
+      schema.exclusiveMaximum !== undefined
+        ? `Exclusive max: ${schema.exclusiveMaximum}`
+        : undefined,
+      schema.multipleOf !== undefined
+        ? `Multiple of: ${schema.multipleOf}`
+        : undefined,
+      schema.uniqueItems ? "Unique items only" : undefined,
+      schema.minItems !== undefined
+        ? `Min items: ${schema.minItems}`
+        : undefined,
+      schema.maxItems !== undefined
+        ? `Max items: ${schema.maxItems}`
+        : undefined,
+      schema.minProperties !== undefined
+        ? `Min properties: ${schema.minProperties}`
+        : undefined,
+      schema.maxProperties !== undefined
+        ? `Max properties: ${schema.maxProperties}`
+        : undefined,
+    ]
+      .filter((line) => line !== undefined)
+      .join("\n\n"),
     schema.externalDocs
       ? `${schema.externalDocs.description || "See"}: ${schema.externalDocs.url}`
       : undefined,
@@ -87,7 +127,6 @@ export const extractDoc = (schema: OpenAPIV3_1.SchemaObject): string =>
     ...(schema.allOf ?? []).map((member) => extractDoc(member)),
   ]
     .filter(Boolean)
-    .filter((n) => n)
     .join("\n\n");
 
 /**
@@ -99,7 +138,7 @@ export function docComment(s: string | undefined): string | undefined {
   }
   let res = "";
   res += "/**\n";
-  for (const line of s.split("\n")) {
+  for (const line of s.replaceAll("*/", "*\\/").split("\n")) {
     res += ` * ${line}\n`;
   }
   res += " */";

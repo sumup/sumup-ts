@@ -23,6 +23,8 @@ export type TransactionHistory = TransactionBase &
     client_transaction_id?: string;
     /**
      * Email address of the registered user (merchant) to whom the payment is made.
+     *
+     * Format: email
      */
     user?: string;
     /**
@@ -32,6 +34,8 @@ export type TransactionHistory = TransactionBase &
     card_type?: CardType;
     /**
      * Payout date (if paid out at once).
+     *
+     * Format: date
      */
     payout_date?: string;
     /**
@@ -40,6 +44,8 @@ export type TransactionHistory = TransactionBase &
     payout_type?: "BANK_ACCOUNT" | "PREPAID_CARD";
     /**
      * Total amount refunded for this transaction, in major units of the transaction's currency.
+     *
+     * Format: decimal
      */
     refunded_amount?: number;
   };

@@ -42,6 +42,8 @@ export type ReceiptTransaction = {
   currency?: string;
   /**
    * The timestamp of when the transaction was created.
+   *
+   * Format: date-time
    */
   timestamp?: string;
   /**
@@ -84,34 +86,50 @@ export type ReceiptTransaction = {
     description?: string;
     /**
      * Product price.
+     *
+     * Format: double
      */
     price?: string;
     /**
      * VAT rate.
+     *
+     * Format: double
      */
     vat_rate?: string;
     /**
      * VAT amount for a single product.
+     *
+     * Format: double
      */
     single_vat_amount?: string;
     /**
      * Product price including VAT.
+     *
+     * Format: double
      */
     price_with_vat?: string;
     /**
      * Total VAT amount for the product quantity.
+     *
+     * Format: double
      */
     vat_amount?: string;
     /**
      * Product quantity.
+     *
+     * Format: int64
      */
     quantity?: number;
     /**
      * Total price calculated as the product price multiplied by the quantity.
+     *
+     * Format: double
      */
     total_price?: string;
     /**
      * Total product price including VAT.
+     *
+     * Format: double
      */
     total_with_vat?: string;
   }[];
@@ -121,18 +139,26 @@ export type ReceiptTransaction = {
   vat_rates?: {
     /**
      * Gross amount to which the VAT rate applies.
+     *
+     * Format: float
      */
     gross?: number;
     /**
      * Net amount to which the VAT rate applies.
+     *
+     * Format: float
      */
     net?: number;
     /**
      * VAT rate applied to the transaction amount.
+     *
+     * Format: float
      */
     rate?: number;
     /**
      * VAT amount included in the gross amount.
+     *
+     * Format: float
      */
     vat?: number;
   }[];

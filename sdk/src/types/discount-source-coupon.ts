@@ -9,18 +9,26 @@ import type { DiscountClass } from "./discount-class";
 export type DiscountSourceCoupon = {
   /**
    * The unique identifier of the coupon discount.
+   *
+   * Format: uuid
    */
   id: string;
   /**
    * The coupon code.
+   *
+   * Max length: 100
    */
   code: string;
   /**
    * The name of the coupon discount.
+   *
+   * Max length: 100
    */
   name: string;
   /**
    * The description of the coupon discount.
+   *
+   * Max length: 250
    */
   description?: string | null;
   discount_class?: DiscountClass;

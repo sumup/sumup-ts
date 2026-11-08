@@ -26,10 +26,14 @@ export type PersonalDetails = {
   phone?: string;
   /**
    * Date of birth of the customer in `YYYY-MM-DD` format, without a time or timezone.
+   *
+   * Format: date
    */
   birth_date?: string;
   /**
    * Identification number used for tax purposes, such as a CPF in Brazil.
+   *
+   * Max length: 255
    */
   tax_id?: string;
   address?: AddressLegacy;

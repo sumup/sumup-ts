@@ -13,6 +13,10 @@ export type PriceAmounts = {
    * The value of the amount in minor units of the currency according to the Sale.currency.scale.
    * `value` can get large for some currencies and applications.
    * Use Long type or a similar data type when parsing `value`.
+   *
+   * Format: int64
+   *
+   * Min: 0
    */
   unit_amount: number;
   /**
@@ -21,6 +25,8 @@ export type PriceAmounts = {
    * The value of the amount in minor units of the currency according to the Sale.currency.scale.
    * `value` can get large for some currencies and applications.
    * Use Long type or a similar data type when parsing `value`.
+   *
+   * Format: int64
    */
   total_net_amount: number;
   /**
@@ -29,6 +35,8 @@ export type PriceAmounts = {
    * The value of the amount in minor units of the currency according to the Sale.currency.scale.
    * `value` can get large for some currencies and applications.
    * Use Long type or a similar data type when parsing `value`.
+   *
+   * Format: int64
    */
   total_gross_amount: number;
 };

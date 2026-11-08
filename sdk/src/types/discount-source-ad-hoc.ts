@@ -6,14 +6,20 @@
 export type DiscountSourceAdHoc = {
   /**
    * The unique identifier of the ad-hoc discount.
+   *
+   * Format: uuid
    */
   id?: string;
   /**
    * The name of the ad-hoc discount.
+   *
+   * Max length: 100
    */
   name?: string;
   /**
    * The description of the ad-hoc discount.
+   *
+   * Max length: 250
    */
   description?: string;
 };

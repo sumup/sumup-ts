@@ -14,6 +14,8 @@ export type Token = {
   token_type: "Bearer";
   /**
    * Remaining lifetime of the token in seconds when the response is created. Tokens expire 15 minutes after creation. Request a new token when needed.
+   *
+   * Min: 0
    */
   expires_in: number;
 };

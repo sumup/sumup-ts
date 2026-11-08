@@ -34,6 +34,8 @@ export type MembershipUser = {
   service_account_user: boolean;
   /**
    * Time when the user has been disabled. Applies only to virtual users (`virtual_user: true`).
+   *
+   * Format: date-time
    */
   disabled_at?: string;
   /**
@@ -42,6 +44,8 @@ export type MembershipUser = {
   nickname?: string;
   /**
    * URL of the End-User's profile picture. This URL refers to an image file (for example, a PNG, JPEG, or GIF image file), rather than to a Web page containing an image.
+   *
+   * Format: uri
    */
   picture?: string;
   classic?: MembershipUserClassic;

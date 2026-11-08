@@ -16,7 +16,13 @@ import type {
   ProcessCheckout,
 } from "../../types";
 export type GetPaymentMethodsQueryParams = {
+  /**
+   * Payment amount in major units, for example `9.99` for EUR 9.99. When filtering by `amount`, also provide `currency`.
+   */
   amount?: number;
+  /**
+   * Three-letter ISO 4217 currency code for which the payment methods should be eligible, for example `EUR`.
+   */
   currency?: string;
 };
 
@@ -33,6 +39,9 @@ export type GetPaymentMethodsResponse = {
 };
 
 export type ListCheckoutsQueryParams = {
+  /**
+   * Filters checkouts by the merchant-defined `checkout_reference` supplied when creating the checkout. This is separate from the SumUp-generated checkout `id`.
+   */
   checkout_reference?: string;
 };
 
@@ -75,10 +84,14 @@ export type ProcessCheckoutError =
 export type CreateApplePaySessionParams = {
   /**
    * Hostname of the website displaying the Apple Pay payment sheet, without a URL scheme or path. Use the domain registered for Apple Pay.
+   *
+   * Format: hostname
    */
   context: string;
   /**
    * Apple Pay validation URL received as `validationURL` in the browser's `onvalidatemerchant` event.
+   *
+   * Format: uri
    */
   target: string;
 };

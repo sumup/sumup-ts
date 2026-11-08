@@ -12,10 +12,14 @@ export type DiscountLine = {
    * Since we can apply multiple discounts (e.g. 2x 10% whole cart off)
    * we need to be able to identify which discount line belongs to which cart discount.
    * Recommended to use UUID identifiers.
+   *
+   * Max length: 100
    */
   id?: string;
   /**
    * A description or reason of the discount.
+   *
+   * Max length: 250
    */
   description?: string;
   /**
@@ -24,6 +28,10 @@ export type DiscountLine = {
    * - ITEM: Applied to specific sale item
    *
    * *Accepted values:* ["ITEM", "CART"].
+   *
+   * Min length: 4
+   *
+   * Max length: 4
    */
   level: string;
   source: DiscountSource;
@@ -36,6 +44,10 @@ export type DiscountLine = {
    * The value of the amount in minor units of the currency according to the Sale.currency.scale.
    * `value` can get large for some currencies and applications.
    * Use Long type or a similar data type when parsing `value`.
+   *
+   * Format: int64
+   *
+   * Min: 0
    */
   net_amount: number;
   /**
@@ -46,6 +58,10 @@ export type DiscountLine = {
    * The value of the amount in minor units of the currency according to the Sale.currency.scale.
    * `value` can get large for some currencies and applications.
    * Use Long type or a similar data type when parsing `value`.
+   *
+   * Format: int64
+   *
+   * Min: 0
    */
   gross_amount: number;
   /**
@@ -56,6 +72,10 @@ export type DiscountLine = {
    * The value of the amount in minor units of the currency according to the Sale.currency.scale.
    * `value` can get large for some currencies and applications.
    * Use Long type or a similar data type when parsing `value`.
+   *
+   * Format: int64
+   *
+   * Min: 0
    */
   tax_amount: number;
 };

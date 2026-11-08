@@ -15,6 +15,10 @@ export type CreateMerchantRoleParams = {
   name: string;
   /**
    * User's permissions.
+   *
+   * Min items: 1
+   *
+   * Max items: 100
    */
   permissions: string[];
   metadata?: Metadata;
@@ -31,6 +35,10 @@ export type UpdateMerchantRoleParams = {
   name?: string;
   /**
    * User's permissions.
+   *
+   * Min items: 1
+   *
+   * Max items: 100
    */
   permissions?: string[];
   /**

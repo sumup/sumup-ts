@@ -39,10 +39,14 @@ export type Membership = {
   permissions: string[];
   /**
    * The timestamp of when the membership was created.
+   *
+   * Format: date-time
    */
   created_at: string;
   /**
    * The timestamp of when the membership was last updated.
+   *
+   * Format: date-time
    */
   updated_at: string;
   invite?: Invite;

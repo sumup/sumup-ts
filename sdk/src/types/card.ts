@@ -10,26 +10,54 @@ import type { CardType } from "./card-type";
 export type Card = {
   /**
    * Name of the cardholder as it appears on the payment card.
+   *
+   * Write only
    */
   name: string;
   /**
    * Number of the payment card (without spaces).
+   *
+   * Write only
    */
   number: string;
   /**
    * Two- or four-digit expiration year in `YY` or `YYYY` format.
+   *
+   * Write only
+   *
+   * Pattern: ^[0-9]{2}([0-9]{2})?$
    */
   expiry_year: string;
   /**
    * Two-digit expiration month, from `01` through `12`.
+   *
+   * Write only
+   *
+   * Min length: 2
+   *
+   * Max length: 2
+   *
+   * Pattern: ^(0[1-9]|1[0-2])$
    */
   expiry_month: string;
   /**
    * Three or four-digit card verification value (security code) of the payment card.
+   *
+   * Write only
+   *
+   * Min length: 3
+   *
+   * Max length: 4
    */
   cvv: string;
   /**
    * Required five-digit ZIP code. Applicable only to merchant users in the USA.
+   *
+   * Write only
+   *
+   * Min length: 5
+   *
+   * Max length: 5
    */
   zip_code?: string;
   type: CardType;

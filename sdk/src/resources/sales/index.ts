@@ -12,7 +12,22 @@ import type {
   SaleSearchResponse,
 } from "../../types";
 export type ListSalesV10QueryParams = {
+  /**
+   * Pagination token for subsequent requests. Should only be set by clients if they have
+   * received a token in the previous response, and this request is an immediate follow-up
+   * request to that response to load the subsequent page. Clients should treat this as an
+   * opaque token and should not attempt to parse it in any way.
+   */
   pagination_token?: string;
+  /**
+   * Maximum number of results per page.
+   *
+   * Default: 10
+   *
+   * Min: 1
+   *
+   * Max: 25
+   */
   pagination_limit?: number;
 };
 

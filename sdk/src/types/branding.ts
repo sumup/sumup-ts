@@ -7,21 +7,31 @@ export type Branding = {
   /**
    * Footer text rendered on receipts and other customer-facing products.
    *
+   *
+   * Min length: 1
+   *
+   * Max length: 500
    */
   footer_text?: string;
   /**
    * An icon for the merchant. Must be square.
    *
+   *
+   * Format: uri
    */
   icon?: string;
   /**
    * A logo for the merchant that will be used in place of the icon and without the merchant's name next to it if there's sufficient space.
    *
+   *
+   * Format: uri
    */
   logo?: string;
   /**
    * Data-URL encoded hero image for the merchant business.
    *
+   *
+   * Format: uri
    */
   hero?: string;
   /**

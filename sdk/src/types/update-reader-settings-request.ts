@@ -8,6 +8,8 @@
 export type UpdateReaderSettingsRequest = {
   /**
    * Menu lock configuration. Provide at least one of `enabled` or `passcode`.
+   *
+   * Min properties: 1
    */
   menu_lock: {
     /**
@@ -16,6 +18,10 @@ export type UpdateReaderSettingsRequest = {
     enabled?: boolean;
     /**
      * Four-digit PIN used to unlock the reader's menu.
+     *
+     * Format: password
+     *
+     * Pattern: ^[0-9]{4}$
      */
     passcode?: string;
   };

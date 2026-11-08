@@ -200,11 +200,14 @@ export async function generateResource(
     if (queryParams.length > 0) {
       writer.w(`export type ${queryParamsType(opName)} = {`);
       for (const param of queryParams) {
-        if ("description" in param.schema || "title" in param.schema) {
-          const comment = docComment(extractDoc(param.schema));
-          if (comment) {
-            writer.w(comment);
-          }
+        const comment = docComment(
+          extractDoc({
+            ...param.schema,
+            description: param.description || param.schema.description,
+          }),
+        );
+        if (comment) {
+          writer.w(comment);
         }
 
         writer.w(`  '${queryParameterName(param)}'`);

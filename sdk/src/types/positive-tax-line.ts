@@ -18,6 +18,10 @@ export type PositiveTaxLine = TaxLine & {
    * The value of the amount in minor units of the currency according to the Sale.currency.scale.
    * `value` can get large for some currencies and applications.
    * Use Long type or a similar data type when parsing `value`.
+   *
+   * Format: int64
+   *
+   * Min: 0
    */
   net_amount?: number;
   /**
@@ -28,6 +32,10 @@ export type PositiveTaxLine = TaxLine & {
    * The value of the amount in minor units of the currency according to the Sale.currency.scale.
    * `value` can get large for some currencies and applications.
    * Use Long type or a similar data type when parsing `value`.
+   *
+   * Format: int64
+   *
+   * Min: 0
    */
   gross_amount?: number;
   /**
@@ -38,6 +46,10 @@ export type PositiveTaxLine = TaxLine & {
    * The value of the amount in minor units of the currency according to the Sale.currency.scale.
    * `value` can get large for some currencies and applications.
    * Use Long type or a similar data type when parsing `value`.
+   *
+   * Format: int64
+   *
+   * Min: 0
    */
   tax_amount?: number;
 };

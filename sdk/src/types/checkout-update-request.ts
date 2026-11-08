@@ -10,6 +10,8 @@ import type { Currency } from "./currency";
 export type CheckoutUpdateRequest = {
   /**
    * Updated amount to be charged to the payer, expressed in major units.
+   *
+   * Format: float
    */
   amount?: number;
   currency?: Currency;
@@ -19,10 +21,14 @@ export type CheckoutUpdateRequest = {
   description?: string;
   /**
    * Updated merchant-defined reference for the checkout.
+   *
+   * Max length: 64
    */
   checkout_reference?: string;
   /**
    * Updated expiration timestamp. The checkout must be processed before this moment, otherwise it becomes unusable.
+   *
+   * Format: date-time
    */
   valid_until?: string | null;
   /**

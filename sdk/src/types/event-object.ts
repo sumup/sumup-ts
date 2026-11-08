@@ -11,6 +11,8 @@ export type EventObject = {
   type: "member" | "reader";
   /**
    * URL pointing to the resource or relevant documentation
+   *
+   * Format: uri
    */
   url: string;
 };

@@ -13,11 +13,17 @@ import type { MerchantsAttributes } from "./merchants-attributes";
 export type Company = {
   /**
    * The company's legal name.
+   *
+   * Min length: 1
+   *
+   * Max length: 150
    */
   name?: string;
   /**
    * The merchant category code for the account as specified by [ISO18245](https://www.iso.org/standard/33365.html). MCCs are used to classify businesses based on the goods or services they provide.
    *
+   *
+   * Pattern: ^[0-9]{4}$
    */
   merchant_category_code?: string;
   /**
@@ -26,6 +32,12 @@ export type Company = {
    *
    * The unique legal type reference as defined in the country SDK. We do not rely on IDs as used by other services. Consumers of this API are expected to use the country SDK to map to any other IDs, translation keys, or descriptions.
    *
+   *
+   * Min length: 4
+   *
+   * Max length: 64
+   *
+   * Pattern: ^[a-z]{2}\.[a-z_]+$
    *
    * The country SDK documentation for legal types.: https://developer.sumup.com/tools/glossary/merchant#legal-types
    */
@@ -46,11 +58,17 @@ export type Company = {
    *
    * A publicly available phone number in [E.164](https://en.wikipedia.org/wiki/E.164) format.
    *
+   *
+   * Max length: 16
    */
   phone_number?: string;
   /**
    * HTTP(S) URL of the company's website.
    *
+   *
+   * Min length: 1
+   *
+   * Max length: 255
    */
   website?: string;
   attributes?: MerchantsAttributes;

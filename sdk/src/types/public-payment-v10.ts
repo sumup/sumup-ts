@@ -17,10 +17,14 @@ export type PublicPaymentV10 = {
    * Digital wallets are first-class methods. Gift card payments use `gift_card`, not `apm`.
    * Input is case-insensitive; the canonical form is lowercase snake_case.
    * **VALUES**: [card, cash, apm, external, apple_pay, google_pay, whatsapp_pay, gift_card].
+   *
+   * Max length: 20
    */
   method: string;
   /**
    * The reference to the actual payment used for this sale, e.g. the sumup transaction code.
+   *
+   * Max length: 50
    */
   reference: string;
   /**
@@ -31,6 +35,8 @@ export type PublicPaymentV10 = {
    * Defaults to "purchase" if unspecified. Either a normal purchase or an unreferenced refund for negative
    * sales like deposit returns.
    *
+   *
+   * Default: "purchase"
    */
   type: string;
   /**
@@ -41,6 +47,10 @@ export type PublicPaymentV10 = {
    * The value of the amount in minor units of the currency according to the Sale.currency.scale.
    * `value` can get large for some currencies and applications.
    * Use Long type or a similar data type when parsing `value`.
+   *
+   * Format: int64
+   *
+   * Min: 0
    */
   amount: number;
   /**
@@ -52,6 +62,8 @@ export type PublicPaymentV10 = {
    * Gift card is not an APM on this API.
    * Input is case-insensitive; the canonical form is lowercase snake_case.
    * **VALUES**: [qr_code_pix, sepa_dd, paypal, sumup_pay, twint, iris].
+   *
+   * Max length: 20
    */
   apm_type?: string;
   card?: PublicCardV10;
@@ -60,6 +72,8 @@ export type PublicPaymentV10 = {
    * UTC date-time when SumUp recorded this payment’s exposed `status` (successful, failed,
    * or canceled). Server processed time when available; otherwise the payment provider’s
    * transaction time. Not the device clock.
+   *
+   * Format: date-time
    */
   processed_at: string;
 };

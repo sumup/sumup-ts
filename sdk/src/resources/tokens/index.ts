@@ -9,6 +9,10 @@ import type { Token } from "../../types";
 export type CreateMerchantTokenParams = {
   /**
    * Actions the token allows for this merchant account.
+   *
+   * Unique items only
+   *
+   * Min items: 1
    */
   actions: "checkout"[];
 };

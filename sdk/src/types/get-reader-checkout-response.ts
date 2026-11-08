@@ -11,6 +11,8 @@ export type GetReaderCheckoutResponse = {
     card_type: "credit" | "debit" | null;
     /**
      * Unique identifier for the checkout
+     *
+     * Format: uuid
      */
     checkout_id: string;
     /**
@@ -19,6 +21,8 @@ export type GetReaderCheckoutResponse = {
     client_transaction_id: string;
     /**
      * Checkout creation timestamp
+     *
+     * Format: date-time
      */
     created_at: string;
     /**
@@ -68,19 +72,27 @@ export type GetReaderCheckoutResponse = {
        * The minor units of the currency.
        * It represents the number of decimals of the currency. For the currencies CLP, COP and HUF, the minor unit is 0.
        *
+       *
+       * Min: 0
        */
       minor_unit: number;
       /**
        * Integer value of the amount.
+       *
+       * Min: 0
        */
       value: number;
     };
     /**
      * Checkout last update timestamp
+     *
+     * Format: date-time
      */
     updated_at: string;
     /**
      * Checkout expiration timestamp. After this time, the checkout will be automatically cancelled.
+     *
+     * Format: date-time
      */
     valid_until: string | null;
   };

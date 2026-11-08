@@ -9,6 +9,12 @@ export type StatusResponse = {
   data: {
     /**
      * Battery level percentage
+     *
+     * Format: float
+     *
+     * Min: 0
+     *
+     * Max: 100
      */
     battery_level?: number;
     /**
@@ -32,6 +38,8 @@ export type StatusResponse = {
     firmware_version?: string;
     /**
      * Timestamp of the last activity from the device
+     *
+     * Format: date-time
      */
     last_activity?: string;
     /**

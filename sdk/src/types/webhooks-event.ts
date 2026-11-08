@@ -6,11 +6,15 @@ import type { EventType } from "./event-type";
 export type WebhooksEvent = {
   /**
    * Unique id for this event
+   *
+   * Max length: 64
    */
   id: string;
   type: EventType;
   /**
    * UTC timestamp when the event was created
+   *
+   * Format: date-time
    */
   created_at: string;
   object: EventObject;

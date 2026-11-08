@@ -15,10 +15,14 @@ import type { SalesChannelFilterV10 } from "./sales-channel-filter-v10";
 export type SaleSearchRequest = {
   /**
    * Sale created **on or after** this instant (inclusive).
+   *
+   * Format: date-time
    */
   start_date?: string;
   /**
    * Sale created **on or before** this instant (inclusive).
+   *
+   * Format: date-time
    */
   end_date?: string;
   /**
@@ -43,6 +47,12 @@ export type SaleSearchRequest = {
   pagination_token?: string;
   /**
    * Maximum number of results per page.
+   *
+   * Default: 10
+   *
+   * Min: 1
+   *
+   * Max: 25
    */
   pagination_limit?: number;
 };

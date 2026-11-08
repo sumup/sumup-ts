@@ -6,10 +6,14 @@
 export type CategoryV10 = {
   /**
    * The category id. Usually a UUID, but not always (legacy cases).
+   *
+   * Max length: 100
    */
   id: string;
   /**
    * The category name.
+   *
+   * Max length: 30
    */
   name: string;
 };

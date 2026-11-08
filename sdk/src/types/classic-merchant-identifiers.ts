@@ -4,6 +4,8 @@ export type ClassicMerchantIdentifiers = {
   /**
    * Classic (serial) merchant ID.
    *
+   * Format: int64
+   *
    * @deprecated
    */
   id: number;

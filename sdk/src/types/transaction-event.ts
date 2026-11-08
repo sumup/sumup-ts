@@ -13,20 +13,28 @@ export type TransactionEvent = {
    * Transaction Event ID
    *
    * Numeric identifier of a transaction event. Use it as `tx_event_id` when requesting receipt details for a specific event. This is separate from the transaction ID and the transaction history pagination references.
+   *
+   * Format: int64
    */
   id?: number;
   event_type?: TransactionEventType;
   status?: TransactionEventStatus;
   /**
    * Amount of the event in major units of the associated transaction's currency.
+   *
+   * Format: decimal
    */
   amount?: number;
   /**
    * Date when the transaction event is due to occur.
+   *
+   * Format: date
    */
   due_date?: string;
   /**
    * Date when the transaction event occurred.
+   *
+   * Format: date
    */
   date?: string;
   /**
@@ -35,6 +43,8 @@ export type TransactionEvent = {
   installment_number?: number;
   /**
    * Date and time of the transaction event.
+   *
+   * Format: date-time
    */
   timestamp?: string;
 };

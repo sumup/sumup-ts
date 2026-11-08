@@ -8,7 +8,12 @@
 export type Invite = {
   /**
    * Email address of the invited user.
+   *
+   * Format: email
    */
   email: string;
+  /**
+   * Format: date-time
+   */
   expires_at: string;
 };

@@ -13,10 +13,14 @@ import type { TransactionCheckoutInfo } from "./transaction-checkout-info";
 export type Checkout = {
   /**
    * Merchant-defined reference for the checkout. Use it to correlate the SumUp checkout with your own order, cart, subscription, or payment attempt in your systems.
+   *
+   * Max length: 64
    */
   checkout_reference?: string;
   /**
    * Amount to be charged to the payer, expressed in major units.
+   *
+   * Format: float
    */
   amount?: number;
   currency?: Currency;
@@ -30,6 +34,8 @@ export type Checkout = {
   description?: string;
   /**
    * Optional backend callback URL for checkout status notifications. SumUp sends an HTTP POST with `event_type` and the checkout `id`. Retrieve the checkout to verify its current status before updating your order. See the [webhook guide](https://developer.sumup.com/online-payments/webhooks/) for the payload and response requirements.
+   *
+   * Format: uri
    */
   return_url?: string;
   /**
@@ -42,10 +48,14 @@ export type Checkout = {
   status?: "PENDING" | "FAILED" | "PAID" | "EXPIRED";
   /**
    * The timestamp of when the checkout was created.
+   *
+   * Format: date-time
    */
   date?: string;
   /**
    * Optional expiration timestamp. The checkout must be processed before this moment, otherwise it becomes unusable. If omitted, the checkout does not have an explicit expiry time.
+   *
+   * Format: date-time
    */
   valid_until?: string | null;
   /**
@@ -55,10 +65,14 @@ export type Checkout = {
   mandate?: MandateResponse;
   /**
    * URL of the SumUp-hosted payment page that handles the payment flow. Returned when Hosted Checkout is enabled for the checkout.
+   *
+   * Format: uri
    */
   readonly hosted_checkout_url?: string;
   /**
    * Payment attempts and resulting transaction records linked to this checkout. Use the Transactions endpoints when you need the authoritative payment result and event history.
+   *
+   * Unique items only
    */
   transactions?: (TransactionBase & TransactionCheckoutInfo)[];
 };

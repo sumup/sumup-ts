@@ -76,6 +76,8 @@ export type CreateReaderCheckoutRequest = {
    * Omit if the merchant country does not support installments.
    * Otherwise, the checkout will be rejected.
    *
+   *
+   * Min: 1
    */
   installments?: number | null;
   /**
@@ -84,12 +86,16 @@ export type CreateReaderCheckoutRequest = {
    * Use `pix` to initiate a Pix QR-code payment flow on the device.
    * Pix is only supported for Brazilian merchants; other merchants will receive a 422 error.
    *
+   *
+   * Default: "card"
    */
   payment_type?: "card" | "pix";
   /**
    * Webhook URL to which the payment result will be sent.
    * It must be a HTTPS url.
    *
+   *
+   * Format: uri
    */
   return_url?: string;
   /**
@@ -97,6 +103,12 @@ export type CreateReaderCheckoutRequest = {
    * Each rate is a fraction between 0.01 and 1.00 in increments of 0.01.
    * The rates are sorted in ascending order by the server.
    *
+   *
+   * Unique items only
+   *
+   * Min items: 3
+   *
+   * Max items: 3
    */
   tip_rates?: number[];
   /**
@@ -107,6 +119,12 @@ export type CreateReaderCheckoutRequest = {
    *
    * **Note**: If the target device is a Solo, it must be in version 3.3.38.0 or higher.
    *
+   *
+   * Default: 30
+   *
+   * Min: 30
+   *
+   * Max: 120
    */
   tip_timeout?: number;
   /**
@@ -128,10 +146,14 @@ export type CreateReaderCheckoutRequest = {
      * The minor units of the currency.
      * It represents the number of decimals of the currency. For the currencies CLP, COP and HUF, the minor unit is 0.
      *
+     *
+     * Min: 0
      */
     minor_unit: number;
     /**
      * Integer value of the amount.
+     *
+     * Min: 0
      */
     value: number;
   };

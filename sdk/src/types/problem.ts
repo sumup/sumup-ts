@@ -9,6 +9,8 @@
 export type Problem = {
   /**
    * A URI reference that identifies the problem type.
+   *
+   * Format: uri
    */
   type: string;
   /**
@@ -25,6 +27,8 @@ export type Problem = {
   detail?: string;
   /**
    * A URI reference that identifies the specific occurrence of the problem.
+   *
+   * Format: uri
    */
   instance?: string;
 } & Omit<

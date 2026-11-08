@@ -23,6 +23,10 @@ export type ProcessCheckout = {
     | "apple_pay";
   /**
    * Number of installments for deferred payments. Available only to merchant users in Brazil.
+   *
+   * Min: 1
+   *
+   * Max: 12
    */
   installments?: number;
   mandate?: MandatePayload;

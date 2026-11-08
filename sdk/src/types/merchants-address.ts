@@ -7,10 +7,17 @@
  * Address documentation: https://developer.sumup.com/tools/glossary/merchant#addresses
  */
 export type MerchantsAddress = {
+  /**
+   * Min items: 1
+   *
+   * Max items: 2
+   */
   street_address?: string[];
   /**
    * The postal code (aka. zip code) of the address.
    *
+   *
+   * Max length: 10
    */
   post_code?: string;
   /**
@@ -19,76 +26,106 @@ export type MerchantsAddress = {
    *
    * An [ISO3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) country code. This definition uses `oneOf` with a two-character string type to allow for support of future countries in client code.
    *
+   *
+   * Pattern: ^[A-Z]{2}$
    */
   country: string;
   /**
    * The city of the address.
    *
+   *
+   * Max length: 60
    */
   city?: string;
   /**
    * The province where the address is located. This may not be relevant in some countries.
    *
+   *
+   * Max length: 60
    */
   province?: string;
   /**
    * The region where the address is located. This may not be relevant in some countries.
    *
+   *
+   * Max length: 60
    */
   region?: string;
   /**
    * A county is a geographic region of a country used for administrative or other purposes in some nations. Used in countries such as Ireland, Romania, etc.
    *
+   *
+   * Max length: 60
    */
   county?: string;
   /**
    * In Spain, an autonomous community is the first sub-national level of political and administrative division.
    *
+   *
+   * Max length: 60
    */
   autonomous_community?: string;
   /**
    * A post town is a required part of all postal addresses in the United Kingdom and Ireland, and a basic unit of the postal delivery system.
    *
+   *
+   * Max length: 60
    */
   post_town?: string;
   /**
    * Most often, a country has a single state, with various administrative divisions. The term "state" is sometimes used to refer to the federated polities that make up the federation. Used in countries such as the United States and Brazil.
    *
+   *
+   * Max length: 60
    */
   state?: string;
   /**
    * Locality level of the address. Used in countries such as Brazil or Chile.
    *
+   *
+   * Max length: 60
    */
   neighborhood?: string;
   /**
    * In many countries, terms cognate with "commune" are used, referring to the community living in the area and the common interest. Used in countries such as Chile.
    *
+   *
+   * Max length: 60
    */
   commune?: string;
   /**
    * A department (French: département, Spanish: departamento) is an administrative or political division in several countries. Used in countries such as Colombia.
    *
+   *
+   * Max length: 60
    */
   department?: string;
   /**
    * A municipality is usually a single administrative division having corporate status and powers of self-government or jurisdiction as granted by national and regional laws to which it is subordinate. Used in countries such as Colombia.
    *
+   *
+   * Max length: 60
    */
   municipality?: string;
   /**
    * A district is a type of administrative division that in some countries is managed by the local government. Used in countries such as Portugal.
    *
+   *
+   * Max length: 60
    */
   district?: string;
   /**
    * A US system of postal codes used by the United States Postal Service (USPS).
    *
+   *
+   * Max length: 10
    */
   zip_code?: string;
   /**
    * A postal address in Ireland.
    *
+   *
+   * Max length: 10
    */
   eircode?: string;
 };

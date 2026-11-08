@@ -25,14 +25,22 @@ export type MembershipResource = {
   name: string;
   /**
    * Logo fo the resource.
+   *
+   * Format: uri
+   *
+   * Max length: 256
    */
   logo?: string;
   /**
    * The timestamp of when the membership resource was created.
+   *
+   * Format: date-time
    */
   created_at: string;
   /**
    * The timestamp of when the membership resource was last updated.
+   *
+   * Format: date-time
    */
   updated_at: string;
   attributes?: Attributes;
