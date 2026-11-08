@@ -10,6 +10,10 @@ const spec = {
   info: { title: "Events", version: "test" },
   components: {
     schemas: {
+      EventType: {
+        type: "string",
+        enum: ["widgets.updated", "devices.deleted"],
+      },
       Widget: { type: "object" },
       Device: { type: "object" },
     },
@@ -48,7 +52,13 @@ describe("event generation", () => {
       const first = await readFile(join(dir, "events.ts"), "utf8");
       await generateEvents(spec, dir);
       expect(await readFile(join(dir, "events.ts"), "utf8")).toBe(first);
-      expect(first).toContain('"widgets.updated": WidgetChangedEvent');
+      expect(first).toContain(
+        'import type { EventType } from "./types/event-type"',
+      );
+      expect(first).toContain(
+        "[Type in EventType]: Extract<KnownEventNotification, { type: Type }>",
+      );
+      expect(first).toContain("DeviceDeletedEvent | WidgetChangedEvent");
       expect(first).toContain("new DeviceDeletedEvent(payload, client)");
     } finally {
       await rm(dir, { recursive: true, force: true });
