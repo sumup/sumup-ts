@@ -12,6 +12,8 @@ export type ReaderCheckoutStatusChange = {
   event_type: string;
   /**
    * Unique identifier for the event.
+   *
+   * Format: uuid
    */
   id: string;
   /**
@@ -20,6 +22,8 @@ export type ReaderCheckoutStatusChange = {
   payload: {
     /**
      * The unique client transaction id. It is the same returned by the Checkout.
+     *
+     * Format: uuid
      */
     client_transaction_id: string;
     /**
@@ -33,12 +37,16 @@ export type ReaderCheckoutStatusChange = {
     /**
      * The transaction id. Deprecated: use `client_transaction_id` instead.
      *
+     * Format: uuid
+     *
      * @deprecated
      */
     transaction_id?: string;
   };
   /**
    * Timestamp of the event.
+   *
+   * Format: date-time
    */
   timestamp: string;
 };

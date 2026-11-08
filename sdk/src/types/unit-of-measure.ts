@@ -6,14 +6,20 @@
 export type UnitOfMeasure = {
   /**
    * The group of the unit of measure.
+   *
+   * Max length: 100
    */
   group_id: string;
   /**
    * The specific unit of measure within the group.
+   *
+   * Max length: 100
    */
   unit_id: string;
   /**
    * The ratio of the specified unit to the base unit of the group.
+   *
+   * Format: double
    */
   unit_ratio: number;
 };

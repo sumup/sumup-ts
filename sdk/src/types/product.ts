@@ -16,22 +16,32 @@ export type Product = {
   price_label?: string;
   /**
    * Product price.
+   *
+   * Format: decimal
    */
   price?: number;
   /**
    * VAT rate as a decimal fraction, for example `0.19` for 19%.
+   *
+   * Format: decimal
    */
   vat_rate?: number;
   /**
    * VAT amount for a single product.
+   *
+   * Format: decimal
    */
   single_vat_amount?: number;
   /**
    * Product price including VAT.
+   *
+   * Format: decimal
    */
   price_with_vat?: number;
   /**
    * Total VAT amount for the product quantity.
+   *
+   * Format: decimal
    */
   vat_amount?: number;
   /**
@@ -40,10 +50,14 @@ export type Product = {
   quantity?: number;
   /**
    * Total price calculated as the product price multiplied by the quantity.
+   *
+   * Format: decimal
    */
   total_price?: number;
   /**
    * Total product price including VAT.
+   *
+   * Format: decimal
    */
   total_with_vat?: number;
 };

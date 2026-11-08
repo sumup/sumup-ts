@@ -7,7 +7,13 @@ import {
 } from "../../core";
 import type { Receipt } from "../../types";
 export type GetReceiptQueryParams = {
+  /**
+   * Short unique identifier for the merchant.
+   */
   mid: string;
+  /**
+   * Unique identifier of the transaction event to include on the receipt.
+   */
   tx_event_id?: number;
 };
 

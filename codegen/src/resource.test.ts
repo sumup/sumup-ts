@@ -30,11 +30,17 @@ test("allowEmptyValue adds an empty string independently of the query schema", a
               name: "count",
               required: true,
               allowEmptyValue: true,
-              schema: { type: "integer" },
+              schema: {
+                type: "integer",
+                minimum: 0,
+                maximum: 100,
+                default: 10,
+              },
             },
             {
               in: "query",
               name: "strict",
+              description: "Filter by kind.",
               allowEmptyValue: false,
               schema: { type: "string", enum: ["merchant"] },
             },
@@ -58,6 +64,10 @@ test("allowEmptyValue adds an empty string independently of the query schema", a
     );
     expect(generated).toContain('kind?: Kind | "";');
     expect(generated).toContain('count: number | "";');
+    expect(generated).toContain(
+      " * Default: 10\n   *\n   * Min: 0\n   *\n   * Max: 100\n   */\n  count:",
+    );
+    expect(generated).toContain(" * Filter by kind.\n   */\n  strict?");
     expect(generated).toContain('strict?: "merchant";');
     expect(generated).toContain("default?: Kind;");
   } finally {

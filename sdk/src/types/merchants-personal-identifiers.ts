@@ -3,16 +3,24 @@
 /**
  * A list of country-specific personal identifiers.
  *
+ *
+ * Max items: 5
  */
 export type MerchantsPersonalIdentifiers = {
   /**
    * The unique reference for the personal identifier type as defined in the country SDK.
    *
+   *
+   * Pattern: ^[a-z]{2}\.[a-z_]+$
    */
   ref: string;
   /**
    * The value of the personal identifier.
    *
+   *
+   * Min length: 1
+   *
+   * Max length: 30
    */
   value: string;
 }[];

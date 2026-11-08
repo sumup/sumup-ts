@@ -7,6 +7,8 @@
 export type ItemReferencesV10 = {
   /**
    * The source of the catalog the line originates from.
+   *
+   * Default: "SUMUP"
    */
   catalog_source?: "SUMUP" | "EXTERNAL";
   /**
@@ -16,14 +18,20 @@ export type ItemReferencesV10 = {
    * `urn:sumup:pos:deposit:${MERCHANT_CODE}:${DEPOSIT_ID}`.
    * Empty for ad-hoc / manual lines. Type-agnostic on purpose: a new item type
    * backed by a catalog entity reuses this field instead of adding its own.
+   *
+   * Max length: 255
    */
   catalog_reference?: string;
   /**
    * An external reference id connecting this line to another system.
+   *
+   * Max length: 250
    */
   external_id?: string;
   /**
    * Stock keeping unit, enriched from the Catalog when available.
+   *
+   * Max length: 100
    */
   sku?: string;
 };

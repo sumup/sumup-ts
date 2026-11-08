@@ -9,6 +9,8 @@ export type PublicCardV10 = {
    * Input is case-insensitive; the canonical form is lowercase snake_case.
    * **VALUES**: [amex, cup, diners, discover, elo, elv, hipercard, jcb, maestro, mastercard, visa, visa_electron,
    * visa_vpay, vr, eftpos, conecs, swile, girocard, interac, sumup, bancomat].
+   *
+   * Max length: 20
    */
   brand: string;
   /**
@@ -18,6 +20,12 @@ export type PublicCardV10 = {
   type: "credit" | "debit" | "unknown";
   /**
    * The last 4 digits of the card used for the payment.
+   *
+   * Min length: 4
+   *
+   * Max length: 4
+   *
+   * Pattern: ^\d{4}$
    */
   last_4_digits: string;
 };

@@ -12,6 +12,8 @@
 export type FinancialPayout = {
   /**
    * Unique identifier of the payout-related record.
+   *
+   * Format: int64
    */
   id: number;
   /**
@@ -25,10 +27,14 @@ export type FinancialPayout = {
     | "BALANCE_DEDUCTION";
   /**
    * Amount of the payout or deduction in major units.
+   *
+   * Format: float
    */
   amount: number;
   /**
    * Payout date associated with the record, in `YYYY-MM-DD` format.
+   *
+   * Format: date
    */
   date: string;
   /**
@@ -37,6 +43,8 @@ export type FinancialPayout = {
   currency: string;
   /**
    * Fee amount associated with the payout record, in major units.
+   *
+   * Format: float
    */
   fee: number;
   /**

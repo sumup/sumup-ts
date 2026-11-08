@@ -12,6 +12,8 @@ export type Link = {
   rel?: string;
   /**
    * URL for accessing the related resource.
+   *
+   * Format: uri
    */
   href?: string;
   /**
@@ -20,10 +22,14 @@ export type Link = {
   type?: string;
   /**
    * Minimum amount allowed for a refund, in major units.
+   *
+   * Format: float
    */
   min_amount?: number;
   /**
    * Maximum amount allowed for a refund, in major units.
+   *
+   * Format: float
    */
   max_amount?: number;
 };

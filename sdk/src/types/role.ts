@@ -22,6 +22,8 @@ export type Role = {
   description?: string;
   /**
    * List of permission granted by this role.
+   *
+   * Max items: 100
    */
   permissions: string[];
   /**
@@ -31,10 +33,14 @@ export type Role = {
   metadata?: Metadata;
   /**
    * The timestamp of when the role was created.
+   *
+   * Format: date-time
    */
   created_at: string;
   /**
    * The timestamp of when the role was last updated.
+   *
+   * Format: date-time
    */
   updated_at: string;
 };

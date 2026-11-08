@@ -12,22 +12,46 @@ export type Location = {
   readonly id: string;
   /**
    * Customer-facing Location name.
+   *
+   * Min length: 1
+   *
+   * Max length: 255
    */
   name: string;
   /**
    * Customer-facing business name used at the Location.
+   *
+   * Min length: 1
+   *
+   * Max length: 255
    */
   business_name?: string;
   /**
    * Public email address for the Location.
+   *
+   * Format: email
+   *
+   * Min length: 1
+   *
+   * Max length: 255
    */
   email?: string;
   /**
    * Public phone number for the Location in E.164 format.
+   *
+   * Min length: 1
+   *
+   * Max length: 20
    */
   phone_number?: string;
   /**
    * Public website for the Location.
+   *
+   * Format: uri
+   *
+   * Min length: 1
+   *
+   * Max length: 255
    */
   website?: string;
   /**
@@ -40,10 +64,14 @@ export type Location = {
   address: MerchantsAddress;
   /**
    * Time when the Location was created.
+   *
+   * Format: date-time
    */
   readonly created_at: string;
   /**
    * Time when the Location was last updated.
+   *
+   * Format: date-time
    */
   readonly updated_at: string;
 };

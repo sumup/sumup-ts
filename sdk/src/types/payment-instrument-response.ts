@@ -15,6 +15,8 @@ export type PaymentInstrumentResponse = {
   readonly token?: string;
   /**
    * Indicates whether the payment instrument is active and can be used for payments. To deactivate it, send a `DELETE` request to the resource endpoint.
+   *
+   * Default: true
    */
   readonly active?: boolean;
   /**
@@ -27,6 +29,10 @@ export type PaymentInstrumentResponse = {
   card?: {
     /**
      * Last 4 digits of the payment card number.
+     *
+     * Min length: 4
+     *
+     * Max length: 4
      */
     readonly last_4_digits?: string;
     type?: CardType;
@@ -34,6 +40,8 @@ export type PaymentInstrumentResponse = {
   mandate?: MandateResponse;
   /**
    * The timestamp of when the payment instrument was created.
+   *
+   * Format: date-time
    */
   created_at?: string;
 };

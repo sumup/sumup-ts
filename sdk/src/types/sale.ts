@@ -26,21 +26,31 @@ export type Sale = {
   /**
    * Identity UUID of the cashier who processed the sale. Omitted when the cashier
    * identity is unknown.
+   *
+   * Format: uuid
    */
   user_id?: string;
   currency: SalesActivityCurrency;
   /**
    * Human-readable name of the sale (not unique, not the sale id).
+   *
+   * Max length: 160
    */
   name?: string;
   /**
    * Optional note attached to the sale, visible on receipts and the UI.
+   *
+   * Max length: 300
    */
   note?: string;
   /**
    * The lines sold in this sale, in the order they were added to the cart.
    * Includes merchant fees (`type: "FEE"`) when present; fee details are in `features`.
    *
+   *
+   * Min items: 1
+   *
+   * Max items: 1000
    */
   items: SaleLineItemV10[];
   price: SalePriceV10;
@@ -49,14 +59,20 @@ export type Sale = {
   /**
    * Payments on this sale, in the order they were recorded.
    *
+   *
+   * Max items: 1000
    */
   payments: PublicPaymentV10[];
   /**
    * Instant when the sale was created.
+   *
+   * Format: date-time
    */
   created_at: string;
   /**
    * Instant when the sale was closed. Always present: non-finalised sales are never returned.
+   *
+   * Format: date-time
    */
   closed_at: string;
   state: SaleStateV10;

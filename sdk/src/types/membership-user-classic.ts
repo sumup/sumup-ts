@@ -5,4 +5,11 @@
  *
  * @deprecated
  */
-export type MembershipUserClassic = { user_id: number };
+export type MembershipUserClassic = {
+  /**
+   * Min: 0
+   *
+   * Max: 2147483647
+   */
+  user_id: number;
+};

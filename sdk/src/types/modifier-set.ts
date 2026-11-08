@@ -6,10 +6,16 @@
 export type ModifierSet = {
   /**
    * The id of the modifier set that modifier belongs to.
+   *
+   * Max length: 100
    */
   id: string;
   /**
    * The name of the modifier set that the modifier belongs to.
+   *
+   * Min length: 1
+   *
+   * Max length: 150
    */
   name: string;
 };

@@ -18,6 +18,8 @@ import type { UnitOfMeasure } from "./unit-of-measure";
 export type SaleLineItemV10 = {
   /**
    * Stable identifier of the line within the sale. Used for linking (e.g. deposits).
+   *
+   * Max length: 100
    */
   id: string;
   /**
@@ -38,10 +40,16 @@ export type SaleLineItemV10 = {
   type: string;
   /**
    * Display name of the line.
+   *
+   * Max length: 250
    */
   name: string;
   /**
    * The numerical value representing the quantity in the specified unit.
+   *
+   * Format: double
+   *
+   * Min: 0
    */
   quantity: number;
   unit_of_measure: UnitOfMeasure;
@@ -51,6 +59,8 @@ export type SaleLineItemV10 = {
   service_type?: "IN_HOUSE" | "TAKE_AWAY";
   /**
    * Optional free-text note attached to the line, visible on receipts.
+   *
+   * Max length: 300
    */
   note?: string;
   price: LineItemPriceV10;
@@ -58,12 +68,16 @@ export type SaleLineItemV10 = {
    * Categories the line belongs to. A shared optional structure available to any
    * line; not a per-type field.
    *
+   *
+   * Max items: 1000
    */
   categories?: CategoryV10[];
   /**
    * Modifiers customise a line (e.g. "oat milk" on a cappuccino). A shared
    * optional structure available to any line; not a per-type field.
    *
+   *
+   * Max items: 50
    */
   modifiers?: ModifierItem[];
   references?: ItemReferencesV10;
@@ -71,6 +85,8 @@ export type SaleLineItemV10 = {
    * Named, typed, type-specific data. New item types add their data here as
    * features instead of new schema variants. See `Feature` for per-type examples.
    *
+   *
+   * Max items: 100
    */
   features?: FeatureV10[];
 };

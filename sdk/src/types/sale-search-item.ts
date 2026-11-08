@@ -17,6 +17,8 @@ export type SaleSearchItem = {
   /**
    * Identity UUID of the cashier who processed the sale. Omitted when the cashier
    * identity is unknown.
+   *
+   * Format: uuid
    */
   user_id?: string;
   state: SaleStateV10;
@@ -38,14 +40,20 @@ export type SaleSearchItem = {
    * The value of the amount in minor units of the currency according to the Sale.currency.scale.
    * `value` can get large for some currencies and applications.
    * Use Long type or a similar data type when parsing `value`.
+   *
+   * Format: int64
    */
   total_amount: number;
   /**
    * Instant when the sale was created.
+   *
+   * Format: date-time
    */
   created_at: string;
   /**
    * Instant when the sale was closed. Always present: non-finalised sales are never returned.
+   *
+   * Format: date-time
    */
   closed_at: string;
 };

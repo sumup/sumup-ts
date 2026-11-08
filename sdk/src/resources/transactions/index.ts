@@ -15,6 +15,8 @@ import type {
 export type RefundTransactionParams = {
   /**
    * Amount to refund in major units of the transaction's currency, for example `5` for EUR 5.00. It must be greater than zero and cannot exceed the amount eligible for a refund. Eligibility depends on the transaction and country/currency rules. If omitted, the system requests a full refund.
+   *
+   * Format: float
    */
   amount?: number;
 };
@@ -22,17 +24,46 @@ export type RefundTransactionParams = {
 export type RefundTransactionResponse = Record<string, unknown>;
 
 export type GetTransactionV2_1QueryParams = {
+  /**
+   * Retrieves the transaction resource with the specified transaction ID (the `id` parameter in the transaction resource).
+   */
   id?: string;
+  /**
+   * Retrieves the transaction resource with the specified transaction code.
+   */
   transaction_code?: string;
+  /**
+   * External transaction identifier supplied by the client.
+   */
   foreign_transaction_id?: string;
+  /**
+   * Client-supplied identifier of the transaction.
+   */
   client_transaction_id?: string;
 };
 
 export type ListTransactionsV2_1QueryParams = {
+  /**
+   * Retrieves the transaction resource with the specified transaction code.
+   */
   transaction_code?: string;
+  /**
+   * Sort direction for the transaction history. Use `ascending` or `descending`; the default is `ascending`.
+   *
+   * Default: "ascending"
+   */
   order?: "ascending" | "descending";
+  /**
+   * Maximum number of transactions per page. Must be a positive integer. Defaults to `10` when omitted; a page can contain fewer results.
+   */
   limit?: number;
+  /**
+   * Filters transactions by user email. For multiple values, repeat the query parameter, for example `users[]=first@example.com&users[]=second@example.com`.
+   */
   users?: string[];
+  /**
+   * Filters transactions by the listed final statuses. For multiple values, repeat the query parameter, for example `statuses[]=SUCCESSFUL&statuses[]=REFUNDED`.
+   */
   statuses?: (
     | "SUCCESSFUL"
     | "CANCELLED"
@@ -40,13 +71,43 @@ export type ListTransactionsV2_1QueryParams = {
     | "REFUNDED"
     | "CHARGE_BACK"
   )[];
+  /**
+   * Filters the returned results by the specified list of payment types used for the transactions.
+   */
   payment_types?: PaymentType[];
+  /**
+   * Filters the returned results by the specified list of entry modes.
+   */
   entry_modes?: EntryMode[];
+  /**
+   * Filters the returned results by the specified list of transaction types.
+   */
   types?: ("PAYMENT" | "REFUND" | "CHARGE_BACK")[];
+  /**
+   * Filters the results by the latest modification time of resources and returns only transactions that are modified *at or after* the specified timestamp (in [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) format).
+   *
+   * Format: date-time
+   */
   changes_since?: string;
+  /**
+   * Filters the results by the creation time of resources and returns only transactions that are created *before* the specified timestamp (in [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) format).
+   *
+   * Format: date-time
+   */
   newest_time?: string;
+  /**
+   * Pagination reference that returns results before the specified reference. Use the value from a returned pagination link rather than constructing it yourself. This parameter takes precedence over `newest_time` when both are provided.
+   */
   newest_ref?: string;
+  /**
+   * Filters the results by the creation time of resources and returns only transactions that are created *at or after* the specified timestamp (in [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) format).
+   *
+   * Format: date-time
+   */
   oldest_time?: string;
+  /**
+   * Pagination reference that returns results after the specified reference. Use the value from a returned pagination link rather than constructing it yourself. This parameter takes precedence over `oldest_time` when both are provided.
+   */
   oldest_ref?: string;
 };
 

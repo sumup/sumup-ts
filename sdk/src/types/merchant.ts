@@ -37,12 +37,16 @@ export type Merchant = {
    *
    * An [ISO3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) country code. This definition uses `oneOf` with a two-character string type to allow for support of future countries in client code.
    *
+   *
+   * Pattern: ^[A-Z]{2}$
    */
   country: string;
   business_profile?: BusinessProfile;
   /**
    * A user-facing small-format logo for use in dashboards and other user-facing applications. For customer-facing branding see `merchant.business_profile.branding`.
    *
+   *
+   * Format: uri
    */
   avatar?: string;
   /**
@@ -53,11 +57,19 @@ export type Merchant = {
   /**
    * Three-letter [ISO currency code](https://en.wikipedia.org/wiki/ISO_4217) representing the default currency for the account.
    *
+   *
+   * Min length: 3
+   *
+   * Max length: 3
    */
   readonly default_currency: string;
   /**
    * Merchant's default locale, represented as a BCP47 [RFC5646](https://datatracker.ietf.org/doc/html/rfc5646) language tag. This is typically an ISO 639-1 Alpha-2 [ISO639‑1](https://www.iso.org/iso-639-language-code) language code in lowercase and an ISO 3166-1 Alpha-2 [ISO3166‑1](https://www.iso.org/iso-3166-country-codes.html) country code in uppercase, separated by a dash. For example, en-US or fr-CA.
    * In multilingual countries this is the merchant's preferred locale out of those, that are officially spoken in the country. In a countries with a single official language this will match the official language.
+   *
+   * Min length: 2
+   *
+   * Max length: 5
    */
   default_locale: string;
   /**

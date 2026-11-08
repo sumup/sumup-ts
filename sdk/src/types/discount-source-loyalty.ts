@@ -11,6 +11,8 @@ import type { DiscountSourceLoyaltyType } from "./discount-source-loyalty-type";
 export type DiscountSourceLoyalty = {
   /**
    * The unique identifier of the promotion or reward.
+   *
+   * Format: uuid
    */
   id: string;
   loyalty_type: DiscountSourceLoyaltyType;
@@ -20,14 +22,22 @@ export type DiscountSourceLoyalty = {
    * Must be a positive integer if the scheme type is POINTS.
    * Must not be populated if the scheme type is STAMPS.
    *
+   *
+   * Format: int64
+   *
+   * Min: 1
    */
   points?: number | null;
   /**
    * The name of the loyalty discount.
+   *
+   * Max length: 100
    */
   name: string;
   /**
    * The description of the loyalty discount.
+   *
+   * Max length: 250
    */
   description?: string | null;
   discount_class?: DiscountClass;

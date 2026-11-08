@@ -20,17 +20,23 @@ export type TransactionBase = {
   transaction_code?: string;
   /**
    * Total amount of the transaction in major units of `currency`, for example `10.1` for EUR 10.10.
+   *
+   * Format: float
    */
   amount?: number;
   currency?: Currency;
   /**
    * The timestamp of when the transaction was created.
+   *
+   * Format: date-time
    */
   timestamp?: string;
   status?: TransactionStatus;
   payment_type?: PaymentType;
   /**
    * Number of installments for a deferred payment.
+   *
+   * Min: 1
    */
   installments_count?: number;
 };

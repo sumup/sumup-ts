@@ -10,20 +10,38 @@ import type { MerchantsAddress } from "./merchants-address";
 export type BusinessProfile = {
   /**
    * The customer-facing business name.
+   *
+   * Min length: 1
+   *
+   * Max length: 150
    */
   name?: string;
   /**
    * The descriptor is the text that your customer sees on their bank account statement.
    * The more recognisable your descriptor is, the less risk you have of receiving disputes (e.g. chargebacks).
    *
+   *
+   * Min length: 1
+   *
+   * Max length: 30
+   *
+   * Pattern: ^[a-zA-Z0-9 +'_.-]+$
    */
   dynamic_descriptor?: string;
   /**
    * The business's publicly available website.
+   *
+   * Min length: 1
+   *
+   * Max length: 255
    */
   website?: string;
   /**
    * A publicly available email address.
+   *
+   * Min length: 1
+   *
+   * Max length: 255
    */
   email?: string;
   /**
@@ -32,6 +50,8 @@ export type BusinessProfile = {
    *
    * A publicly available phone number in [E.164](https://en.wikipedia.org/wiki/E.164) format.
    *
+   *
+   * Max length: 16
    */
   phone_number?: string;
   address?: MerchantsAddress;

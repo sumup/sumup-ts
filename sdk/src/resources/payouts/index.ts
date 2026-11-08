@@ -7,10 +7,37 @@ import {
 } from "../../core";
 import type { ErrorExtended, FinancialPayouts } from "../../types";
 export type ListPayoutsV1QueryParams = {
+  /**
+   * Start date of the payout period filter, inclusive, in [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) `date` format (`YYYY-MM-DD`).
+   *
+   * Format: date
+   */
   start_date: string;
+  /**
+   * End date of the payout period filter, inclusive, in [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) `date` format (`YYYY-MM-DD`). Must be greater than or equal to `start_date`.
+   *
+   * Format: date
+   */
   end_date: string;
+  /**
+   * Response format for the payout list.
+   *
+   * Default: "json"
+   */
   format?: "json" | "csv";
+  /**
+   * Maximum number of payout records to return.
+   *
+   * Min: 1
+   *
+   * Max: 9999
+   */
   limit?: number;
+  /**
+   * Sort direction for the returned payouts.
+   *
+   * Default: "asc"
+   */
   order?: "asc" | "desc";
 };
 

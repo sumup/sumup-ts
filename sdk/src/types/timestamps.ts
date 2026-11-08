@@ -4,11 +4,15 @@ export type Timestamps = {
   /**
    * The date and time when the resource was created. This is a string as defined in [RFC 3339, section 5.6](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6).
    *
+   *
+   * Format: date-time
    */
   readonly created_at: string;
   /**
    * The date and time when the resource was last updated. This is a string as defined in [RFC 3339, section 5.6](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6).
    *
+   *
+   * Format: date-time
    */
   readonly updated_at: string;
 };

@@ -11,10 +11,14 @@ import type { HostedCheckout } from "./hosted-checkout";
 export type CheckoutCreateRequest = {
   /**
    * Merchant-defined reference for the new checkout, up to 64 characters. Use it to correlate the checkout with an order or payment attempt in your own system. If a checkout already exists for the supplied unique parameters, creation returns `409` with `DUPLICATED_CHECKOUT`; see the conflict response.
+   *
+   * Max length: 64
    */
   checkout_reference: string;
   /**
    * Amount to be charged to the payer, expressed in major units.
+   *
+   * Format: float
    */
   amount: number;
   currency: Currency;
@@ -28,6 +32,8 @@ export type CheckoutCreateRequest = {
   description?: string;
   /**
    * Optional backend callback URL for checkout status notifications. SumUp sends an HTTP POST with `event_type` and the checkout `id`. Retrieve the checkout to verify its current status before updating your order. See the [webhook guide](https://developer.sumup.com/online-payments/webhooks/) for the payload and response requirements.
+   *
+   * Format: uri
    */
   return_url?: string;
   /**
@@ -36,10 +42,14 @@ export type CheckoutCreateRequest = {
   customer_id?: string;
   /**
    * Business purpose of the checkout. Use `CHECKOUT` for a standard payment and `SETUP_RECURRING_PAYMENT` when collecting consent and payment details for future recurring charges.
+   *
+   * Default: "CHECKOUT"
    */
   purpose?: "CHECKOUT" | "SETUP_RECURRING_PAYMENT";
   /**
    * Optional expiration timestamp. The checkout must be processed before this moment, otherwise it becomes unusable. If omitted, the checkout does not have an explicit expiry time.
+   *
+   * Format: date-time
    */
   valid_until?: string | null;
   /**

@@ -14,10 +14,16 @@ export type Reader = {
    * Unique identifier of the object.
    *
    * Note that this identifies the instance of the physical devices pairing with your SumUp account. If you [delete](https://developer.sumup.com/api/readers/delete-reader) a reader, and pair the device again, the ID will be different. Do not use this ID to refer to a physical device.
+   *
+   * Min length: 30
+   *
+   * Max length: 30
    */
   id: string;
   /**
    * Custom human-readable, user-defined name for easier identification of the reader.
+   *
+   * Max length: 500
    */
   name: string;
   status: ReaderStatus;
@@ -27,14 +33,20 @@ export type Reader = {
    * Identifier of the system-managed service account associated with this reader.
    * Present only for readers that are already paired.
    * This field is currently in beta and may change.
+   *
+   * Format: uuid
    */
   service_account_id?: string;
   /**
    * The timestamp of when the reader was created.
+   *
+   * Format: date-time
    */
   created_at: string;
   /**
    * The timestamp of when the reader was last updated.
+   *
+   * Format: date-time
    */
   updated_at: string;
 };

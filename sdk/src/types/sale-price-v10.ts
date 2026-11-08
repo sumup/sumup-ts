@@ -19,6 +19,8 @@ export type SalePriceV10 = {
    * The value of the amount in minor units of the currency according to the Sale.currency.scale.
    * `value` can get large for some currencies and applications.
    * Use Long type or a similar data type when parsing `value`.
+   *
+   * Format: int64
    */
   net_amount: number;
   /**
@@ -30,16 +32,24 @@ export type SalePriceV10 = {
    * The value of the amount in minor units of the currency according to the Sale.currency.scale.
    * `value` can get large for some currencies and applications.
    * Use Long type or a similar data type when parsing `value`.
+   *
+   * Format: int64
    */
   gross_amount: number;
   /**
    * Discounts applied at cart level. Item-level discounts remain on
    * `items[].price.discounts`.
+   *
+   * Max items: 1000
    */
   cart_discounts?: DiscountLine[];
   /**
    * Tax lines aggregated across the sale (after cart-level discounts).
    * Per-line tax detail remains on `items[].price.taxes` / `taxes_final`.
+   *
+   * Min items: 1
+   *
+   * Max items: 1000
    */
   taxes: TaxLine[];
 };

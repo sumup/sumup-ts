@@ -32,6 +32,8 @@ import type { FeatureValueTypeV10 } from "./feature-value-type-v10";
 export type FeatureV10 = {
   /**
    * The feature name/key.
+   *
+   * Max length: 100
    */
   name: string;
   value_type: FeatureValueTypeV10;
@@ -40,6 +42,8 @@ export type FeatureV10 = {
    * (e.g. INTEGER -> "3", DECIMAL -> "1.50", DATE -> "2026-07-02",
    * BOOLEAN -> "true"). Carrying it as a string keeps the wire format stable as
    * new feature names and value types are introduced.
+   *
+   * Max length: 1000
    */
   value: string;
 };

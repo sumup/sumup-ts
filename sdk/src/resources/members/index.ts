@@ -12,12 +12,47 @@ import type {
   Metadata,
 } from "../../types";
 export type ListMerchantMembersQueryParams = {
+  /**
+   * Offset of the first member to return.
+   *
+   * Default: 0
+   *
+   * Min: 0
+   */
   offset?: number;
+  /**
+   * Maximum number of members to return.
+   *
+   * Default: 10
+   *
+   * Min: 1
+   *
+   * Max: 25
+   */
   limit?: number;
+  /**
+   * Indicates to skip count query.
+   *
+   * Default: false
+   */
   scroll?: boolean;
+  /**
+   * Filter the returned members by email address prefix.
+   */
   email?: string;
+  /**
+   * Search for a member by user id.
+   *
+   * Format: uuid
+   */
   "user.id"?: string;
+  /**
+   * Filter the returned members by the membership status.
+   */
   status?: MembershipStatus;
+  /**
+   * Filter the returned members by role.
+   */
   roles?: string[];
 };
 
@@ -33,18 +68,32 @@ export type CreateMerchantMemberParams = {
   is_managed_user?: boolean;
   /**
    * Email address of the member to add.
+   *
+   * Format: email
+   *
+   * Max length: 256
    */
   email: string;
   /**
    * Password of the member to add. Only used if `is_managed_user` is true. In the case of service accounts, the password is not used and can not be defined by the caller.
+   *
+   * Format: password
+   *
+   * Min length: 8
    */
   password?: string;
   /**
    * Nickname of the member to add. Only used if `is_managed_user` is true. Used for display purposes only.
+   *
+   * Max length: 64
    */
   nickname?: string;
   /**
    * List of roles to assign to the new member.
+   *
+   * Min items: 1
+   *
+   * Max items: 124
    */
   roles: string[];
   metadata?: Metadata;
@@ -52,6 +101,11 @@ export type CreateMerchantMemberParams = {
 };
 
 export type UpdateMerchantMemberParams = {
+  /**
+   * Min items: 1
+   *
+   * Max items: 124
+   */
   roles?: string[];
   metadata?: Metadata;
   attributes?: Attributes;
@@ -61,10 +115,16 @@ export type UpdateMerchantMemberParams = {
   user?: {
     /**
      * User's nickname. Used for display purposes only.
+     *
+     * Max length: 64
      */
     nickname?: string;
     /**
      * Password of the member to add. Only used if `is_managed_user` is true.
+     *
+     * Format: password
+     *
+     * Min length: 8
      */
     password?: string;
   };

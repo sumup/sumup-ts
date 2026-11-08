@@ -28,10 +28,14 @@ export type Member = {
   permissions: string[];
   /**
    * The timestamp of when the member was created.
+   *
+   * Format: date-time
    */
   created_at: string;
   /**
    * The timestamp of when the member was last updated.
+   *
+   * Format: date-time
    */
   updated_at: string;
   user?: MembershipUser;

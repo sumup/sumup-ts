@@ -18,6 +18,10 @@ export type GetReaderSettingsResponse = {
       enabled?: boolean;
       /**
        * Four-digit PIN used to unlock the reader's menu.
+       *
+       * Format: password
+       *
+       * Pattern: ^[0-9]{4}$
        */
       passcode?: string;
     };

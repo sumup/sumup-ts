@@ -24,14 +24,24 @@ export type BasePerson = {
   /**
    * The date of birth of the individual, represented as an ISO 8601:2004 [ISO8601‑2004] YYYY-MM-DD format.
    *
+   *
+   * Format: date
    */
   birthdate?: string;
   /**
    * The first name(s) of the individual.
+   *
+   * Min length: 1
+   *
+   * Max length: 60
    */
   given_name?: string;
   /**
    * The last name(s) of the individual.
+   *
+   * Min length: 1
+   *
+   * Max length: 60
    */
   family_name?: string;
   /**
@@ -40,11 +50,17 @@ export type BasePerson = {
    *
    * A publicly available phone number in [E.164](https://en.wikipedia.org/wiki/E.164) format.
    *
+   *
+   * Max length: 16
    */
   phone_number?: string;
   /**
    * A list of roles the Person has in the Merchant or towards SumUp. A Merchant must have at least one Person with the relationship `representative`.
    *
+   *
+   * Min items: 1
+   *
+   * Max items: 1
    */
   relationships?: string[];
   ownership?: Ownership;
@@ -56,16 +72,22 @@ export type BasePerson = {
    *
    * An [ISO3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) country code. This definition uses `oneOf` with a two-character string type to allow for support of future countries in client code.
    *
+   *
+   * Pattern: ^[A-Z]{2}$
    */
   citizenship?: string;
   /**
    * The Person's nationality. May be an [ISO3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) country code, but legacy data may not conform to this standard.
    *
+   *
+   * Pattern: ^[A-Z]{2}$
    */
   nationality?: string | null;
   /**
    * An [ISO3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) country code representing the country where the Person resides.
    *
+   *
+   * Pattern: ^[A-Z]{2}$
    */
   country_of_residence?: string | null;
   /**

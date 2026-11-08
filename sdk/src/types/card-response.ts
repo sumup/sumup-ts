@@ -10,6 +10,10 @@ import type { CardType } from "./card-type";
 export type CardResponse = {
   /**
    * Last 4 digits of the payment card number.
+   *
+   * Min length: 4
+   *
+   * Max length: 4
    */
   readonly last_4_digits?: string;
   type?: CardType;

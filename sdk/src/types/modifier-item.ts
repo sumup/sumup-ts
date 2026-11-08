@@ -13,15 +13,23 @@ export type ModifierItem = Record<string, unknown> &
     FinalPriceAmounts & {
       /**
        * Modifier id, coming from the Item Catalog
+       *
+       * Max length: 100
        */
       id: string;
       /**
        * Modifier name, coming from the Item Catalog
+       *
+       * Max length: 150
        */
       name: string;
       set: ModifierSet;
       /**
        * The numerical value representing the quantity in the specified unit.
+       *
+       * Format: double
+       *
+       * Min: 0
        */
       quantity: number;
     });

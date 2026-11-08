@@ -29,32 +29,52 @@ export type TransactionFull = TransactionBase &
     client_transaction_id?: string;
     /**
      * Email address of the registered user (merchant) to whom the payment is made.
+     *
+     * Format: email
      */
     username?: string;
     /**
      * Total SumUp transaction fee in major units of the transaction's currency.
+     *
+     * Format: decimal
      */
     fee_amount?: number;
     /**
      * Latitude
      *
      * Latitude value from the coordinates of the payment location (as received from the payment terminal reader).
+     *
+     * Format: float
+     *
+     * Min: -90
+     *
+     * Max: 90
      */
     lat?: number;
     /**
      * Longitude
      *
      * Longitude value from the coordinates of the payment location (as received from the payment terminal reader).
+     *
+     * Format: float
+     *
+     * Min: -180
+     *
+     * Max: 180
      */
     lon?: number;
     /**
      * Horizontal Accuracy
      *
      * Indication of the precision of the geographical position received from the payment terminal.
+     *
+     * Format: float
      */
     horizontal_accuracy?: number;
     /**
      * Internal SumUp identifier of the merchant.
+     *
+     * Format: int64
      */
     merchant_id?: number;
     device_info?: Device;
@@ -90,10 +110,14 @@ export type TransactionFull = TransactionBase &
     elv_account?: ElvCardAccount;
     /**
      * Local timestamp of when the transaction was created.
+     *
+     * Format: date-time
      */
     local_time?: string;
     /**
      * The date of the payout.
+     *
+     * Format: date
      */
     payout_date?: string;
     /**
@@ -114,18 +138,26 @@ export type TransactionFull = TransactionBase &
     vat_rates?: {
       /**
        * VAT rate.
+       *
+       * Format: decimal
        */
       rate?: number;
       /**
        * NET amount of products having this VAT rate applied.
+       *
+       * Format: decimal
        */
       net?: number;
       /**
        * VAT amount of this rate applied.
+       *
+       * Format: decimal
        */
       vat?: number;
       /**
        * Gross amount of products having this VAT rate applied.
+       *
+       * Format: decimal
        */
       gross?: number;
     }[];
@@ -174,18 +206,32 @@ export type TransactionFull = TransactionBase &
        * Latitude
        *
        * Latitude value from the coordinates of the payment location (as received from the payment terminal reader).
+       *
+       * Format: float
+       *
+       * Min: -90
+       *
+       * Max: 90
        */
       lat?: number;
       /**
        * Longitude
        *
        * Longitude value from the coordinates of the payment location (as received from the payment terminal reader).
+       *
+       * Format: float
+       *
+       * Min: -180
+       *
+       * Max: 180
        */
       lon?: number;
       /**
        * Horizontal Accuracy
        *
        * Indication of the precision of the geographical position received from the payment terminal.
+       *
+       * Format: float
        */
       horizontal_accuracy?: number;
     };

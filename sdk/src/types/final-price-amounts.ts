@@ -18,6 +18,8 @@ export type FinalPriceAmounts = {
    *  - for cart level discount: only part of the whole amount is applied
    *     (discount money value is split on each line item)
    *
+   *
+   * Max items: 1000
    */
   discounts?: DiscountLine[];
   /**
@@ -26,6 +28,10 @@ export type FinalPriceAmounts = {
    * The value of the amount in minor units of the currency according to the Sale.currency.scale.
    * `value` can get large for some currencies and applications.
    * Use Long type or a similar data type when parsing `value`.
+   *
+   * Format: int64
+   *
+   * Min: 0
    */
   total_net_amount_final: number;
   /**
@@ -34,12 +40,20 @@ export type FinalPriceAmounts = {
    * The value of the amount in minor units of the currency according to the Sale.currency.scale.
    * `value` can get large for some currencies and applications.
    * Use Long type or a similar data type when parsing `value`.
+   *
+   * Format: int64
+   *
+   * Min: 0
    */
   total_gross_amount_final: number;
   /**
    * Taxes applied on top of `total_net_amount_final` amount resulting in `total_gross_amount_final` amount.
    * If no discounts are applied, it should be equal to `taxes`.
    *
+   *
+   * Min items: 1
+   *
+   * Max items: 1000
    */
   taxes_final: PositiveTaxLine[];
 };

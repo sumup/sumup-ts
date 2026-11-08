@@ -21,6 +21,10 @@ export type LineItemPriceV10 = {
    * The value of the amount in minor units of the currency according to the Sale.currency.scale.
    * `value` can get large for some currencies and applications.
    * Use Long type or a similar data type when parsing `value`.
+   *
+   * Format: int64
+   *
+   * Min: 0
    */
   unit_amount: number;
   /**
@@ -29,6 +33,8 @@ export type LineItemPriceV10 = {
    * The value of the amount in minor units of the currency according to the Sale.currency.scale.
    * `value` can get large for some currencies and applications.
    * Use Long type or a similar data type when parsing `value`.
+   *
+   * Format: int64
    */
   total_net_amount: number;
   /**
@@ -37,16 +43,24 @@ export type LineItemPriceV10 = {
    * The value of the amount in minor units of the currency according to the Sale.currency.scale.
    * `value` can get large for some currencies and applications.
    * Use Long type or a similar data type when parsing `value`.
+   *
+   * Format: int64
    */
   total_gross_amount: number;
   /**
    * Taxes applied on top of the net amount resulting in the gross amount.
+   *
+   * Min items: 1
+   *
+   * Max items: 1000
    */
   taxes: TaxLine[];
   /**
    * Discounts applied. Discount amounts do not affect `total_net_amount` /
    * `total_gross_amount`; they are reflected in the `*_final` amounts.
    *
+   *
+   * Max items: 1000
    */
   discounts?: DiscountLine[];
   /**
@@ -55,6 +69,8 @@ export type LineItemPriceV10 = {
    * The value of the amount in minor units of the currency according to the Sale.currency.scale.
    * `value` can get large for some currencies and applications.
    * Use Long type or a similar data type when parsing `value`.
+   *
+   * Format: int64
    */
   total_net_amount_final: number;
   /**
@@ -63,10 +79,16 @@ export type LineItemPriceV10 = {
    * The value of the amount in minor units of the currency according to the Sale.currency.scale.
    * `value` can get large for some currencies and applications.
    * Use Long type or a similar data type when parsing `value`.
+   *
+   * Format: int64
    */
   total_gross_amount_final: number;
   /**
    * Taxes applied on top of `total_net_amount_final` resulting in `total_gross_amount_final`. Equals `taxes` if no discounts apply.
+   *
+   * Min items: 1
+   *
+   * Max items: 1000
    */
   taxes_final: TaxLine[];
 };

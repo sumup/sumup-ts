@@ -14,10 +14,14 @@ export type TransactionCheckoutInfo = {
   merchant_code?: string;
   /**
    * VAT included in the total transaction amount, in major units of the transaction's currency.
+   *
+   * Format: float
    */
   vat_amount?: number;
   /**
    * Tip included in the total transaction amount, in major units of the transaction's currency.
+   *
+   * Format: float
    */
   tip_amount?: number;
   entry_mode?: EntryMode;
