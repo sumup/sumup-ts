@@ -5,7 +5,6 @@ import type { Invite } from "./invite";
 import type { MembershipResource } from "./membership-resource";
 import type { MembershipStatus } from "./membership-status";
 import type { Metadata } from "./metadata";
-import type { ResourceType } from "./resource-type";
 
 /**
  * Membership
@@ -21,7 +20,13 @@ export type Membership = {
    * ID of the resource the membership is in.
    */
   resource_id: string;
-  type: ResourceType;
+  /**
+   * The type of the membership resource.
+   * Possible values are:
+   * * `merchant` - merchant account(s)
+   * * `organization` - organization(s)
+   */
+  type: string;
   /**
    * User's roles.
    */

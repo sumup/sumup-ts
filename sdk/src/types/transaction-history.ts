@@ -2,7 +2,6 @@
 
 import type { CardType } from "./card-type";
 import type { TransactionBase } from "./transaction-base";
-import type { TransactionID } from "./transaction-id";
 import type { TransactionMixinHistory } from "./transaction-mixin-history";
 
 /**
@@ -12,7 +11,12 @@ import type { TransactionMixinHistory } from "./transaction-mixin-history";
  */
 export type TransactionHistory = TransactionBase &
   TransactionMixinHistory & {
-    transaction_id?: TransactionID;
+    /**
+     * Transaction ID
+     *
+     * Unique identifier of the transaction.
+     */
+    transaction_id?: string;
     /**
      * Client-supplied identifier of the transaction.
      */

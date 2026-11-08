@@ -2,8 +2,6 @@
 
 import type { Metadata } from "./metadata";
 import type { ReaderDevice } from "./reader-device";
-import type { ReaderID } from "./reader-id";
-import type { ReaderName } from "./reader-name";
 import type { ReaderStatus } from "./reader-status";
 
 /**
@@ -12,8 +10,16 @@ import type { ReaderStatus } from "./reader-status";
  * A physical card reader device that can accept in-person payments.
  */
 export type Reader = {
-  id: ReaderID;
-  name: ReaderName;
+  /**
+   * Unique identifier of the object.
+   *
+   * Note that this identifies the instance of the physical devices pairing with your SumUp account. If you [delete](https://developer.sumup.com/api/readers/delete-reader) a reader, and pair the device again, the ID will be different. Do not use this ID to refer to a physical device.
+   */
+  id: string;
+  /**
+   * Custom human-readable, user-defined name for easier identification of the reader.
+   */
+  name: string;
   status: ReaderStatus;
   device: ReaderDevice;
   metadata?: Metadata;

@@ -12,9 +12,6 @@ import type {
   GetReaderSettingsResponse,
   Metadata,
   Reader,
-  ReaderID,
-  ReaderName,
-  ReaderPairingCode,
   ReaderPaymentRequestParams,
   ReaderPaymentResponse,
   StatusResponse,
@@ -24,12 +21,24 @@ import type {
 export type ListReadersResponse = { items: Reader[] };
 
 export type CreateReaderParams = {
-  pairing_code: ReaderPairingCode;
-  name: ReaderName;
+  /**
+   * The pairing code is a 8 or 9 character alphanumeric string that is displayed on a SumUp Device after initiating the pairing. It is used to link the physical device to the created pairing.
+   */
+  pairing_code: string;
+  /**
+   * Custom human-readable, user-defined name for easier identification of the reader.
+   */
+  name: string;
   metadata?: Metadata;
 };
 
-export type UpdateReaderParams = { name?: ReaderName; metadata?: Metadata };
+export type UpdateReaderParams = {
+  /**
+   * Custom human-readable, user-defined name for easier identification of the reader.
+   */
+  name?: string;
+  metadata?: Metadata;
+};
 
 export type CreateReaderTerminateParams = Record<string, unknown>;
 
@@ -46,7 +55,7 @@ export class Readers extends APIResource {
    */
   createGoCheckout(
     merchantCode: string,
-    readerId: ReaderID,
+    readerId: string,
     body: ReaderPaymentRequestParams,
     options?: RequestOptions,
   ): Promise<ReaderPaymentResponse> {
@@ -59,7 +68,7 @@ export class Readers extends APIResource {
 
   createGoCheckoutWithResponse(
     merchantCode: string,
-    readerId: ReaderID,
+    readerId: string,
     body: ReaderPaymentRequestParams,
     options?: RequestOptions,
   ): Promise<WithResponse<ReaderPaymentResponse>> {
@@ -125,7 +134,7 @@ export class Readers extends APIResource {
    */
   get(
     merchantCode: string,
-    readerId: ReaderID,
+    readerId: string,
     options?: RequestOptions,
   ): Promise<Reader> {
     return this._client.get<Reader>({
@@ -136,7 +145,7 @@ export class Readers extends APIResource {
 
   getWithResponse(
     merchantCode: string,
-    readerId: ReaderID,
+    readerId: string,
     options?: RequestOptions,
   ): Promise<WithResponse<Reader>> {
     return this._client.getWithResponse<Reader>({
@@ -150,7 +159,7 @@ export class Readers extends APIResource {
    */
   delete(
     merchantCode: string,
-    readerId: ReaderID,
+    readerId: string,
     options?: RequestOptions,
   ): Promise<void> {
     return this._client.delete<void>({
@@ -161,7 +170,7 @@ export class Readers extends APIResource {
 
   deleteWithResponse(
     merchantCode: string,
-    readerId: ReaderID,
+    readerId: string,
     options?: RequestOptions,
   ): Promise<WithResponse<void>> {
     return this._client.deleteWithResponse<void>({
@@ -177,7 +186,7 @@ export class Readers extends APIResource {
    */
   update(
     merchantCode: string,
-    readerId: ReaderID,
+    readerId: string,
     body: UpdateReaderParams,
     options?: RequestOptions,
   ): Promise<Reader> {
@@ -190,7 +199,7 @@ export class Readers extends APIResource {
 
   updateWithResponse(
     merchantCode: string,
-    readerId: ReaderID,
+    readerId: string,
     body: UpdateReaderParams,
     options?: RequestOptions,
   ): Promise<WithResponse<Reader>> {

@@ -3,7 +3,6 @@
 import type { ReceiptCard } from "./receipt-card";
 import type { ReceiptEvent } from "./receipt-event";
 import type { ReceiptReader } from "./receipt-reader";
-import type { TransactionID } from "./transaction-id";
 
 /**
  * Receipt Transaction
@@ -15,7 +14,12 @@ export type ReceiptTransaction = {
    * Transaction code returned after processing the transaction.
    */
   transaction_code?: string;
-  transaction_id?: TransactionID;
+  /**
+   * Transaction ID
+   *
+   * Unique identifier of the transaction.
+   */
+  transaction_id?: string;
   /**
    * Short unique identifier for the merchant.
    */

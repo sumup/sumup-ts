@@ -3423,7 +3423,11 @@
             "description": "The unique identifier of the reader.",
             "required": true,
             "schema": {
-              "$ref": "#/components/schemas/ReaderID"
+              "type": "string",
+              "description": "Unique identifier of the reader that the payment is initiated on.",
+              "example": "rdr_3MSAFM23CK82VSTT4BN6RWSQ65",
+              "minLength": 30,
+              "maxLength": 30
             }
           }
         ],
@@ -3495,7 +3499,9 @@
             "in": "query",
             "description": "Filter memberships by resource kind.",
             "schema": {
-              "$ref": "#/components/schemas/ResourceType"
+              "type": "string",
+              "description": "The type of the membership resource.\nPossible values are:\n* `merchant` - merchant account(s)\n* `organization` - organization(s)",
+              "example": "merchant"
             }
           },
           {
@@ -3511,7 +3517,9 @@
             "in": "query",
             "description": "Filter memberships by resource kind.",
             "schema": {
-              "$ref": "#/components/schemas/ResourceType"
+              "type": "string",
+              "description": "The type of the membership resource.\nPossible values are:\n* `merchant` - merchant account(s)\n* `organization` - organization(s)",
+              "example": "merchant"
             }
           },
           {
@@ -3553,7 +3561,9 @@
             "allowEmptyValue": true,
             "description": "Filter memberships by the parent of the resource the membership is in.\nOmit both `resource.parent.id` and `resource.parent.type` to skip parent filtering. When filtering by parent, both parameters must be present. To select resources without a parent, set each parameter to an empty value. Otherwise, both parameters must identify a parent.",
             "schema": {
-              "$ref": "#/components/schemas/ResourceType"
+              "type": "string",
+              "description": "The type of the membership resource.\nPossible values are:\n* `merchant` - merchant account(s)\n* `organization` - organization(s)",
+              "example": "merchant"
             }
           },
           {
@@ -5218,10 +5228,17 @@
                 ],
                 "properties": {
                   "pairing_code": {
-                    "$ref": "#/components/schemas/ReaderPairingCode"
+                    "type": "string",
+                    "description": "The pairing code is a 8 or 9 character alphanumeric string that is displayed on a SumUp Device after initiating the pairing. It is used to link the physical device to the created pairing.",
+                    "example": "4WLFDSBF",
+                    "minLength": 8,
+                    "maxLength": 9
                   },
                   "name": {
-                    "$ref": "#/components/schemas/ReaderName"
+                    "type": "string",
+                    "description": "Custom human-readable, user-defined name for easier identification of the reader.",
+                    "maxLength": 500,
+                    "example": "Frontdesk"
                   },
                   "metadata": {
                     "$ref": "#/components/schemas/Metadata"
@@ -5408,7 +5425,11 @@
             "description": "The unique identifier of the reader.",
             "required": true,
             "schema": {
-              "$ref": "#/components/schemas/ReaderID"
+              "type": "string",
+              "description": "Unique identifier of the object.\n\nNote that this identifies the instance of the physical devices pairing with your SumUp account. If you [delete](https://developer.sumup.com/api/readers/delete-reader) a reader, and pair the device again, the ID will be different. Do not use this ID to refer to a physical device.",
+              "example": "rdr_3MSAFM23CK82VSTT4BN6RWSQ65",
+              "minLength": 30,
+              "maxLength": 30
             }
           }
         ],
@@ -5511,7 +5532,11 @@
             "description": "The unique identifier of the reader.",
             "required": true,
             "schema": {
-              "$ref": "#/components/schemas/ReaderID"
+              "type": "string",
+              "description": "Unique identifier of the object.\n\nNote that this identifies the instance of the physical devices pairing with your SumUp account. If you [delete](https://developer.sumup.com/api/readers/delete-reader) a reader, and pair the device again, the ID will be different. Do not use this ID to refer to a physical device.",
+              "example": "rdr_3MSAFM23CK82VSTT4BN6RWSQ65",
+              "minLength": 30,
+              "maxLength": 30
             }
           }
         ]
@@ -5556,7 +5581,10 @@
                 "type": "object",
                 "properties": {
                   "name": {
-                    "$ref": "#/components/schemas/ReaderName"
+                    "type": "string",
+                    "description": "Custom human-readable, user-defined name for easier identification of the reader.",
+                    "maxLength": 500,
+                    "example": "Frontdesk"
                   },
                   "metadata": {
                     "$ref": "#/components/schemas/Metadata"
@@ -5627,7 +5655,11 @@
             "description": "The unique identifier of the reader.",
             "required": true,
             "schema": {
-              "$ref": "#/components/schemas/ReaderID"
+              "type": "string",
+              "description": "Unique identifier of the object.\n\nNote that this identifies the instance of the physical devices pairing with your SumUp account. If you [delete](https://developer.sumup.com/api/readers/delete-reader) a reader, and pair the device again, the ID will be different. Do not use this ID to refer to a physical device.",
+              "example": "rdr_3MSAFM23CK82VSTT4BN6RWSQ65",
+              "minLength": 30,
+              "maxLength": 30
             }
           }
         ]
@@ -7749,42 +7781,47 @@
         }
       },
       "Problem": {
-        "description": "A RFC 9457 problem details object.\n\nAdditional properties specific to the problem type may be present.",
         "type": "object",
-        "properties": {
-          "type": {
-            "description": "A URI reference that identifies the problem type.",
-            "type": "string",
-            "format": "uri",
-            "example": "https://developer.sumup.com/problem/not-found"
-          },
-          "title": {
-            "description": "A short, human-readable summary of the problem type.",
-            "type": "string",
-            "example": "Requested resource couldn't be found."
-          },
-          "status": {
-            "description": "The HTTP status code generated by the origin server for this occurrence of the problem.",
-            "type": "integer",
-            "example": 404
-          },
-          "detail": {
-            "description": "A human-readable explanation specific to this occurrence of the problem.",
-            "type": "string",
-            "example": "The requested resource doesn't exist or does not belong to you."
-          },
-          "instance": {
-            "description": "A URI reference that identifies the specific occurrence of the problem.",
-            "type": "string",
-            "format": "uri",
-            "example": "https://api.sumup.com/v0.1/checkouts/4e425463-3e1b-431d-83fa-1e51c2925e99"
-          }
-        },
-        "additionalProperties": true,
+        "description": "A RFC 9457 problem details object.\n\nAdditional properties specific to the problem type may be present.\n",
         "required": [
           "type"
         ],
-        "title": "Problem"
+        "additionalProperties": true,
+        "properties": {
+          "type": {
+            "type": "string",
+            "format": "uri",
+            "description": "A URI reference that identifies the problem type.",
+            "example": "https://developer.sumup.com/problem/not-found"
+          },
+          "title": {
+            "type": "string",
+            "description": "A short, human-readable summary of the problem type.",
+            "example": "Requested resource couldn't be found."
+          },
+          "status": {
+            "type": "integer",
+            "description": "The HTTP status code generated by the origin server for this occurrence of the problem.",
+            "example": 404
+          },
+          "detail": {
+            "type": "string",
+            "description": "A human-readable explanation specific to this occurrence of the problem.",
+            "example": "The requested resource doesn't exist or does not belong to you."
+          },
+          "instance": {
+            "type": "string",
+            "format": "uri",
+            "description": "A URI reference that identifies the specific occurrence of the problem."
+          }
+        }
+      },
+      "Metadata": {
+        "description": "Set of user-defined key-value pairs attached to the object. Partial updates are not supported. When updating, always submit whole metadata. Maximum of 64 parameters are allowed in the object.",
+        "type": "object",
+        "maxProperties": 64,
+        "example": {},
+        "additionalProperties": true
       },
       "ErrorExtended": {
         "title": "Error Extended",
@@ -7880,10 +7917,17 @@
         "type": "object",
         "properties": {
           "id": {
-            "$ref": "#/components/schemas/TransactionEventID"
+            "title": "Transaction Event ID",
+            "type": "integer",
+            "format": "int64",
+            "description": "Numeric identifier of a transaction event. Use it as `tx_event_id` when requesting receipt details for a specific event. This is separate from the transaction ID and the transaction history pagination references.",
+            "example": 9567461191
           },
           "transaction_id": {
-            "$ref": "#/components/schemas/TransactionID"
+            "title": "Transaction ID",
+            "type": "string",
+            "description": "Unique identifier of the transaction.",
+            "example": "410fc44a-5956-44e1-b5cc-19c6f8d727a4"
           },
           "type": {
             "$ref": "#/components/schemas/TransactionEventType"
@@ -8363,10 +8407,17 @@
         "type": "object",
         "properties": {
           "id": {
-            "$ref": "#/components/schemas/TransactionEventID"
+            "title": "Transaction Event ID",
+            "type": "integer",
+            "format": "int64",
+            "description": "Numeric identifier of a transaction event. Use it as `tx_event_id` when requesting receipt details for a specific event. This is separate from the transaction ID and the transaction history pagination references.",
+            "example": 9567461191
           },
           "transaction_id": {
-            "$ref": "#/components/schemas/TransactionID"
+            "title": "Transaction ID",
+            "type": "string",
+            "description": "Unique identifier of the transaction.",
+            "example": "410fc44a-5956-44e1-b5cc-19c6f8d727a4"
           },
           "type": {
             "$ref": "#/components/schemas/TransactionEventType"
@@ -8557,7 +8608,10 @@
             "example": "TEENSK4W2K"
           },
           "transaction_id": {
-            "$ref": "#/components/schemas/TransactionID"
+            "title": "Transaction ID",
+            "type": "string",
+            "description": "Unique identifier of the transaction.",
+            "example": "410fc44a-5956-44e1-b5cc-19c6f8d727a4"
           },
           "merchant_code": {
             "type": "string",
@@ -8750,7 +8804,11 @@
         "description": "Detailed information about a transaction event.",
         "properties": {
           "id": {
-            "$ref": "#/components/schemas/TransactionEventID"
+            "title": "Transaction Event ID",
+            "type": "integer",
+            "format": "int64",
+            "description": "Numeric identifier of a transaction event. Use it as `tx_event_id` when requesting receipt details for a specific event. This is separate from the transaction ID and the transaction history pagination references.",
+            "example": 9567461191
           },
           "event_type": {
             "$ref": "#/components/schemas/TransactionEventType"
@@ -8911,7 +8969,10 @@
             "type": "object",
             "properties": {
               "transaction_id": {
-                "$ref": "#/components/schemas/TransactionID"
+                "title": "Transaction ID",
+                "type": "string",
+                "description": "Unique identifier of the transaction.",
+                "example": "410fc44a-5956-44e1-b5cc-19c6f8d727a4"
               },
               "client_transaction_id": {
                 "type": "string",
@@ -9089,13 +9150,29 @@
                 "example": 8
               },
               "lat": {
-                "$ref": "#/components/schemas/Lat"
+                "title": "Latitude",
+                "type": "number",
+                "format": "float",
+                "description": "Latitude value from the coordinates of the payment location (as received from the payment terminal reader).",
+                "minimum": -90,
+                "maximum": 90,
+                "example": 52.520008
               },
               "lon": {
-                "$ref": "#/components/schemas/Lon"
+                "title": "Longitude",
+                "type": "number",
+                "format": "float",
+                "description": "Longitude value from the coordinates of the payment location (as received from the payment terminal reader).",
+                "minimum": -180,
+                "maximum": 180,
+                "example": 13.404954
               },
               "horizontal_accuracy": {
-                "$ref": "#/components/schemas/HorizontalAccuracy"
+                "title": "Horizontal Accuracy",
+                "type": "number",
+                "format": "float",
+                "description": "Indication of the precision of the geographical position received from the payment terminal.",
+                "example": 5
               },
               "merchant_id": {
                 "type": "integer",
@@ -9259,13 +9336,29 @@
                 "description": "Details of the payment location as received from the payment terminal.",
                 "properties": {
                   "lat": {
-                    "$ref": "#/components/schemas/Lat"
+                    "title": "Latitude",
+                    "type": "number",
+                    "format": "float",
+                    "description": "Latitude value from the coordinates of the payment location (as received from the payment terminal reader).",
+                    "minimum": -90,
+                    "maximum": 90,
+                    "example": 52.520008
                   },
                   "lon": {
-                    "$ref": "#/components/schemas/Lon"
+                    "title": "Longitude",
+                    "type": "number",
+                    "format": "float",
+                    "description": "Longitude value from the coordinates of the payment location (as received from the payment terminal reader).",
+                    "minimum": -180,
+                    "maximum": 180,
+                    "example": 13.404954
                   },
                   "horizontal_accuracy": {
-                    "$ref": "#/components/schemas/HorizontalAccuracy"
+                    "title": "Horizontal Accuracy",
+                    "type": "number",
+                    "format": "float",
+                    "description": "Indication of the precision of the geographical position received from the payment terminal.",
+                    "example": 5
                   }
                 }
               },
@@ -9341,44 +9434,6 @@
         ],
         "example": "SUCCESSFUL"
       },
-      "TransactionEventID": {
-        "title": "Transaction Event ID",
-        "type": "integer",
-        "format": "int64",
-        "description": "Numeric identifier of a transaction event. Use it as `tx_event_id` when requesting receipt details for a specific event. This is separate from the transaction ID and the transaction history pagination references.",
-        "example": 9567461191
-      },
-      "HorizontalAccuracy": {
-        "title": "Horizontal Accuracy",
-        "type": "number",
-        "format": "float",
-        "description": "Indication of the precision of the geographical position received from the payment terminal.",
-        "example": 5
-      },
-      "Lat": {
-        "title": "Latitude",
-        "type": "number",
-        "format": "float",
-        "description": "Latitude value from the coordinates of the payment location (as received from the payment terminal reader).",
-        "minimum": -90,
-        "maximum": 90,
-        "example": 52.520008
-      },
-      "Lon": {
-        "title": "Longitude",
-        "type": "number",
-        "format": "float",
-        "description": "Longitude value from the coordinates of the payment location (as received from the payment terminal reader).",
-        "minimum": -180,
-        "maximum": 180,
-        "example": 13.404954
-      },
-      "TransactionID": {
-        "title": "Transaction ID",
-        "type": "string",
-        "description": "Unique identifier of the transaction.",
-        "example": "410fc44a-5956-44e1-b5cc-19c6f8d727a4"
-      },
       "Affiliate": {
         "properties": {
           "app_id": {
@@ -9414,13 +9469,6 @@
           "value"
         ],
         "type": "object"
-      },
-      "ReaderID": {
-        "type": "string",
-        "description": "Unique identifier of the reader that the payment is initiated on.",
-        "example": "rdr_3MSAFM23CK82VSTT4BN6RWSQ65",
-        "minLength": 30,
-        "maxLength": 30
       },
       "ReaderPaymentRequestParams": {
         "properties": {
@@ -9500,11 +9548,6 @@
           "unknown"
         ]
       },
-      "ResourceType": {
-        "type": "string",
-        "description": "The type of the membership resource.\nPossible values are:\n* `merchant` - merchant account(s)\n* `organization` - organization(s)",
-        "example": "merchant"
-      },
       "Membership": {
         "title": "Membership",
         "type": "object",
@@ -9532,7 +9575,9 @@
             "example": "M2DDT39A"
           },
           "type": {
-            "$ref": "#/components/schemas/ResourceType"
+            "type": "string",
+            "description": "The type of the membership resource.\nPossible values are:\n* `merchant` - merchant account(s)\n* `organization` - organization(s)",
+            "example": "merchant"
           },
           "roles": {
             "type": "array",
@@ -9610,7 +9655,9 @@
             "example": "M2DDT39A"
           },
           "type": {
-            "$ref": "#/components/schemas/ResourceType"
+            "type": "string",
+            "description": "The type of the membership resource.\nPossible values are:\n* `merchant` - merchant account(s)\n* `organization` - organization(s)",
+            "example": "merchant"
           },
           "name": {
             "type": "string",
@@ -9905,13 +9952,6 @@
           }
         }
       },
-      "Metadata": {
-        "description": "Set of user-defined key-value pairs attached to the object. Partial updates are not supported. When updating, always submit whole metadata. Maximum of 64 parameters are allowed in the object.",
-        "type": "object",
-        "maxProperties": 64,
-        "example": {},
-        "additionalProperties": true
-      },
       "Attributes": {
         "description": "Object attributes that are modifiable only by SumUp applications.\n",
         "type": "object",
@@ -9928,189 +9968,6 @@
           "system_account"
         ],
         "example": "user"
-      },
-      "Address": {
-        "externalDocs": {
-          "description": "Address documentation",
-          "url": "https://developer.sumup.com/tools/glossary/address"
-        },
-        "description": "An address somewhere in the world. The address fields used depend on the country conventions. For example, in Great Britain, `city` is `post_town`. In the United States, the top-level administrative unit used in addresses is `state`, whereas in Chile it's `region`.\nWhether an address is valid or not depends on whether the locally required fields are present. Fields not supported in a country will be ignored.",
-        "type": "object",
-        "required": [
-          "country"
-        ],
-        "properties": {
-          "street_address": {
-            "type": "array",
-            "maxItems": 2,
-            "items": {
-              "type": "string",
-              "description": "The first line of the address.",
-              "maxLength": 100
-            },
-            "example": [
-              "Paul-Linke-Ufer 39-40",
-              "2. Hinterhof"
-            ]
-          },
-          "post_code": {
-            "type": "string",
-            "description": "The postal code (aka. zip code) of the address.\n",
-            "maxLength": 10,
-            "example": "10999"
-          },
-          "country": {
-            "allOf": [
-              {
-                "description": "The ISO3166-1 Alpha-2 code of the address country.\n",
-                "example": "DE"
-              },
-              {
-                "$ref": "#/components/schemas/CountryCode"
-              }
-            ]
-          },
-          "city": {
-            "type": "string",
-            "description": "The city of the address.\n",
-            "maxLength": 60,
-            "example": "Berlin"
-          },
-          "province": {
-            "type": "string",
-            "description": "The province where the address is located. This may not be relevant in some countries.\n",
-            "maxLength": 60,
-            "example": "Berlin"
-          },
-          "region": {
-            "type": "string",
-            "description": "The region where the address is located. This may not be relevant in some countries.\n",
-            "maxLength": 60,
-            "example": "Baden Wuerttemberg"
-          },
-          "county": {
-            "type": "string",
-            "description": "A county is a geographic region of a country used for administrative or other purposes in some nations. Used in countries such as Ireland, Romania, etc.\n",
-            "maxLength": 60,
-            "example": "Dublin County"
-          },
-          "autonomous_community": {
-            "type": "string",
-            "description": "In Spain, an autonomous community is the first sub-national level of political and administrative division.\n",
-            "maxLength": 60,
-            "example": "Catalonia"
-          },
-          "post_town": {
-            "type": "string",
-            "description": "A post town is a required part of all postal addresses in the United Kingdom and Ireland, and a basic unit of the postal delivery system.\n",
-            "maxLength": 60,
-            "example": "London"
-          },
-          "state": {
-            "type": "string",
-            "description": "Most often, a country has a single state, with various administrative divisions. The term \"state\" is sometimes used to refer to the federated polities that make up the federation. Used in countries such as the United States and Brazil.\n",
-            "maxLength": 60,
-            "example": "California"
-          },
-          "neighborhood": {
-            "type": "string",
-            "description": "Locality level of the address. Used in countries such as Brazil or Chile.\n",
-            "maxLength": 60,
-            "example": "Copacabana"
-          },
-          "commune": {
-            "type": "string",
-            "description": "In many countries, terms cognate with \"commune\" are used, referring to the community living in the area and the common interest. Used in countries such as Chile.\n",
-            "maxLength": 60,
-            "example": "Providencia"
-          },
-          "department": {
-            "type": "string",
-            "description": "A department (French: département, Spanish: departamento) is an administrative or political division in several countries. Used in countries such as Colombia.\n",
-            "maxLength": 60,
-            "example": "Antioquia"
-          },
-          "municipality": {
-            "type": "string",
-            "description": "A municipality is usually a single administrative division having corporate status and powers of self-government or jurisdiction as granted by national and regional laws to which it is subordinate. Used in countries such as Colombia.\n",
-            "maxLength": 60,
-            "example": "Medellín"
-          },
-          "district": {
-            "type": "string",
-            "description": "A district is a type of administrative division that in some countries is managed by the local government. Used in countries such as Portugal.\n",
-            "maxLength": 60,
-            "example": "Lisbon District"
-          },
-          "zip_code": {
-            "type": "string",
-            "description": "A US system of postal codes used by the United States Postal Service (USPS).\n",
-            "maxLength": 10,
-            "example": "94103"
-          },
-          "eircode": {
-            "type": "string",
-            "description": "A postal address in Ireland.\n",
-            "maxLength": 10,
-            "example": "D02 X285"
-          }
-        },
-        "example": {
-          "street_address": [
-            "Paul-Linke-Ufer 39-40",
-            "2. Hinterhof"
-          ],
-          "post_code": "10999",
-          "city": "Berlin",
-          "country": "DE"
-        }
-      },
-      "CountryCode": {
-        "description": "An [ISO3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)\ncountry code. This definition users `oneOf` with a two-character string\ntype to allow for support of future countries in client code.",
-        "type": "string",
-        "minLength": 2,
-        "maxLength": 2,
-        "pattern": "^[A-Z]{2}$",
-        "example": "BR"
-      },
-      "PersonalIdentifiers": {
-        "type": "array",
-        "description": "A list of country-specific personal identifiers.",
-        "items": {
-          "$ref": "#/components/schemas/PersonalIdentifier"
-        },
-        "maxItems": 32,
-        "example": [
-          {
-            "ref": "br.cpf",
-            "value": "847.060.136-90"
-          }
-        ]
-      },
-      "PersonalIdentifier": {
-        "type": "object",
-        "required": [
-          "ref",
-          "value"
-        ],
-        "properties": {
-          "ref": {
-            "type": "string",
-            "description": "The unique reference for the personal identifier type.",
-            "example": "br.cpf",
-            "maxLength": 32
-          },
-          "value": {
-            "type": "string",
-            "description": "The personal identifier value.",
-            "example": "847.060.136-90",
-            "maxLength": 128
-          }
-        },
-        "example": {
-          "ref": "br.cpf",
-          "value": "847.060.136-90"
-        }
       },
       "ListPersonsResponseBody": {
         "type": "object",
@@ -10161,7 +10018,53 @@
                 "$ref": "#/components/schemas/Company"
               },
               "country": {
-                "$ref": "#/components/schemas/CountryCode"
+                "description": "The [https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2](ISO3166-1 alpha-2) country code of the country the merchant is registered and operates in.\n",
+                "allOf": [
+                  {
+                    "description": "An [ISO3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) country code. This definition uses `oneOf` with a two-character string type to allow for support of future countries in client code.\n",
+                    "type": "string",
+                    "pattern": "^[A-Z]{2}$",
+                    "examples": [
+                      "AR",
+                      "AT",
+                      "AU",
+                      "BE",
+                      "BG",
+                      "BR",
+                      "CH",
+                      "CL",
+                      "CO",
+                      "CY",
+                      "CZ",
+                      "DE",
+                      "DK",
+                      "EE",
+                      "ES",
+                      "FI",
+                      "FR",
+                      "GB",
+                      "GR",
+                      "HU",
+                      "IE",
+                      "IT",
+                      "LT",
+                      "LU",
+                      "LV",
+                      "MT",
+                      "MX",
+                      "NL",
+                      "NO",
+                      "PE",
+                      "PL",
+                      "PT",
+                      "RO",
+                      "SE",
+                      "SI",
+                      "SK",
+                      "US"
+                    ]
+                  }
+                ]
               },
               "business_profile": {
                 "$ref": "#/components/schemas/BusinessProfile"
@@ -10202,10 +10105,16 @@
                 "$ref": "#/components/schemas/ClassicMerchantIdentifiers"
               },
               "version": {
-                "$ref": "#/components/schemas/Version"
+                "type": "string",
+                "description": "The version of the resource. The version reflects a specific change submitted to the API via one of the `PATCH` endpoints.\n",
+                "examples": [
+                  "chng_01HS0KG3MPVEVWW85E3KNXH55J"
+                ]
               },
               "change_status": {
-                "$ref": "#/components/schemas/ChangeStatus"
+                "type": "string",
+                "readOnly": true,
+                "description": "Reflects the status of changes submitted through the `PATCH` endpoints for the Merchant or Persons. If some changes have not been applied yet, the status will be `pending`. If all changes have been applied, the status `done`.\nThe status is only returned after write operations or on read endpoints when the `version` query parameter is provided.\n"
               }
             }
           },
@@ -10257,15 +10166,148 @@
             "example": "contact@example.com"
           },
           "phone_number": {
-            "$ref": "#/components/schemas/PhoneNumber"
+            "description": "A public phone number that customers can call.\n",
+            "allOf": [
+              {
+                "type": "string",
+                "description": "A publicly available phone number in [E.164](https://en.wikipedia.org/wiki/E.164) format.\n",
+                "example": "+420123456789",
+                "maxLength": 16
+              }
+            ]
           },
           "address": {
-            "$ref": "#/components/schemas/Address"
+            "$ref": "#/components/schemas/MerchantsAddress"
           },
           "branding": {
             "$ref": "#/components/schemas/Branding"
           }
         }
+      },
+      "Location": {
+        "type": "object",
+        "description": "Physical Merchant Location with a customer-facing name and address.",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "name",
+          "is_default",
+          "address",
+          "created_at",
+          "updated_at"
+        ],
+        "properties": {
+          "id": {
+            "readOnly": true,
+            "allOf": [
+              {
+                "type": "string",
+                "description": "Unique identifier of a Merchant Location.",
+                "examples": [
+                  "loc_01JZ8N8ZH8AVAZF30MZ6J4Z7PK"
+                ]
+              }
+            ]
+          },
+          "name": {
+            "type": "string",
+            "description": "Customer-facing Location name.",
+            "minLength": 1,
+            "maxLength": 255,
+            "examples": [
+              "Kreuzberg Store"
+            ]
+          },
+          "business_name": {
+            "type": "string",
+            "description": "Customer-facing business name used at the Location.",
+            "minLength": 1,
+            "maxLength": 255,
+            "examples": [
+              "Example Coffee"
+            ]
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "Public email address for the Location.",
+            "minLength": 1,
+            "maxLength": 255,
+            "examples": [
+              "kreuzberg@example.com"
+            ]
+          },
+          "phone_number": {
+            "type": "string",
+            "description": "Public phone number for the Location in E.164 format.",
+            "minLength": 1,
+            "maxLength": 20,
+            "examples": [
+              "+49301234567"
+            ]
+          },
+          "website": {
+            "type": "string",
+            "format": "uri",
+            "description": "Public website for the Location.",
+            "minLength": 1,
+            "maxLength": 255,
+            "examples": [
+              "https://example.com/kreuzberg"
+            ]
+          },
+          "is_default": {
+            "type": "boolean",
+            "readOnly": true,
+            "description": "Whether this is the default Location for the Merchant.",
+            "examples": [
+              true
+            ]
+          },
+          "address": {
+            "$ref": "#/components/schemas/MerchantsAddress",
+            "description": "Physical address of the Location."
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true,
+            "description": "Time when the Location was created.",
+            "examples": [
+              "2026-07-02T10:15:30Z"
+            ]
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true,
+            "description": "Time when the Location was last updated.",
+            "examples": [
+              "2026-07-02T10:15:30Z"
+            ]
+          }
+        },
+        "examples": [
+          {
+            "id": "loc_01JZ8N8ZH8AVAZF30MZ6J4Z7PK",
+            "name": "Kreuzberg Store",
+            "business_name": "Example Coffee",
+            "email": "kreuzberg@example.com",
+            "phone_number": "+49301234567",
+            "website": "https://example.com/kreuzberg",
+            "is_default": true,
+            "address": {
+              "street_address": [
+                "Paul-Linke-Ufer 39-40"
+              ],
+              "post_code": "10999",
+              "city": "Berlin",
+              "country": "DE"
+            },
+            "created_at": "2026-07-02T10:15:30Z",
+            "updated_at": "2026-07-02T10:15:30Z"
+          }
+        ]
       },
       "Person": {
         "allOf": [
@@ -10274,11 +10316,194 @@
           }
         ]
       },
-      "PhoneNumber": {
-        "type": "string",
-        "description": "A publicly available phone number in [E.164](https://en.wikipedia.org/wiki/E.164) format.\n",
-        "example": "+420123456789",
-        "maxLength": 16
+      "MerchantsAddress": {
+        "externalDocs": {
+          "description": "Address documentation",
+          "url": "https://developer.sumup.com/tools/glossary/merchant#addresses"
+        },
+        "description": "An address somewhere in the world. The address fields used depend on the country conventions. For example, in Great Britain, `city` is `post_town`. In the United States, the top-level administrative unit used in addresses is `state`, whereas in Chile it's `region`.\nWhether an address is valid or not depends on whether the locally required fields are present. Fields not supported in a country will be ignored.",
+        "type": "object",
+        "required": [
+          "country"
+        ],
+        "properties": {
+          "street_address": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 2,
+            "items": {
+              "type": "string",
+              "description": "The first line of the address.",
+              "maxLength": 100
+            },
+            "example": [
+              "Paul-Linke-Ufer 39-40",
+              "2. Hinterhof"
+            ]
+          },
+          "post_code": {
+            "type": "string",
+            "description": "The postal code (aka. zip code) of the address.\n",
+            "maxLength": 10,
+            "example": "10999"
+          },
+          "country": {
+            "description": "The ISO3166-1 Alpha-2 code of the address country.\n",
+            "example": "DE",
+            "allOf": [
+              {
+                "description": "An [ISO3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) country code. This definition uses `oneOf` with a two-character string type to allow for support of future countries in client code.\n",
+                "type": "string",
+                "pattern": "^[A-Z]{2}$",
+                "examples": [
+                  "AR",
+                  "AT",
+                  "AU",
+                  "BE",
+                  "BG",
+                  "BR",
+                  "CH",
+                  "CL",
+                  "CO",
+                  "CY",
+                  "CZ",
+                  "DE",
+                  "DK",
+                  "EE",
+                  "ES",
+                  "FI",
+                  "FR",
+                  "GB",
+                  "GR",
+                  "HU",
+                  "IE",
+                  "IT",
+                  "LT",
+                  "LU",
+                  "LV",
+                  "MT",
+                  "MX",
+                  "NL",
+                  "NO",
+                  "PE",
+                  "PL",
+                  "PT",
+                  "RO",
+                  "SE",
+                  "SI",
+                  "SK",
+                  "US"
+                ]
+              }
+            ]
+          },
+          "city": {
+            "type": "string",
+            "description": "The city of the address.\n",
+            "maxLength": 60,
+            "example": "Berlin"
+          },
+          "province": {
+            "type": "string",
+            "description": "The province where the address is located. This may not be relevant in some countries.\n",
+            "maxLength": 60,
+            "example": "Ontario"
+          },
+          "region": {
+            "type": "string",
+            "description": "The region where the address is located. This may not be relevant in some countries.\n",
+            "maxLength": 60,
+            "example": "Baden-Wuerttemberg"
+          },
+          "county": {
+            "type": "string",
+            "description": "A county is a geographic region of a country used for administrative or other purposes in some nations. Used in countries such as Ireland, Romania, etc.\n",
+            "maxLength": 60,
+            "example": "Dublin"
+          },
+          "autonomous_community": {
+            "type": "string",
+            "description": "In Spain, an autonomous community is the first sub-national level of political and administrative division.\n",
+            "maxLength": 60,
+            "example": "Catalonia"
+          },
+          "post_town": {
+            "type": "string",
+            "description": "A post town is a required part of all postal addresses in the United Kingdom and Ireland, and a basic unit of the postal delivery system.\n",
+            "maxLength": 60,
+            "example": "London"
+          },
+          "state": {
+            "type": "string",
+            "description": "Most often, a country has a single state, with various administrative divisions. The term \"state\" is sometimes used to refer to the federated polities that make up the federation. Used in countries such as the United States and Brazil.\n",
+            "maxLength": 60,
+            "example": "California"
+          },
+          "neighborhood": {
+            "type": "string",
+            "description": "Locality level of the address. Used in countries such as Brazil or Chile.\n",
+            "maxLength": 60,
+            "example": "Copacabana"
+          },
+          "commune": {
+            "type": "string",
+            "description": "In many countries, terms cognate with \"commune\" are used, referring to the community living in the area and the common interest. Used in countries such as Chile.\n",
+            "maxLength": 60,
+            "example": "Providencia"
+          },
+          "department": {
+            "type": "string",
+            "description": "A department (French: département, Spanish: departamento) is an administrative or political division in several countries. Used in countries such as Colombia.\n",
+            "maxLength": 60,
+            "example": "Antioquia"
+          },
+          "municipality": {
+            "type": "string",
+            "description": "A municipality is usually a single administrative division having corporate status and powers of self-government or jurisdiction as granted by national and regional laws to which it is subordinate. Used in countries such as Colombia.\n",
+            "maxLength": 60,
+            "example": "Medellin"
+          },
+          "district": {
+            "type": "string",
+            "description": "A district is a type of administrative division that in some countries is managed by the local government. Used in countries such as Portugal.\n",
+            "maxLength": 60,
+            "example": "Lisbon"
+          },
+          "zip_code": {
+            "type": "string",
+            "description": "A US system of postal codes used by the United States Postal Service (USPS).\n",
+            "maxLength": 10,
+            "example": "94103"
+          },
+          "eircode": {
+            "type": "string",
+            "description": "A postal address in Ireland.\n",
+            "maxLength": 10,
+            "example": "D02 X285"
+          }
+        },
+        "examples": [
+          {
+            "street_address": [
+              "Paul-Linke-Ufer 39-40",
+              "2. Hinterhof"
+            ],
+            "post_code": "10999",
+            "city": "Berlin",
+            "country": "DE"
+          },
+          {
+            "street_address": [
+              "156 Avenida Vida Nova",
+              "Apto 2"
+            ],
+            "city": "Taboão da Serra",
+            "post_code": "06764045",
+            "state": "SP",
+            "neighborhood": "Jardim Maria Rosa",
+            "country": "BR"
+          }
+        ]
       },
       "Branding": {
         "type": "object",
@@ -10355,29 +10580,21 @@
           }
         }
       },
-      "LegalType": {
-        "externalDocs": {
-          "description": "The country SDK documentation for legal types.",
-          "url": "https://developer.sumup.com/tools/glossary/merchant#legal-types"
-        },
-        "type": "string",
-        "description": "The unique legal type reference as defined in the country SDK. We do not rely on IDs as used by other services. Consumers of this API are expected to use the country SDK to map to any other IDs, translation keys, or descriptions.\n",
-        "minLength": 4,
-        "maxLength": 64,
-        "pattern": "^[a-z]{2}\\.[a-z_]+$",
-        "examples": [
-          "de.freiberufler",
-          "br.ltda",
-          "gb.partnership",
-          "bg.private_limited_company"
-        ]
-      },
       "CompanyIdentifiers": {
         "type": "array",
         "description": "A list of country-specific company identifiers.\n",
         "items": {
           "$ref": "#/components/schemas/CompanyIdentifier"
         }
+      },
+      "MerchantsAttributes": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "string",
+          "maxLength": 256
+        },
+        "description": "Object metadata which should only be writable for internal applications, and readable by all clients.\n**Warning**: Updating Attributes will overwrite the existing data. Make sure to always include the complete JSON object.\n",
+        "example": {}
       },
       "CompanyIdentifier": {
         "externalDocs": {
@@ -10431,17 +10648,42 @@
           }
         }
       },
-      "Version": {
-        "type": "string",
-        "description": "The version of the resource. The version reflects a specific change submitted to the API via one of the `PATCH` endpoints.\n",
-        "examples": [
-          "chng_01HS0KG3MPVEVWW85E3KNXH55J"
-        ]
-      },
-      "ChangeStatus": {
-        "type": "string",
-        "readOnly": true,
-        "description": "Reflects the status of changes submitted through the `PATCH` endpoints for the Merchant or Persons. If some changes have not been applied yet, the status will be `pending`. If all changes have been applied, the status `done`.\nThe status is only returned after write operations or on read endpoints when the `version` query parameter is provided.\n"
+      "MerchantsPersonalIdentifiers": {
+        "type": "array",
+        "description": "A list of country-specific personal identifiers.\n",
+        "maxItems": 5,
+        "items": {
+          "type": "object",
+          "required": [
+            "ref",
+            "value"
+          ],
+          "properties": {
+            "ref": {
+              "type": "string",
+              "pattern": "^[a-z]{2}\\.[a-z_]+$",
+              "description": "The unique reference for the personal identifier type as defined in the country SDK.\n",
+              "examples": [
+                "br.cpf"
+              ]
+            },
+            "value": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 30,
+              "description": "The value of the personal identifier.\n",
+              "examples": [
+                "847.060.136-90"
+              ]
+            }
+          },
+          "examples": [
+            {
+              "ref": "br.cpf",
+              "value": "847.060.136-90"
+            }
+          ]
+        }
       },
       "BasePerson": {
         "externalDocs": {
@@ -10490,7 +10732,15 @@
             "maxLength": 60
           },
           "phone_number": {
-            "$ref": "#/components/schemas/PhoneNumber"
+            "description": "The (mobile) phone number of the individual (used for verification) in [E.164](https://en.wikipedia.org/wiki/E.164) format.\n",
+            "allOf": [
+              {
+                "type": "string",
+                "description": "A publicly available phone number in [E.164](https://en.wikipedia.org/wiki/E.164) format.\n",
+                "example": "+420123456789",
+                "maxLength": 16
+              }
+            ]
           },
           "relationships": {
             "type": "array",
@@ -10511,13 +10761,59 @@
             "$ref": "#/components/schemas/Ownership"
           },
           "address": {
-            "$ref": "#/components/schemas/Address"
+            "$ref": "#/components/schemas/MerchantsAddress"
           },
           "identifiers": {
-            "$ref": "#/components/schemas/PersonalIdentifiers"
+            "$ref": "#/components/schemas/MerchantsPersonalIdentifiers"
           },
           "citizenship": {
-            "$ref": "#/components/schemas/CountryCode"
+            "description": "The Alpha-2 ISO code of the country where the Person is a citizen.\n",
+            "allOf": [
+              {
+                "description": "An [ISO3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) country code. This definition uses `oneOf` with a two-character string type to allow for support of future countries in client code.\n",
+                "type": "string",
+                "pattern": "^[A-Z]{2}$",
+                "examples": [
+                  "AR",
+                  "AT",
+                  "AU",
+                  "BE",
+                  "BG",
+                  "BR",
+                  "CH",
+                  "CL",
+                  "CO",
+                  "CY",
+                  "CZ",
+                  "DE",
+                  "DK",
+                  "EE",
+                  "ES",
+                  "FI",
+                  "FR",
+                  "GB",
+                  "GR",
+                  "HU",
+                  "IE",
+                  "IT",
+                  "LT",
+                  "LU",
+                  "LV",
+                  "MT",
+                  "MX",
+                  "NL",
+                  "NO",
+                  "PE",
+                  "PL",
+                  "PT",
+                  "RO",
+                  "SE",
+                  "SI",
+                  "SK",
+                  "US"
+                ]
+              }
+            ]
           },
           "nationality": {
             "type": [
@@ -10536,10 +10832,16 @@
             "pattern": "^[A-Z]{2}$"
           },
           "version": {
-            "$ref": "#/components/schemas/Version"
+            "type": "string",
+            "description": "The version of the resource. The version reflects a specific change submitted to the API via one of the `PATCH` endpoints.\n",
+            "examples": [
+              "chng_01HS0KG3MPVEVWW85E3KNXH55J"
+            ]
           },
           "change_status": {
-            "$ref": "#/components/schemas/ChangeStatus"
+            "type": "string",
+            "readOnly": true,
+            "description": "Reflects the status of changes submitted through the `PATCH` endpoints for the Merchant or Persons. If some changes have not been applied yet, the status will be `pending`. If all changes have been applied, the status `done`.\nThe status is only returned after write operations or on read endpoints when the `version` query parameter is provided.\n"
           }
         }
       },
@@ -10565,23 +10867,48 @@
             "pattern": "^[0-9]{4}$"
           },
           "legal_type": {
-            "$ref": "#/components/schemas/LegalType",
-            "description": "The category identifying the legal structure of the company or legal entity.\n"
+            "description": "The category identifying the legal structure of the company or legal entity.\n",
+            "allOf": [
+              {
+                "externalDocs": {
+                  "description": "The country SDK documentation for legal types.",
+                  "url": "https://developer.sumup.com/tools/glossary/merchant#legal-types"
+                },
+                "type": "string",
+                "description": "The unique legal type reference as defined in the country SDK. We do not rely on IDs as used by other services. Consumers of this API are expected to use the country SDK to map to any other IDs, translation keys, or descriptions.\n",
+                "minLength": 4,
+                "maxLength": 64,
+                "pattern": "^[a-z]{2}\\.[a-z_]+$",
+                "examples": [
+                  "de.freiberufler",
+                  "br.ltda",
+                  "gb.partnership",
+                  "bg.private_limited_company"
+                ]
+              }
+            ]
           },
           "address": {
-            "$ref": "#/components/schemas/Address",
+            "$ref": "#/components/schemas/MerchantsAddress",
             "description": "The company's primary address."
           },
           "trading_address": {
-            "$ref": "#/components/schemas/Address",
+            "$ref": "#/components/schemas/MerchantsAddress",
             "description": "A trading address is where your suppliers, banks or customers send you correspondence to. Trading address can be different to the company's registered address (`address`).\n"
           },
           "identifiers": {
             "$ref": "#/components/schemas/CompanyIdentifiers"
           },
           "phone_number": {
-            "$ref": "#/components/schemas/PhoneNumber",
-            "description": "The company's phone number (used for verification) in [E.164](https://en.wikipedia.org/wiki/E.164) format.\n"
+            "description": "The company's phone number (used for verification) in [E.164](https://en.wikipedia.org/wiki/E.164) format.\n",
+            "allOf": [
+              {
+                "type": "string",
+                "description": "A publicly available phone number in [E.164](https://en.wikipedia.org/wiki/E.164) format.\n",
+                "example": "+420123456789",
+                "maxLength": 16
+              }
+            ]
           },
           "website": {
             "description": "HTTP(S) URL of the company's website.\n",
@@ -10593,7 +10920,7 @@
             ]
           },
           "attributes": {
-            "$ref": "#/components/schemas/Attributes"
+            "$ref": "#/components/schemas/MerchantsAttributes"
           }
         }
       },
@@ -10645,10 +10972,17 @@
         "type": "object",
         "properties": {
           "id": {
-            "$ref": "#/components/schemas/ReaderID"
+            "type": "string",
+            "description": "Unique identifier of the object.\n\nNote that this identifies the instance of the physical devices pairing with your SumUp account. If you [delete](https://developer.sumup.com/api/readers/delete-reader) a reader, and pair the device again, the ID will be different. Do not use this ID to refer to a physical device.",
+            "example": "rdr_3MSAFM23CK82VSTT4BN6RWSQ65",
+            "minLength": 30,
+            "maxLength": 30
           },
           "name": {
-            "$ref": "#/components/schemas/ReaderName"
+            "type": "string",
+            "description": "Custom human-readable, user-defined name for easier identification of the reader.",
+            "maxLength": 500,
+            "example": "Frontdesk"
           },
           "status": {
             "$ref": "#/components/schemas/ReaderStatus"
@@ -10687,12 +11021,6 @@
           "updated_at"
         ]
       },
-      "ReaderName": {
-        "type": "string",
-        "description": "Custom human-readable, user-defined name for easier identification of the reader.",
-        "maxLength": 500,
-        "example": "Frontdesk"
-      },
       "ReaderStatus": {
         "type": "string",
         "example": "paired",
@@ -10728,36 +11056,28 @@
           "model"
         ]
       },
-      "ReaderPairingCode": {
-        "type": "string",
-        "description": "The pairing code is a 8 or 9 character alphanumeric string that is displayed on a SumUp Device after initiating the pairing. It is used to link the physical device to the created pairing.",
-        "example": "4WLFDSBF",
-        "minLength": 8,
-        "maxLength": 9
-      },
-      "Reference": {
-        "type": "string",
-        "description": "The reference to the actual payment used for this sale, e.g. the sumup transaction code.",
-        "example": "TERTYFQ4G3",
-        "maxLength": 50
-      },
-      "Brand": {
-        "type": "string",
-        "description": "The brand of the card.\nInput is case-insensitive; the canonical form is lowercase snake_case.\n**VALUES**: [amex, cup, diners, discover, elo, elv, hipercard, jcb, maestro, mastercard, visa, visa_electron,\nvisa_vpay, vr, eftpos, conecs, swile, girocard, interac, sumup, bancomat].",
-        "maxLength": 20,
-        "example": "visa"
-      },
-      "ItemTypeV10": {
-        "type": "string",
-        "description": "Classifies a sale line. Not a schema subclass.\n\nKnown values: `CATALOG`, `DEPOSIT`, `GIFT_CARD`, `CUSTOM`, `FEE`.\n\n`FEE` lines represent merchant-charged fees on the sale (e.g. shipping, service\ncharge, surcharge, cancellation). They participate in sale totals like any other\nline; type-specific data is carried in `features` (see `Feature` for the\nconventional feature keys).\n\nThis is intentionally an open string, NOT a closed enum: new values are added\nover time as pure data and consumers MUST tolerate unknown values, rendering the\nline from the generic envelope (name, quantity, price, taxes) and reading any\nextra information from `features`.",
-        "example": "CATALOG"
-      },
-      "Quantity": {
-        "type": "number",
-        "format": "double",
-        "description": "The numerical value representing the quantity in the specified unit.",
-        "minimum": 0,
-        "example": 2.15332
+      "SalesActivityCurrency": {
+        "type": "object",
+        "description": "The currency of the sale.",
+        "required": [
+          "code",
+          "scale"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 3,
+            "description": "3-letter currency code as defined by ISO-4217.",
+            "format": "iso-4217",
+            "example": "EUR"
+          },
+          "scale": {
+            "type": "integer",
+            "description": "The scaling factor to apply to the value to arrive at the currency's major unit. Providing a scale mitigates changes to the minor unit over time, for example due to inflation. For example, if `scale` is denoted by `s` and `value` is denoted by  `v` is the value, then one arrives at the major currency value by calculating `v / 10^s`.\n",
+            "example": 2
+          }
+        }
       },
       "UnitOfMeasure": {
         "type": "object",
@@ -10788,20 +11108,6 @@
           }
         }
       },
-      "PositiveAmount": {
-        "type": "integer",
-        "format": "int64",
-        "description": "The value of the amount in minor units of the currency according to the Sale.currency.scale. \n`value` can get large for some currencies and applications. \nUse Long type or a similar data type when parsing `value`.",
-        "example": 100,
-        "minimum": 0
-      },
-      "TaxRate": {
-        "type": "integer",
-        "format": "int64",
-        "minimum": 0,
-        "description": "The tax rate percentage in minor units (1/100000). For example 19000 = 19%.",
-        "example": 19000
-      },
       "TaxLine": {
         "type": "object",
         "required": [
@@ -10824,13 +11130,20 @@
             "maxLength": 255
           },
           "percentage": {
-            "$ref": "#/components/schemas/TaxRate"
+            "type": "integer",
+            "format": "int64",
+            "minimum": 0,
+            "description": "The tax rate percentage in minor units (1/100000). For example 19000 = 19%.",
+            "example": 19000
           },
           "net_amount": {
             "description": "Net amount before applying the tax. \nThe value of the amount in minor units of the currency according to the Sale.currency.scale.\n",
             "allOf": [
               {
-                "$ref": "#/components/schemas/Amount"
+                "type": "integer",
+                "format": "int64",
+                "description": "The value of the amount in minor units of the currency according to the Sale.currency.scale. \n`value` can get large for some currencies and applications. \nUse Long type or a similar data type when parsing `value`.",
+                "example": 100
               }
             ]
           },
@@ -10838,7 +11151,10 @@
             "description": "Gross amount after applying the tax.\nThe value of the amount in minor units of the currency according to the Sale.currency.scale.\n",
             "allOf": [
               {
-                "$ref": "#/components/schemas/Amount"
+                "type": "integer",
+                "format": "int64",
+                "description": "The value of the amount in minor units of the currency according to the Sale.currency.scale. \n`value` can get large for some currencies and applications. \nUse Long type or a similar data type when parsing `value`.",
+                "example": 100
               }
             ]
           },
@@ -10846,18 +11162,14 @@
             "description": "Amount of tax.\nThe value of the amount in minor units of the currency according to the Sale.currency.scale.\n",
             "allOf": [
               {
-                "$ref": "#/components/schemas/Amount"
+                "type": "integer",
+                "format": "int64",
+                "description": "The value of the amount in minor units of the currency according to the Sale.currency.scale. \n`value` can get large for some currencies and applications. \nUse Long type or a similar data type when parsing `value`.",
+                "example": 100
               }
             ]
           }
         }
-      },
-      "DiscountLevel": {
-        "type": "string",
-        "description": "Specifies where discount was applied by user (either merchant or consumer):\n- CART: Applied to the whole cart (calculated and distributed per sale item)\n- ITEM: Applied to specific sale item\n\n*Accepted values:* [\"ITEM\", \"CART\"].",
-        "example": "CART",
-        "minLength": 4,
-        "maxLength": 4
       },
       "DiscountSourceAdHoc": {
         "type": "object",
@@ -11128,7 +11440,11 @@
             "description": "The absolute value in minor units of the currency according to the Sale.currency.scale.\nExample: 10000 = 10.00\n",
             "allOf": [
               {
-                "$ref": "#/components/schemas/PositiveAmount"
+                "type": "integer",
+                "format": "int64",
+                "description": "The value of the amount in minor units of the currency according to the Sale.currency.scale. \n`value` can get large for some currencies and applications. \nUse Long type or a similar data type when parsing `value`.",
+                "example": 100,
+                "minimum": 0
               }
             ]
           },
@@ -11166,7 +11482,11 @@
             "maxLength": 250
           },
           "level": {
-            "$ref": "#/components/schemas/DiscountLevel"
+            "type": "string",
+            "description": "Specifies where discount was applied by user (either merchant or consumer):\n- CART: Applied to the whole cart (calculated and distributed per sale item)\n- ITEM: Applied to specific sale item\n\n*Accepted values:* [\"ITEM\", \"CART\"].",
+            "example": "CART",
+            "minLength": 4,
+            "maxLength": 4
           },
           "source": {
             "$ref": "#/components/schemas/DiscountSource"
@@ -11178,7 +11498,11 @@
             "description": "The net amount of the discount.\nThe value of the amount in minor units of the currency according to the Sale.currency.scale.\n",
             "allOf": [
               {
-                "$ref": "#/components/schemas/PositiveAmount"
+                "type": "integer",
+                "format": "int64",
+                "description": "The value of the amount in minor units of the currency according to the Sale.currency.scale. \n`value` can get large for some currencies and applications. \nUse Long type or a similar data type when parsing `value`.",
+                "example": 100,
+                "minimum": 0
               }
             ]
           },
@@ -11186,7 +11510,11 @@
             "description": "The gross amount of the discount.\nThe value of the amount in minor units of the currency according to the Sale.currency.scale.\n",
             "allOf": [
               {
-                "$ref": "#/components/schemas/PositiveAmount"
+                "type": "integer",
+                "format": "int64",
+                "description": "The value of the amount in minor units of the currency according to the Sale.currency.scale. \n`value` can get large for some currencies and applications. \nUse Long type or a similar data type when parsing `value`.",
+                "example": 100,
+                "minimum": 0
               }
             ]
           },
@@ -11194,7 +11522,11 @@
             "description": "The tax amount of the discount.\nThe value of the amount in minor units of the currency according to the Sale.currency.scale.\n",
             "allOf": [
               {
-                "$ref": "#/components/schemas/PositiveAmount"
+                "type": "integer",
+                "format": "int64",
+                "description": "The value of the amount in minor units of the currency according to the Sale.currency.scale. \n`value` can get large for some currencies and applications. \nUse Long type or a similar data type when parsing `value`.",
+                "example": 100,
+                "minimum": 0
               }
             ]
           }
@@ -11217,7 +11549,11 @@
             "description": "The price of a single unit. If the tax_mode is GROSS it includes taxes,\notherwise no tax is included. It does NOT include discounts.\n",
             "allOf": [
               {
-                "$ref": "#/components/schemas/PositiveAmount"
+                "type": "integer",
+                "format": "int64",
+                "description": "The value of the amount in minor units of the currency according to the Sale.currency.scale. \n`value` can get large for some currencies and applications. \nUse Long type or a similar data type when parsing `value`.",
+                "example": 100,
+                "minimum": 0
               }
             ],
             "example": 300
@@ -11226,7 +11562,10 @@
             "description": "The net amount (including modifiers if applied). It does NOT include discounts.",
             "allOf": [
               {
-                "$ref": "#/components/schemas/Amount"
+                "type": "integer",
+                "format": "int64",
+                "description": "The value of the amount in minor units of the currency according to the Sale.currency.scale. \n`value` can get large for some currencies and applications. \nUse Long type or a similar data type when parsing `value`.",
+                "example": 100
               }
             ],
             "example": 252
@@ -11235,7 +11574,10 @@
             "description": "The gross amount (including modifiers if applied). It does NOT include discounts.",
             "allOf": [
               {
-                "$ref": "#/components/schemas/Amount"
+                "type": "integer",
+                "format": "int64",
+                "description": "The value of the amount in minor units of the currency according to the Sale.currency.scale. \n`value` can get large for some currencies and applications. \nUse Long type or a similar data type when parsing `value`.",
+                "example": 100
               }
             ],
             "example": 300
@@ -11270,7 +11612,10 @@
             "description": "The final net amount including discounts and modifiers. Equals `total_net_amount` if no discounts apply.",
             "allOf": [
               {
-                "$ref": "#/components/schemas/Amount"
+                "type": "integer",
+                "format": "int64",
+                "description": "The value of the amount in minor units of the currency according to the Sale.currency.scale. \n`value` can get large for some currencies and applications. \nUse Long type or a similar data type when parsing `value`.",
+                "example": 100
               }
             ],
             "example": 210
@@ -11279,7 +11624,10 @@
             "description": "The final gross amount including discounts, modifiers and taxes. Equals `total_gross_amount` if no discounts apply.",
             "allOf": [
               {
-                "$ref": "#/components/schemas/Amount"
+                "type": "integer",
+                "format": "int64",
+                "description": "The value of the amount in minor units of the currency according to the Sale.currency.scale. \n`value` can get large for some currencies and applications. \nUse Long type or a similar data type when parsing `value`.",
+                "example": 100
               }
             ],
             "example": 250
@@ -11338,7 +11686,11 @@
             "description": "The price of a single unit.\nIf the tax_mode is GROSS, it includes taxes, otherwise no tax included.\nIt doesn't include discounts.\n",
             "allOf": [
               {
-                "$ref": "#/components/schemas/PositiveAmount"
+                "type": "integer",
+                "format": "int64",
+                "description": "The value of the amount in minor units of the currency according to the Sale.currency.scale. \n`value` can get large for some currencies and applications. \nUse Long type or a similar data type when parsing `value`.",
+                "example": 100,
+                "minimum": 0
               }
             ]
           },
@@ -11346,7 +11698,10 @@
             "description": "The net amount (including modifiers if applied). It does NOT include discounts.",
             "allOf": [
               {
-                "$ref": "#/components/schemas/Amount"
+                "type": "integer",
+                "format": "int64",
+                "description": "The value of the amount in minor units of the currency according to the Sale.currency.scale. \n`value` can get large for some currencies and applications. \nUse Long type or a similar data type when parsing `value`.",
+                "example": 100
               }
             ]
           },
@@ -11354,7 +11709,10 @@
             "description": "The gross amount (including modifiers if applied). It does NOT include discounts.",
             "allOf": [
               {
-                "$ref": "#/components/schemas/Amount"
+                "type": "integer",
+                "format": "int64",
+                "description": "The value of the amount in minor units of the currency according to the Sale.currency.scale. \n`value` can get large for some currencies and applications. \nUse Long type or a similar data type when parsing `value`.",
+                "example": 100
               }
             ]
           }
@@ -11370,10 +11728,18 @@
             "type": "object",
             "properties": {
               "total_net_amount": {
-                "$ref": "#/components/schemas/PositiveAmount"
+                "type": "integer",
+                "format": "int64",
+                "description": "The value of the amount in minor units of the currency according to the Sale.currency.scale. \n`value` can get large for some currencies and applications. \nUse Long type or a similar data type when parsing `value`.",
+                "example": 100,
+                "minimum": 0
               },
               "total_gross_amount": {
-                "$ref": "#/components/schemas/PositiveAmount"
+                "type": "integer",
+                "format": "int64",
+                "description": "The value of the amount in minor units of the currency according to the Sale.currency.scale. \n`value` can get large for some currencies and applications. \nUse Long type or a similar data type when parsing `value`.",
+                "example": 100,
+                "minimum": 0
               }
             }
           }
@@ -11392,7 +11758,11 @@
                 "description": "Net amount before applying the tax. \nThe value of the amount in minor units of the currency according to the Sale.currency.scale.\n",
                 "allOf": [
                   {
-                    "$ref": "#/components/schemas/PositiveAmount"
+                    "type": "integer",
+                    "format": "int64",
+                    "description": "The value of the amount in minor units of the currency according to the Sale.currency.scale. \n`value` can get large for some currencies and applications. \nUse Long type or a similar data type when parsing `value`.",
+                    "example": 100,
+                    "minimum": 0
                   }
                 ]
               },
@@ -11400,7 +11770,11 @@
                 "description": "Gross amount after applying the tax.\nThe value of the amount in minor units of the currency according to the Sale.currency.scale.\n",
                 "allOf": [
                   {
-                    "$ref": "#/components/schemas/PositiveAmount"
+                    "type": "integer",
+                    "format": "int64",
+                    "description": "The value of the amount in minor units of the currency according to the Sale.currency.scale. \n`value` can get large for some currencies and applications. \nUse Long type or a similar data type when parsing `value`.",
+                    "example": 100,
+                    "minimum": 0
                   }
                 ]
               },
@@ -11408,7 +11782,11 @@
                 "description": "Amount of tax.\nThe value of the amount in minor units of the currency according to the Sale.currency.scale.\n",
                 "allOf": [
                   {
-                    "$ref": "#/components/schemas/PositiveAmount"
+                    "type": "integer",
+                    "format": "int64",
+                    "description": "The value of the amount in minor units of the currency according to the Sale.currency.scale. \n`value` can get large for some currencies and applications. \nUse Long type or a similar data type when parsing `value`.",
+                    "example": 100,
+                    "minimum": 0
                   }
                 ]
               }
@@ -11462,7 +11840,11 @@
             "description": "The final net amount includes discounts and modifiers. It does NOT include taxes. If no discounts are applied, it should be equal to total_net_amount.",
             "allOf": [
               {
-                "$ref": "#/components/schemas/PositiveAmount"
+                "type": "integer",
+                "format": "int64",
+                "description": "The value of the amount in minor units of the currency according to the Sale.currency.scale. \n`value` can get large for some currencies and applications. \nUse Long type or a similar data type when parsing `value`.",
+                "example": 100,
+                "minimum": 0
               }
             ]
           },
@@ -11470,7 +11852,11 @@
             "description": "The final gross amount includes discounts, modifiers, and taxes. If no discounts are applied, it should be equal to total_gross_amount.",
             "allOf": [
               {
-                "$ref": "#/components/schemas/PositiveAmount"
+                "type": "integer",
+                "format": "int64",
+                "description": "The value of the amount in minor units of the currency according to the Sale.currency.scale. \n`value` can get large for some currencies and applications. \nUse Long type or a similar data type when parsing `value`.",
+                "example": 100,
+                "minimum": 0
               }
             ]
           },
@@ -11543,7 +11929,11 @@
                 "$ref": "#/components/schemas/ModifierSet"
               },
               "quantity": {
-                "$ref": "#/components/schemas/Quantity"
+                "type": "number",
+                "format": "double",
+                "description": "The numerical value representing the quantity in the specified unit.",
+                "minimum": 0,
+                "example": 2.15332
               }
             }
           }
@@ -11640,7 +12030,9 @@
             "example": "line-1"
           },
           "type": {
-            "$ref": "#/components/schemas/ItemTypeV10"
+            "type": "string",
+            "description": "Classifies a sale line. Not a schema subclass.\n\nKnown values: `CATALOG`, `DEPOSIT`, `GIFT_CARD`, `CUSTOM`, `FEE`.\n\n`FEE` lines represent merchant-charged fees on the sale (e.g. shipping, service\ncharge, surcharge, cancellation). They participate in sale totals like any other\nline; type-specific data is carried in `features` (see `Feature` for the\nconventional feature keys).\n\nThis is intentionally an open string, NOT a closed enum: new values are added\nover time as pure data and consumers MUST tolerate unknown values, rendering the\nline from the generic envelope (name, quantity, price, taxes) and reading any\nextra information from `features`.",
+            "example": "CATALOG"
           },
           "name": {
             "type": "string",
@@ -11649,7 +12041,11 @@
             "example": "Cappuccino"
           },
           "quantity": {
-            "$ref": "#/components/schemas/Quantity"
+            "type": "number",
+            "format": "double",
+            "description": "The numerical value representing the quantity in the specified unit.",
+            "minimum": 0,
+            "example": 2.15332
           },
           "unit_of_measure": {
             "$ref": "#/components/schemas/UnitOfMeasure"
@@ -11728,7 +12124,10 @@
             "description": "Final net total for the sale: sum of `items[].price.total_net_amount_final`\nafter cart-level discounts (tips excluded).\nIn minor units according to `Sale.currency.scale`.",
             "allOf": [
               {
-                "$ref": "#/components/schemas/Amount"
+                "type": "integer",
+                "format": "int64",
+                "description": "The value of the amount in minor units of the currency according to the Sale.currency.scale. \n`value` can get large for some currencies and applications. \nUse Long type or a similar data type when parsing `value`.",
+                "example": 100
               }
             ],
             "example": 777
@@ -11737,7 +12136,10 @@
             "description": "Final gross total for the sale: sum of `items[].price.total_gross_amount_final`\nafter cart-level discounts (tips excluded).\nSame value as search `total_amount`, in minor units according to `Sale.currency.scale`.\nPayment amounts include tips and can therefore differ from this gross total.",
             "allOf": [
               {
-                "$ref": "#/components/schemas/Amount"
+                "type": "integer",
+                "format": "int64",
+                "description": "The value of the amount in minor units of the currency according to the Sale.currency.scale. \n`value` can get large for some currencies and applications. \nUse Long type or a similar data type when parsing `value`.",
+                "example": 100
               }
             ],
             "example": 925
@@ -11780,17 +12182,14 @@
         ],
         "example": "NO_TAX"
       },
-      "SalesChannel": {
-        "type": "string",
-        "description": "The sale_channel is field that indicates the channel through\nwhich the sale was made. For example, if the sale was made in the merchant app,\nthe sale_channel could be POS. If the sale was made on a kiosk, the\nsale_channel is KIOSK.\n\n*Accepted values:* [\"POS\", \"KIOSK\", \"ONLINE_STORE\", \"SOLO\", \"ORDER_AND_PAY\", \"INVOICE\", \"BOOKINGS\", \"ORDER_AGGREGATOR\", \"SUBSCRIPTIONS\", \"UNKNOWN\"].",
-        "example": "POS"
-      },
       "SaleSource": {
         "type": "object",
         "description": "Information about the source of the sale.",
         "properties": {
           "channel": {
-            "$ref": "#/components/schemas/SalesChannel"
+            "type": "string",
+            "description": "The sale_channel is field that indicates the channel through\nwhich the sale was made. For example, if the sale was made in the merchant app,\nthe sale_channel could be POS. If the sale was made on a kiosk, the\nsale_channel is KIOSK.\n\n*Accepted values:* [\"POS\", \"KIOSK\", \"ONLINE_STORE\", \"SOLO\", \"ORDER_AND_PAY\", \"INVOICE\", \"BOOKINGS\", \"ORDER_AGGREGATOR\", \"SUBSCRIPTIONS\", \"UNKNOWN\"].",
+            "example": "POS"
           },
           "sub_channel": {
             "type": "string",
@@ -11815,17 +12214,6 @@
           "channel"
         ]
       },
-      "PublicPaymentMethod": {
-        "type": "string",
-        "description": "Payment method on public sales read API v1.0.\nDigital wallets are first-class methods. Gift card payments use `gift_card`, not `apm`.\nInput is case-insensitive; the canonical form is lowercase snake_case.\n**VALUES**: [card, cash, apm, external, apple_pay, google_pay, whatsapp_pay, gift_card].",
-        "example": "card",
-        "maxLength": 20
-      },
-      "PublicApmType": {
-        "type": "string",
-        "description": "Alternative payment method type when `method` is `apm`.\nGift card is not an APM on this API.\nInput is case-insensitive; the canonical form is lowercase snake_case.\n**VALUES**: [qr_code_pix, sepa_dd, paypal, sumup_pay, twint, iris].",
-        "maxLength": 20
-      },
       "PublicCardV10": {
         "type": "object",
         "description": "Card brand, credit/debit processing type, and last four digits.",
@@ -11836,7 +12224,10 @@
         ],
         "properties": {
           "brand": {
-            "$ref": "#/components/schemas/Brand"
+            "type": "string",
+            "description": "The brand of the card.\nInput is case-insensitive; the canonical form is lowercase snake_case.\n**VALUES**: [amex, cup, diners, discover, elo, elv, hipercard, jcb, maestro, mastercard, visa, visa_electron,\nvisa_vpay, vr, eftpos, conecs, swile, girocard, interac, sumup, bancomat].",
+            "maxLength": 20,
+            "example": "visa"
           },
           "type": {
             "type": "string",
@@ -11886,10 +12277,16 @@
         ],
         "properties": {
           "method": {
-            "$ref": "#/components/schemas/PublicPaymentMethod"
+            "type": "string",
+            "description": "Payment method on public sales read API v1.0.\nDigital wallets are first-class methods. Gift card payments use `gift_card`, not `apm`.\nInput is case-insensitive; the canonical form is lowercase snake_case.\n**VALUES**: [card, cash, apm, external, apple_pay, google_pay, whatsapp_pay, gift_card].",
+            "example": "card",
+            "maxLength": 20
           },
           "reference": {
-            "$ref": "#/components/schemas/Reference"
+            "type": "string",
+            "description": "The reference to the actual payment used for this sale, e.g. the sumup transaction code.",
+            "example": "TERTYFQ4G3",
+            "maxLength": 50
           },
           "type": {
             "type": "string",
@@ -11901,7 +12298,11 @@
             "description": "The amount of the payment including tips.\nThe value of the amount in minor units of `Sale.currency`.\n",
             "allOf": [
               {
-                "$ref": "#/components/schemas/PositiveAmount"
+                "type": "integer",
+                "format": "int64",
+                "description": "The value of the amount in minor units of the currency according to the Sale.currency.scale. \n`value` can get large for some currencies and applications. \nUse Long type or a similar data type when parsing `value`.",
+                "example": 100,
+                "minimum": 0
               }
             ],
             "example": 975
@@ -11917,7 +12318,9 @@
             "example": "SUCCESSFUL"
           },
           "apm_type": {
-            "$ref": "#/components/schemas/PublicApmType"
+            "type": "string",
+            "description": "Alternative payment method type when `method` is `apm`.\nGift card is not an APM on this API.\nInput is case-insensitive; the canonical form is lowercase snake_case.\n**VALUES**: [qr_code_pix, sepa_dd, paypal, sumup_pay, twint, iris].",
+            "maxLength": 20
           },
           "card": {
             "$ref": "#/components/schemas/PublicCardV10"
@@ -11970,7 +12373,7 @@
             "example": "d6f51684-519b-454c-bdb3-deeb05f52b92"
           },
           "currency": {
-            "$ref": "#/components/schemas/Currency"
+            "$ref": "#/components/schemas/SalesActivityCurrency"
           },
           "name": {
             "type": "string",
@@ -12225,13 +12628,16 @@
             ]
           },
           "currency": {
-            "$ref": "#/components/schemas/Currency"
+            "$ref": "#/components/schemas/SalesActivityCurrency"
           },
           "total_amount": {
             "description": "Final sale gross total after discounts and taxes, excluding tips.\nSame value as `Sale.price.gross_amount`, in minor units according to `currency.scale`.\nPayment amounts include tips and can therefore differ from this total.",
             "allOf": [
               {
-                "$ref": "#/components/schemas/Amount"
+                "type": "integer",
+                "format": "int64",
+                "description": "The value of the amount in minor units of the currency according to the Sale.currency.scale. \n`value` can get large for some currencies and applications. \nUse Long type or a similar data type when parsing `value`.",
+                "example": 100
               }
             ],
             "example": 1250
@@ -13309,6 +13715,81 @@
             "example": 899
           }
         }
+      },
+      "WebhooksEvent": {
+        "type": "object",
+        "required": [
+          "id",
+          "type",
+          "created_at",
+          "object"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "maxLength": 64,
+            "description": "Unique id for this event"
+          },
+          "type": {
+            "$ref": "#/components/schemas/EventType"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "UTC timestamp when the event was created"
+          },
+          "object": {
+            "$ref": "#/components/schemas/EventObject"
+          }
+        }
+      },
+      "EventObject": {
+        "type": "object",
+        "required": [
+          "id",
+          "type",
+          "url"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Identifier of the resource associated with the event"
+          },
+          "type": {
+            "type": "string",
+            "description": "Type of the resource associated with the event",
+            "enum": [
+              "member",
+              "reader"
+            ]
+          },
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "description": "URL pointing to the resource or relevant documentation"
+          }
+        }
+      },
+      "EventType": {
+        "type": "string",
+        "description": "The event type name used when subscribing to an event destination.",
+        "enum": [
+          "checkouts.created",
+          "checkouts.failed",
+          "checkouts.expired",
+          "checkouts.updated",
+          "checkouts.paid",
+          "sales.completed",
+          "sales.updated",
+          "members.created",
+          "members.updated",
+          "members.deleted",
+          "readers.created",
+          "readers.deleted",
+          "roles.created",
+          "roles.updated",
+          "roles.deleted"
+        ]
       }
     },
     "requestBodies": {
@@ -13466,544 +13947,7 @@
         }
       }
     },
-    "responses": {
-      "Checkout": {
-        "description": "Returns the created checkout resource.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/Checkout"
-            },
-            "examples": {
-              "Checkout": {
-                "description": "Standard response body for a successfully created checkout",
-                "value": {
-                  "checkout_reference": "8ea25ec3-3293-40e9-a165-6d7f3b3073c5",
-                  "amount": 10.1,
-                  "currency": "EUR",
-                  "merchant_code": "MH4H92C7",
-                  "merchant_country": "DE",
-                  "description": "My Checkout",
-                  "return_url": "http://example.com",
-                  "id": "88fcf8de-304d-4820-8f1c-ec880290eb92",
-                  "status": "PENDING",
-                  "date": "2020-02-29T10:56:56+00:00",
-                  "valid_until": "2030-12-31T23:59:59Z",
-                  "customer_id": "831ff8d4cd5958ab5670",
-                  "mandate": {
-                    "type": "recurrent",
-                    "status": "active",
-                    "merchant_code": "MH4H92C7"
-                  },
-                  "transactions": [
-                    {
-                      "id": "410fc44a-5956-44e1-b5cc-19c6f8d727a4",
-                      "transaction_code": "TEENSK4W2K",
-                      "amount": 10.1,
-                      "currency": "EUR",
-                      "timestamp": "2020-02-29T10:56:56.876Z",
-                      "status": "SUCCESSFUL",
-                      "payment_type": "ECOM",
-                      "installments_count": 1,
-                      "merchant_code": "MH4H92C7",
-                      "vat_amount": 6,
-                      "tip_amount": 3,
-                      "entry_mode": "CUSTOMER_ENTRY",
-                      "auth_code": "012345"
-                    }
-                  ]
-                }
-              },
-              "Checkout3DS": {
-                "description": "Response body for a successfully created 3DS checkout",
-                "value": {
-                  "checkout_reference": "8ea25ec3-3293-40e9-a165-6d7f3b3073c5",
-                  "amount": 10.1,
-                  "currency": "EUR",
-                  "description": "My Checkout",
-                  "return_url": "http://example.com",
-                  "id": "88fcf8de-304d-4820-8f1c-ec880290eb92",
-                  "status": "PENDING",
-                  "date": "2020-02-29T10:56:56+00:00",
-                  "valid_until": "2030-12-31T23:59:59Z",
-                  "customer_id": "831ff8d4cd5958ab5670",
-                  "redirect_url": "https://mysite.com/completed_purchase",
-                  "transactions": [
-                    {
-                      "id": "410fc44a-5956-44e1-b5cc-19c6f8d727a4",
-                      "transaction_code": "TEENSK4W2K",
-                      "amount": 10.1,
-                      "currency": "EUR",
-                      "timestamp": "2020-02-29T10:56:56.876Z",
-                      "status": "SUCCESSFUL",
-                      "payment_type": "ECOM",
-                      "installments_count": 1,
-                      "merchant_code": "MH4H92C7",
-                      "vat_amount": 6,
-                      "tip_amount": 3,
-                      "entry_mode": "CUSTOMER_ENTRY",
-                      "auth_code": "012345"
-                    }
-                  ]
-                }
-              },
-              "CheckoutAPM": {
-                "description": "Response body for APMs, including Blik, iDeal, ...",
-                "value": {
-                  "checkout_reference": "8ea25ec3-3293-40e9-a165-6d7f3b3073c5",
-                  "amount": 10.1,
-                  "currency": "EUR",
-                  "merchant_code": "MH4H92C7",
-                  "description": "My Checkout",
-                  "return_url": "http://example.com",
-                  "id": "88fcf8de-304d-4820-8f1c-ec880290eb92",
-                  "status": "PENDING",
-                  "date": "2021-06-29T11:08:36.000+00:00",
-                  "merchant_name": "My company",
-                  "merchant_country": "DE",
-                  "redirect_url": "https://sumup.com",
-                  "purpose": "CHECKOUT",
-                  "transactions": [
-                    {
-                      "id": "410fc44a-5956-44e1-b5cc-19c6f8d727a4",
-                      "transaction_code": "TEENSK4W2K",
-                      "amount": 10.1,
-                      "currency": "EUR",
-                      "timestamp": "2020-02-29T10:56:56.876Z",
-                      "status": "SUCCESSFUL",
-                      "payment_type": "ECOM",
-                      "installments_count": 1,
-                      "merchant_code": "MH4H92C7",
-                      "vat_amount": 6,
-                      "tip_amount": 3,
-                      "entry_mode": "CUSTOMER_ENTRY",
-                      "auth_code": "012345"
-                    }
-                  ]
-                }
-              },
-              "HostedCheckout": {
-                "description": "Response body for a checkout with a SumUp-hosted payment page",
-                "value": {
-                  "checkout_reference": "b50pr914-6k0e-3091-a592-890010285b3d",
-                  "amount": 12,
-                  "currency": "EUR",
-                  "merchant_code": "MCXXXXXX",
-                  "merchant_country": "DE",
-                  "merchant_name": "Sample Shop",
-                  "description": "A sample checkout",
-                  "id": "64553e20-3f0e-49e4-8af3-fd0eca86ce91",
-                  "status": "PENDING",
-                  "date": "2000-01-01T12:49:24.899+00:00",
-                  "purpose": "CHECKOUT",
-                  "hosted_checkout": {
-                    "enabled": true
-                  },
-                  "hosted_checkout_url": "https://checkout.sumup.com/pay/8f9316a3-cda9-42a9-9771-54d534315676",
-                  "transactions": []
-                }
-              },
-              "Tokenization": {
-                "summary": "Checkout for saving a card",
-                "value": {
-                  "checkout_reference": "save-card-123",
-                  "amount": 1,
-                  "currency": "EUR",
-                  "merchant_code": "MCXXXXXX",
-                  "description": "Save a card for future payments",
-                  "customer_id": "831ff8d4cd5958ab5670",
-                  "purpose": "SETUP_RECURRING_PAYMENT",
-                  "id": "7164c99b-13cb-42a1-8ba1-3c2c46a29de7",
-                  "status": "PENDING",
-                  "date": "2026-10-30T12:00:00+00:00",
-                  "transactions": []
-                }
-              }
-            }
-          }
-        }
-      },
-      "CheckoutUpdate": {
-        "description": "Returns the updated checkout resource.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/Checkout"
-            },
-            "example": {
-              "checkout_reference": "f00a8f74-b05d-4605-bd73-2a901bae5802",
-              "amount": 12.5,
-              "currency": "EUR",
-              "merchant_code": "MH4H92C7",
-              "merchant_country": "DE",
-              "description": "Updated purchase",
-              "id": "88fcf8de-304d-4820-8f1c-ec880290eb92",
-              "status": "PENDING",
-              "date": "2020-02-29T10:56:56+00:00",
-              "valid_until": "2030-12-31T23:59:59Z",
-              "customer_id": "831ff8d4cd5958ab5670",
-              "transactions": []
-            }
-          }
-        }
-      },
-      "CheckoutList": {
-        "description": "Returns a list of checkout resources.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/components/schemas/CheckoutSuccess"
-              }
-            },
-            "example": [
-              {
-                "checkout_reference": "f00a8f74-b05d-4605-bd73-2a901bae5802",
-                "amount": 10.1,
-                "currency": "EUR",
-                "merchant_code": "MH4H92C7",
-                "description": "Purchase",
-                "id": "4e425463-3e1b-431d-83fa-1e51c2925e99",
-                "status": "PENDING",
-                "date": "2020-02-29T10:56:56+00:00"
-              }
-            ]
-          }
-        }
-      },
-      "CheckoutRetrieve": {
-        "description": "Returns the requested checkout resource.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/CheckoutSuccess"
-            },
-            "examples": {
-              "Checkout": {
-                "value": {
-                  "checkout_reference": "f00a8f74-b05d-4605-bd73-2a901bae5802",
-                  "amount": 10.1,
-                  "currency": "EUR",
-                  "merchant_code": "MH4H92C7",
-                  "description": "Purchase",
-                  "id": "4e425463-3e1b-431d-83fa-1e51c2925e99",
-                  "status": "PENDING",
-                  "date": "2020-02-29T10:56:56+00:00",
-                  "transaction_code": "TEENSK4W2K",
-                  "transaction_id": "410fc44a-5956-44e1-b5cc-19c6f8d727a4"
-                }
-              },
-              "PaidCheckout": {
-                "summary": "Paid checkout with a transaction to refund",
-                "value": {
-                  "checkout_reference": "f00a8f74-b05d-4605-bd73-2a901bae5802",
-                  "amount": 42.42,
-                  "currency": "EUR",
-                  "merchant_code": "MH4H92C7",
-                  "description": "Purchase",
-                  "id": "4e425463-3e1b-431d-83fa-1e51c2925e99",
-                  "status": "PAID",
-                  "date": "2020-02-29T10:56:56+00:00",
-                  "transaction_code": "TEENSK4W2K",
-                  "transaction_id": "410fc44a-5956-44e1-b5cc-19c6f8d727a4",
-                  "transactions": [
-                    {
-                      "id": "410fc44a-5956-44e1-b5cc-19c6f8d727a4",
-                      "transaction_code": "TEENSK4W2K",
-                      "amount": 42.42,
-                      "currency": "EUR",
-                      "status": "SUCCESSFUL",
-                      "timestamp": "2026-10-30T12:00:00+00:00"
-                    }
-                  ]
-                }
-              },
-              "TokenizedCheckout": {
-                "summary": "Checkout with a saved card",
-                "value": {
-                  "checkout_reference": "save-card-123",
-                  "amount": 1,
-                  "currency": "EUR",
-                  "merchant_code": "MCXXXXXX",
-                  "description": "Save a card for future payments",
-                  "customer_id": "831ff8d4cd5958ab5670",
-                  "purpose": "SETUP_RECURRING_PAYMENT",
-                  "id": "7164c99b-13cb-42a1-8ba1-3c2c46a29de7",
-                  "status": "PAID",
-                  "date": "2026-10-30T12:00:00+00:00",
-                  "transactions": [],
-                  "payment_instrument": {
-                    "token": "6878cb7f-6515-47bf-bdd9-1408d270fdce"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "CheckoutProcessAccepted": {
-        "description": "Returns the next required action for asynchronous checkout processing.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/CheckoutAccepted"
-            }
-          }
-        }
-      },
-      "Customer": {
-        "description": "Returns the customer resource.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/Customer"
-            }
-          }
-        }
-      },
-      "PaymentInstrumentList": {
-        "description": "Returns the list of saved payment instruments for the customer.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/components/schemas/PaymentInstrumentResponse"
-              }
-            }
-          }
-        }
-      },
-      "Transaction": {
-        "description": "Returns the requested transaction resource.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/TransactionFull"
-            },
-            "example": {
-              "id": "410fc44a-5956-44e1-b5cc-19c6f8d727a4",
-              "transaction_code": "TEENSK4W2K",
-              "amount": 10.1,
-              "currency": "EUR",
-              "timestamp": "2020-02-29T10:56:56.876Z",
-              "status": "SUCCESSFUL",
-              "payment_type": "ECOM",
-              "installments_count": 1,
-              "merchant_code": "MH4H92C7",
-              "vat_amount": 6,
-              "tip_amount": 3,
-              "entry_mode": "CUSTOMER_ENTRY",
-              "auth_code": "053201"
-            }
-          }
-        }
-      },
-      "NoBodyResponse": {
-        "description": "Returns an empty response body when the operation succeeds."
-      },
-      "ErrorNotAuthorized": {
-        "description": "The request is not authorized.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/Problem"
-            },
-            "examples": {
-              "Problem_Details": {
-                "description": "Unauthorized response returned by API gateway.",
-                "value": {
-                  "detail": "Unauthorized.",
-                  "status": 401,
-                  "title": "Unauthorized",
-                  "trace_id": "3c77294349d3b5647ea2d990f0d8f017",
-                  "type": "https://developer.sumup.com/problem/unauthorized"
-                }
-              }
-            }
-          }
-        }
-      },
-      "ErrorForbidden": {
-        "description": "The request is authenticated but not permitted for this operation.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ErrorForbidden"
-            },
-            "examples": {
-              "Forbidden": {
-                "description": "You do not have required scopes for making this request.",
-                "value": {
-                  "error_message": "request_not_allowed",
-                  "error_code": "FORBIDDEN",
-                  "status_code": "403"
-                }
-              }
-            }
-          }
-        }
-      },
-      "ErrorNotFound": {
-        "description": "The requested resource does not exist.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/Error"
-            },
-            "examples": {
-              "Not_Found": {
-                "description": "The identified resource is not found on the server.",
-                "value": {
-                  "error_code": "NOT_FOUND",
-                  "message": "Resource not found"
-                }
-              }
-            }
-          }
-        }
-      },
-      "ErrorConflict": {
-        "description": "The request conflicts with the current state of the resource.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/Error"
-            },
-            "examples": {
-              "Checkout_Processed": {
-                "description": "The identified checkout resource is already processed.",
-                "value": {
-                  "error_code": "CHECKOUT_PROCESSED",
-                  "message": "Checkout is already processed"
-                }
-              }
-            }
-          }
-        }
-      },
-      "BadRequest": {
-        "description": "The request is invalid.",
-        "content": {
-          "application/problem+json": {
-            "schema": {
-              "$ref": "#/components/schemas/Problem"
-            },
-            "example": {
-              "type": "https://developer.sumup.com/problem/bad-request",
-              "title": "Bad Request",
-              "status": 400,
-              "detail": "Request validation failed."
-            }
-          }
-        }
-      },
-      "Unauthorized": {
-        "description": "Authentication failed or missing required scope.",
-        "content": {
-          "application/problem+json": {
-            "schema": {
-              "$ref": "#/components/schemas/Problem"
-            },
-            "example": {
-              "type": "https://developer.sumup.com/problem/unauthorized",
-              "title": "Unauthorized",
-              "status": 401,
-              "detail": "Authentication credentials are missing or invalid."
-            }
-          }
-        }
-      },
-      "NotFound": {
-        "description": "The requested Reader resource does not exist.",
-        "content": {
-          "application/problem+json": {
-            "schema": {
-              "$ref": "#/components/schemas/Problem"
-            },
-            "example": {
-              "type": "https://developer.sumup.com/problem/not-found",
-              "title": "Requested resource couldn't be found.",
-              "status": 404,
-              "detail": "The requested resource doesn't exist or does not belong to you."
-            }
-          }
-        }
-      },
-      "ListMemberships": {
-        "description": "Returns a list of Membership objects.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object",
-              "required": [
-                "total_count",
-                "items"
-              ],
-              "properties": {
-                "items": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Membership"
-                  }
-                },
-                "total_count": {
-                  "type": "integer",
-                  "example": 3
-                }
-              }
-            }
-          }
-        }
-      },
-      "ListMembers": {
-        "description": "Returns a list of Member objects.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object",
-              "required": [
-                "items"
-              ],
-              "properties": {
-                "items": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Member"
-                  }
-                },
-                "total_count": {
-                  "type": "integer",
-                  "example": 3
-                }
-              }
-            }
-          }
-        }
-      },
-      "ListRoles": {
-        "description": "Returns a list of Role objects.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object",
-              "required": [
-                "items"
-              ],
-              "properties": {
-                "items": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Role"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
+    "responses": {},
     "parameters": {
       "CheckoutReference": {
         "name": "checkout_reference",
@@ -14302,7 +14246,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Event"
+                "$ref": "#/components/schemas/WebhooksEvent"
               },
               "examples": {
                 "completed": {
@@ -14346,7 +14290,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Event"
+                "$ref": "#/components/schemas/WebhooksEvent"
               },
               "examples": {
                 "updated": {
@@ -14390,7 +14334,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Event"
+                "$ref": "#/components/schemas/WebhooksEvent"
               },
               "examples": {
                 "created": {
@@ -14433,7 +14377,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Event"
+                "$ref": "#/components/schemas/WebhooksEvent"
               },
               "examples": {
                 "failed": {
@@ -14476,7 +14420,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Event"
+                "$ref": "#/components/schemas/WebhooksEvent"
               },
               "examples": {
                 "expired": {
@@ -14519,7 +14463,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Event"
+                "$ref": "#/components/schemas/WebhooksEvent"
               },
               "examples": {
                 "updated": {
@@ -14562,7 +14506,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Event"
+                "$ref": "#/components/schemas/WebhooksEvent"
               },
               "examples": {
                 "paid": {
@@ -14605,7 +14549,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Event"
+                "$ref": "#/components/schemas/WebhooksEvent"
               },
               "examples": {
                 "created": {
@@ -14649,7 +14593,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Event"
+                "$ref": "#/components/schemas/WebhooksEvent"
               },
               "examples": {
                 "deleted": {
@@ -14693,7 +14637,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Event"
+                "$ref": "#/components/schemas/WebhooksEvent"
               },
               "examples": {
                 "created": {
@@ -14737,7 +14681,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Event"
+                "$ref": "#/components/schemas/WebhooksEvent"
               },
               "examples": {
                 "updated": {
@@ -14781,7 +14725,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Event"
+                "$ref": "#/components/schemas/WebhooksEvent"
               },
               "examples": {
                 "deleted": {
@@ -14825,7 +14769,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Event"
+                "$ref": "#/components/schemas/WebhooksEvent"
               },
               "examples": {
                 "created": {
@@ -14869,7 +14813,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Event"
+                "$ref": "#/components/schemas/WebhooksEvent"
               },
               "examples": {
                 "updated": {
@@ -14913,7 +14857,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Event"
+                "$ref": "#/components/schemas/WebhooksEvent"
               },
               "examples": {
                 "deleted": {
