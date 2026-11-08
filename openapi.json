@@ -7911,8 +7911,8 @@
           }
         }
       },
-      "Event": {
-        "title": "Event",
+      "TransactionEvent": {
+        "title": "Transaction Event",
         "description": "High-level transaction event details.",
         "type": "object",
         "properties": {
@@ -8798,8 +8798,8 @@
           }
         }
       },
-      "TransactionEvent": {
-        "title": "Transaction Event",
+      "TransactionEventDetails": {
+        "title": "Transaction Event Details",
         "type": "object",
         "description": "Detailed information about a transaction event.",
         "properties": {
@@ -9297,7 +9297,7 @@
                 "type": "array",
                 "description": "Detailed list of events related to the transaction.",
                 "items": {
-                  "$ref": "#/components/schemas/TransactionEvent"
+                  "$ref": "#/components/schemas/TransactionEventDetails"
                 }
               },
               "simple_status": {
@@ -9328,7 +9328,7 @@
                 "type": "array",
                 "description": "Compact list of events related to the transaction.",
                 "items": {
-                  "$ref": "#/components/schemas/Event"
+                  "$ref": "#/components/schemas/TransactionEvent"
                 }
               },
               "location": {
@@ -13716,7 +13716,7 @@
           }
         }
       },
-      "WebhooksEvent": {
+      "Event": {
         "type": "object",
         "required": [
           "id",
@@ -14246,7 +14246,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/WebhooksEvent"
+                "$ref": "#/components/schemas/Event"
               },
               "examples": {
                 "completed": {
@@ -14290,7 +14290,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/WebhooksEvent"
+                "$ref": "#/components/schemas/Event"
               },
               "examples": {
                 "updated": {
@@ -14334,7 +14334,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/WebhooksEvent"
+                "$ref": "#/components/schemas/Event"
               },
               "examples": {
                 "created": {
@@ -14377,7 +14377,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/WebhooksEvent"
+                "$ref": "#/components/schemas/Event"
               },
               "examples": {
                 "failed": {
@@ -14420,7 +14420,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/WebhooksEvent"
+                "$ref": "#/components/schemas/Event"
               },
               "examples": {
                 "expired": {
@@ -14463,7 +14463,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/WebhooksEvent"
+                "$ref": "#/components/schemas/Event"
               },
               "examples": {
                 "updated": {
@@ -14506,7 +14506,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/WebhooksEvent"
+                "$ref": "#/components/schemas/Event"
               },
               "examples": {
                 "paid": {
@@ -14549,7 +14549,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/WebhooksEvent"
+                "$ref": "#/components/schemas/Event"
               },
               "examples": {
                 "created": {
@@ -14593,7 +14593,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/WebhooksEvent"
+                "$ref": "#/components/schemas/Event"
               },
               "examples": {
                 "deleted": {
@@ -14637,7 +14637,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/WebhooksEvent"
+                "$ref": "#/components/schemas/Event"
               },
               "examples": {
                 "created": {
@@ -14681,7 +14681,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/WebhooksEvent"
+                "$ref": "#/components/schemas/Event"
               },
               "examples": {
                 "updated": {
@@ -14725,7 +14725,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/WebhooksEvent"
+                "$ref": "#/components/schemas/Event"
               },
               "examples": {
                 "deleted": {
@@ -14769,7 +14769,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/WebhooksEvent"
+                "$ref": "#/components/schemas/Event"
               },
               "examples": {
                 "created": {
@@ -14813,7 +14813,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/WebhooksEvent"
+                "$ref": "#/components/schemas/Event"
               },
               "examples": {
                 "updated": {
@@ -14857,7 +14857,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/WebhooksEvent"
+                "$ref": "#/components/schemas/Event"
               },
               "examples": {
                 "deleted": {
