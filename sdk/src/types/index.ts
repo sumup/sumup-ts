@@ -133,6 +133,7 @@ export type { Token } from "./token";
 export type { TransactionBase } from "./transaction-base";
 export type { TransactionCheckoutInfo } from "./transaction-checkout-info";
 export type { TransactionEvent } from "./transaction-event";
+export type { TransactionEventDetails } from "./transaction-event-details";
 export type { TransactionEventStatus } from "./transaction-event-status";
 export type { TransactionEventType } from "./transaction-event-type";
 export type { TransactionFull } from "./transaction-full";
@@ -147,4 +148,3 @@ export type { UpdateReaderSettingsRequest } from "./update-reader-settings-reque
 export type { UpdateReaderSettingsResponse } from "./update-reader-settings-response";
 export type { UpdateReaderSettingsUnprocessableEntity } from "./update-reader-settings-unprocessable-entity";
 export type { UserType } from "./user-type";
-export type { WebhooksEvent } from "./webhooks-event";
