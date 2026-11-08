@@ -4,10 +4,7 @@ import type { CardResponse } from "./card-response";
 import type { Device } from "./device";
 import type { ElvCardAccount } from "./elv-card-account";
 import type { Event } from "./event";
-import type { HorizontalAccuracy } from "./horizontal-accuracy";
-import type { Lat } from "./lat";
 import type { Link } from "./link";
-import type { Lon } from "./lon";
 import type { Product } from "./product";
 import type { TransactionBase } from "./transaction-base";
 import type { TransactionCheckoutInfo } from "./transaction-checkout-info";
@@ -38,9 +35,24 @@ export type TransactionFull = TransactionBase &
      * Total SumUp transaction fee in major units of the transaction's currency.
      */
     fee_amount?: number;
-    lat?: Lat;
-    lon?: Lon;
-    horizontal_accuracy?: HorizontalAccuracy;
+    /**
+     * Latitude
+     *
+     * Latitude value from the coordinates of the payment location (as received from the payment terminal reader).
+     */
+    lat?: number;
+    /**
+     * Longitude
+     *
+     * Longitude value from the coordinates of the payment location (as received from the payment terminal reader).
+     */
+    lon?: number;
+    /**
+     * Horizontal Accuracy
+     *
+     * Indication of the precision of the geographical position received from the payment terminal.
+     */
+    horizontal_accuracy?: number;
     /**
      * Internal SumUp identifier of the merchant.
      */
@@ -158,9 +170,24 @@ export type TransactionFull = TransactionBase &
      * Details of the payment location as received from the payment terminal.
      */
     location?: {
-      lat?: Lat;
-      lon?: Lon;
-      horizontal_accuracy?: HorizontalAccuracy;
+      /**
+       * Latitude
+       *
+       * Latitude value from the coordinates of the payment location (as received from the payment terminal reader).
+       */
+      lat?: number;
+      /**
+       * Longitude
+       *
+       * Longitude value from the coordinates of the payment location (as received from the payment terminal reader).
+       */
+      lon?: number;
+      /**
+       * Horizontal Accuracy
+       *
+       * Indication of the precision of the geographical position received from the payment terminal.
+       */
+      horizontal_accuracy?: number;
     };
     /**
      * Indicates whether tax deduction is enabled for the transaction.

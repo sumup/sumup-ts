@@ -5,18 +5,36 @@ import {
   type RequestOptions,
   type WithResponse,
 } from "../../core";
-import type { Membership, MembershipStatus, ResourceType } from "../../types";
+import type { Membership, MembershipStatus } from "../../types";
 export type ListMembershipsQueryParams = {
   offset?: number;
   limit?: number;
-  kind?: ResourceType;
+  /**
+   * The type of the membership resource.
+   * Possible values are:
+   * * `merchant` - merchant account(s)
+   * * `organization` - organization(s)
+   */
+  kind?: string;
   status?: MembershipStatus;
-  "resource.type"?: ResourceType;
+  /**
+   * The type of the membership resource.
+   * Possible values are:
+   * * `merchant` - merchant account(s)
+   * * `organization` - organization(s)
+   */
+  "resource.type"?: string;
   "resource.attributes.sandbox"?: boolean;
   "resource.name"?: string;
   "resource.id"?: string;
   "resource.parent.id"?: string | "";
-  "resource.parent.type"?: ResourceType | "";
+  /**
+   * The type of the membership resource.
+   * Possible values are:
+   * * `merchant` - merchant account(s)
+   * * `organization` - organization(s)
+   */
+  "resource.parent.type"?: string | "";
   roles?: string[];
 };
 

@@ -3,10 +3,8 @@
 import type { CategoryV10 } from "./category-v10";
 import type { FeatureV10 } from "./feature-v10";
 import type { ItemReferencesV10 } from "./item-references-v10";
-import type { ItemTypeV10 } from "./item-type-v10";
 import type { LineItemPriceV10 } from "./line-item-price-v10";
 import type { ModifierItem } from "./modifier-item";
-import type { Quantity } from "./quantity";
 import type { UnitOfMeasure } from "./unit-of-measure";
 
 /**
@@ -22,12 +20,30 @@ export type SaleLineItemV10 = {
    * Stable identifier of the line within the sale. Used for linking (e.g. deposits).
    */
   id: string;
-  type: ItemTypeV10;
+  /**
+   * Classifies a sale line. Not a schema subclass.
+   *
+   * Known values: `CATALOG`, `DEPOSIT`, `GIFT_CARD`, `CUSTOM`, `FEE`.
+   *
+   * `FEE` lines represent merchant-charged fees on the sale (e.g. shipping, service
+   * charge, surcharge, cancellation). They participate in sale totals like any other
+   * line; type-specific data is carried in `features` (see `Feature` for the
+   * conventional feature keys).
+   *
+   * This is intentionally an open string, NOT a closed enum: new values are added
+   * over time as pure data and consumers MUST tolerate unknown values, rendering the
+   * line from the generic envelope (name, quantity, price, taxes) and reading any
+   * extra information from `features`.
+   */
+  type: string;
   /**
    * Display name of the line.
    */
   name: string;
-  quantity: Quantity;
+  /**
+   * The numerical value representing the quantity in the specified unit.
+   */
+  quantity: number;
   unit_of_measure: UnitOfMeasure;
   /**
    * The type of service for this line.

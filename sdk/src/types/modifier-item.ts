@@ -3,7 +3,6 @@
 import type { FinalPriceAmounts } from "./final-price-amounts";
 import type { ModifierSet } from "./modifier-set";
 import type { PositivePriceWithTaxes } from "./positive-price-with-taxes";
-import type { Quantity } from "./quantity";
 
 /**
  * Modifiers are reported under line items and can be build from Item Catalog objects.
@@ -21,5 +20,8 @@ export type ModifierItem = Record<string, unknown> &
        */
       name: string;
       set: ModifierSet;
-      quantity: Quantity;
+      /**
+       * The numerical value representing the quantity in the specified unit.
+       */
+      quantity: number;
     });
