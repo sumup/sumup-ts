@@ -1,13 +1,13 @@
 import type { HTTPClient } from "./client";
 import { type RequestOptions, SumUpError } from "./core";
+import type { Event } from "./types/event";
 import type { EventObject as SchemaEventObject } from "./types/event-object";
-import type { WebhooksEvent } from "./types/webhooks-event";
 
 /** Reference to the affected resource. Use the notification's fetchObject() method to retrieve it. */
 export type EventObject = Omit<SchemaEventObject, "type"> & { type: string };
 
 /** @internal Wire representation shared by generated event classes. */
-export type EventPayload = Omit<WebhooksEvent, "type" | "object"> & {
+export type EventPayload = Omit<Event, "type" | "object"> & {
   // Accept future event and object names so they can reach fallback callbacks.
   type: string;
   object: EventObject;

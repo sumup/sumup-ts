@@ -3,12 +3,12 @@
 import type { CardResponse } from "./card-response";
 import type { Device } from "./device";
 import type { ElvCardAccount } from "./elv-card-account";
-import type { Event } from "./event";
 import type { Link } from "./link";
 import type { Product } from "./product";
 import type { TransactionBase } from "./transaction-base";
 import type { TransactionCheckoutInfo } from "./transaction-checkout-info";
 import type { TransactionEvent } from "./transaction-event";
+import type { TransactionEventDetails } from "./transaction-event-details";
 import type { TransactionMixinHistory } from "./transaction-mixin-history";
 
 /**
@@ -164,7 +164,7 @@ export type TransactionFull = TransactionBase &
     /**
      * Detailed list of events related to the transaction.
      */
-    transaction_events?: TransactionEvent[];
+    transaction_events?: TransactionEventDetails[];
     /**
      * High-level status of the transaction from the merchant's perspective.
      *
@@ -197,7 +197,7 @@ export type TransactionFull = TransactionBase &
     /**
      * Compact list of events related to the transaction.
      */
-    events?: Event[];
+    events?: TransactionEvent[];
     /**
      * Details of the payment location as received from the payment terminal.
      */

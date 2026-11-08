@@ -6,7 +6,7 @@ import type { TransactionEventType } from "./transaction-event-type";
 /**
  * Transaction Event
  *
- * Detailed information about a transaction event.
+ * High-level transaction event details.
  */
 export type TransactionEvent = {
   /**
@@ -17,34 +17,46 @@ export type TransactionEvent = {
    * Format: int64
    */
   id?: number;
-  event_type?: TransactionEventType;
+  /**
+   * Transaction ID
+   *
+   * Unique identifier of the transaction.
+   */
+  transaction_id?: string;
+  type?: TransactionEventType;
   status?: TransactionEventStatus;
   /**
-   * Amount of the event in major units of the associated transaction's currency.
+   * Amount associated with the transaction event, in major units.
    *
-   * Format: decimal
+   * Format: float
    */
   amount?: number;
   /**
-   * Date when the transaction event is due to occur.
-   *
-   * Format: date
-   */
-  due_date?: string;
-  /**
-   * Date when the transaction event occurred.
-   *
-   * Format: date
-   */
-  date?: string;
-  /**
-   * Consecutive number of the installment that is paid. Applicable only to payout events, i.e. `event_type = PAYOUT`.
-   */
-  installment_number?: number;
-  /**
-   * Date and time of the transaction event.
+   * The timestamp of when the transaction event occurred.
    *
    * Format: date-time
    */
   timestamp?: string;
+  /**
+   * Fee associated with the transaction event, in major units.
+   *
+   * Format: float
+   */
+  fee_amount?: number;
+  /**
+   * Consecutive number of the installment associated with the event.
+   */
+  installment_number?: number;
+  /**
+   * Amount deducted from the merchant for the event, in major units.
+   *
+   * Format: float
+   */
+  deducted_amount?: number;
+  /**
+   * Fee deducted from the merchant for the event, in major units.
+   *
+   * Format: float
+   */
+  deducted_fee_amount?: number;
 };
