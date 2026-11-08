@@ -2,6 +2,7 @@
 import type { HTTPClient } from "./client";
 import { EventBase, type EventPayload, UnknownEvent } from "./event";
 import type { Checkout } from "./types/checkout";
+import type { EventType } from "./types/event-type";
 import type { Member } from "./types/member";
 import type { Reader } from "./types/reader";
 import type { Role } from "./types/role";
@@ -66,24 +67,26 @@ export class SaleCompletedEvent extends EventBase<Sale> {
 export class SaleUpdatedEvent extends EventBase<Sale> {
   declare readonly type: "sales.updated";
 }
+type KnownEventNotification =
+  | CheckoutCreatedEvent
+  | CheckoutExpiredEvent
+  | CheckoutFailedEvent
+  | CheckoutPaidEvent
+  | CheckoutUpdatedEvent
+  | MemberCreatedEvent
+  | MemberDeletedEvent
+  | MemberUpdatedEvent
+  | ReaderCreatedEvent
+  | ReaderDeletedEvent
+  | RoleCreatedEvent
+  | RoleDeletedEvent
+  | RoleUpdatedEvent
+  | SaleCompletedEvent
+  | SaleUpdatedEvent;
 /** Known wire event names and their notification classes. */
-export interface EventMap {
-  "checkouts.created": CheckoutCreatedEvent;
-  "checkouts.expired": CheckoutExpiredEvent;
-  "checkouts.failed": CheckoutFailedEvent;
-  "checkouts.paid": CheckoutPaidEvent;
-  "checkouts.updated": CheckoutUpdatedEvent;
-  "members.created": MemberCreatedEvent;
-  "members.deleted": MemberDeletedEvent;
-  "members.updated": MemberUpdatedEvent;
-  "readers.created": ReaderCreatedEvent;
-  "readers.deleted": ReaderDeletedEvent;
-  "roles.created": RoleCreatedEvent;
-  "roles.deleted": RoleDeletedEvent;
-  "roles.updated": RoleUpdatedEvent;
-  "sales.completed": SaleCompletedEvent;
-  "sales.updated": SaleUpdatedEvent;
-}
+export type EventMap = {
+  [Type in EventType]: Extract<KnownEventNotification, { type: Type }>;
+};
 /** A recognized event notification or {@link UnknownEvent}. Narrow with instanceof to access a specific resource type. */
 export type EventNotification = EventMap[keyof EventMap] | UnknownEvent;
 /** @internal Construct the typed notification from the decoded JSON object. */
