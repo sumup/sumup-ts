@@ -2565,7 +2565,7 @@
                   "merchant_code": "MH4H92C7",
                   "vat_amount": 6,
                   "tip_amount": 3,
-                  "entry_mode": "CUSTOMER_ENTRY",
+                  "entry_mode": "customer entry",
                   "auth_code": "053201"
                 }
               }
@@ -2750,8 +2750,8 @@
             "schema": {
               "type": "array",
               "example": [
-                "CUSTOMER_ENTRY",
-                "CHIP"
+                "customer entry",
+                "chip"
               ],
               "items": {
                 "$ref": "#/components/schemas/EntryMode"
@@ -7401,6 +7401,14 @@
                 },
                 {
                   "$ref": "#/components/schemas/TransactionCheckoutInfo"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "entry_mode": {
+                      "$ref": "#/components/schemas/CheckoutEntryMode"
+                    }
+                  }
                 }
               ]
             }
@@ -8913,9 +8921,6 @@
             "description": "Tip included in the total transaction amount, in major units of the transaction's currency.",
             "example": 3
           },
-          "entry_mode": {
-            "$ref": "#/components/schemas/EntryMode"
-          },
           "auth_code": {
             "type": "string",
             "description": "Authorization code for the transaction sent by the payment card issuer or bank. Applicable only to card payments.",
@@ -8928,6 +8933,9 @@
         "description": "Additional transaction fields used by history and detailed views.",
         "type": "object",
         "properties": {
+          "entry_mode": {
+            "$ref": "#/components/schemas/EntryMode"
+          },
           "product_summary": {
             "type": "string",
             "description": "Short description of the payment. The value is taken from the `description` property of the related checkout resource.",
@@ -9042,13 +9050,16 @@
         ],
         "example": "ECOM"
       },
-      "EntryMode": {
-        "title": "Entry Mode",
+      "CheckoutEntryMode": {
+        "title": "Checkout Entry Mode",
         "type": "string",
-        "description": "How the payment details were captured, for example `CHIP` or `CONTACTLESS` for card-present payments and `CUSTOMER_ENTRY` for card details entered by the payer. For wallet and alternative payment methods, this can identify the method, such as `APPLE_PAY` or `BLIK`.",
+        "description": "How the payment details were captured for a checkout transaction, for example `CUSTOMER_ENTRY` for card details entered by the payer or `APPLE_PAY` for an Apple Pay payment. Checkout entry modes use uppercase values, unlike entry modes returned by the Transactions endpoints.",
         "enum": [
+          "CUSTOMER_ENTRY",
+          "MOTO",
+          "CARD",
           "BOLETO",
-          "SOFORT",
+          "DIRECT_DEBIT",
           "IDEAL",
           "BANCONTACT",
           "EPS",
@@ -9059,23 +9070,51 @@
           "GIROPAY",
           "PIX",
           "QR_CODE_PIX",
+          "KLARNA",
+          "BANCOMATPAY",
           "APPLE_PAY",
-          "GOOGLE_PAY",
           "PAYPAL",
-          "TWINT",
-          "NONE",
-          "CHIP",
-          "MANUAL_ENTRY",
-          "CUSTOMER_ENTRY",
-          "MAGSTRIPE_FALLBACK",
-          "MAGSTRIPE",
-          "DIRECT_DEBIT",
-          "CONTACTLESS",
-          "MOTO",
-          "CONTACTLESS_MAGSTRIPE",
-          "N/A"
+          "GOOGLE_PAY"
         ],
         "example": "CUSTOMER_ENTRY"
+      },
+      "EntryMode": {
+        "title": "Entry Mode",
+        "type": "string",
+        "description": "How the payment details were captured, for example `chip` or `contactless` for card-present payments and `customer entry` for card details entered by the payer. For wallet and alternative payment methods, this can identify the method, such as `apple pay` or `blik`.",
+        "enum": [
+          "none",
+          "magstripe",
+          "chip",
+          "manual entry",
+          "customer entry",
+          "magstripe fallback",
+          "contactless",
+          "moto",
+          "contactless magstripe",
+          "boleto",
+          "direct debit",
+          "sofort",
+          "ideal",
+          "bancontact",
+          "eps",
+          "mybank",
+          "satispay",
+          "blik",
+          "p24",
+          "giropay",
+          "pix",
+          "qr code pix",
+          "apple pay",
+          "google pay",
+          "sumup gift card",
+          "paypal",
+          "twint",
+          "iris",
+          "sumup pay",
+          "na"
+        ],
+        "example": "customer entry"
       },
       "CardType": {
         "title": "Card Type",
@@ -14087,8 +14126,8 @@
         "schema": {
           "type": "array",
           "example": [
-            "CUSTOMER_ENTRY",
-            "CHIP"
+            "customer entry",
+            "chip"
           ],
           "items": {
             "$ref": "#/components/schemas/EntryMode"
