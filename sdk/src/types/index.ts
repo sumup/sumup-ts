@@ -15,6 +15,7 @@ export type { CategoryV10 } from "./category-v10";
 export type { Checkout } from "./checkout";
 export type { CheckoutAccepted } from "./checkout-accepted";
 export type { CheckoutCreateRequest } from "./checkout-create-request";
+export type { CheckoutEntryMode } from "./checkout-entry-mode";
 export type { CheckoutSuccess } from "./checkout-success";
 export type { CheckoutUpdateRequest } from "./checkout-update-request";
 export type { ClassicMerchantIdentifiers } from "./classic-merchant-identifiers";
