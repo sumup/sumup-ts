@@ -15,8 +15,9 @@ export type PublicPaymentV10 = {
   /**
    * Payment method on public sales read API v1.0.
    * Digital wallets are first-class methods. Gift card payments use `gift_card`, not `apm`.
-   * Input is case-insensitive; the canonical form is lowercase snake_case.
-   * **VALUES**: [card, cash, apm, external, apple_pay, google_pay, whatsapp_pay, gift_card].
+   * Values use lowercase snake_case. Known values are `card`, `cash`, `apm`, `external`,
+   * `apple_pay`, `google_pay`, `whatsapp_pay`, and `gift_card`.
+   * Additional values may be returned as new payment methods become available.
    *
    * Max length: 20
    */
@@ -30,10 +31,8 @@ export type PublicPaymentV10 = {
   /**
    * Payment operation type.
    * This is distinct from the payment instrument in `method`.
-   * Input is case-insensitive; the canonical form is lowercase snake_case.
-   * **VALUES**: [purchase, unreferenced_refund]
-   * Defaults to "purchase" if unspecified. Either a normal purchase or an unreferenced refund for negative
-   * sales like deposit returns.
+   * Values use lowercase snake_case. Known values are `purchase` for a normal purchase
+   * and `unreferenced_refund` for negative sales such as deposit returns.
    *
    *
    * Default: "purchase"
@@ -60,8 +59,9 @@ export type PublicPaymentV10 = {
   /**
    * Alternative payment method type when `method` is `apm`.
    * Gift card is not an APM on this API.
-   * Input is case-insensitive; the canonical form is lowercase snake_case.
-   * **VALUES**: [qr_code_pix, sepa_dd, paypal, sumup_pay, twint, iris].
+   * Values use lowercase snake_case. Known values are `qr_code_pix`, `sepa_dd`, `paypal`,
+   * `sumup_pay`, `twint`, and `iris`.
+   * Additional values may be returned as new alternative payment methods become available.
    *
    * Max length: 20
    */
