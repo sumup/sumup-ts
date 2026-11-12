@@ -13,10 +13,9 @@ import type {
 } from "../../types";
 export type ListSalesV10QueryParams = {
   /**
-   * Pagination token for subsequent requests. Should only be set by clients if they have
-   * received a token in the previous response, and this request is an immediate follow-up
-   * request to that response to load the subsequent page. Clients should treat this as an
-   * opaque token and should not attempt to parse it in any way.
+   * Opaque token from the previous list response. Omit it on the first request. To load
+   * the next page, pass the returned token unchanged. Not interchangeable with tokens
+   * from `POST /sales/search`.
    */
   pagination_token?: string;
   /**
@@ -34,7 +33,12 @@ export type ListSalesV10QueryParams = {
 /**
  * API resource for the Sales endpoints.
  *
- * Operations related to reading sales data.
+ * Read a merchant's fully-paid, closed sales, including item lines, taxes, discounts, and payments.
+ *
+ * List sales to retrieve full `Sale` objects, or search by date, payment status, and sales channel
+ * to retrieve summaries. Use a summary's `id` to get the full sale.
+ *
+ * Amounts are expressed in minor units according to each sale's `currency.scale`.
  */
 export class Sales extends APIResource {
   /**
@@ -44,7 +48,7 @@ export class Sales extends APIResource {
    * Covers the merchant’s **last two years** of sales. Non-finalised sales are never returned;
    * only fully-paid sales. Use `POST /sales/search` for filtered queries.
    */
-  listSalesV10(
+  list(
     merchantCode: string,
     query?: ListSalesV10QueryParams,
     options?: RequestOptions,
@@ -56,7 +60,7 @@ export class Sales extends APIResource {
     });
   }
 
-  listSalesV10WithResponse(
+  listWithResponse(
     merchantCode: string,
     query?: ListSalesV10QueryParams,
     options?: RequestOptions,
@@ -77,7 +81,7 @@ export class Sales extends APIResource {
    * (narrow further with `start_date` / `end_date`). Pagination tokens are not interchangeable
    * with `GET /sales`.
    */
-  searchSalesV10(
+  search(
     merchantCode: string,
     body: SaleSearchRequest,
     options?: RequestOptions,
@@ -89,7 +93,7 @@ export class Sales extends APIResource {
     });
   }
 
-  searchSalesV10WithResponse(
+  searchWithResponse(
     merchantCode: string,
     body: SaleSearchRequest,
     options?: RequestOptions,
@@ -105,7 +109,7 @@ export class Sales extends APIResource {
    * Returns `Sale` for `sale_id`, including item lines and `payments[]`.
    * Non-finalised sales are never returned; only fully-paid sales.
    */
-  getSaleV10(
+  get(
     merchantCode: string,
     saleId: string,
     options?: RequestOptions,
@@ -116,7 +120,7 @@ export class Sales extends APIResource {
     });
   }
 
-  getSaleV10WithResponse(
+  getWithResponse(
     merchantCode: string,
     saleId: string,
     options?: RequestOptions,

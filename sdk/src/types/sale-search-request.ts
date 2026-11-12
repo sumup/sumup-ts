@@ -41,8 +41,8 @@ export type SaleSearchRequest = {
    */
   sales_channels?: SalesChannelFilterV10[];
   /**
-   * Opaque pagination token from a previous search response. Not interchangeable with tokens
-   * from `GET /sales`.
+   * Opaque token from the previous search response. To load the next page, send it with
+   * the same filters. Not interchangeable with tokens from `GET /sales`.
    */
   pagination_token?: string;
   /**
