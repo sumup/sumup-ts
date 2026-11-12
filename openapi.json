@@ -106,13 +106,10 @@
     },
     {
       "name": "Sales",
-      "description": "Operations related to reading sales data.",
+      "description": "Read a merchant's fully-paid, closed sales, including item lines, taxes, discounts, and payments.\n\nList sales to retrieve full `Sale` objects, or search by date, payment status, and sales channel\nto retrieve summaries. Use a summary's `id` to get the full sale.\n\nAmounts are expressed in minor units according to each sale's `currency.scale`.",
       "x-core-objects": [
         {
           "$ref": "#/components/schemas/Sale"
-        },
-        {
-          "$ref": "#/components/schemas/PublicPaymentV10"
         }
       ],
       "x-displayName": "Sales"
@@ -275,7 +272,11 @@
           },
           {
             "oauth2": [
-              "payments",
+              "payments"
+            ]
+          },
+          {
+            "oauth2": [
               "checkouts.write"
             ]
           }
@@ -616,7 +617,11 @@
           },
           {
             "oauth2": [
-              "payments",
+              "payments"
+            ]
+          },
+          {
+            "oauth2": [
               "checkouts.read"
             ]
           }
@@ -717,7 +722,11 @@
           },
           {
             "oauth2": [
-              "payments",
+              "payments"
+            ]
+          },
+          {
+            "oauth2": [
               "checkouts.read"
             ]
           }
@@ -856,7 +865,11 @@
           },
           {
             "oauth2": [
-              "payments",
+              "payments"
+            ]
+          },
+          {
+            "oauth2": [
               "checkouts.write"
             ]
           }
@@ -968,7 +981,11 @@
           },
           {
             "oauth2": [
-              "payments",
+              "payments"
+            ]
+          },
+          {
+            "oauth2": [
               "checkouts.write"
             ]
           }
@@ -1412,7 +1429,11 @@
           },
           {
             "oauth2": [
-              "payments",
+              "payments"
+            ]
+          },
+          {
+            "oauth2": [
               "checkouts.write"
             ]
           }
@@ -1657,7 +1678,11 @@
           },
           {
             "oauth2": [
-              "payment_instruments",
+              "payment_instruments"
+            ]
+          },
+          {
+            "oauth2": [
               "customers.write"
             ]
           }
@@ -1808,7 +1833,11 @@
           },
           {
             "oauth2": [
-              "payment_instruments",
+              "payment_instruments"
+            ]
+          },
+          {
+            "oauth2": [
               "customers.read"
             ]
           }
@@ -1907,7 +1936,11 @@
           },
           {
             "oauth2": [
-              "payment_instruments",
+              "payment_instruments"
+            ]
+          },
+          {
+            "oauth2": [
               "customers.write"
             ]
           }
@@ -2036,7 +2069,11 @@
           },
           {
             "oauth2": [
-              "payment_instruments",
+              "payment_instruments"
+            ]
+          },
+          {
+            "oauth2": [
               "customers.read"
             ]
           }
@@ -2162,7 +2199,11 @@
           },
           {
             "oauth2": [
-              "payment_instruments",
+              "payment_instruments"
+            ]
+          },
+          {
+            "oauth2": [
               "customers.write"
             ]
           }
@@ -2297,7 +2338,11 @@
           },
           {
             "oauth2": [
-              "payments",
+              "payments"
+            ]
+          },
+          {
+            "oauth2": [
               "refunds.write"
             ]
           }
@@ -2483,7 +2528,11 @@
           },
           {
             "oauth2": [
-              "transactions.history",
+              "transactions.history"
+            ]
+          },
+          {
+            "oauth2": [
               "transactions.read"
             ]
           }
@@ -2629,7 +2678,11 @@
           },
           {
             "oauth2": [
-              "transactions.history",
+              "transactions.history"
+            ]
+          },
+          {
+            "oauth2": [
               "transactions.read"
             ]
           }
@@ -2958,8 +3011,16 @@
           },
           {
             "oauth2": [
-              "user.profile",
-              "user.profile_readonly",
+              "user.profile"
+            ]
+          },
+          {
+            "oauth2": [
+              "user.profile_readonly"
+            ]
+          },
+          {
+            "oauth2": [
               "payouts.read"
             ]
           }
@@ -3157,7 +3218,11 @@
           },
           {
             "oauth2": [
-              "receipts.read",
+              "receipts.read"
+            ]
+          },
+          {
+            "oauth2": [
               "transactions.history"
             ]
           }
@@ -3437,7 +3502,11 @@
           },
           {
             "oauth2": [
-              "payments",
+              "payments"
+            ]
+          },
+          {
+            "oauth2": [
               "readers.write"
             ]
           }
@@ -3465,7 +3534,11 @@
           },
           {
             "oauth2": [
-              "user.profile",
+              "user.profile"
+            ]
+          },
+          {
+            "oauth2": [
               "user.profile_readonly"
             ]
           }
@@ -3764,7 +3837,11 @@
           },
           {
             "oauth2": [
-              "user.subaccounts",
+              "user.subaccounts"
+            ]
+          },
+          {
+            "oauth2": [
               "members.read"
             ]
           }
@@ -3826,7 +3903,11 @@
           },
           {
             "oauth2": [
-              "user.subaccounts",
+              "user.subaccounts"
+            ]
+          },
+          {
+            "oauth2": [
               "members.write"
             ]
           }
@@ -4007,7 +4088,11 @@
           },
           {
             "oauth2": [
-              "user.subaccounts",
+              "user.subaccounts"
+            ]
+          },
+          {
+            "oauth2": [
               "members.read"
             ]
           }
@@ -4090,7 +4175,11 @@
           },
           {
             "oauth2": [
-              "user.subaccounts",
+              "user.subaccounts"
+            ]
+          },
+          {
+            "oauth2": [
               "members.write"
             ]
           }
@@ -4278,7 +4367,11 @@
           },
           {
             "oauth2": [
-              "user.subaccounts",
+              "user.subaccounts"
+            ]
+          },
+          {
+            "oauth2": [
               "members.write"
             ]
           }
@@ -4372,7 +4465,11 @@
           },
           {
             "oauth2": [
-              "user.subaccounts",
+              "user.subaccounts"
+            ]
+          },
+          {
+            "oauth2": [
               "roles.read"
             ]
           }
@@ -4442,7 +4539,11 @@
           },
           {
             "oauth2": [
-              "user.subaccounts",
+              "user.subaccounts"
+            ]
+          },
+          {
+            "oauth2": [
               "roles.write"
             ]
           }
@@ -4590,7 +4691,11 @@
           },
           {
             "oauth2": [
-              "user.subaccounts",
+              "user.subaccounts"
+            ]
+          },
+          {
+            "oauth2": [
               "roles.read"
             ]
           }
@@ -4659,7 +4764,11 @@
           },
           {
             "oauth2": [
-              "user.subaccounts",
+              "user.subaccounts"
+            ]
+          },
+          {
+            "oauth2": [
               "roles.write"
             ]
           }
@@ -4751,7 +4860,11 @@
           },
           {
             "oauth2": [
-              "user.subaccounts",
+              "user.subaccounts"
+            ]
+          },
+          {
+            "oauth2": [
               "roles.write"
             ]
           }
@@ -4910,7 +5023,11 @@
           },
           {
             "oauth2": [
-              "user.profile",
+              "user.profile"
+            ]
+          },
+          {
+            "oauth2": [
               "user.profile_readonly"
             ]
           }
@@ -4979,7 +5096,11 @@
           },
           {
             "oauth2": [
-              "user.profile",
+              "user.profile"
+            ]
+          },
+          {
+            "oauth2": [
               "user.profile_readonly"
             ]
           }
@@ -5048,7 +5169,11 @@
           },
           {
             "oauth2": [
-              "user.profile",
+              "user.profile"
+            ]
+          },
+          {
+            "oauth2": [
               "user.profile_readonly"
             ]
           }
@@ -5127,7 +5252,11 @@
           },
           {
             "oauth2": [
-              "readers.read",
+              "readers.read"
+            ]
+          },
+          {
+            "oauth2": [
               "terminals.read"
             ]
           }
@@ -5211,7 +5340,11 @@
           },
           {
             "oauth2": [
-              "readers.write",
+              "readers.write"
+            ]
+          },
+          {
+            "oauth2": [
               "terminals.write"
             ]
           }
@@ -5382,7 +5515,11 @@
           },
           {
             "oauth2": [
-              "readers.read",
+              "readers.read"
+            ]
+          },
+          {
+            "oauth2": [
               "terminals.read"
             ]
           }
@@ -5489,7 +5626,11 @@
           },
           {
             "oauth2": [
-              "readers.write",
+              "readers.write"
+            ]
+          },
+          {
+            "oauth2": [
               "terminals.write"
             ]
           }
@@ -5568,7 +5709,11 @@
           },
           {
             "oauth2": [
-              "readers.write",
+              "readers.write"
+            ]
+          },
+          {
+            "oauth2": [
               "terminals.write"
             ]
           }
@@ -5670,9 +5815,18 @@
         "tags": [
           "Sales"
         ],
-        "summary": "Lists sales",
+        "summary": "List sales",
         "description": "Returns a paginated list of `Sale` objects. Results are sorted **newest first** by the\n**newest event** recorded for each sale. Pagination tokens follow that order.\n\nCovers the merchant’s **last two years** of sales. Non-finalised sales are never returned;\nonly fully-paid sales. Use `POST /sales/search` for filtered queries.",
         "operationId": "ListSalesV10",
+        "x-codegen": {
+          "method_name": "list"
+        },
+        "x-scopes": [
+          "sales.read"
+        ],
+        "x-permissions": [
+          "merchant.read"
+        ],
         "security": [
           {
             "apiKey": []
@@ -5682,12 +5836,6 @@
               "sales.read"
             ]
           }
-        ],
-        "x-scopes": [
-          "sales.read"
-        ],
-        "x-permissions": [
-          "merchant_read"
         ],
         "parameters": [
           {
@@ -5705,11 +5853,10 @@
             "name": "pagination_token",
             "in": "query",
             "required": false,
-            "description": "Pagination token for subsequent requests. Should only be set by clients if they have\nreceived a token in the previous response, and this request is an immediate follow-up\nrequest to that response to load the subsequent page. Clients should treat this as an\nopaque token and should not attempt to parse it in any way.",
+            "description": "Opaque token from the previous list response. Omit it on the first request. To load\nthe next page, pass the returned token unchanged. Not interchangeable with tokens\nfrom `POST /sales/search`.",
             "schema": {
               "type": "string"
-            },
-            "example": "66bcbtzelrubzeuzruzgu76678trncH"
+            }
           },
           {
             "name": "pagination_limit",
@@ -5757,7 +5904,7 @@
             }
           },
           "403": {
-            "description": "Missing `sales.read`, merchant code mismatch on the token, or no `merchant_read` permission.",
+            "description": "Missing `sales.read`, merchant code mismatch on the token, or no `merchant.read` permission.",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -5784,9 +5931,18 @@
         "tags": [
           "Sales"
         ],
-        "summary": "Searches sales",
+        "summary": "Search sales",
         "description": "Returns a paginated list of `SaleSearchItem` rows matching filter criteria. Results are\nsorted **newest first** by **sale close date**.\n\nFilters from different categories stack with **logical AND**; multiple values in one array\nfield stack with **logical OR**. Results cover the merchant’s **last two years** of sales\n(narrow further with `start_date` / `end_date`). Pagination tokens are not interchangeable\nwith `GET /sales`.",
         "operationId": "SearchSalesV10",
+        "x-codegen": {
+          "method_name": "search"
+        },
+        "x-scopes": [
+          "sales.read"
+        ],
+        "x-permissions": [
+          "merchant.read"
+        ],
         "security": [
           {
             "apiKey": []
@@ -5796,12 +5952,6 @@
               "sales.read"
             ]
           }
-        ],
-        "x-scopes": [
-          "sales.read"
-        ],
-        "x-permissions": [
-          "merchant_read"
         ],
         "parameters": [
           {
@@ -5822,6 +5972,19 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/SaleSearchRequest"
+              },
+              "examples": {
+                "date_range": {
+                  "summary": "Search point-of-sale sales in a date range",
+                  "value": {
+                    "start_date": "2026-06-01T00:00:00Z",
+                    "end_date": "2026-06-02T23:59:59Z",
+                    "sales_channels": [
+                      "POS"
+                    ],
+                    "pagination_limit": 10
+                  }
+                }
               }
             }
           }
@@ -5858,7 +6021,7 @@
             }
           },
           "403": {
-            "description": "Missing `sales.read`, merchant code mismatch on the token, or no `merchant_read` permission.",
+            "description": "Missing `sales.read`, merchant code mismatch on the token, or no `merchant.read` permission.",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -5885,9 +6048,18 @@
         "tags": [
           "Sales"
         ],
-        "summary": "Gets a sale",
+        "summary": "Get a sale",
         "description": "Returns `Sale` for `sale_id`, including item lines and `payments[]`.\nNon-finalised sales are never returned; only fully-paid sales.",
         "operationId": "GetSaleV10",
+        "x-codegen": {
+          "method_name": "get"
+        },
+        "x-scopes": [
+          "sales.read"
+        ],
+        "x-permissions": [
+          "merchant.read"
+        ],
         "security": [
           {
             "apiKey": []
@@ -5897,12 +6069,6 @@
               "sales.read"
             ]
           }
-        ],
-        "x-scopes": [
-          "sales.read"
-        ],
-        "x-permissions": [
-          "merchant_read"
         ],
         "parameters": [
           {
@@ -5944,14 +6110,14 @@
                   "tax_mode": "GROSS",
                   "state": "CLOSED",
                   "price": {
-                    "net_amount": 777,
-                    "gross_amount": 925,
+                    "net_amount": 252,
+                    "gross_amount": 300,
                     "taxes": [
                       {
                         "id": "tax-vat-19",
-                        "net_amount": 777,
-                        "gross_amount": 925,
-                        "tax_amount": 148
+                        "net_amount": 252,
+                        "gross_amount": 300,
+                        "tax_amount": 48
                       }
                     ]
                   },
@@ -5966,6 +6132,11 @@
                       "type": "CATALOG",
                       "name": "Cappuccino",
                       "quantity": 1,
+                      "unit_of_measure": {
+                        "group_id": "quantity",
+                        "unit_id": "quantity.piece",
+                        "unit_ratio": 1
+                      },
                       "price": {
                         "unit_amount": 300,
                         "total_net_amount": 252,
@@ -5996,7 +6167,7 @@
                       "method": "apple_pay",
                       "reference": "TERTYFQ4G3",
                       "type": "purchase",
-                      "amount": 975,
+                      "amount": 300,
                       "status": "SUCCESSFUL",
                       "processed_at": "2026-06-02T10:20:00Z"
                     }
@@ -6016,7 +6187,7 @@
             }
           },
           "403": {
-            "description": "Missing `sales.read`, merchant code mismatch on the token, or no `merchant_read` permission.",
+            "description": "Missing `sales.read`, merchant code mismatch on the token, or no `merchant.read` permission.",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -12317,7 +12488,7 @@
         "properties": {
           "method": {
             "type": "string",
-            "description": "Payment method on public sales read API v1.0.\nDigital wallets are first-class methods. Gift card payments use `gift_card`, not `apm`.\nInput is case-insensitive; the canonical form is lowercase snake_case.\n**VALUES**: [card, cash, apm, external, apple_pay, google_pay, whatsapp_pay, gift_card].",
+            "description": "Payment method on public sales read API v1.0.\nDigital wallets are first-class methods. Gift card payments use `gift_card`, not `apm`.\nValues use lowercase snake_case. Known values are `card`, `cash`, `apm`, `external`,\n`apple_pay`, `google_pay`, `whatsapp_pay`, and `gift_card`.\nAdditional values may be returned as new payment methods become available.",
             "example": "card",
             "maxLength": 20
           },
@@ -12330,7 +12501,7 @@
           "type": {
             "type": "string",
             "default": "purchase",
-            "description": "Payment operation type.\nThis is distinct from the payment instrument in `method`.\nInput is case-insensitive; the canonical form is lowercase snake_case.\n**VALUES**: [purchase, unreferenced_refund]\nDefaults to \"purchase\" if unspecified. Either a normal purchase or an unreferenced refund for negative\nsales like deposit returns.\n",
+            "description": "Payment operation type.\nThis is distinct from the payment instrument in `method`.\nValues use lowercase snake_case. Known values are `purchase` for a normal purchase\nand `unreferenced_refund` for negative sales such as deposit returns.\n",
             "example": "purchase"
           },
           "amount": {
@@ -12358,7 +12529,7 @@
           },
           "apm_type": {
             "type": "string",
-            "description": "Alternative payment method type when `method` is `apm`.\nGift card is not an APM on this API.\nInput is case-insensitive; the canonical form is lowercase snake_case.\n**VALUES**: [qr_code_pix, sepa_dd, paypal, sumup_pay, twint, iris].",
+            "description": "Alternative payment method type when `method` is `apm`.\nGift card is not an APM on this API.\nValues use lowercase snake_case. Known values are `qr_code_pix`, `sepa_dd`, `paypal`,\n`sumup_pay`, `twint`, and `iris`.\nAdditional values may be returned as new alternative payment methods become available.",
             "maxLength": 20
           },
           "card": {
@@ -12371,7 +12542,7 @@
             "type": "string",
             "format": "date-time",
             "description": "UTC date-time when SumUp recorded this payment’s exposed `status` (successful, failed,\nor canceled). Server processed time when available; otherwise the payment provider’s\ntransaction time. Not the device clock.",
-            "example": "2017-07-21T17:32:28+01:00"
+            "example": "2026-06-02T10:20:00Z"
           }
         }
       },
@@ -12482,7 +12653,7 @@
       "SalePage": {
         "title": "SalePage",
         "type": "object",
-        "description": "Paginated list of `Sale` objects. Results are ordered **newest first** by the newest\nactivity recorded for each sale. See `ListSalesV10`.",
+        "description": "Paginated list of `Sale` objects. Results are ordered **newest first** by the newest\nactivity recorded for each sale.",
         "required": [
           "items"
         ],
@@ -12494,7 +12665,7 @@
             }
           },
           "pagination_token": {
-            "description": "Pagination token for subsequent requests. Should only be set by clients if they have\nreceived a token in the previous response, and this request is an immediate follow-up\nrequest to that response to load the subsequent page. Clients should treat this as an\nopaque token and should not attempt to parse it in any way.",
+            "description": "Opaque token for the next page. Pass it as the `pagination_token` query parameter\non the next list request. Omitted when no further page is available.",
             "type": "string",
             "example": "66bcbtzelrubzeuzruzgu76678trncH"
           }
@@ -12612,7 +12783,7 @@
           },
           "pagination_token": {
             "type": "string",
-            "description": "Opaque pagination token from a previous search response. Not interchangeable with tokens\nfrom `GET /sales`.",
+            "description": "Opaque token from the previous search response. To load the next page, send it with\nthe same filters. Not interchangeable with tokens from `GET /sales`.",
             "example": "66bcbtzelrubzeuzruzgu76678trncH"
           },
           "pagination_limit": {
@@ -12725,7 +12896,7 @@
             ]
           },
           "pagination_token": {
-            "description": "Opaque token for the next page of search results.",
+            "description": "Opaque token for the next page. Pass it as `pagination_token` in the next search\nrequest body with the same filters. Omitted when no further page is available.",
             "type": "string",
             "example": "66bcbtzelrubzeuzruzgu76678trncH"
           }
