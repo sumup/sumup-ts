@@ -4,4 +4,4 @@
  * Lifecycle state of the sale.
  * Non-finalised sales are never returned; only fully-paid sales.
  */
-export type SaleStateV10 = "CLOSED";
+export type SaleLifecycleState = "CLOSED";

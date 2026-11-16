@@ -6,4 +6,4 @@
  * Only fully-paid closed sales are exposed. Refunded original sales remain searchable as
  * `PAID`; refunds are separate negative sales, not a `REFUNDED` sale-search outcome.
  */
-export type PaymentStatusFilterV10 = "PAID" | "CHARGED_BACK";
+export type SalePaymentStatusFilter = "PAID" | "CHARGED_BACK";

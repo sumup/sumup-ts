@@ -4,7 +4,7 @@
  * Outward identifiers and links for a line, kept in one place rather than scattered
  * per item type.
  */
-export type ItemReferencesV10 = {
+export type SaleItemReferences = {
   /**
    * The source of the catalog the line originates from.
    *

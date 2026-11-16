@@ -4,7 +4,7 @@
  * The data type of a feature value. The wire `value` is always a string and is parsed
  * according to this type.
  */
-export type FeatureValueTypeV10 =
+export type SaleItemFeatureValueType =
   | "TEXT"
   | "INTEGER"
   | "DECIMAL"
