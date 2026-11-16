@@ -3,7 +3,7 @@
 /**
  * A category a line belongs to.
  */
-export type CategoryV10 = {
+export type SaleItemCategory = {
   /**
    * The category id. Usually a UUID, but not always (legacy cases).
    *

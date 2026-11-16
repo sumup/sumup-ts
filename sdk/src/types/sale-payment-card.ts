@@ -3,7 +3,7 @@
 /**
  * Card brand, credit/debit processing type, and last four digits.
  */
-export type PublicCardV10 = {
+export type SalePaymentCard = {
   /**
    * The brand of the card.
    * Input is case-insensitive; the canonical form is lowercase snake_case.

@@ -4,13 +4,13 @@ import type { DiscountLine } from "./discount-line";
 import type { TaxLine } from "./tax-line";
 
 /**
- * Sale-level pricing aggregate, parallel to `LineItemPrice` on each `SaleLineItem`.
+ * Sale-level pricing aggregate, parallel to `SaleItemPrice` on each `SaleItem`.
  *
  * Line-level breakdown (unit price, line discounts, per-line taxes) lives on
  * `items[].price`. This object holds the rolled-up totals and cart-level
  * adjustments that consumers use for receipts and payment reconciliation.
  */
-export type SalePriceV10 = {
+export type SaleTotals = {
   /**
    * Final net total for the sale: sum of `items[].price.total_net_amount_final`
    * after cart-level discounts (tips excluded).

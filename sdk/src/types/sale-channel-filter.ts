@@ -3,7 +3,7 @@
 /**
  * Sale channel filter value. Multi-select uses **OR** within this field.
  */
-export type SalesChannelFilterV10 =
+export type SaleChannelFilter =
   | "POS"
   | "ONLINE_PAYMENTS"
   | "KIOSK"

@@ -12,7 +12,7 @@ import type { TaxLine } from "./tax-line";
  * Totals and tax amounts can be negative for return-like operations (for example
  * a deposit with `operation_type` = `RETURN`).
  */
-export type LineItemPriceV10 = {
+export type SaleItemPrice = {
   /**
    * The price of a single unit. If the tax_mode is GROSS it includes taxes,
    * otherwise no tax is included. It does NOT include discounts.
