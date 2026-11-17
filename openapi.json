@@ -2363,10 +2363,10 @@
                 "description": "Optional amount for partial refunds of transactions.",
                 "properties": {
                   "amount": {
-                    "type": "number",
-                    "format": "float",
-                    "description": "Amount to refund in major units of the transaction's currency, for example `5` for EUR 5.00. It must be greater than zero and cannot exceed the amount eligible for a refund. Eligibility depends on the transaction and country/currency rules. If omitted, the system requests a full refund.",
-                    "example": 5
+                    "type": "integer",
+                    "description": "Amount to refund in minor units of the transaction's currency, for example `500` for EUR 5.00. It must be greater than zero and cannot exceed the amount eligible for a refund. Eligibility depends on the transaction and country/currency rules. If omitted, the system requests a full refund.",
+                    "example": 500,
+                    "minimum": 0
                   }
                 }
               },
@@ -2378,7 +2378,7 @@
                 "PartialRefund": {
                   "summary": "Partial refund",
                   "value": {
-                    "amount": 24.42
+                    "amount": 2442
                   }
                 }
               }
@@ -14104,10 +14104,10 @@
               "description": "Optional amount for partial refunds of transactions.",
               "properties": {
                 "amount": {
-                  "type": "number",
-                  "format": "float",
-                  "description": "Amount to refund in major units of the transaction's currency, for example `5` for EUR 5.00. It must be greater than zero and cannot exceed the amount eligible for a refund. Eligibility depends on the transaction and country/currency rules. If omitted, the system requests a full refund.",
-                  "example": 5
+                  "type": "integer",
+                  "description": "Amount to refund in minor units of the transaction's currency, for example `500` for EUR 5.00. It must be greater than zero and cannot exceed the amount eligible for a refund. Eligibility depends on the transaction and country/currency rules. If omitted, the system requests a full refund.",
+                  "example": 500,
+                  "minimum": 0
                 }
               }
             },
@@ -14119,7 +14119,7 @@
               "PartialRefund": {
                 "summary": "Partial refund",
                 "value": {
-                  "amount": 24.42
+                  "amount": 2442
                 }
               }
             }
