@@ -85,6 +85,14 @@ export * from "./resources/payouts";
 
 import { Payouts } from "./resources/payouts";
 
+export * from "./resources/reader-checkouts";
+
+import { ReaderCheckouts } from "./resources/reader-checkouts";
+
+export * from "./resources/reader-settings";
+
+import { ReaderSettings } from "./resources/reader-settings";
+
 export * from "./resources/readers";
 
 import { Readers } from "./resources/readers";
@@ -165,6 +173,10 @@ export class SumUp extends HTTPClient {
   merchants: Merchants = new Merchants(this);
   /** Access the Payouts API endpoints. */
   payouts: Payouts = new Payouts(this);
+  /** Access the ReaderCheckouts API endpoints. */
+  readerCheckouts: ReaderCheckouts = new ReaderCheckouts(this);
+  /** Access the ReaderSettings API endpoints. */
+  readerSettings: ReaderSettings = new ReaderSettings(this);
   /** Access the Readers API endpoints. */
   readers: Readers = new Readers(this);
   /** Access the Receipts API endpoints. */

@@ -6,17 +6,11 @@ import {
   type WithResponse,
 } from "../../core";
 import type {
-  CreateReaderCheckoutRequest,
-  CreateReaderCheckoutResponse,
-  GetReaderCheckoutResponse,
-  GetReaderSettingsResponse,
   Metadata,
   Reader,
   ReaderPaymentRequestParams,
   ReaderPaymentResponse,
   StatusResponse,
-  UpdateReaderSettingsRequest,
-  UpdateReaderSettingsResponse,
 } from "../../types";
 export type ListReadersResponse = { items: Reader[] };
 
@@ -47,8 +41,6 @@ export type UpdateReaderParams = {
   name?: string;
   metadata?: Metadata;
 };
-
-export type CreateReaderTerminateParams = Record<string, unknown>;
 
 /**
  * API resource for the Readers endpoints.
@@ -219,50 +211,6 @@ export class Readers extends APIResource {
   }
 
   /**
-   * Creates a Checkout for a Reader.
-   *
-   * This process is asynchronous and the actual transaction may take some time to be started on the device.
-   *
-   *
-   * There are some caveats when using this endpoint:
-   * * The target device must be online, otherwise checkout won't be accepted
-   * * After the checkout is accepted, the system has 60 seconds to start the payment on the target device. During this time, any other checkout for the same device will be rejected.
-   *
-   *
-   * **Note**: If the target device is a Solo, it must be in version 3.3.24.3 or higher.
-   *
-   *
-   * Optionally include an `affiliate` object to attach integrator metadata to the payment.
-   * Provide both `app_id` and `key` when including this object.
-   *
-   */
-  createCheckout(
-    merchantCode: string,
-    readerId: string,
-    body: CreateReaderCheckoutRequest,
-    options?: RequestOptions,
-  ): Promise<CreateReaderCheckoutResponse> {
-    return this._client.post<CreateReaderCheckoutResponse>({
-      path: `/v0.1/merchants/${merchantCode}/readers/${readerId}/checkout`,
-      body,
-      ...options,
-    });
-  }
-
-  createCheckoutWithResponse(
-    merchantCode: string,
-    readerId: string,
-    body: CreateReaderCheckoutRequest,
-    options?: RequestOptions,
-  ): Promise<WithResponse<CreateReaderCheckoutResponse>> {
-    return this._client.postWithResponse<CreateReaderCheckoutResponse>({
-      path: `/v0.1/merchants/${merchantCode}/readers/${readerId}/checkout`,
-      body,
-      ...options,
-    });
-  }
-
-  /**
    * Provides the last known status for a Reader.
    *
    * This endpoint allows you to retrieve updates from the connected card reader, including the current screen being displayed during the payment process and the device status (battery level, connectivity, and update state).
@@ -302,147 +250,6 @@ export class Readers extends APIResource {
   ): Promise<WithResponse<StatusResponse>> {
     return this._client.getWithResponse<StatusResponse>({
       path: `/v0.1/merchants/${merchantCode}/readers/${readerId}/status`,
-      ...options,
-    });
-  }
-
-  /**
-   * Returns the menu lock settings for a Solo reader.
-   *
-   * For an online reader, returns the current settings. For an offline reader,
-   * returns the last saved settings, which may differ from its current configuration.
-   * Returns `404` if the reader is offline and no saved settings are available.
-   *
-   * The response may include the menu lock PIN.
-   *
-   */
-  getReaderSettings(
-    merchantCode: string,
-    readerId: string,
-    options?: RequestOptions,
-  ): Promise<GetReaderSettingsResponse> {
-    return this._client.get<GetReaderSettingsResponse>({
-      path: `/v0.1/merchants/${merchantCode}/readers/${readerId}/settings`,
-      ...options,
-    });
-  }
-
-  getReaderSettingsWithResponse(
-    merchantCode: string,
-    readerId: string,
-    options?: RequestOptions,
-  ): Promise<WithResponse<GetReaderSettingsResponse>> {
-    return this._client.getWithResponse<GetReaderSettingsResponse>({
-      path: `/v0.1/merchants/${merchantCode}/readers/${readerId}/settings`,
-      ...options,
-    });
-  }
-
-  /**
-   * Updates the menu lock settings for a Solo reader. The reader must be online.
-   * A successful response confirms that the reader applied the update.
-   *
-   * Include at least one of `menu_lock.enabled` or `menu_lock.passcode`.
-   * Omitted settings keep their current values. The response contains only the
-   * settings included in the request.
-   *
-   * When enabling menu lock for a reader without a PIN, include a four-digit PIN
-   * in `menu_lock.passcode` in the same request.
-   *
-   */
-  updateReaderSettings(
-    merchantCode: string,
-    readerId: string,
-    body: UpdateReaderSettingsRequest,
-    options?: RequestOptions,
-  ): Promise<UpdateReaderSettingsResponse> {
-    return this._client.patch<UpdateReaderSettingsResponse>({
-      path: `/v0.1/merchants/${merchantCode}/readers/${readerId}/settings`,
-      body,
-      ...options,
-    });
-  }
-
-  updateReaderSettingsWithResponse(
-    merchantCode: string,
-    readerId: string,
-    body: UpdateReaderSettingsRequest,
-    options?: RequestOptions,
-  ): Promise<WithResponse<UpdateReaderSettingsResponse>> {
-    return this._client.patchWithResponse<UpdateReaderSettingsResponse>({
-      path: `/v0.1/merchants/${merchantCode}/readers/${readerId}/settings`,
-      body,
-      ...options,
-    });
-  }
-
-  /**
-   * Terminate a Reader Checkout stops the current transaction on the target device.
-   *
-   * This process is asynchronous and the actual termination may take some time to be performed on the device.
-   *
-   *
-   * There are some caveats when using this endpoint:
-   * * The target device must be online, otherwise terminate won't be accepted
-   * * The action will succeed only if the device is waiting for cardholder action: e.g: waiting for card, waiting for PIN, etc.
-   * * There is no confirmation of the termination.
-   *
-   * If a transaction is successfully terminated and `return_url` was provided on Checkout, the transaction status will be sent as `failed` to the provided URL.
-   *
-   *
-   * **Note**: If the target device is a Solo, it must be in version 3.3.28.0 or higher.
-   *
-   */
-  terminateCheckout(
-    merchantCode: string,
-    readerId: string,
-    body?: CreateReaderTerminateParams,
-    options?: RequestOptions,
-  ): Promise<void> {
-    return this._client.post<void>({
-      path: `/v0.1/merchants/${merchantCode}/readers/${readerId}/terminate`,
-      body,
-      ...options,
-    });
-  }
-
-  terminateCheckoutWithResponse(
-    merchantCode: string,
-    readerId: string,
-    body?: CreateReaderTerminateParams,
-    options?: RequestOptions,
-  ): Promise<WithResponse<void>> {
-    return this._client.postWithResponse<void>({
-      path: `/v0.1/merchants/${merchantCode}/readers/${readerId}/terminate`,
-      body,
-      ...options,
-    });
-  }
-
-  /**
-   * Get a Checkout for a Reader.
-   *
-   */
-  getCheckout(
-    merchantCode: string,
-    readerId: string,
-    checkoutId: string,
-    options?: RequestOptions,
-  ): Promise<GetReaderCheckoutResponse> {
-    return this._client.get<GetReaderCheckoutResponse>({
-      path: `/v0.1/merchants/${merchantCode}/readers/${readerId}/checkout/${checkoutId}`,
-      ...options,
-    });
-  }
-
-  getCheckoutWithResponse(
-    merchantCode: string,
-    readerId: string,
-    checkoutId: string,
-    options?: RequestOptions,
-  ): Promise<WithResponse<GetReaderCheckoutResponse>> {
-    return this._client.getWithResponse<GetReaderCheckoutResponse>({
-      path: `/v0.1/merchants/${merchantCode}/readers/${readerId}/checkout/${checkoutId}`,
       ...options,
     });
   }
