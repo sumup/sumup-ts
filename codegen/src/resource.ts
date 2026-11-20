@@ -11,8 +11,9 @@ import {
   responseSchema,
 } from "./base";
 import { fileWriter } from "./io";
-import type { Document, ParameterObject } from "./openapi";
+import type { Document, ParameterObject, ResourceTag } from "./openapi";
 import { schemaNameToTypeName, schemaToTypes } from "./schema";
+import { childAccessor, resourceParents } from "./tag-hierarchy";
 import {
   docComment,
   errorType,
@@ -27,7 +28,7 @@ import {
  * Creates operation-specific type definitions and a resource class.
  */
 export async function generateResource(
-  tag: OpenAPIV3_1.TagObject,
+  tag: ResourceTag,
   spec: Document<{
     "x-codegen": {
       method_name?: string;
@@ -42,6 +43,10 @@ export async function generateResource(
     "index.ts",
   );
   const writer = fileWriter(outFile);
+  const parents = resourceParents(spec);
+  const children = (spec.tags ?? []).filter(
+    (child) => parents.get(child.name)?.name === tag.name,
+  );
 
   const schemaTypeNames = new Set(
     getSortedSchemas(spec).map((schemaName) =>
@@ -53,6 +58,14 @@ export async function generateResource(
   const resourceClassName = schemaTypeNames.has(resourceName)
     ? `${resourceName}Resource`
     : resourceName;
+  const childClasses = children.map((child) => {
+    const name = Case.pascal(child.name);
+    return {
+      tag: child,
+      accessor: childAccessor(child),
+      className: schemaTypeNames.has(name) ? `${name}Resource` : name,
+    };
+  });
 
   const usedSharedTypes = new Set<string>();
   const addSharedType = (name: string) => {
@@ -173,6 +186,11 @@ export async function generateResource(
   writer.w(
     'import { APIResource, type RequestOptions, type WithResponse } from "../../core";',
   );
+  for (const child of childClasses) {
+    const module = `../${Case.kebab(child.tag.name)}`;
+    writer.w(`import { ${child.className} } from ${JSON.stringify(module)};`);
+    writer.w(`export * from ${JSON.stringify(module)};`);
+  }
 
   const sortedSharedTypes = [...usedSharedTypes].sort((a, b) =>
     a > b ? 1 : -1,
@@ -276,6 +294,42 @@ export class ${resourceClassName} extends APIResource {`);
     writer.w(`
 export class ${resourceClassName} extends APIResource {`);
   }
+  const usedMembers = new Set<string>();
+  for (const { methodSpec, opId } of iterPathConfig(spec.paths)) {
+    if (!methodSpec.tags?.includes(tag.name)) continue;
+    const name = operationMethodName(methodSpec, opId);
+    usedMembers.add(name);
+    usedMembers.add(`${name}WithResponse`);
+  }
+  for (const child of childClasses) {
+    if (!child.accessor || usedMembers.has(child.accessor)) {
+      throw new Error(
+        `Resource ${tag.name} has conflicting accessor ${child.accessor}`,
+      );
+    }
+    usedMembers.add(child.accessor);
+    writer.w(
+      `readonly ${child.accessor} = new ${child.className}(this._client);`,
+    );
+  }
+  const compatibility = new Map<string, string[]>();
+  for (const child of childClasses) {
+    for (const { methodSpec, opId } of iterPathConfig(spec.paths)) {
+      if (!methodSpec.tags?.includes(child.tag.name)) continue;
+      const name = operationMethodName(methodSpec, opId);
+      for (const member of [name, `${name}WithResponse`]) {
+        compatibility.set(member, [
+          ...(compatibility.get(member) ?? []),
+          child.accessor,
+        ]);
+      }
+    }
+  }
+  for (const [member, accessors] of compatibility) {
+    if (usedMembers.has(member) || accessors.length !== 1) continue;
+    const child = accessors[0];
+    writer.w(`${member} = this.${child}.${member}.bind(this.${child});`);
+  }
   for (const { methodSpec, pathSpec, opId, method, path } of iterPathConfig(
     spec.paths,
   )) {
@@ -283,12 +337,7 @@ export class ${resourceClassName} extends APIResource {`);
       continue;
     }
 
-    const nameOverride =
-      "x-codegen" in methodSpec &&
-      // biome-ignore lint/suspicious/noExplicitAny: OpenAPI extension type is dynamic
-      (methodSpec["x-codegen"] as any)?.method_name;
-
-    const methodName = Case.camel(nameOverride || opId);
+    const methodName = operationMethodName(methodSpec, opId);
     const methodNameType = Case.pascal(opId);
 
     const params = (pathSpec.parameters || []).concat(
@@ -408,4 +457,11 @@ export class ${resourceClassName} extends APIResource {`);
   writer.w("}");
 
   await writer.flush();
+}
+
+function operationMethodName(method: object, operationId: string): string {
+  const overrides = (method as { "x-codegen"?: { method_name?: string } })[
+    "x-codegen"
+  ];
+  return Case.camel(overrides?.method_name || operationId);
 }

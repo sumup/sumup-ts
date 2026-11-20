@@ -5,6 +5,7 @@ import { collectEventDefinitions } from "./events";
 import { fileWriter } from "./io";
 import type { Document } from "./openapi";
 import { schemaNameToTypeName } from "./schema";
+import { resourceParents } from "./tag-hierarchy";
 
 /**
  * Generates the main index.ts file with the primary API client class.
@@ -49,6 +50,7 @@ export async function generateIndex(spec: Document, destDir: string) {
   const tags = spec.tags || [];
   tags.sort((a, b) => (a.name > b.name ? 1 : -1));
 
+  const parents = resourceParents(spec);
   const resourceClassByTag = new Map<string, string>();
   for (const tag of tags) {
     const resourceName = Case.pascal(tag.name);
@@ -59,6 +61,7 @@ export async function generateIndex(spec: Document, destDir: string) {
     resourceClassByTag.set(tag.name, resourceClassName);
 
     writer.w(`export * from './resources/${Case.kebab(tag.name)}'`);
+    if (parents.has(tag.name)) continue;
     writer.w(
       `import { ${resourceClassName} } from './resources/${Case.kebab(tag.name)}'`,
     );
@@ -104,6 +107,7 @@ export async function generateIndex(spec: Document, destDir: string) {
     }
   `);
   for (const tag of tags) {
+    if (parents.has(tag.name)) continue;
     const resourceClassName = resourceClassByTag.get(tag.name)!;
     writer.w(
       `  /** Access the ${tag.name} API endpoints. */

@@ -2,8 +2,60 @@ import { mkdtemp, readFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { expect, test } from "@rstest/core";
+import { generateIndex } from "./api";
 import type { Document } from "./openapi";
 import { generateResource } from "./resource";
+import { buildSampleCatalog } from "./samples";
+
+test("a resource with a declared parent is nested and keeps existing parent calls", async () => {
+  const dir = await mkdtemp(join(tmpdir(), "sumup-resource-"));
+  const readers = { name: "Readers" };
+  const checkouts = { name: "ReaderCheckouts", "x-displayName": "Checkouts" };
+  const spec: Document = {
+    openapi: "3.1.0",
+    info: { title: "Test", version: "1" },
+    components: {},
+    tags: [readers, checkouts],
+    "x-tagGroups": [{ name: "Readers", tags: [checkouts.name] }],
+    paths: {
+      "/readers/checkouts": {
+        post: {
+          operationId: "createCheckout",
+          tags: [checkouts.name],
+          responses: { "204": { description: "OK" } },
+        },
+      },
+    },
+  };
+
+  try {
+    await generateIndex(spec, dir);
+    await generateResource(readers, spec, dir);
+    await generateResource(checkouts, spec, dir);
+    const root = await readFile(join(dir, "index.ts"), "utf8");
+    const parent = await readFile(
+      join(dir, "resources/readers/index.ts"),
+      "utf8",
+    );
+    const child = await readFile(
+      join(dir, "resources/reader-checkouts/index.ts"),
+      "utf8",
+    );
+    expect(root).not.toContain("new ReaderCheckouts(");
+    expect(parent).toContain(
+      "readonly checkouts = new ReaderCheckouts(this._client)",
+    );
+    expect(parent).toContain(
+      "this.checkouts.createCheckout.bind(this.checkouts)",
+    );
+    expect(child).toContain("createCheckout(options?: RequestOptions)");
+    expect(buildSampleCatalog(spec, "1").samples[0].sample).toContain(
+      "client.readers.checkouts.createCheckout(",
+    );
+  } finally {
+    await rm(dir, { recursive: true, force: true });
+  }
+});
 
 test("allowEmptyValue adds an empty string independently of the query schema", async () => {
   const dir = await mkdtemp(join(tmpdir(), "sumup-resource-"));

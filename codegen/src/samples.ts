@@ -9,6 +9,7 @@ import type {
   ParameterObject,
   PathItemObject,
 } from "./openapi";
+import { resourcePath } from "./tag-hierarchy";
 
 export interface SampleCatalog {
   schemaVersion: 1;
@@ -170,7 +171,7 @@ function renderProgram(
   const methodName =
     operation["x-codegen"]?.method_name || operation.operationId || "unknown";
   const invocation = renderInvocation(
-    `client.${Case.camel(tag)}.${Case.camel(methodName)}`,
+    `client.${resourcePath(spec, tag)}.${Case.camel(methodName)}`,
     args,
   );
 
