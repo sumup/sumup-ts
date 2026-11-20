@@ -11,13 +11,21 @@ test("a resource with a declared parent is nested and keeps existing parent call
   const dir = await mkdtemp(join(tmpdir(), "sumup-resource-"));
   const readers = { name: "Readers" };
   const checkouts = { name: "ReaderCheckouts", "x-displayName": "Checkouts" };
+  const settings = { name: "ReaderSettings", "x-displayName": "Settings" };
   const spec: Document = {
     openapi: "3.1.0",
     info: { title: "Test", version: "1" },
     components: {},
-    tags: [readers, checkouts],
-    "x-tagGroups": [{ name: "Readers", tags: [checkouts.name] }],
+    tags: [readers, checkouts, settings],
+    "x-tagGroups": [{ name: "Readers", tags: [checkouts.name, settings.name] }],
     paths: {
+      "/readers/settings": {
+        put: {
+          operationId: "updateReaderSettings",
+          tags: [settings.name],
+          responses: { "204": { description: "OK" } },
+        },
+      },
       "/readers/checkouts": {
         post: {
           operationId: "createCheckout",
@@ -32,6 +40,7 @@ test("a resource with a declared parent is nested and keeps existing parent call
     await generateIndex(spec, dir);
     await generateResource(readers, spec, dir);
     await generateResource(checkouts, spec, dir);
+    await generateResource(settings, spec, dir);
     const root = await readFile(join(dir, "index.ts"), "utf8");
     const parent = await readFile(
       join(dir, "resources/readers/index.ts"),
@@ -45,12 +54,19 @@ test("a resource with a declared parent is nested and keeps existing parent call
     expect(parent).toContain(
       "readonly checkouts = new ReaderCheckouts(this._client)",
     );
-    expect(parent).toContain(
-      "this.checkouts.createCheckout.bind(this.checkouts)",
-    );
-    expect(child).toContain("createCheckout(options?: RequestOptions)");
+    expect(parent).toContain("this.checkouts.create.bind(this.checkouts)");
+    expect(child).toContain("create(options?: RequestOptions)");
     expect(buildSampleCatalog(spec, "1").samples[0].sample).toContain(
-      "client.readers.checkouts.createCheckout(",
+      "client.readers.checkouts.create(",
+    );
+    expect(parent).toContain("this.settings.update.bind(this.settings)");
+    const settingsClient = await readFile(
+      join(dir, "resources/reader-settings/index.ts"),
+      "utf8",
+    );
+    expect(settingsClient).toContain("update(options?: RequestOptions)");
+    expect(buildSampleCatalog(spec, "1").samples[1].sample).toContain(
+      "client.readers.settings.update(",
     );
   } finally {
     await rm(dir, { recursive: true, force: true });
