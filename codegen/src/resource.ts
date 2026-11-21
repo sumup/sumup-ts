@@ -7,17 +7,14 @@ import {
   getSortedSchemas,
   iterParams,
   iterPathConfig,
+  operationMethodName,
   queryParameterName,
   responseSchema,
 } from "./base";
 import { fileWriter } from "./io";
 import type { Document, ParameterObject, ResourceTag } from "./openapi";
 import { schemaNameToTypeName, schemaToTypes } from "./schema";
-import {
-  childAccessor,
-  operationMethodName,
-  resourceParents,
-} from "./tag-hierarchy";
+import type { ResourceParents } from "./tag-hierarchy";
 import {
   docComment,
   errorType,
@@ -35,6 +32,7 @@ export async function generateResource(
   tag: ResourceTag,
   spec: Document,
   destDir: string,
+  parents: ResourceParents,
 ) {
   const outFile = resolve(
     destDir,
@@ -43,9 +41,8 @@ export async function generateResource(
     "index.ts",
   );
   const writer = fileWriter(outFile);
-  const parents = resourceParents(spec);
-  const children = (spec.tags ?? []).filter(
-    (child) => parents.get(child.name)?.name === tag.name,
+  const operations = iterPathConfig(spec.paths).filter(({ methodSpec }) =>
+    methodSpec.tags?.includes(tag.name),
   );
 
   const schemaTypeNames = new Set(
@@ -58,13 +55,17 @@ export async function generateResource(
   const resourceClassName = schemaTypeNames.has(resourceName)
     ? `${resourceName}Resource`
     : resourceName;
-  const childClasses = children.map((child) => {
+  const childClasses = (spec.tags ?? []).flatMap((child) => {
+    const parent = parents.get(child.name);
+    if (parent?.tag !== tag.name) return [];
     const name = Case.pascal(child.name);
-    return {
-      tag: child,
-      accessor: childAccessor(child),
-      className: schemaTypeNames.has(name) ? `${name}Resource` : name,
-    };
+    return [
+      {
+        tag: child.name,
+        accessor: parent.accessor,
+        className: schemaTypeNames.has(name) ? `${name}Resource` : name,
+      },
+    ];
   });
 
   const usedSharedTypes = new Set<string>();
@@ -187,7 +188,7 @@ export async function generateResource(
     'import { APIResource, type RequestOptions, type WithResponse } from "../../core";',
   );
   for (const child of childClasses) {
-    const module = `../${Case.kebab(child.tag.name)}`;
+    const module = `../${Case.kebab(child.tag)}`;
     writer.w(`import { ${child.className} } from ${JSON.stringify(module)};`);
     writer.w(`export * from ${JSON.stringify(module)};`);
   }
@@ -295,8 +296,7 @@ export class ${resourceClassName} extends APIResource {`);
 export class ${resourceClassName} extends APIResource {`);
   }
   const usedMembers = new Set<string>();
-  for (const { methodSpec, opId } of iterPathConfig(spec.paths)) {
-    if (!methodSpec.tags?.includes(tag.name)) continue;
+  for (const { methodSpec, opId } of operations) {
     const name = operationMethodName(methodSpec, opId);
     usedMembers.add(name);
     usedMembers.add(`${name}WithResponse`);
@@ -312,13 +312,7 @@ export class ${resourceClassName} extends APIResource {`);
       `readonly ${child.accessor} = new ${child.className}(this._client);`,
     );
   }
-  for (const { methodSpec, pathSpec, opId, method, path } of iterPathConfig(
-    spec.paths,
-  )) {
-    if (!methodSpec.tags?.includes(tag.name)) {
-      continue;
-    }
-
+  for (const { methodSpec, pathSpec, opId, method, path } of operations) {
     const methodName = operationMethodName(methodSpec, opId);
     const methodNameType = Case.pascal(opId);
 

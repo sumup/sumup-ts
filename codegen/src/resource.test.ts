@@ -6,6 +6,7 @@ import { generateIndex } from "./api";
 import type { Document } from "./openapi";
 import { generateResource } from "./resource";
 import { buildSampleCatalog } from "./samples";
+import { resourceParents } from "./tag-hierarchy";
 
 test("nested resources use the annotated method name or operation ID", async () => {
   const dir = await mkdtemp(join(tmpdir(), "sumup-resource-"));
@@ -37,11 +38,12 @@ test("nested resources use the annotated method name or operation ID", async () 
     },
   };
 
+  const parents = resourceParents(spec);
   try {
-    await generateIndex(spec, dir);
-    await generateResource(readers, spec, dir);
-    await generateResource(checkouts, spec, dir);
-    await generateResource(settings, spec, dir);
+    await generateIndex(spec, dir, parents);
+    await generateResource(readers, spec, dir, parents);
+    await generateResource(checkouts, spec, dir, parents);
+    await generateResource(settings, spec, dir, parents);
     const root = await readFile(join(dir, "index.ts"), "utf8");
     const parent = await readFile(
       join(dir, "resources/readers/index.ts"),
@@ -57,7 +59,8 @@ test("nested resources use the annotated method name or operation ID", async () 
     );
     expect(parent).not.toContain("createCheckout");
     expect(child).toContain("createCheckout(options?: RequestOptions)");
-    expect(buildSampleCatalog(spec, "1").samples[0].sample).toContain(
+    const { samples } = buildSampleCatalog(spec, "1");
+    expect(samples[0].sample).toContain(
       "client.readers.checkouts.createCheckout(",
     );
     expect(parent).not.toContain("this.settings.update");
@@ -66,9 +69,7 @@ test("nested resources use the annotated method name or operation ID", async () 
       "utf8",
     );
     expect(settingsClient).toContain("update(options?: RequestOptions)");
-    expect(buildSampleCatalog(spec, "1").samples[1].sample).toContain(
-      "client.readers.settings.update(",
-    );
+    expect(samples[1].sample).toContain("client.readers.settings.update(");
   } finally {
     await rm(dir, { recursive: true, force: true });
   }
@@ -126,7 +127,12 @@ test("allowEmptyValue adds an empty string independently of the query schema", a
   };
 
   try {
-    await generateResource({ name: "Resources" }, spec, dir);
+    await generateResource(
+      { name: "Resources" },
+      spec,
+      dir,
+      resourceParents(spec),
+    );
     const generated = await readFile(
       join(dir, "resources/resources/index.ts"),
       "utf8",

@@ -1,14 +1,19 @@
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import type { OpenAPIV3_1 } from "openapi-types";
-import { getRequestBody, iterPathConfig, queryParameterName } from "./base";
+import {
+  getRequestBody,
+  iterPathConfig,
+  operationMethodName,
+  queryParameterName,
+} from "./base";
 import type {
   Document,
   OperationObject,
   ParameterObject,
   PathItemObject,
 } from "./openapi";
-import { operationMethodName, resourcePath } from "./tag-hierarchy";
+import { resourceParents, resourcePath } from "./tag-hierarchy";
 
 export interface SampleCatalog {
   schemaVersion: 1;
@@ -51,8 +56,12 @@ export function buildSampleCatalog(
     throw new Error("SDK version must not be empty");
   }
 
+  const parents = resourceParents(spec);
   const samples = iterPathConfig(spec.paths).flatMap(
     ({ methodSpec: operation, method, opId, path, pathSpec }) => {
+      const tag = operation.tags?.[0];
+      if (!tag) throw new Error(`Operation ${opId} has no tag`);
+      const call = `client.${resourcePath(parents, tag)}.${operationMethodName(operation, opId)}`;
       return requestExamples(spec, operation).map((example) => ({
         id: example.name ? `${opId}.${example.name}` : opId,
         operationId: opId,
@@ -64,7 +73,7 @@ export function buildSampleCatalog(
         ),
         httpMethod: method.toUpperCase(),
         path,
-        sample: renderProgram(spec, operation, pathSpec, example),
+        sample: renderProgram(spec, operation, pathSpec, example, call),
       }));
     },
   );
@@ -119,12 +128,8 @@ function renderProgram(
   operation: OperationObject,
   pathItem: PathItemObject,
   example: RequestExample,
+  call: string,
 ): string {
-  const tag = operation.tags?.[0];
-  if (!tag) {
-    throw new Error(`Operation ${operation.operationId} has no tag`);
-  }
-
   const parameters = [
     ...(pathItem.parameters || []),
     ...(operation.parameters || []),
@@ -163,14 +168,7 @@ function renderProgram(
     );
   }
 
-  const methodName = operationMethodName(
-    operation,
-    operation.operationId || "unknown",
-  );
-  const invocation = renderInvocation(
-    `client.${resourcePath(spec, tag)}.${methodName}`,
-    args,
-  );
+  const invocation = renderInvocation(call, args);
 
   return [
     'import SumUp from "@sumup/sdk";',

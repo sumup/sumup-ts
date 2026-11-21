@@ -7,6 +7,13 @@ import { bodyType, responseType, topologicalSort } from "./util";
 
 const HttpMethods = OpenAPIV3.HttpMethods;
 
+export function operationMethodName(
+  operation: OperationObject,
+  operationId: string,
+): string {
+  return Case.camel(operation["x-codegen"]?.method_name || operationId);
+}
+
 const getJsonMediaType = (
   content?: Record<string, OpenAPIV3_1.MediaTypeObject>,
 ) => {
