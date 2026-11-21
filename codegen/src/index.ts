@@ -14,6 +14,7 @@ import {
   writeSampleCatalog,
 } from "./samples";
 import { loadSpec } from "./spec";
+import { resourceParents } from "./tag-hierarchy";
 import { generateTypes } from "./types";
 
 /**
@@ -32,17 +33,18 @@ async function generate(specFile: string, destDir: string) {
   }
 
   const spec = await loadSpec(specFile);
+  const parents = resourceParents(spec);
 
   rmSync(resolve(destDirAbs, "resources"), { recursive: true, force: true });
   mkdirSync(resolve(destDirAbs, "resources"), { recursive: true });
 
   await generateApiVersion(spec, destDirAbs);
   await generateTypes(spec, destDirAbs);
-  await generateIndex(spec, destDirAbs);
+  await generateIndex(spec, destDirAbs, parents);
   await generateEvents(spec, destDirAbs);
   await generateCore(spec, destDirAbs);
   for (const t of spec.tags || []) {
-    await generateResource(t, spec, destDirAbs);
+    await generateResource(t, spec, destDirAbs, parents);
   }
 }
 

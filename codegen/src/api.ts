@@ -5,13 +5,17 @@ import { collectEventDefinitions } from "./events";
 import { fileWriter } from "./io";
 import type { Document } from "./openapi";
 import { schemaNameToTypeName } from "./schema";
-import { resourceParents } from "./tag-hierarchy";
+import type { ResourceParents } from "./tag-hierarchy";
 
 /**
  * Generates the main index.ts file with the primary API client class.
  * Creates a client class that instantiates all resource classes as properties.
  */
-export async function generateIndex(spec: Document, destDir: string) {
+export async function generateIndex(
+  spec: Document,
+  destDir: string,
+  parents: ResourceParents,
+) {
   const apiName = "SumUp";
 
   if (!spec.components) return;
@@ -50,7 +54,6 @@ export async function generateIndex(spec: Document, destDir: string) {
   const tags = spec.tags || [];
   tags.sort((a, b) => (a.name > b.name ? 1 : -1));
 
-  const parents = resourceParents(spec);
   const resourceClassByTag = new Map<string, string>();
   for (const tag of tags) {
     const resourceName = Case.pascal(tag.name);

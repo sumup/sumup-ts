@@ -1,18 +1,19 @@
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import type { OpenAPIV3_1 } from "openapi-types";
-import { getRequestBody, iterPathConfig, queryParameterName } from "./base";
+import {
+  getRequestBody,
+  iterPathConfig,
+  operationMethodName,
+  queryParameterName,
+} from "./base";
 import type {
   Document,
   OperationObject,
   ParameterObject,
   PathItemObject,
 } from "./openapi";
-import {
-  nestedMethodNames,
-  operationMethodName,
-  resourcePath,
-} from "./tag-hierarchy";
+import { resourceParents, resourcePath } from "./tag-hierarchy";
 
 export interface SampleCatalog {
   schemaVersion: 1;
@@ -46,9 +47,6 @@ interface RequestExample {
 
 type Schema = OpenAPIV3_1.SchemaObject | OpenAPIV3_1.ReferenceObject;
 type Parameter = ParameterObject;
-type Operation = OperationObject & {
-  "x-codegen"?: { method_name?: string };
-};
 
 export function buildSampleCatalog(
   spec: Document,
@@ -58,9 +56,12 @@ export function buildSampleCatalog(
     throw new Error("SDK version must not be empty");
   }
 
+  const parents = resourceParents(spec);
   const samples = iterPathConfig(spec.paths).flatMap(
-    ({ methodSpec, method, opId, path, pathSpec }) => {
-      const operation = methodSpec as Operation;
+    ({ methodSpec: operation, method, opId, path, pathSpec }) => {
+      const tag = operation.tags?.[0];
+      if (!tag) throw new Error(`Operation ${opId} has no tag`);
+      const call = `client.${resourcePath(parents, tag)}.${operationMethodName(operation, opId)}`;
       return requestExamples(spec, operation).map((example) => ({
         id: example.name ? `${opId}.${example.name}` : opId,
         operationId: opId,
@@ -72,7 +73,7 @@ export function buildSampleCatalog(
         ),
         httpMethod: method.toUpperCase(),
         path,
-        sample: renderProgram(spec, operation, pathSpec, example),
+        sample: renderProgram(spec, operation, pathSpec, example, call),
       }));
     },
   );
@@ -124,15 +125,11 @@ function optionalText(key: "summary" | "description", value?: string) {
 
 function renderProgram(
   spec: Document,
-  operation: Operation,
+  operation: OperationObject,
   pathItem: PathItemObject,
   example: RequestExample,
+  call: string,
 ): string {
-  const tag = operation.tags?.[0];
-  if (!tag) {
-    throw new Error(`Operation ${operation.operationId} has no tag`);
-  }
-
   const parameters = [
     ...(pathItem.parameters || []),
     ...(operation.parameters || []),
@@ -171,15 +168,7 @@ function renderProgram(
     );
   }
 
-  const original = operationMethodName(
-    operation,
-    operation.operationId || "unknown",
-  );
-  const methodName = nestedMethodNames(spec, tag).get(original) ?? original;
-  const invocation = renderInvocation(
-    `client.${resourcePath(spec, tag)}.${methodName}`,
-    args,
-  );
+  const invocation = renderInvocation(call, args);
 
   return [
     'import SumUp from "@sumup/sdk";',
@@ -472,7 +461,7 @@ function sampleString(schema: OpenAPIV3_1.SchemaObject, hint: string): string {
 
 function requestExamples(
   spec: Document,
-  operation: Operation,
+  operation: OperationObject,
 ): RequestExample[] {
   const requestBody = resolveRequestBody(spec, operation.requestBody);
   const media = requestBody?.content?.["application/json"];
