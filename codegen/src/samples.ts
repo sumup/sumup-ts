@@ -1,6 +1,5 @@
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
-import { Case } from "change-case-all";
 import type { OpenAPIV3_1 } from "openapi-types";
 import { getRequestBody, iterPathConfig, queryParameterName } from "./base";
 import type {
@@ -9,6 +8,11 @@ import type {
   ParameterObject,
   PathItemObject,
 } from "./openapi";
+import {
+  nestedMethodNames,
+  operationMethodName,
+  resourcePath,
+} from "./tag-hierarchy";
 
 export interface SampleCatalog {
   schemaVersion: 1;
@@ -167,10 +171,13 @@ function renderProgram(
     );
   }
 
-  const methodName =
-    operation["x-codegen"]?.method_name || operation.operationId || "unknown";
+  const original = operationMethodName(
+    operation,
+    operation.operationId || "unknown",
+  );
+  const methodName = nestedMethodNames(spec, tag).get(original) ?? original;
   const invocation = renderInvocation(
-    `client.${Case.camel(tag)}.${Case.camel(methodName)}`,
+    `client.${resourcePath(spec, tag)}.${methodName}`,
     args,
   );
 

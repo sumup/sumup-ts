@@ -23,7 +23,14 @@ export type PathItemObject = Omit<
 } & { [method in OpenAPIV3_1.HttpMethods]?: OperationObject };
 export type Document<T extends object = object> = Omit<
   OpenAPIV3_1.Document<T>,
-  "paths"
+  "paths" | "tags"
 > & {
   paths?: Record<string, PathItemObject | undefined>;
+  tags?: ResourceTag[];
+  "x-tagGroups"?: { name: string; tags: string[] }[];
+};
+
+export type ResourceTag = OpenAPIV3_1.TagObject & {
+  parent?: string;
+  "x-displayName"?: string;
 };
