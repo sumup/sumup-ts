@@ -14,6 +14,7 @@ export type OperationObject<T extends object = object> = Omit<
   "parameters"
 > & {
   parameters?: (ParameterObject | OpenAPIV3_1.ReferenceObject)[];
+  "x-codegen"?: { method_name?: string };
 };
 export type PathItemObject = Omit<
   OpenAPIV3_1.PathItemObject,

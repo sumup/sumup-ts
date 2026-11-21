@@ -8,11 +8,7 @@ import type {
   ParameterObject,
   PathItemObject,
 } from "./openapi";
-import {
-  nestedMethodNames,
-  operationMethodName,
-  resourcePath,
-} from "./tag-hierarchy";
+import { operationMethodName, resourcePath } from "./tag-hierarchy";
 
 export interface SampleCatalog {
   schemaVersion: 1;
@@ -46,9 +42,6 @@ interface RequestExample {
 
 type Schema = OpenAPIV3_1.SchemaObject | OpenAPIV3_1.ReferenceObject;
 type Parameter = ParameterObject;
-type Operation = OperationObject & {
-  "x-codegen"?: { method_name?: string };
-};
 
 export function buildSampleCatalog(
   spec: Document,
@@ -59,8 +52,7 @@ export function buildSampleCatalog(
   }
 
   const samples = iterPathConfig(spec.paths).flatMap(
-    ({ methodSpec, method, opId, path, pathSpec }) => {
-      const operation = methodSpec as Operation;
+    ({ methodSpec: operation, method, opId, path, pathSpec }) => {
       return requestExamples(spec, operation).map((example) => ({
         id: example.name ? `${opId}.${example.name}` : opId,
         operationId: opId,
@@ -124,7 +116,7 @@ function optionalText(key: "summary" | "description", value?: string) {
 
 function renderProgram(
   spec: Document,
-  operation: Operation,
+  operation: OperationObject,
   pathItem: PathItemObject,
   example: RequestExample,
 ): string {
@@ -171,11 +163,10 @@ function renderProgram(
     );
   }
 
-  const original = operationMethodName(
+  const methodName = operationMethodName(
     operation,
     operation.operationId || "unknown",
   );
-  const methodName = nestedMethodNames(spec, tag).get(original) ?? original;
   const invocation = renderInvocation(
     `client.${resourcePath(spec, tag)}.${methodName}`,
     args,
@@ -472,7 +463,7 @@ function sampleString(schema: OpenAPIV3_1.SchemaObject, hint: string): string {
 
 function requestExamples(
   spec: Document,
-  operation: Operation,
+  operation: OperationObject,
 ): RequestExample[] {
   const requestBody = resolveRequestBody(spec, operation.requestBody);
   const media = requestBody?.content?.["application/json"];

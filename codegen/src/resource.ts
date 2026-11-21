@@ -15,7 +15,6 @@ import type { Document, ParameterObject, ResourceTag } from "./openapi";
 import { schemaNameToTypeName, schemaToTypes } from "./schema";
 import {
   childAccessor,
-  nestedMethodNames,
   operationMethodName,
   resourceParents,
 } from "./tag-hierarchy";
@@ -34,11 +33,7 @@ import {
  */
 export async function generateResource(
   tag: ResourceTag,
-  spec: Document<{
-    "x-codegen": {
-      method_name?: string;
-    };
-  }>,
+  spec: Document,
   destDir: string,
 ) {
   const outFile = resolve(
@@ -49,7 +44,6 @@ export async function generateResource(
   );
   const writer = fileWriter(outFile);
   const parents = resourceParents(spec);
-  const scopedMethods = nestedMethodNames(spec, tag.name);
   const children = (spec.tags ?? []).filter(
     (child) => parents.get(child.name)?.name === tag.name,
   );
@@ -303,8 +297,7 @@ export class ${resourceClassName} extends APIResource {`);
   const usedMembers = new Set<string>();
   for (const { methodSpec, opId } of iterPathConfig(spec.paths)) {
     if (!methodSpec.tags?.includes(tag.name)) continue;
-    const original = operationMethodName(methodSpec, opId);
-    const name = scopedMethods.get(original) ?? original;
+    const name = operationMethodName(methodSpec, opId);
     usedMembers.add(name);
     usedMembers.add(`${name}WithResponse`);
   }
@@ -319,30 +312,6 @@ export class ${resourceClassName} extends APIResource {`);
       `readonly ${child.accessor} = new ${child.className}(this._client);`,
     );
   }
-  const compatibility = new Map<
-    string,
-    { accessor: string; target: string }[]
-  >();
-  for (const child of childClasses) {
-    const childMethods = nestedMethodNames(spec, child.tag.name);
-    for (const { methodSpec, opId } of iterPathConfig(spec.paths)) {
-      if (!methodSpec.tags?.includes(child.tag.name)) continue;
-      const name = operationMethodName(methodSpec, opId);
-      const target = childMethods.get(name) ?? name;
-      for (const variant of ["", "WithResponse"]) {
-        const member = name + variant;
-        compatibility.set(member, [
-          ...(compatibility.get(member) ?? []),
-          { accessor: child.accessor, target: target + variant },
-        ]);
-      }
-    }
-  }
-  for (const [member, accessors] of compatibility) {
-    if (usedMembers.has(member) || accessors.length !== 1) continue;
-    const { accessor, target } = accessors[0];
-    writer.w(`${member} = this.${accessor}.${target}.bind(this.${accessor});`);
-  }
   for (const { methodSpec, pathSpec, opId, method, path } of iterPathConfig(
     spec.paths,
   )) {
@@ -350,8 +319,7 @@ export class ${resourceClassName} extends APIResource {`);
       continue;
     }
 
-    const original = operationMethodName(methodSpec, opId);
-    const methodName = scopedMethods.get(original) ?? original;
+    const methodName = operationMethodName(methodSpec, opId);
     const methodNameType = Case.pascal(opId);
 
     const params = (pathSpec.parameters || []).concat(

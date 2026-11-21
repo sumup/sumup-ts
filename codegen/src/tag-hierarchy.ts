@@ -1,6 +1,5 @@
 import { Case } from "change-case-all";
-import { iterPathConfig } from "./base";
-import type { Document, ResourceTag } from "./openapi";
+import type { Document, OperationObject, ResourceTag } from "./openapi";
 
 export function childAccessor(tag: ResourceTag): string {
   return Case.camel(tag["x-displayName"] || tag.name);
@@ -56,48 +55,8 @@ export function resourcePath(spec: Document, tagName: string): string {
 }
 
 export function operationMethodName(
-  method: object,
+  operation: OperationObject,
   operationId: string,
 ): string {
-  const overrides = (method as { "x-codegen"?: { method_name?: string } })[
-    "x-codegen"
-  ];
-  return Case.camel(overrides?.method_name || operationId);
-}
-
-export function nestedMethodNames(
-  spec: Document,
-  tagName: string,
-): Map<string, string> {
-  const tag = spec.tags?.find(({ name }) => name === tagName);
-  if (!tag || !resourceParents(spec).has(tagName)) return new Map();
-
-  const suffixes = [tag.name, tag["x-displayName"] ?? tag.name].flatMap(
-    (name) => {
-      const words = Case.snake(name);
-      return [`_${words}`, `_${words.replace(/s$/, "")}`];
-    },
-  );
-  const originals = new Set<string>();
-  const proposed = new Map<string, string>();
-  const counts = new Map<string, number>();
-  for (const { methodSpec, opId } of iterPathConfig(spec.paths)) {
-    if (!methodSpec.tags?.includes(tagName)) continue;
-    const original = operationMethodName(methodSpec, opId);
-    originals.add(original);
-    const snake = Case.snake(original);
-    const suffix = suffixes.find(
-      (tail) => snake.length > tail.length && snake.endsWith(tail),
-    );
-    const name = suffix ? Case.camel(snake.slice(0, -suffix.length)) : original;
-    proposed.set(original, name);
-    counts.set(name, (counts.get(name) ?? 0) + 1);
-  }
-
-  for (const [original, shorter] of proposed) {
-    if (originals.has(shorter) || (counts.get(shorter) ?? 0) > 1) {
-      proposed.delete(original);
-    }
-  }
-  return proposed;
+  return Case.camel(operation["x-codegen"]?.method_name || operationId);
 }

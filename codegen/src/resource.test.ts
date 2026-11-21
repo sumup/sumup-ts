@@ -7,7 +7,7 @@ import type { Document } from "./openapi";
 import { generateResource } from "./resource";
 import { buildSampleCatalog } from "./samples";
 
-test("a resource with a declared parent is nested and keeps existing parent calls", async () => {
+test("nested resources use the annotated method name or operation ID", async () => {
   const dir = await mkdtemp(join(tmpdir(), "sumup-resource-"));
   const readers = { name: "Readers" };
   const checkouts = { name: "ReaderCheckouts", "x-displayName": "Checkouts" };
@@ -22,6 +22,7 @@ test("a resource with a declared parent is nested and keeps existing parent call
       "/readers/settings": {
         put: {
           operationId: "updateReaderSettings",
+          "x-codegen": { method_name: "update" },
           tags: [settings.name],
           responses: { "204": { description: "OK" } },
         },
@@ -54,12 +55,12 @@ test("a resource with a declared parent is nested and keeps existing parent call
     expect(parent).toContain(
       "readonly checkouts = new ReaderCheckouts(this._client)",
     );
-    expect(parent).toContain("this.checkouts.create.bind(this.checkouts)");
-    expect(child).toContain("create(options?: RequestOptions)");
+    expect(parent).not.toContain("createCheckout");
+    expect(child).toContain("createCheckout(options?: RequestOptions)");
     expect(buildSampleCatalog(spec, "1").samples[0].sample).toContain(
-      "client.readers.checkouts.create(",
+      "client.readers.checkouts.createCheckout(",
     );
-    expect(parent).toContain("this.settings.update.bind(this.settings)");
+    expect(parent).not.toContain("this.settings.update");
     const settingsClient = await readFile(
       join(dir, "resources/reader-settings/index.ts"),
       "utf8",
