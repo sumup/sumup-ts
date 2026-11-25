@@ -56,6 +56,7 @@ export async function generateIndex(
 
   const resourceClassByTag = new Map<string, string>();
   for (const tag of tags) {
+    if (parents.has(tag.name)) continue;
     const resourceName = Case.pascal(tag.name);
     const resourceClassName = schemaTypeNames.has(resourceName)
       ? `${resourceName}Resource`
@@ -64,7 +65,6 @@ export async function generateIndex(
     resourceClassByTag.set(tag.name, resourceClassName);
 
     writer.w(`export * from './resources/${Case.kebab(tag.name)}'`);
-    if (parents.has(tag.name)) continue;
     writer.w(
       `import { ${resourceClassName} } from './resources/${Case.kebab(tag.name)}'`,
     );

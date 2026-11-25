@@ -5,13 +5,13 @@ import {
   type RequestOptions,
   type WithResponse,
 } from "../../core";
-import { ReaderCheckouts } from "../reader-checkouts";
+import { ReaderCheckouts } from "./checkouts";
 
-export * from "../reader-checkouts";
+export * from "./checkouts";
 
-import { ReaderSettings } from "../reader-settings";
+import { ReaderSettings } from "./settings";
 
-export * from "../reader-settings";
+export * from "./settings";
 
 import type {
   Metadata,

@@ -4,12 +4,12 @@ import {
   APIResource,
   type RequestOptions,
   type WithResponse,
-} from "../../core";
+} from "../../../core";
 import type {
   CreateReaderCheckoutRequest,
   CreateReaderCheckoutResponse,
   GetReaderCheckoutResponse,
-} from "../../types";
+} from "../../../types";
 export type CreateReaderTerminateParams = Record<string, unknown>;
 
 /**

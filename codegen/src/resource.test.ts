@@ -50,10 +50,13 @@ test("nested resources use the annotated method name or operation ID", async () 
       "utf8",
     );
     const child = await readFile(
-      join(dir, "resources/reader-checkouts/index.ts"),
+      join(dir, "resources/readers/checkouts/index.ts"),
       "utf8",
     );
     expect(root).not.toContain("new ReaderCheckouts(");
+    expect(root).toContain('export * from "./resources/readers";');
+    expect(parent).toContain('export * from "./checkouts";');
+    expect(child).toContain('from "../../../core";');
     expect(parent).toContain(
       "readonly checkouts = new ReaderCheckouts(this._client)",
     );
@@ -65,7 +68,7 @@ test("nested resources use the annotated method name or operation ID", async () 
     );
     expect(parent).not.toContain("this.settings.update");
     const settingsClient = await readFile(
-      join(dir, "resources/reader-settings/index.ts"),
+      join(dir, "resources/readers/settings/index.ts"),
       "utf8",
     );
     expect(settingsClient).toContain("update(options?: RequestOptions)");

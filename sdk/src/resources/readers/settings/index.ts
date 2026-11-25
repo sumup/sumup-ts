@@ -4,12 +4,12 @@ import {
   APIResource,
   type RequestOptions,
   type WithResponse,
-} from "../../core";
+} from "../../../core";
 import type {
   GetReaderSettingsResponse,
   UpdateReaderSettingsRequest,
   UpdateReaderSettingsResponse,
-} from "../../types";
+} from "../../../types";
 /**
  * API resource for the ReaderSettings endpoints.
  *
