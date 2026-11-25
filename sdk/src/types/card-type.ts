@@ -9,6 +9,7 @@ export type CardType =
   | "ALELO"
   | "AMEX"
   | "BANCOMAT"
+  | "CARNET"
   | "CONECS"
   | "CUP"
   | "DINERS"

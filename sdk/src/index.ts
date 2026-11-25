@@ -85,6 +85,8 @@ export * from "./resources/payouts";
 
 import { Payouts } from "./resources/payouts";
 
+export * from "./resources/reader-checkouts";
+export * from "./resources/reader-settings";
 export * from "./resources/readers";
 
 import { Readers } from "./resources/readers";
