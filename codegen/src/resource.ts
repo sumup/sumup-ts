@@ -196,6 +196,9 @@ export async function generateResource(
     writer.w(
       `import type { ${sortedSharedTypes.join(", ")} } from "${sdkRoot}types";`,
     );
+    writer.w(
+      `export type { ${sortedSharedTypes.join(", ")} } from "${sdkRoot}types";`,
+    );
   }
 
   for (const { methodSpec, queryParams, opId } of iterParams(spec.paths)) {
@@ -305,7 +308,7 @@ export class ${resourceClassName} extends APIResource {`);
     }
     usedMembers.add(child.accessor);
     writer.w(
-      `readonly ${child.accessor} = new ${child.className}(this._client);`,
+      `readonly ${child.accessor}: ${child.className} = new ${child.className}(this._client);`,
     );
   }
   for (const { methodSpec, pathSpec, opId, method, path } of operations) {

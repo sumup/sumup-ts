@@ -6,6 +6,8 @@ import {
   type WithResponse,
 } from "../../core";
 import type { Token } from "../../types";
+
+export type { Token } from "../../types";
 export type CreateMerchantTokenParams = {
   /**
    * Actions the token allows for this merchant account.

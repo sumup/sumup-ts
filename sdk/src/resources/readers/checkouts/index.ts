@@ -10,6 +10,12 @@ import type {
   CreateReaderCheckoutResponse,
   GetReaderCheckoutResponse,
 } from "../../../types";
+
+export type {
+  CreateReaderCheckoutRequest,
+  CreateReaderCheckoutResponse,
+  GetReaderCheckoutResponse,
+} from "../../../types";
 export type CreateReaderTerminateParams = Record<string, unknown>;
 
 /**

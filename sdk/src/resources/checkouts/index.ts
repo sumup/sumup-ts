@@ -15,6 +15,17 @@ import type {
   ErrorExtended,
   ProcessCheckout,
 } from "../../types";
+
+export type {
+  Checkout,
+  CheckoutAccepted,
+  CheckoutCreateRequest,
+  CheckoutSuccess,
+  CheckoutUpdateRequest,
+  ErrorBody,
+  ErrorExtended,
+  ProcessCheckout,
+} from "../../types";
 export type GetPaymentMethodsQueryParams = {
   /**
    * Payment amount in major units, for example `9.99` for EUR 9.99. When filtering by `amount`, also provide `currency`.

@@ -11,6 +11,13 @@ import type {
   MembershipStatus,
   Metadata,
 } from "../../types";
+
+export type {
+  Attributes,
+  Member,
+  MembershipStatus,
+  Metadata,
+} from "../../types";
 export type ListMerchantMembersQueryParams = {
   /**
    * Offset of the first member to return.

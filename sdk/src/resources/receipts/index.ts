@@ -6,6 +6,8 @@ import {
   type WithResponse,
 } from "../../core";
 import type { Receipt } from "../../types";
+
+export type { Receipt } from "../../types";
 export type GetReceiptQueryParams = {
   /**
    * Short unique identifier for the merchant.

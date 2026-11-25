@@ -12,6 +12,14 @@ import type {
   PaymentInstrumentResponse,
   PersonalDetails,
 } from "../../types";
+
+export type {
+  Customer,
+  CustomerValidationError,
+  ErrorExtended,
+  PaymentInstrumentResponse,
+  PersonalDetails,
+} from "../../types";
 export type CreateCustomerError = ErrorExtended | CustomerValidationError;
 
 export type UpdateCustomerParams = { personal_details?: PersonalDetails };

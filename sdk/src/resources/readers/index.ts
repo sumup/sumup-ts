@@ -20,6 +20,14 @@ import type {
   ReaderPaymentResponse,
   StatusResponse,
 } from "../../types";
+
+export type {
+  Metadata,
+  Reader,
+  ReaderPaymentRequestParams,
+  ReaderPaymentResponse,
+  StatusResponse,
+} from "../../types";
 export type ListReadersResponse = { items: Reader[] };
 
 export type CreateReaderParams = {
@@ -56,8 +64,8 @@ export type UpdateReaderParams = {
  * A reader represents a device that accepts payments. You can use the SumUp Solo to accept in-person payments.
  */
 export class Readers extends APIResource {
-  readonly checkouts = new ReaderCheckouts(this._client);
-  readonly settings = new ReaderSettings(this._client);
+  readonly checkouts: ReaderCheckouts = new ReaderCheckouts(this._client);
+  readonly settings: ReaderSettings = new ReaderSettings(this._client);
   /**
    * Initiates a payment on the SumUp Go terminal identified by the reader ID.
    *

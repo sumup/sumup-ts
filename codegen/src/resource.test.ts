@@ -58,7 +58,7 @@ test("nested resources use the annotated method name or operation ID", async () 
     expect(parent).toContain('export * from "./checkouts";');
     expect(child).toContain('from "../../../core";');
     expect(parent).toContain(
-      "readonly checkouts = new ReaderCheckouts(this._client)",
+      "readonly checkouts: ReaderCheckouts = new ReaderCheckouts(this._client)",
     );
     expect(parent).not.toContain("createCheckout");
     expect(child).toContain("createCheckout(options?: RequestOptions)");
@@ -140,6 +140,7 @@ test("allowEmptyValue adds an empty string independently of the query schema", a
       join(dir, "resources/resources/index.ts"),
       "utf8",
     );
+    expect(generated).toContain('export type { Kind } from "../../types";');
     expect(generated).toContain('kind?: Kind | "";');
     expect(generated).toContain('count: number | "";');
     expect(generated).toContain(
