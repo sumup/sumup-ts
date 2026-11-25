@@ -42,7 +42,7 @@
     "test:browser": "rstest --config rstest.browser.config.ts",
     "tsc": "tsc -p tsconfig.test.json",
     "prerelease": "npm run build",
-    "generate": "node ../codegen/dist/index.cjs ../openapi.json ./src/",
+    "generate": "node ../codegen/dist/index.cjs ../openapi.json ./src/ --jsr-config ./jsr.json",
     "lint": "biome check",
     "lint:fix": "biome check --write",
     "docs": "typedoc --cleanOutputDir --out ../docs/ --favicon https://static.sumup.com/favicons/favicon.svg"
@@ -50,13 +50,25 @@
   "main": "./dist/index.cjs",
   "types": "./dist/index.d.ts",
   "exports": {
-    "import": {
-      "types": "./dist/index.d.ts",
-      "default": "./dist/index.js"
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
     },
-    "require": {
-      "types": "./dist/index.d.cts",
-      "default": "./dist/index.cjs"
+    "./resources/*": {
+      "import": {
+        "types": "./dist/resources/*/index.d.ts",
+        "default": "./dist/resources/*/index.js"
+      },
+      "require": {
+        "types": "./dist/resources/*/index.d.cts",
+        "default": "./dist/resources/*/index.cjs"
+      }
     }
   },
   "devDependencies": {

@@ -1,7 +1,13 @@
 #!/usr/bin/env node
 
-import { existsSync, mkdirSync, rmSync } from "node:fs";
-import { resolve } from "node:path";
+import {
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
+import { dirname, relative, resolve, sep } from "node:path";
 import { program } from "commander";
 import { generateIndex } from "./api";
 import { generateApiVersion } from "./api-version";
@@ -14,14 +20,18 @@ import {
   writeSampleCatalog,
 } from "./samples";
 import { loadSpec } from "./spec";
-import { resourceParents } from "./tag-hierarchy";
+import { resourceDirectory, resourceParents } from "./tag-hierarchy";
 import { generateTypes } from "./types";
 
 /**
  * Main code generation function.
  * Parses an OpenAPI specification and generates TypeScript client code.
  */
-async function generate(specFile: string, destDir: string) {
+async function generate(
+  specFile: string,
+  destDir: string,
+  jsrConfigFile?: string,
+) {
   // destination directory is resolved relative to CWD
   const destDirAbs = resolve(process.cwd(), destDir);
 
@@ -43,8 +53,38 @@ async function generate(specFile: string, destDir: string) {
   await generateIndex(spec, destDirAbs, parents);
   await generateEvents(spec, destDirAbs);
   await generateCore(spec, destDirAbs);
-  for (const t of spec.tags || []) {
-    await generateResource(t, spec, destDirAbs, parents);
+  const tags = spec.tags ?? [];
+  for (const tag of tags) {
+    await generateResource(tag, spec, destDirAbs, parents);
+  }
+
+  if (jsrConfigFile) {
+    const config: { exports: string | Record<string, string> } = JSON.parse(
+      readFileSync(jsrConfigFile, "utf8"),
+    );
+    const existing =
+      typeof config.exports === "string"
+        ? { ".": config.exports }
+        : config.exports;
+    const otherExports = Object.entries(existing).filter(
+      ([name]) => !name.startsWith("./resources/"),
+    );
+    const resourceExports = tags
+      .map(({ name }) =>
+        ["resources", ...resourceDirectory(parents, name)].join("/"),
+      )
+      .sort()
+      .map((path) => {
+        const target = relative(
+          dirname(resolve(jsrConfigFile)),
+          resolve(destDirAbs, path, "index.ts"),
+        )
+          .split(sep)
+          .join("/");
+        return [`./${path}`, `./${target}`];
+      });
+    config.exports = Object.fromEntries([...otherExports, ...resourceExports]);
+    writeFileSync(jsrConfigFile, `${JSON.stringify(config, null, 2)}\n`);
   }
 }
 
@@ -53,8 +93,12 @@ program
   .description("@sumup/sdk code generator")
   .argument("<specs>")
   .argument("<dir>")
-  .action(async (specs, dir) => {
-    await generate(specs, dir);
+  .option(
+    "--jsr-config <file>",
+    "update resource exports in a JSR package manifest",
+  )
+  .action(async (specs, dir, options: { jsrConfig?: string }) => {
+    await generate(specs, dir, options.jsrConfig);
   });
 
 program

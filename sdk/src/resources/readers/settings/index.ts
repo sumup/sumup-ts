@@ -10,6 +10,12 @@ import type {
   UpdateReaderSettingsRequest,
   UpdateReaderSettingsResponse,
 } from "../../../types";
+
+export type {
+  GetReaderSettingsResponse,
+  UpdateReaderSettingsRequest,
+  UpdateReaderSettingsResponse,
+} from "../../../types";
 /**
  * API resource for the ReaderSettings endpoints.
  *

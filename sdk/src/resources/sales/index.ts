@@ -11,6 +11,13 @@ import type {
   SaleSearchRequest,
   SaleSearchResponse,
 } from "../../types";
+
+export type {
+  Sale,
+  SalePage,
+  SaleSearchRequest,
+  SaleSearchResponse,
+} from "../../types";
 export type ListSalesV10QueryParams = {
   /**
    * Opaque token from the previous list response. Omit it on the first request. To load

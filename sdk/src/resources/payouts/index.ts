@@ -6,6 +6,8 @@ import {
   type WithResponse,
 } from "../../core";
 import type { ErrorExtended, FinancialPayouts } from "../../types";
+
+export type { ErrorExtended, FinancialPayouts } from "../../types";
 export type ListPayoutsV1QueryParams = {
   /**
    * Start date of the payout period filter, inclusive, in [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) `date` format (`YYYY-MM-DD`).

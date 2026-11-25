@@ -2,6 +2,7 @@ import { defineConfig } from "@rslib/core";
 import { pluginPublint } from "rsbuild-plugin-publint";
 
 export default defineConfig({
+  bundle: false,
   lib: [
     {
       format: "esm",

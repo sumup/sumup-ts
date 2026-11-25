@@ -6,6 +6,8 @@ import {
   type WithResponse,
 } from "../../core";
 import type { ListPersonsResponseBody, Merchant, Person } from "../../types";
+
+export type { ListPersonsResponseBody, Merchant, Person } from "../../types";
 /**
  * API resource for the Merchants endpoints.
  *

@@ -6,6 +6,8 @@ import {
   type WithResponse,
 } from "../../core";
 import type { Membership, MembershipStatus } from "../../types";
+
+export type { Membership, MembershipStatus } from "../../types";
 export type ListMembershipsQueryParams = {
   /**
    * Offset of the first member to return.
