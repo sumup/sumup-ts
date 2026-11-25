@@ -1,4 +1,13 @@
 {
+  "x-tagGroups": [
+    {
+      "name": "Readers",
+      "tags": [
+        "ReaderCheckouts",
+        "ReaderSettings"
+      ]
+    }
+  ],
   "openapi": "3.1.0",
   "info": {
     "title": "SumUp REST API",
@@ -113,6 +122,16 @@
         }
       ],
       "x-displayName": "Sales"
+    },
+    {
+      "description": "Create, retrieve, and terminate payments on a card reader.",
+      "name": "ReaderCheckouts",
+      "x-displayName": "Checkouts"
+    },
+    {
+      "description": "Retrieve and update card reader settings.",
+      "name": "ReaderSettings",
+      "x-displayName": "Settings"
     },
     {
       "name": "Tokens",
@@ -2365,8 +2384,7 @@
                   "amount": {
                     "type": "integer",
                     "description": "Amount to refund in minor units of the transaction's currency, for example `500` for EUR 5.00. It must be greater than zero and cannot exceed the amount eligible for a refund. Eligibility depends on the transaction and country/currency rules. If omitted, the system requests a full refund.",
-                    "example": 500,
-                    "minimum": 0
+                    "example": 500
                   }
                 }
               },
@@ -6282,7 +6300,6 @@
                 "return_url": "https://example.com/sumup/webhook",
                 "total_amount": {
                   "currency": "EUR",
-                  "minor_unit": 2,
                   "value": 1500
                 }
               },
@@ -6420,10 +6437,10 @@
         ],
         "summary": "Create a Reader Checkout",
         "tags": [
-          "Readers"
+          "ReaderCheckouts"
         ],
         "x-codegen": {
-          "method_name": "create_checkout"
+          "method_name": "create"
         },
         "x-permissions": [
           "readers.checkouts.create"
@@ -6674,10 +6691,10 @@
         ],
         "summary": "Get Reader Settings",
         "tags": [
-          "Readers"
+          "ReaderSettings"
         ],
         "x-codegen": {
-          "method_name": "get_reader_settings"
+          "method_name": "get"
         },
         "x-permissions": [
           "readers.checkouts.view"
@@ -6837,10 +6854,10 @@
         ],
         "summary": "Update Reader Settings",
         "tags": [
-          "Readers"
+          "ReaderSettings"
         ],
         "x-codegen": {
-          "method_name": "update_reader_settings"
+          "method_name": "update"
         },
         "x-permissions": [
           "readers.checkouts.create"
@@ -6988,10 +7005,10 @@
         ],
         "summary": "Terminate a Reader Checkout",
         "tags": [
-          "Readers"
+          "ReaderCheckouts"
         ],
         "x-codegen": {
-          "method_name": "terminate_checkout"
+          "method_name": "terminate"
         },
         "x-permissions": [
           "readers.checkouts.delete"
@@ -7104,10 +7121,10 @@
         ],
         "summary": "Get a Reader Checkout",
         "tags": [
-          "Readers"
+          "ReaderCheckouts"
         ],
         "x-codegen": {
-          "method_name": "get_checkout"
+          "method_name": "get"
         },
         "x-permissions": [
           "readers.checkouts.view"
@@ -9301,6 +9318,7 @@
           "ALELO",
           "AMEX",
           "BANCOMAT",
+          "CARNET",
           "CONECS",
           "CUP",
           "DINERS",
@@ -13015,7 +13033,6 @@
             "status": "pending",
             "total_amount": {
               "currency": "EUR",
-              "minor_unit": 2,
               "value": 10000
             },
             "updated_at": "2026-07-07T20:42:18.117244Z",
@@ -13099,10 +13116,9 @@
                 "type": "string"
               },
               "total_amount": {
-                "description": "Amount structure.\n\nThe amount is represented as an integer value altogether with the currency and the minor unit.\n\nFor example, EUR 1.00 is represented as value 100 with minor unit of 2.\n",
+                "description": "The checkout amount. The value uses two decimal places, even for currencies\nsuch as CLP that use zero decimal places in the create request.\n\nFor example, EUR 10.00 is returned as `1000` and CLP 1000 as `100000`.\n",
                 "example": {
                   "currency": "EUR",
-                  "minor_unit": 2,
                   "value": 1000
                 },
                 "properties": {
@@ -13110,12 +13126,6 @@
                     "description": "Currency ISO 4217 code",
                     "example": "EUR",
                     "type": "string"
-                  },
-                  "minor_unit": {
-                    "description": "The minor units of the currency.\nIt represents the number of decimals of the currency. For the currencies CLP, COP and HUF, the minor unit is 0.\n",
-                    "example": 2,
-                    "minimum": 0,
-                    "type": "integer"
                   },
                   "value": {
                     "description": "Integer value of the amount.",
@@ -13126,10 +13136,8 @@
                 },
                 "required": [
                   "currency",
-                  "minor_unit",
                   "value"
                 ],
-                "title": "Money",
                 "type": "object"
               },
               "updated_at": {
@@ -13601,7 +13609,6 @@
           "tip_timeout": 60,
           "total_amount": {
             "currency": "EUR",
-            "minor_unit": 2,
             "value": 5033
           }
         },
@@ -13731,10 +13738,9 @@
             "type": "integer"
           },
           "total_amount": {
-            "description": "Amount structure.\n\nThe amount is represented as an integer value altogether with the currency and the minor unit.\n\nFor example, EUR 1.00 is represented as value 100 with minor unit of 2.\n",
+            "description": "Amount to charge in minor units. Use the decimal places for the currency.\nCLP, COP, and HUF use zero decimal places.\n\nFor example, send `1234` for EUR 12.34 or `1000` for CLP 1000.\n",
             "example": {
               "currency": "EUR",
-              "minor_unit": 2,
               "value": 1000
             },
             "properties": {
@@ -13742,12 +13748,6 @@
                 "description": "Currency ISO 4217 code",
                 "example": "EUR",
                 "type": "string"
-              },
-              "minor_unit": {
-                "description": "The minor units of the currency.\nIt represents the number of decimals of the currency. For the currencies CLP, COP and HUF, the minor unit is 0.\n",
-                "example": 2,
-                "minimum": 0,
-                "type": "integer"
               },
               "value": {
                 "description": "Integer value of the amount.",
@@ -13758,10 +13758,8 @@
             },
             "required": [
               "currency",
-              "minor_unit",
               "value"
             ],
-            "title": "Money",
             "type": "object"
           }
         },
@@ -14106,8 +14104,7 @@
                 "amount": {
                   "type": "integer",
                   "description": "Amount to refund in minor units of the transaction's currency, for example `500` for EUR 5.00. It must be greater than zero and cannot exceed the amount eligible for a refund. Eligibility depends on the transaction and country/currency rules. If omitted, the system requests a full refund.",
-                  "example": 500,
-                  "minimum": 0
+                  "example": 500
                 }
               }
             },

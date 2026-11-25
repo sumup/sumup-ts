@@ -48,3 +48,13 @@ export function resourcePath(parents: ResourceParents, tag: string): string {
     ? `${resourcePath(parents, parent.tag)}.${parent.accessor}`
     : Case.camel(tag);
 }
+
+export function resourceDirectory(
+  parents: ResourceParents,
+  tag: string,
+): string[] {
+  const parent = parents.get(tag);
+  return parent
+    ? [...resourceDirectory(parents, parent.tag), Case.kebab(parent.accessor)]
+    : [Case.kebab(tag)];
+}

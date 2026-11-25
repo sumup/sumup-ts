@@ -54,13 +54,10 @@ export type GetReaderCheckoutResponse = {
      */
     status: "pending" | "successful" | "failed" | "cancelled";
     /**
-     * Money
+     * The checkout amount. The value uses two decimal places, even for currencies
+     * such as CLP that use zero decimal places in the create request.
      *
-     * Amount structure.
-     *
-     * The amount is represented as an integer value altogether with the currency and the minor unit.
-     *
-     * For example, EUR 1.00 is represented as value 100 with minor unit of 2.
+     * For example, EUR 10.00 is returned as `1000` and CLP 1000 as `100000`.
      *
      */
     total_amount: {
@@ -68,14 +65,6 @@ export type GetReaderCheckoutResponse = {
        * Currency ISO 4217 code
        */
       currency: string;
-      /**
-       * The minor units of the currency.
-       * It represents the number of decimals of the currency. For the currencies CLP, COP and HUF, the minor unit is 0.
-       *
-       *
-       * Min: 0
-       */
-      minor_unit: number;
       /**
        * Integer value of the amount.
        *
