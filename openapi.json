@@ -115,7 +115,7 @@
     },
     {
       "name": "Sales",
-      "description": "Read a merchant's fully-paid, closed sales, including item lines, taxes, discounts, and payments.\n\nList sales to retrieve full `Sale` objects, or search by date, payment status, and sales channel\nto retrieve summaries. Use a summary's `id` to get the full sale.\n\nAmounts are expressed in minor units according to each sale's `currency.scale`.",
+      "description": "Read a merchant's fully-paid, closed sales, including item lines, taxes, discounts, and payments.\n\nList sales to retrieve full `Sale` objects, or search by date, payment status, and sales channel\nto retrieve summaries. Use a summary's `id` to get the full sale.\n\nAmounts are expressed in minor units according to each sale's `currency.scale`.\n\nCurrent limitation: In most countries, sales created via the Invoices product are only included when\nthe transaction happened through SumUp payments. This means invoices paid via cash or bank transfer\nwon’t be listed. Sales made in the UK are an exception to this limitation; all sales will be shown there.",
       "x-core-objects": [
         {
           "$ref": "#/components/schemas/Sale"
