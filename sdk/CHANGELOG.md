@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.2.6](https://github.com/sumup/sumup-ts/compare/v0.2.5...v0.2.6) (2026-11-27)
+
+
+### Features
+
+* export SDK resource modules ([#565](https://github.com/sumup/sumup-ts/issues/565)) ([025870f](https://github.com/sumup/sumup-ts/commit/025870f8b333e3e1085ab1c926146e5b2be7ef26))
+
+
+### Chores
+
+* **deps-dev:** bump @biomejs/biome from 2.6.6 to 2.6.8 in /sdk ([#563](https://github.com/sumup/sumup-ts/issues/563)) ([98f0e94](https://github.com/sumup/sumup-ts/commit/98f0e94d1496fe2db00dad72ebedda0a9307c44e))
+* **deps-dev:** bump playwright from 1.65.0 to 1.65.1 in /sdk ([#561](https://github.com/sumup/sumup-ts/issues/561)) ([c5eff4f](https://github.com/sumup/sumup-ts/commit/c5eff4fd880794340e7f37f6713c648c8797e302))
+* **deps-dev:** bump the rslib group in /sdk with 2 updates ([#560](https://github.com/sumup/sumup-ts/issues/560)) ([4ae96fc](https://github.com/sumup/sumup-ts/commit/4ae96fc51b4e8204ed30ef5c987d7808791f082b))
+* synced file(s) with sumup/apis ([#556](https://github.com/sumup/sumup-ts/issues/556)) ([a272008](https://github.com/sumup/sumup-ts/commit/a272008218e26d38798c094b20e567b511f95efa))
+* synced file(s) with sumup/apis ([#566](https://github.com/sumup/sumup-ts/issues/566)) ([b224d62](https://github.com/sumup/sumup-ts/commit/b224d62bcf81e60cca60b777027610a7a3dd71a0))
+
 ## [0.2.5](https://github.com/sumup/sumup-ts/compare/v0.2.4...v0.2.5) (2026-11-17)
 
 
